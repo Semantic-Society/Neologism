@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css"
+          integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/ontolist.css">
+    <link rel="stylesheet" href="css/bootstrap-override.css"/> <!-- Call override CSS second -->
+    <link rel="stylesheet" href="css/navigation.css">
+
+</head>
+<body>
+<header class="navbar navbar-inverse navbar-expand-lg bg-inverse sticky-top">
+    <a class="navbar-brand" href="index.html">
+        <img src="http://via.placeholder.com/50x50" width="30" height="30" class="d-inline-block align-top" alt="">
+        Neologism 2.0
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="#">My Dashboard <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="explore.html">Explore</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Create Content</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Statistics</a>
+            </li>
+        </ul>
+        <ul class="navbar-nav ">
+            <li class="nav-item">
+                <a class="nav-link" href="#">Login</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Register</a>
+            </li>
+        </ul>
+    </div>
+</header>
+
+<div class="container-fluid">
+    <div class="row flex-xl-nowrap">
+        <div class="col-12 col-md-3 col-xl-2 bd-sidebar">
+
+        </div>
+
+        <div class="col-12 col-md-9 col-xl-8 py-md-3 pl-md-5 bd-content" role="main">
+            <div id="accordion ontolist" role="tablist">
+                <div class="card">
+                    <div class="card-header" role="tab" id="headingOne">
+                        <h6 class="mb-0">
+                            <a data-toggle="collapse" href="#collapseOne" aria-expanded="true"
+                               aria-controls="collapseOne">
+                                Vocabulary 1
+                            </a>
+                        </h6>
+                    </div>
+
+                    <div id="collapseOne" class="collapse show" role="tabpanel" aria-labelledby="headingOne"
+                         data-parent="#accordion">
+                        <div class="card-body">
+                            ALorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
+                            invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam
+                            et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est
+                            Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
+                            diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
+                            voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd
+                            gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header" role="tab" id="headingTwo">
+                        <h6 class="mb-0">
+                            <a class="collapsed" data-toggle="collapse" href="#collapseTwo" aria-expanded="false"
+                               aria-controls="collapseTwo">
+                                Vocabulary 2
+                            </a>
+                        </h6>
+                    </div>
+                    <div id="collapseTwo" class="collapse" role="tabpanel" aria-labelledby="headingTwo"
+                         data-parent="#accordion">
+                        <div class="card-body">
+                            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
+                            invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam
+                            et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est
+                            Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
+                            diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
+                            voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd
+                            gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header" role="tab" id="headingThree">
+                        <h6 class="mb-0">
+                            <a class="collapsed" data-toggle="collapse" href="#collapseThree" aria-expanded="false"
+                               aria-controls="collapseThree">
+                                Vocabulary 3
+                            </a>
+                        </h6>
+                    </div>
+                    <div id="collapseThree" class="collapse" role="tabpanel" aria-labelledby="headingThree"
+                         data-parent="#accordion">
+                        <div class="card-body">
+                            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
+                            invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam
+                            et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est
+                            Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
+                            diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
+                            voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd
+                            gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header" role="tab" id="headingFour">
+                        <h6 class="mb-0">
+                            <a class="collapsed" data-toggle="collapse" href="#collapseFour" aria-expanded="false"
+                               aria-controls="collapseFour">
+                                Vocabulary 4
+                            </a>
+                        </h6>
+                    </div>
+                    <div id="collapseFour" class="collapse" role="tabpanel" aria-labelledby="headingFour"
+                         data-parent="#accordion">
+                        <div class="card-body">
+                            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
+                            invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam
+                            et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est
+                            Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
+                            diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
+                            voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd
+                            gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header" role="tab" id="headingFive">
+                        <h6 class="mb-0">
+                            <a class="collapsed" data-toggle="collapse" href="#collapseFive" aria-expanded="false"
+                               aria-controls="collapseFive">
+                                Vocabulary 5
+                            </a>
+                        </h6>
+                    </div>
+                    <div id="collapseFive" class="collapse" role="tabpanel" aria-labelledby="headingFive"
+                         data-parent="#accordion">
+                        <div class="card-body">
+                            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
+                            invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam
+                            et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est
+                            Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
+                            diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
+                            voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd
+                            gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header" role="tab" id="headingSix">
+                        <h6 class="mb-0">
+                            <a class="collapsed" data-toggle="collapse" href="#collapseSix" aria-expanded="false"
+                               aria-controls="collapseSix">
+                                Vocabulary 6
+                            </a>
+                        </h6>
+                    </div>
+                    <div id="collapseSix" class="collapse" role="tabpanel" aria-labelledby="headingSix"
+                         data-parent="#accordion">
+                        <div class="card-body">
+                            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
+                            invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam
+                            et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est
+                            Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
+                            diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
+                            voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd
+                            gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header" role="tab" id="headingSeven">
+                        <h6 class="mb-0">
+                            <a class="collapsed" data-toggle="collapse" href="#collapseSeven" aria-expanded="false"
+                               aria-controls="collapseSeven">
+                                Vocabulary 7
+                            </a>
+                        </h6>
+                    </div>
+                    <div id="collapseSeven" class="collapse" role="tabpanel" aria-labelledby="headingSeven"
+                         data-parent="#accordion">
+                        <div class="card-body">
+                            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
+                            invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam
+                            et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est
+                            Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
+                            diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
+                            voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd
+                            gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="d-none d-xl-block col-xl-2 bd-toc">
+
+    </div>
+
+</div>
+
+</div>
+<!-- scripts -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"
+        integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4"
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"
+        integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1"
+        crossorigin="anonymous"></script>
+</body>
+<div class="row footer">
+    <div class="col-12" align="center">
+        <a href="#">About</a> | <a href="#">Legal notice</a> | <a href="#">Privacy</a> | <a href="#">Terms of use</a> |
+        <a href="#">FAQ</a> | <a href="#">Send error report</a>
+    </div>
+</div>
+</html>
