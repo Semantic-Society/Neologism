@@ -1,0 +1,29 @@
+.section-nav {
+    padding-left: 0;
+    border-left: 1px solid #eee;
+    list-style-type: disc;
+}
+
+.bd-toc {
+    -ms-flex-order: 2;
+    order: 2;
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+    font-size: .875rem;
+
+    position: -webkit-sticky;
+    position: sticky;
+    top: 4rem;
+    max-height: calc(100vh - 4rem);
+    overflow-y: auto;
+}
+
+.toc-entry {
+    display: block;
+}
+
+.toc-entry a {
+    display: block;
+    padding: .125rem 1.5rem;
+    color: #99979c;
+}
