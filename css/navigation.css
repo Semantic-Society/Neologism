@@ -1,7 +1,15 @@
+/*
+    Navbar
+ */
+.bg-inverse {
+    background-color: #292b2c!important;
+}
+/*
+   Side navigation
+ */
 .section-nav {
     padding-left: 0;
     border-left: 1px solid #eee;
-    list-style-type: disc;
 }
 
 .bd-toc {
@@ -26,4 +34,23 @@
     display: block;
     padding: .125rem 1.5rem;
     color: #99979c;
+}
+
+
+/*
+    footer stuff
+ */
+
+
+.row.footer {
+    margin-top: 1em;
+    padding-top:1em;
+    padding-bottom: 1em;
+    background-color: #292b2c;
+    color: #FFFFFF;
+    font-size: .875rem;
+
+}
+.row.footer a {
+    color: #FFFFFF;
 }
