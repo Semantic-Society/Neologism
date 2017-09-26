@@ -261,6 +261,7 @@
         crossorigin="anonymous"></script>
 
 <script src="https://d3js.org/d3.v4.min.js"></script>
+<!--<script language="javascript" type="text/javascript" src="external/js/d3.min.js"></script>-->
 <script>
 
     var svg = d3.select("svg"),
@@ -273,8 +274,9 @@
         .force("link", d3.forceLink().distance(10).strength(0.5))
         .force("charge", d3.forceManyBody())
         .force("center", d3.forceCenter(width / 2, height / 2));
-
-    d3.json("miserables.json", function (error, graph) {
+        
+    //d3.json("miserables.json", function (error, graph) {
+    d3.json("https://api.myjson.com/bins/fmruh", function (error, graph) {
         if (error) throw error;
 
         var nodes = graph.nodes,
