@@ -12,10 +12,39 @@ function main(container)
     else
     {
         // Disables the built-in context menu
-        mxEvent.disableContextMenu(container);
+        //mxEvent.disableContextMenu(container);
+
+        //Defines an icon creating new connections
+        mxConnectionHandler.prototype.connectImage = new mxImage('external/mxgraph/images/point_new.gif', 16, 16);
 
         // Creates the graph inside the given container
         var graph = new mxGraph(container);
+
+        // Creates toolbar inside the given container
+        var tbContainer = document.getElementById('left-toolbar');
+        var toolbar = new mxToolbar(tbContainer);
+        toolbar.enabled = false
+
+        // Graph Style Settings
+        graph.setConnectable(true);
+
+        var addVertex = function(icon, w, h, style)
+        {
+            var vertex = new mxCell(null, new mxGeometry(0, 0, w, h), style);
+            vertex.setVertex(true);
+
+            var img = addToolbarItem(graph, toolbar, vertex, icon);
+            img.enabled = true;
+
+            graph.getSelectionModel().addListener(mxEvent.CHANGE, function()
+            {
+                var tmp = graph.isSelectionEmpty();
+                mxUtils.setOpacity(img, (tmp) ? 100 : 20);
+                img.enabled = tmp;
+            });
+        };
+        addVertex('external/mxgraph/images/rounded.gif', 100, 40, 'shape=rounded');
+
 
         // Enables rubberband selection
         new mxRubberband(graph);
@@ -39,3 +68,50 @@ function main(container)
         }
     }
 };
+
+function addToolbarItem(graph, toolbar, prototype, image)
+{
+    // Function that is executed when the image is dropped on
+    // the graph. The cell argument points to the cell under
+    // the mousepointer if there is one.
+    var funct = function(graph, evt, cell, x, y)
+    {
+        graph.stopEditing(false);
+
+        var vertex = graph.getModel().cloneCell(prototype);
+        vertex.geometry.x = x;
+        vertex.geometry.y = y;
+
+        graph.addCell(vertex);
+        graph.setSelectionCell(vertex);
+    }
+
+    // Creates the image which is used as the drag icon (preview)
+    var img = toolbar.addMode(null, image, function(evt, cell)
+    {
+        var pt = this.graph.getPointForEvent(evt);
+        funct(graph, evt, cell, pt.x, pt.y);
+    });
+
+    // Disables dragging if element is disabled. This is a workaround
+    // for wrong event order in IE. Following is a dummy listener that
+    // is invoked as the last listener in IE.
+    mxEvent.addListener(img, 'mousedown', function(evt)
+    {
+        // do nothing
+    });
+
+    // This listener is always called first before any other listener
+    // in all browsers.
+    mxEvent.addListener(img, 'mousedown', function(evt)
+    {
+        if (img.enabled == false)
+        {
+            mxEvent.consume(evt);
+        }
+    });
+
+    mxUtils.makeDraggable(img, graph, funct);
+
+    return img;
+}
