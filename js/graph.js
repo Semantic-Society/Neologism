@@ -11,8 +11,15 @@ function main(container)
     }
     else
     {
+
         // Disables the built-in context menu
+
+        /*
+        Disabled for debugging reasons
+         */
         //mxEvent.disableContextMenu(container);
+
+        //TODO: Look into clipboard.html, events.html, extendedcanvas.html, graphlayout.html, hovericons.html, layers.html, morph.html, secondlabel.html, stylesheets.html and touch.html
 
         //Defines an icon creating new connections
         mxConnectionHandler.prototype.connectImage = new mxImage('external/mxgraph/images/point_new.gif', 16, 16);
