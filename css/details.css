@@ -1,18 +1,10 @@
-h6 a {
-    text-decoration:none !important;
-    color: #333333 !important;
+svg .link {
+    fill: none;
+    stroke: #bbb;
 }
 
-.card-header{
-    background-color: #FFFFFF
-}
-
-.card-header:hover {
-    background-color: #f4f9fb
-}
 
 .stats-row {
-    padding: 15px;
 }
 
 .stat-words {
@@ -33,6 +25,7 @@ h6 a {
     color: #FFFFFF;
 }
 .stats-div {
+    margin: 15px;
     color: #FFFFFF;
     padding: 15px;
 }
@@ -49,6 +42,18 @@ h6 a {
     font-weight: bold;
 }
 
-.show-details {
-    font-size: .875rem;
+.classes-row {
+
+}
+
+.properties-row {
+
+}
+
+.list-group > .list-group-item {
+    border: none;
+}
+
+.os-label {
+    font-weight: 600;
 }

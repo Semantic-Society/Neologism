@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css"
+          integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="css/bootstrap-override.css"/> <!-- Call override CSS second -->
+    <link rel="stylesheet" href="css/navigation.css">
+    <link rel="stylesheet" href="css/details.css">
+
+</head>
+<body>
+
+<header class="navbar navbar-inverse navbar-expand-lg bg-inverse sticky-top">
+    <a class="navbar-brand" href="index.html">
+        <img src="http://via.placeholder.com/50x50" width="30" height="30" class="d-inline-block align-top" alt="">
+        Neologism 2.0
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="#">My Dashboard <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="explore.html">Explore</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Create Content</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Statistics</a>
+            </li>
+        </ul>
+        <ul class="navbar-nav ">
+            <li class="nav-item">
+                <a class="nav-link" href="#">Login</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Register</a>
+            </li>
+        </ul>
+    </div>
+</header>
+
+<div class="container-fluid">
+    <div class="row flex-xl-nowrap">
+        <div class="col-12 col-md-3 col-xl-2 bd-sidebar">
+
+        </div>
+
+        <div class="col-12 col-md-9 col-xl-8 py-md-3 pl-md-5 bd-content" role="main">
+            <svg width="960" height="600" id="graph"></svg>
+            <h4>Description</h4>
+            <div class="description-row" id="description">
+                ALorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
+                invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam
+                et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est
+                Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
+                diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
+                voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd
+                gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.<br><br>
+                <div class="row ownership-row">
+                    <div class="col-12" id="ownership">
+                        <h4>Ownership</h4>
+                        <span class="os-label">Creator:</span> &nbsp; <a href="#">John Doe</a><br>
+                        <span class="os-label">Contributor:</span> &nbsp; <a href="#">G. Raymond</a>
+                        <br><br>
+                    </div>
+                </div>
+                <div class="row stats-row">
+                    <div class="col-12" id="statistics">
+                        <h4>Statistics</h4>
+                    </div>
+                    <div class="col-2 col-md-6 col-sm-12 col-xl-2 stats-div stat-words">
+                        <div class="header">
+                            <a href="#">153</a>
+                        </div>
+                        <div class="content">
+                            Words
+                        </div>
+                    </div>
+                    <div class="col-2 col-md-6 col-sm-12 col-xl-2 stats-div stat-properties">
+                        <div class="header">
+                            <a href="#">302</a>
+                        </div>
+                        <div class="content">
+                            Properties
+                        </div>
+                    </div>
+                    <div class="col-2 col-md-6 col-sm-12 col-xl-2 stats-div stat-relation">
+                        <div class="header">
+                            <a href="#">255</a>
+                        </div>
+                        <div class="content">
+                            Relations
+                        </div>
+                    </div>
+                    <div class="col-2 col-md-6 col-sm-12 col-xl-2 stats-div stat-used">
+                        <div class="header">
+                            <a href="#">10</a>
+                        </div>
+                        <div class="content">
+                            Times used
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row classes-row">
+                <div class="col-12">
+                    <div id="accordion" role="tablist">
+                        <div class="card" id="classes">
+                            <div class="card-header" role="tab" id="headingOne">
+                                <h5 class="mb-0">
+                                    <a data-toggle="collapse" href="#collapseOne" aria-expanded="false"
+                                       aria-controls="collapseOne">
+                                        Classes
+                                    </a>
+                                </h5>
+                            </div>
+
+                            <div id="collapseOne" class="collapse" role="tabpanel" aria-labelledby="headingOne"
+                                 data-parent="#accordion">
+                                <div class="card-body">
+                                    <div class="list-group">
+                                        <a href="#" class="list-group-item list-group-item-action">Dapibus ac facilisis in</a>
+                                        <a href="#" class="list-group-item list-group-item-action">Morbi leo risus</a>
+                                        <a href="#" class="list-group-item list-group-item-action">Porta ac consectetur ac</a>
+                                        <a href="#" class="list-group-item list-group-item-action">Dapibus ac facilisis in</a>
+                                        <a href="#" class="list-group-item list-group-item-action">Morbi leo risus</a>
+                                        <a href="#" class="list-group-item list-group-item-action">Porta ac consectetur ac</a>
+                                        <a href="#" class="list-group-item list-group-item-action">Dapibus ac facilisis in</a>
+                                        <a href="#" class="list-group-item list-group-item-action">Morbi leo risus</a>
+                                        <a href="#" class="list-group-item list-group-item-action">Porta ac consectetur ac</a>
+                                        <a href="#" class="list-group-item list-group-item-action">Dapibus ac facilisis in</a>
+                                        <a href="#" class="list-group-item list-group-item-action">Morbi leo risus</a>
+                                        <a href="#" class="list-group-item list-group-item-action">Porta ac consectetur ac</a>
+                                        <a href="#" class="list-group-item list-group-item-action">Dapibus ac facilisis in</a>
+                                        <a href="#" class="list-group-item list-group-item-action">Morbi leo risus</a>
+                                        <a href="#" class="list-group-item list-group-item-action">Porta ac consectetur ac</a>
+                                        <a href="#" class="list-group-item list-group-item-action">Dapibus ac facilisis in</a>
+                                        <a href="#" class="list-group-item list-group-item-action">Morbi leo risus</a>
+                                        <a href="#" class="list-group-item list-group-item-action">Porta ac consectetur ac</a>
+                                        <a href="#" class="list-group-item list-group-item-action">Dapibus ac facilisis in</a>
+                                        <a href="#" class="list-group-item list-group-item-action">Morbi leo risus</a>
+                                        <a href="#" class="list-group-item list-group-item-action">Porta ac consectetur ac</a>
+                                        <a href="#" class="list-group-item list-group-item-action">Dapibus ac facilisis in</a>
+                                        <a href="#" class="list-group-item list-group-item-action">Morbi leo risus</a>
+                                        <a href="#" class="list-group-item list-group-item-action">Porta ac consectetur ac</a>
+                                        <a href="#" class="list-group-item list-group-item-action">Dapibus ac facilisis in</a>
+                                        <a href="#" class="list-group-item list-group-item-action">Morbi leo risus</a>
+                                        <a href="#" class="list-group-item list-group-item-action">Porta ac consectetur ac</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card" id="properties">
+                            <div class="card-header" role="tab" id="headingTwo">
+                                <h5 class="mb-0">
+                                    <a data-toggle="collapse" href="#collapseTwo" aria-expanded="false"
+                                       aria-controls="collapseTwo">
+                                        Properties
+                                    </a>
+                                </h5>
+                            </div>
+
+                            <div id="collapseTwo" class="collapse" role="tabpanel" aria-labelledby="headingTwo"
+                                 data-parent="#accordion">
+                                <div class="card-body">
+                                    <div class="list-group">
+                                        <a href="#" class="list-group-item list-group-item-action">Dapibus ac facilisis in</a>
+                                        <a href="#" class="list-group-item list-group-item-action">Morbi leo risus</a>
+                                        <a href="#" class="list-group-item list-group-item-action">Porta ac consectetur ac</a>
+                                        <a href="#" class="list-group-item list-group-item-action">Dapibus ac facilisis in</a>
+                                        <a href="#" class="list-group-item list-group-item-action">Morbi leo risus</a>
+                                        <a href="#" class="list-group-item list-group-item-action">Porta ac consectetur ac</a>
+                                        <a href="#" class="list-group-item list-group-item-action">Dapibus ac facilisis in</a>
+                                        <a href="#" class="list-group-item list-group-item-action">Morbi leo risus</a>
+                                        <a href="#" class="list-group-item list-group-item-action">Porta ac consectetur ac</a>
+                                        <a href="#" class="list-group-item list-group-item-action">Dapibus ac facilisis in</a>
+                                        <a href="#" class="list-group-item list-group-item-action">Morbi leo risus</a>
+                                        <a href="#" class="list-group-item list-group-item-action">Porta ac consectetur ac</a>
+                                        <a href="#" class="list-group-item list-group-item-action">Dapibus ac facilisis in</a>
+                                        <a href="#" class="list-group-item list-group-item-action">Morbi leo risus</a>
+                                        <a href="#" class="list-group-item list-group-item-action">Porta ac consectetur ac</a>
+                                        <a href="#" class="list-group-item list-group-item-action">Dapibus ac facilisis in</a>
+                                        <a href="#" class="list-group-item list-group-item-action">Morbi leo risus</a>
+                                        <a href="#" class="list-group-item list-group-item-action">Porta ac consectetur ac</a>
+                                        <a href="#" class="list-group-item list-group-item-action">Dapibus ac facilisis in</a>
+                                        <a href="#" class="list-group-item list-group-item-action">Morbi leo risus</a>
+                                        <a href="#" class="list-group-item list-group-item-action">Porta ac consectetur ac</a>
+                                        <a href="#" class="list-group-item list-group-item-action">Dapibus ac facilisis in</a>
+                                        <a href="#" class="list-group-item list-group-item-action">Morbi leo risus</a>
+                                        <a href="#" class="list-group-item list-group-item-action">Porta ac consectetur ac</a>
+                                        <a href="#" class="list-group-item list-group-item-action">Dapibus ac facilisis in</a>
+                                        <a href="#" class="list-group-item list-group-item-action">Morbi leo risus</a>
+                                        <a href="#" class="list-group-item list-group-item-action">Porta ac consectetur ac</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card" id="versions">
+                            <div class="card-header" role="tab" id="headingThree">
+                                <h5 class="mb-0">
+                                    <a data-toggle="collapse" href="#collapseThree" aria-expanded="false"
+                                       aria-controls="collapseThree">
+                                       Older Versions
+                                    </a>
+                                </h5>
+                            </div>
+
+                            <div id="collapseThree" class="collapse" role="tabpanel" aria-labelledby="headingThree"
+                                 data-parent="#accordion">
+                                <div class="card-body">
+                                    <div class="list-group">
+                                        <a href="#" class="list-group-item list-group-item-action">Version 5 <span class="badge badge-secondary">23.09.2017</span></a>
+                                        <a href="#" class="list-group-item list-group-item-action">Version 4 <span class="badge badge-secondary">08.06.2017</span></a>
+                                        <a href="#" class="list-group-item list-group-item-action">Version 3 <span class="badge badge-secondary">31.02.2017</span></a>
+                                        <a href="#" class="list-group-item list-group-item-action">Version 2 <span class="badge badge-secondary">17.12.2016</span></a>
+                                        <a href="#" class="list-group-item list-group-item-action">Version 1 <span class="badge badge-secondary">12.04.2016</span></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="d-none d-xl-block col-xl-2 bd-toc">
+            <ul class="section-nav">
+                <li class="toc-entry toc-h2"><a href="#graph">Graph</a></li>
+                <li class="toc-entry toc-h2"><a href="#description">Description</a></li>
+                <li class="toc-entry toc-h2"><a href="#ownership">Ownership</a></li>
+                <li class="toc-entry toc-h2"><a href="#statistics">Statistics</a></li>
+                <li class="toc-entry toc-h2"><a href="#classes">Classes</a></li>
+                <li class="toc-entry toc-h2"><a href="#properties">Properties</a></li>
+                <li class="toc-entry toc-h2"><a href="#versions">Versions</a></li>
+            </ul>
+        </div>
+
+    </div>
+
+</div>
+<!-- scripts -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"
+        integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4"
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"
+        integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1"
+        crossorigin="anonymous"></script>
+
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script>
+
+    var svg = d3.select("svg"),
+        width = +svg.attr("width"),
+        height = +svg.attr("height");
+
+    var color = d3.scaleOrdinal(d3.schemeCategory20);
+
+    var simulation = d3.forceSimulation()
+        .force("link", d3.forceLink().distance(10).strength(0.5))
+        .force("charge", d3.forceManyBody())
+        .force("center", d3.forceCenter(width / 2, height / 2));
+
+    d3.json("miserables.json", function (error, graph) {
+        if (error) throw error;
+
+        var nodes = graph.nodes,
+            nodeById = d3.map(nodes, function (d) {
+                return d.id;
+            }),
+            links = graph.links,
+            bilinks = [];
+
+        links.forEach(function (link) {
+            var s = link.source = nodeById.get(link.source),
+                t = link.target = nodeById.get(link.target),
+                i = {}; // intermediate node
+            nodes.push(i);
+            links.push({source: s, target: i}, {source: i, target: t});
+            bilinks.push([s, i, t]);
+        });
+
+        var link = svg.selectAll(".link")
+            .data(bilinks)
+            .enter().append("path")
+            .attr("class", "link");
+
+        var node = svg.selectAll(".node")
+            .data(nodes.filter(function (d) {
+                return d.id;
+            }))
+            .enter().append("circle")
+            .attr("class", "node")
+            .attr("r", 5)
+            .attr("fill", function (d) {
+                return color(d.group);
+            })
+            .call(d3.drag()
+                .on("start", dragstarted)
+                .on("drag", dragged)
+                .on("end", dragended));
+
+        node.append("title")
+            .text(function (d) {
+                return d.id;
+            });
+
+        simulation
+            .nodes(nodes)
+            .on("tick", ticked);
+
+        simulation.force("link")
+            .links(links);
+
+        function ticked() {
+            link.attr("d", positionLink);
+            node.attr("transform", positionNode);
+        }
+    });
+
+    function positionLink(d) {
+        return "M" + d[0].x + "," + d[0].y
+            + "S" + d[1].x + "," + d[1].y
+            + " " + d[2].x + "," + d[2].y;
+    }
+
+    function positionNode(d) {
+        return "translate(" + d.x + "," + d.y + ")";
+    }
+
+    function dragstarted(d) {
+        if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+        d.fx = d.x, d.fy = d.y;
+    }
+
+    function dragged(d) {
+        d.fx = d3.event.x, d.fy = d3.event.y;
+    }
+
+    function dragended(d) {
+        if (!d3.event.active) simulation.alphaTarget(0);
+        d.fx = null, d.fy = null;
+    }
+
+</script>
+</body>
+<div class="row footer">
+    <div class="col-12" align="center">
+        <a href="#">About</a> | <a href="#">Legal notice</a> | <a href="#">Privacy</a> | <a href="#">Terms of use</a> |
+        <a href="#">FAQ</a> | <a href="#">Send error report</a>
+    </div>
+</div>
+</html>
