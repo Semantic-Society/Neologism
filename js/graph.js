@@ -27,6 +27,11 @@ function main(container)
         // Creates the graph inside the given container
         var graph = new mxGraph(container);
 
+
+        //Disable resize of vertices
+        graph.setCellsResizable(true);
+
+
         // Creates toolbar inside the given container
         var tbContainer = document.getElementById('left-toolbar');
         var toolbar = new mxToolbar(tbContainer);
@@ -50,7 +55,7 @@ function main(container)
                 img.enabled = tmp;
             });
         };
-        addVertex('external/mxgraph/images/rounded.gif', 100, 40, 'shape=rounded');
+        addVertex('external/mxgraph/images/class_mockup.gif', 100, 40, 'shape=rounded');
 
 
         // Enables rubberband selection
