@@ -19,11 +19,14 @@ function main(container)
         //TODO: Look into clipboard.html, events.html, extendedcanvas.html, graphlayout.html, hovericons.html, layers.html, morph.html, secondlabel.html, stylesheets.html and touch.html
 
         //Defines an icon creating new connections
-        mxConnectionHandler.prototype.connectImage = new mxImage('external/mxgraph/images/point_new.gif', 16, 16);
+        //mxConnectionHandler.prototype.connectImage = new mxImage('external/mxgraph/images/point_new.gif', 16, 16);
 
         // Creates the graph inside the given container
         graph = new mxGraph(container);
 
+
+        //Enables Guide (Highlighting)
+        mxGraphHandler.prototype.highlightEnabled= true;
 
         //Disables resize of vertices
         graph.setCellsResizable(false);
@@ -37,7 +40,7 @@ function main(container)
         // Creates toolbar inside the given container
         var tbContainer = document.getElementById('left-toolbar');
         var toolbar = new mxToolbar(tbContainer);
-        toolbar.enabled = false
+        toolbar.enabled = false;
 
         // Graph Style Settings
         graph.setConnectable(true);
