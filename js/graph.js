@@ -1,6 +1,7 @@
 // Program starts here. Creates a sample graph in the
 // DOM node with the specified ID. This function is invoked
 // from the onLoad event handler of the document (see below).
+var graph;
 function main(container)
 {
     // Checks if the browser is supported
@@ -25,12 +26,14 @@ function main(container)
         mxConnectionHandler.prototype.connectImage = new mxImage('external/mxgraph/images/point_new.gif', 16, 16);
 
         // Creates the graph inside the given container
-        var graph = new mxGraph(container);
+        graph = new mxGraph(container);
 
 
         //Disable resize of vertices
-        graph.setCellsResizable(true);
+        graph.setCellsResizable(false);
 
+        //Disable edit function for graph in default mode
+        graph.setEnabled(false);
 
         // Creates toolbar inside the given container
         var tbContainer = document.getElementById('left-toolbar');
@@ -127,3 +130,41 @@ function addToolbarItem(graph, toolbar, prototype, image)
 
     return img;
 }
+
+
+/*
+    Bind events for buttons
+ */
+
+
+$(".edit-graph").bind("click", function(){
+    if($(this).hasClass("active-btn")){
+        graph.setEnabled(true);
+        $("#graphContainer").addClass("col-9 col-xl-9");
+        $("#left-toolbar").removeClass("display-none");
+        $("#right-toolbar").removeClass("display-none");
+        $(".cancel-graph").removeClass("display-none");
+        $(".save-graph").removeClass("display-none");
+        $(this).addClass("display-none").removeClass("active-btn");
+    }
+});
+
+$(".cancel-graph").bind("click", function() {
+    graph.setEnabled(false);
+    $("#left-toolbar").addClass("display-none");
+    $("#right-toolbar").addClass("display-none");
+    $("#graphContainer").removeClass("col-9 col-xl-9");
+    $(this).addClass("display-none");
+    $(".save-graph").addClass("display-none");
+    $(".edit-graph").removeClass("display-none").addClass("active-btn");
+});
+
+$(".save-graph").bind("click", function() {
+    graph.setEnabled(false);
+    $("#left-toolbar").addClass("display-none");
+    $("#right-toolbar").addClass("display-none");
+    $("#graphContainer").removeClass("col-9 col-xl-9");
+    $(this).addClass("display-none");
+    $(".cancel-graph").addClass("display-none");
+    $(".edit-graph").removeClass("display-none").addClass("active-btn");
+});
