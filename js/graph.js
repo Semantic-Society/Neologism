@@ -24,6 +24,16 @@ function main(container)
         // Creates the graph inside the given container
         graph = new mxGraph(container);
 
+        //add Node event listener for right toolbar
+        graph.getSelectionModel().addListener(mxEvent.CHANGE, function(e) {
+            var cell = graph.getSelectionCell();
+            var cellLabel = cell["value"];
+            $("#descriptionOfClass")[0].innerHTML = cellLabel;
+            console.log($("#descriptionOfClass"));
+            console.log(cell);
+
+        });
+
 
         //Enables Guide (Highlighting)
         mxGraphHandler.prototype.highlightEnabled= true;
@@ -171,10 +181,3 @@ $(".save-graph").bind("click", function() {
     $(".edit-graph").removeClass("display-none").addClass("active-btn");
 });
 
-//fix height of graph div
-/*
-$( document ).ready(function() {
-    var height=$("#rightDiv").height();
-    $("#graphContainer").css('height',height);
-});
-*/
