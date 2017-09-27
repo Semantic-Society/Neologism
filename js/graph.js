@@ -14,10 +14,6 @@ function main(container)
     {
 
         // Disables the built-in context menu
-
-        /*
-        Disabled for debugging reasons
-         */
         //mxEvent.disableContextMenu(container);
 
         //TODO: Look into clipboard.html, events.html, extendedcanvas.html, graphlayout.html, hovericons.html, layers.html, morph.html, secondlabel.html, stylesheets.html and touch.html
@@ -29,8 +25,11 @@ function main(container)
         graph = new mxGraph(container);
 
 
-        //Disable resize of vertices
+        //Disables resize of vertices
         graph.setCellsResizable(false);
+
+        //Enables Auto resize of vertices
+        //graph.setAutoSizeCells(true);
 
         //Disable edit function for graph in default mode
         graph.setEnabled(false);
@@ -58,7 +57,7 @@ function main(container)
                 img.enabled = tmp;
             });
         };
-        addVertex('external/mxgraph/images/class_mockup.gif', 100, 40, 'shape=rounded');
+        addVertex('external/mxgraph/images/class_mockup.gif', 80, 30, 'shape=rounded');
 
 
         // Enables rubberband selection
