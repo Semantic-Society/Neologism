@@ -3,16 +3,17 @@ svg .link {
     stroke: #bbb;
 }
 
-
 .stats-row {
 }
 
 .stat-words {
     background-color: #873bc2;
 }
+
 .stat-relation {
     background-color: #c27f53;
 }
+
 .stat-properties {
     background-color: #69a9c2;
 }
@@ -24,6 +25,7 @@ svg .link {
 .header > a {
     color: #FFFFFF;
 }
+
 .stats-div {
     margin: 15px;
     color: #FFFFFF;
@@ -58,27 +60,82 @@ svg .link {
     font-weight: 600;
 }
 
-#graphContainer{
+#graphContainer {
     border: 2px solid #f5f5f5;
-    height: 300px;
+    min-height: 350px;
 
 }
 
-
-#left-toolbar{
+#left-toolbar {
     background-color: #f5f5f5;
     padding-top: 1rem;
 }
 
-#right-toolbar{
+#right-toolbar {
     background-color: #f5f5f5;
+    padding: 0;
+
 }
 
-#bottom-toolbar{
+.right-toolbar-header {
+    font-size: 0.8rem;
+    color: #707070;
+    font-weight: bold;
+}
+
+.right-toolbar-content {
+    font-size: 0.7rem;
+    padding: 0.5rem;
+
+}
+
+.right-toolbar-classname {
+    font-size: 0.8rem;
+    color: #707070;
+    font-weight: bold;
+    text-align: center;
+    padding-top: 0.5rem;
+}
+
+.right-toolbar-header {
+    padding: 0 0.3rem 0 0.3rem;
+}
+
+
+#collapseRightToolbarDocumentation {
+    margin-bottom: 3rem;
+}
+
+#bottom-toolbar {
     padding-top: 0.5rem;
     margin-bottom: 1rem;
 }
 
-.display-none{
+.display-none {
     display: none;
+}
+
+.description-label {
+    font-weight: bold;
+    font-size: 0.8rem;
+    color: #707070;
+    margin-bottom: 0.3rem;
+}
+
+.description-text {
+    font-size: 0.8rem;
+    color: #707070;
+    margin-bottom: 0.3rem;
+}
+
+.documentation-description {
+    width: 100%;
+    height: 100px;
+}
+
+.bottomaligned {
+    position: absolute;
+    bottom: 0;
+    margin-bottom: 7px;
+    left: 0;
 }

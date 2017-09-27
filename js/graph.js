@@ -142,7 +142,7 @@ function addToolbarItem(graph, toolbar, prototype, image)
 $(".edit-graph").bind("click", function(){
     if($(this).hasClass("active-btn")){
         graph.setEnabled(true);
-        $("#graphContainer").addClass("col-9 col-xl-9");
+        $("#graphContainer").addClass("col-8 col-xl-8");
         $("#left-toolbar").removeClass("display-none");
         $("#right-toolbar").removeClass("display-none");
         $(".cancel-graph").removeClass("display-none");
@@ -155,7 +155,7 @@ $(".cancel-graph").bind("click", function() {
     graph.setEnabled(false);
     $("#left-toolbar").addClass("display-none");
     $("#right-toolbar").addClass("display-none");
-    $("#graphContainer").removeClass("col-9 col-xl-9");
+    $("#graphContainer").removeClass("col-8 col-xl-8");
     $(this).addClass("display-none");
     $(".save-graph").addClass("display-none");
     $(".edit-graph").removeClass("display-none").addClass("active-btn");
@@ -165,8 +165,16 @@ $(".save-graph").bind("click", function() {
     graph.setEnabled(false);
     $("#left-toolbar").addClass("display-none");
     $("#right-toolbar").addClass("display-none");
-    $("#graphContainer").removeClass("col-9 col-xl-9");
+    $("#graphContainer").removeClass("col-8 col-xl-8");
     $(this).addClass("display-none");
     $(".cancel-graph").addClass("display-none");
     $(".edit-graph").removeClass("display-none").addClass("active-btn");
 });
+
+//fix height of graph div
+/*
+$( document ).ready(function() {
+    var height=$("#rightDiv").height();
+    $("#graphContainer").css('height',height);
+});
+*/

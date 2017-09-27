@@ -49,6 +49,8 @@
     background-color: #292b2c;
     color: #FFFFFF;
     font-size: .875rem;
+    margin-left:0;
+    margin-right: 0;
 
 }
 .row.footer a {
