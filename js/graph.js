@@ -36,6 +36,29 @@ function main(container)
 
         });
 
+        /*
+            =======================================
+                        GRAPH STYLES
+            =======================================
+
+         */
+
+        var style = graph.stylesheet.getDefaultVertexStyle();
+        style[mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_RECTANGLE;
+        style[mxConstants.STYLE_STROKECOLOR] = '#c4a000';
+        style[mxConstants.STYLE_STROKEWIDTH] = 2;
+        style[mxConstants.STYLE_PERIMETER] = mxPerimeter.EllipsePerimeter;
+        style[mxConstants.STYLE_FONTCOLOR] = 'black';
+        style[mxConstants.STYLE_FILLCOLOR] = '#f3e57a';
+        //Edge color #554600
+        graph.getStylesheet().putCellStyle('image', style)
+
+        /*
+            =======================================
+                        GENERAL SETTINGS
+            =======================================
+
+         */
 
         //Enables Guide (Highlighting)
         mxGraphHandler.prototype.highlightEnabled= true;
@@ -43,21 +66,32 @@ function main(container)
         //Disables resize of vertices
         graph.setCellsResizable(false);
 
-
-
         //Enables Auto resize of vertices
         //graph.setAutoSizeCells(true);
 
         //Disable edit function for graph in default mode
         graph.setEnabled(false);
 
+        // Graph Style Settings
+        graph.setConnectable(true);
+
+        // Disables unconnected edges
+        graph.setAllowDanglingEdges(false);
+
+        // Enables rubberband selection
+        new mxRubberband(graph);
+
+        /*
+           =======================================
+                       TOLLBAR SETUP
+           =======================================
+
+        */
+
         // Creates toolbar inside the given container
         var tbContainer = document.getElementById('left-toolbar');
         var toolbar = new mxToolbar(tbContainer);
         toolbar.enabled = false;
-
-        // Graph Style Settings
-        graph.setConnectable(true);
 
         var addVertex = function(icon, w, h, style)
         {
@@ -75,11 +109,20 @@ function main(container)
             });*/
 
         };
+
+        //Adding mockup Node
         addVertex('external/mxgraph/images/class_mockup.gif', 80, 30, 'shape=rounded');
 
-        // Disables unconnected edges
-        graph.setAllowDanglingEdges(false);
-// Scroll events should not start moving the vertex
+
+
+        /*
+           =======================================
+                       OTHER STUFF
+           =======================================
+
+        */
+
+        // Scroll events should not start moving the vertex
         graph.cellRenderer.isLabelEvent = function(state, evt)
         {
             var source = mxEvent.getSource(evt);
@@ -89,8 +132,13 @@ function main(container)
         };
 
 
-        // Enables rubberband selection
-        new mxRubberband(graph);
+
+        /*
+             =======================================
+                 MOCKUP NODES AND UPDATE ROUTINE
+             =======================================
+
+        */
 
         // Gets the default parent for inserting new cells. This
         // is normally the first child of the root (ie. layer 0).
@@ -161,9 +209,11 @@ function addToolbarItem(graph, toolbar, prototype, image)
 
 
 /*
-    Bind events for buttons
- */
+   =======================================
+          BINDING EVENTS FOR BUTTONS
+   =======================================
 
+*/
 
 $(".edit-graph").bind("click", function(){
     if($(this).hasClass("active-btn")){
