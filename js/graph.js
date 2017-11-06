@@ -127,15 +127,53 @@ function main(container) {
                 source != state.text.node.getElementsByTagName('div')[0];
         };
 
+
+        /*
+                  =======================================
+                             AUTO GRAPH LAYOUT
+                  =======================================
+        */
+
+        var parent = graph.getDefaultParent();
+
+        var layout = new mxFastOrganicLayout(graph);
+        // Moves stuff wider apart than usual
+        layout.forceConstant = 80;
+        $(".auto-layout-graph").bind("click", function () {
+                graph.getModel().beginUpdate();
+                try {
+                    // Creates a layout algorithm to be used
+                    // with the graph
+                    var circleLayout = new mxCircleLayout(graph);
+                    circleLayout.execute(parent);
+                }
+                catch (e) {
+                    throw e;
+                }
+                finally {
+                    if (true) {
+                        var morph = new mxMorphing(graph);
+                        morph.addListener(mxEvent.DONE, function () {
+                            graph.getModel().endUpdate();
+                        });
+
+                        morph.startAnimation();
+                    }
+                    else {
+                        graph.getModel().endUpdate();
+                    }
+                }
+
+            }
+        );
+
         /*
                   =======================================
                           UNDO/REDO FUNCTIONALITY
                   =======================================
-
         */
 
-
-        // Undo/redo
+// Undo/redo
         var undoManager = new mxUndoManager();
         var listener = function (sender, evt) {
             undoManager.undoableEditHappened(evt.getProperty('edit'));
@@ -161,11 +199,11 @@ function main(container) {
 
         */
 
-        // Gets the default parent for inserting new cells. This
-        // is normally the first child of the root (ie. layer 0).
+// Gets the default parent for inserting new cells. This
+// is normally the first child of the root (ie. layer 0).
         var parent = graph.getDefaultParent();
 
-        // Adds cells to the model in a single step
+// Adds cells to the model in a single step
         graph.getModel().beginUpdate();
         try {
             var v1 = graph.insertVertex(parent, null, 'Hello,', 20, 20, 80, 30);
@@ -177,8 +215,9 @@ function main(container) {
             graph.getModel().endUpdate();
         }
     }
-    undoManager.clear();
-};
+    undoManager.clear(); // Removes the mockup nodes from the undo History.
+}
+;
 
 function addToolbarItem(graph, toolbar, prototype, image) {
     // Function that is executed when the image is dropped on
