@@ -7,7 +7,9 @@
     <link rel="stylesheet" href="css/bootstrap-override.css"/> <!-- Call override CSS second -->
     <link rel="stylesheet" href="css/navigation.css">
     <link rel="stylesheet" href="css/details.css">
+    <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/mxgraph-override.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> <!-- icon fonts -->
 
 </head>
 <body onload="main(document.getElementById('graphContainer'))">
@@ -69,7 +71,9 @@
         <div class="col-12 col-md-12 col-xl-8 py-md-3 pl-md-5 bd-content" role="main">
             <div class="row">
                 <div class="col-1 col-xl-1 col-md-12 col-sm-12 display-none" id="left-toolbar">
-
+                    <button type="button" class="btn btn-outline-secondary btn-sm no-pad line-height-05 undo-graph">
+                        <i class="material-icons">undo</i>
+                    </button>
                 </div>
                 <div class="col-md-12 " id="graphContainer">
 
@@ -129,7 +133,9 @@
                         </div>
                     </div>
                     <div>
-                        <button type="button" class="btn btn-primary btn-sm btn-block align-bottom bottomaligned">Update</button>
+                        <button type="button" class="btn btn-primary btn-sm btn-block align-bottom bottomaligned">
+                            Update
+                        </button>
                     </div>
 
                 </div>

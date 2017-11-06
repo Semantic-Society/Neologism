@@ -2,16 +2,14 @@
 // DOM node with the specified ID. This function is invoked
 // from the onLoad event handler of the document (see below).
 var graph;
-function main(container)
-{
+
+function main(container) {
     // Checks if the browser is supported
-    if (!mxClient.isBrowserSupported())
-    {
+    if (!mxClient.isBrowserSupported()) {
         // Displays an error message if the browser is not supported.
         mxUtils.error('Browser is not supported!', 200, false);
     }
-    else
-    {
+    else {
 
         // Disables the built-in context menu
         //mxEvent.disableContextMenu(container);
@@ -25,9 +23,9 @@ function main(container)
         graph = new mxGraph(container);
 
         //add Node event listener for right toolbar
-        graph.getSelectionModel().addListener(mxEvent.CHANGE, function(e) {
+        graph.getSelectionModel().addListener(mxEvent.CHANGE, function (e) {
             var cell = graph.getSelectionCell();
-            if (cell["vertex"] == true){
+            if (cell["vertex"] == true) {
                 var cellLabel = cell["value"];
                 $("#descriptionOfClass")[0].innerHTML = cellLabel;
 
@@ -51,7 +49,8 @@ function main(container)
         style[mxConstants.STYLE_FONTCOLOR] = 'black';
         style[mxConstants.STYLE_FILLCOLOR] = '#f3e57a';
         //Edge color #554600
-        graph.getStylesheet().putCellStyle('image', style)
+        graph.getStylesheet().putCellStyle('image', style);
+
 
         /*
             =======================================
@@ -61,7 +60,7 @@ function main(container)
          */
 
         //Enables Guide (Highlighting)
-        mxGraphHandler.prototype.highlightEnabled= true;
+        mxGraphHandler.prototype.highlightEnabled = true;
 
         //Disables resize of vertices
         graph.setCellsResizable(false);
@@ -93,8 +92,7 @@ function main(container)
         var toolbar = new mxToolbar(tbContainer);
         toolbar.enabled = false;
 
-        var addVertex = function(icon, w, h, style)
-        {
+        var addVertex = function (icon, w, h, style) {
             var vertex = new mxCell(null, new mxGeometry(0, 0, w, h), style);
             vertex.setVertex(true);
 
@@ -114,7 +112,6 @@ function main(container)
         addVertex('external/mxgraph/images/class_mockup.gif', 80, 30, 'shape=rounded');
 
 
-
         /*
            =======================================
                        OTHER STUFF
@@ -123,15 +120,39 @@ function main(container)
         */
 
         // Scroll events should not start moving the vertex
-        graph.cellRenderer.isLabelEvent = function(state, evt)
-        {
+        graph.cellRenderer.isLabelEvent = function (state, evt) {
             var source = mxEvent.getSource(evt);
 
             return state.text != null && source != state.text.node &&
                 source != state.text.node.getElementsByTagName('div')[0];
         };
 
+        /*
+                  =======================================
+                          UNDO/REDO FUNCTIONALITY
+                  =======================================
 
+        */
+
+
+        // Undo/redo
+        var undoManager = new mxUndoManager();
+        var listener = function (sender, evt) {
+            undoManager.undoableEditHappened(evt.getProperty('edit'));
+        };
+        graph.getModel().addListener(mxEvent.UNDO, listener);
+        graph.getView().addListener(mxEvent.UNDO, listener);
+
+        /*document.body.appendChild(mxUtils.button('Undo', function () {
+            undoManager.undo();
+        }));
+
+        document.body.appendChild(mxUtils.button('Redo', function () {
+            undoManager.redo();
+        }));*/
+        $(".undo-graph").bind("click", function () {
+            undoManager.undo();
+        });
 
         /*
              =======================================
@@ -146,27 +167,24 @@ function main(container)
 
         // Adds cells to the model in a single step
         graph.getModel().beginUpdate();
-        try
-        {
+        try {
             var v1 = graph.insertVertex(parent, null, 'Hello,', 20, 20, 80, 30);
             var v2 = graph.insertVertex(parent, null, 'World!', 200, 150, 80, 30);
             var e1 = graph.insertEdge(parent, null, '', v1, v2);
         }
-        finally
-        {
+        finally {
             // Updates the display
             graph.getModel().endUpdate();
         }
     }
+    undoManager.clear();
 };
 
-function addToolbarItem(graph, toolbar, prototype, image)
-{
+function addToolbarItem(graph, toolbar, prototype, image) {
     // Function that is executed when the image is dropped on
     // the graph. The cell argument points to the cell under
     // the mousepointer if there is one.
-    var funct = function(graph, evt, cell, x, y)
-    {
+    var funct = function (graph, evt, cell, x, y) {
         graph.stopEditing(false);
 
         var vertex = graph.getModel().cloneCell(prototype);
@@ -178,8 +196,7 @@ function addToolbarItem(graph, toolbar, prototype, image)
     }
 
     // Creates the image which is used as the drag icon (preview)
-    var img = toolbar.addMode(null, image, function(evt, cell)
-    {
+    var img = toolbar.addMode(null, image, function (evt, cell) {
         var pt = this.graph.getPointForEvent(evt);
         funct(graph, evt, cell, pt.x, pt.y);
     });
@@ -187,17 +204,14 @@ function addToolbarItem(graph, toolbar, prototype, image)
     // Disables dragging if element is disabled. This is a workaround
     // for wrong event order in IE. Following is a dummy listener that
     // is invoked as the last listener in IE.
-    mxEvent.addListener(img, 'mousedown', function(evt)
-    {
+    mxEvent.addListener(img, 'mousedown', function (evt) {
         // do nothing
     });
 
     // This listener is always called first before any other listener
     // in all browsers.
-    mxEvent.addListener(img, 'mousedown', function(evt)
-    {
-        if (img.enabled == false)
-        {
+    mxEvent.addListener(img, 'mousedown', function (evt) {
+        if (img.enabled == false) {
             mxEvent.consume(evt);
         }
     });
@@ -215,8 +229,8 @@ function addToolbarItem(graph, toolbar, prototype, image)
 
 */
 
-$(".edit-graph").bind("click", function(){
-    if($(this).hasClass("active-btn")){
+$(".edit-graph").bind("click", function () {
+    if ($(this).hasClass("active-btn")) {
         graph.setEnabled(true);
         $("#graphContainer").addClass("col-8 col-xl-8");
         $("#left-toolbar").removeClass("display-none");
@@ -227,7 +241,7 @@ $(".edit-graph").bind("click", function(){
     }
 });
 
-$(".cancel-graph").bind("click", function() {
+$(".cancel-graph").bind("click", function () {
     graph.setEnabled(false);
     $("#left-toolbar").addClass("display-none");
     $("#right-toolbar").addClass("display-none");
@@ -237,7 +251,7 @@ $(".cancel-graph").bind("click", function() {
     $(".edit-graph").removeClass("display-none").addClass("active-btn");
 });
 
-$(".save-graph").bind("click", function() {
+$(".save-graph").bind("click", function () {
     graph.setEnabled(false);
     $("#left-toolbar").addClass("display-none");
     $("#right-toolbar").addClass("display-none");
@@ -246,4 +260,3 @@ $(".save-graph").bind("click", function() {
     $(".cancel-graph").addClass("display-none");
     $(".edit-graph").removeClass("display-none").addClass("active-btn");
 });
-
