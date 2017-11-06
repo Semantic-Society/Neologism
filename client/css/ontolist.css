@@ -1,0 +1,54 @@
+h6 a {
+    text-decoration:none !important;
+    color: #333333 !important;
+}
+
+.card-header{
+    background-color: #FFFFFF
+}
+
+.card-header:hover {
+    background-color: #f4f9fb
+}
+
+.stats-row {
+    padding: 15px;
+}
+
+.stat-words {
+    background-color: #873bc2;
+}
+.stat-relation {
+    background-color: #c27f53;
+}
+.stat-properties {
+    background-color: #69a9c2;
+}
+
+.stat-used {
+    background-color: #55c259;
+}
+
+.header > a {
+    color: #FFFFFF;
+}
+.stats-div {
+    color: #FFFFFF;
+    padding: 15px;
+}
+
+.stats-div > .header {
+    line-height: normal;
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+.stats-div > .content {
+    line-height: normal;
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+.show-details {
+    font-size: .875rem;
+}
