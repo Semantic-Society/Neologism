@@ -45,11 +45,15 @@ function main(container) {
         style[mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_RECTANGLE;
         style[mxConstants.STYLE_STROKECOLOR] = '#c4a000';
         style[mxConstants.STYLE_STROKEWIDTH] = 2;
-        style[mxConstants.STYLE_PERIMETER] = mxPerimeter.EllipsePerimeter;
+        style[mxConstants.STYLE_PERIMETER] = mxPerimeter.RectanglePerimeter;
         style[mxConstants.STYLE_FONTCOLOR] = 'black';
         style[mxConstants.STYLE_FILLCOLOR] = '#f3e57a';
         //Edge color #554600
         graph.getStylesheet().putCellStyle('image', style);
+
+        var styleEdge = graph.stylesheet.getDefaultEdgeStyle();
+        styleEdge[mxConstants.STYLE_LABEL_BACKGROUNDCOLOR] = '#ffffff';
+        //styleEdge[mxConstants.STYLE_EDGE] = mxEdgeStyle.SegmentConnector;
 
 
         /*
@@ -79,6 +83,7 @@ function main(container) {
 
         // Enables rubberband selection
         new mxRubberband(graph);
+
 
         /*
            =======================================
