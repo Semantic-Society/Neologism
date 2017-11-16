@@ -12,7 +12,7 @@ function main(container) {
     else {
 
         // Disables the built-in context menu
-        //mxEvent.disableContextMenu(container);
+        mxEvent.disableContextMenu(container);
 
         //TODO: Look into clipboard.html, events.html, extendedcanvas.html, graphlayout.html, hovericons.html, layers.html, morph.html, secondlabel.html, stylesheets.html and touch.html
 

@@ -74,7 +74,8 @@
                     <button type="button" class="btn btn-outline-secondary btn-sm no-pad line-height-05 undo-graph">
                         <i class="material-icons">undo</i>
                     </button>
-                    <button type="button" class="btn btn-outline-secondary btn-sm no-pad line-height-05 auto-layout-graph">
+                    <button type="button"
+                            class="btn btn-outline-secondary btn-sm no-pad line-height-05 auto-layout-graph">
                         <i class="material-icons">timeline</i>
                     </button>
                 </div>
@@ -86,15 +87,17 @@
                     <div id="rightToolbarSettingsContainer" role="tablist">
                         <p class="right-toolbar-classname">Description</p>
 
-                        <p class="description-label float-left">Class: </p>
-                        <p class="description-text" id="descriptionOfClass">Hello</p>
+                        <div class="form-group right-toolbar-content">
+                            <label for="class">Class:</label>
+                            <input type="text" class="form-control form-input-text" id="class">
+                        </div>
 
                         <p class="description-label float-left">URI:</p>
-                        <p class="description-text">
+                        <p class="form-input-text">
                             http://neologism.rwth-aachen.de/some#Hello </p>
 
                         <p class="description-label float-left">Superclass: </p>
-                        <p class="description-text">SomeSuperClass </p>
+                        <p class="form-input-text">SomeSuperClass </p>
 
 
                         <div class="card">

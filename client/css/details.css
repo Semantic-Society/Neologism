@@ -125,11 +125,13 @@ svg .link {
     margin-bottom: 0.3rem;
 }
 
-.description-text {
+.form-input-text {
     font-size: 0.8rem;
     color: #707070;
     margin-bottom: 0.3rem;
 }
+
+
 
 .documentation-description {
     width: 100%;
