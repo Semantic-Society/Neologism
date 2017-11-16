@@ -51,6 +51,9 @@ svg .link {
 .properties-row {
 
 }
+.right-toolbar-content{
+    position: relative;
+}
 
 .list-group > .list-group-item {
     border: none;
@@ -168,4 +171,13 @@ svg .link {
 
     /* Support for IE. */
     font-feature-settings: 'liga';
+}
+
+.class-recommendation-box{
+    top: 68px;
+    left: 8px;
+    width: 95%;
+    position: absolute;
+    background-color: white;
+    border: 1px solid rgba(0,0,0,.15);
 }
