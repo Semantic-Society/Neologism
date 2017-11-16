@@ -25,9 +25,11 @@ function main(container) {
         //add Node event listener for right toolbar
         graph.getSelectionModel().addListener(mxEvent.CHANGE, function (e) {
             var cell = graph.getSelectionCell();
-            if (cell["vertex"] == true) {
+            if(cell == undefined) {
+
+            } else if (cell["vertex"] == true) {
                 var cellLabel = cell["value"];
-                $("#descriptionOfClass")[0].innerHTML = cellLabel;
+                //$("#descriptionOfClass")[0].innerHTML = cellLabel;
 
             }
 
