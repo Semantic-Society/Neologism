@@ -1,0 +1,5 @@
+{
+  "globalDependencies": {
+    "mxGraph": "github:gooddaytoday/mxgraph-typescript-definitions/mxGraph.d.ts"
+  }
+}
