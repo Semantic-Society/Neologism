@@ -1,0 +1,15 @@
+.mat-drawer {
+  background-color: #1f1f1f;
+  color: #FFFFFF;
+  padding: 1rem;
+}
+
+.mat-drawer-container {
+  height: 1000px;
+}
+
+.mxgraph-container {
+  height: 400px;
+  width: 400px;
+  background-color: red;
+}
