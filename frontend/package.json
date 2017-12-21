@@ -25,7 +25,9 @@
     "mxgraph": "git+https://github.com/NicCOConnor/mxgraph.git",
     "n3": "^0.11.2",
     "rxjs": "^5.5.2",
-    "zone.js": "^0.8.14"
+    "zone.js": "^0.8.14",
+    "@angular/material": "5.0.1",
+    "@angular/cdk": "5.0.1"
   },
   "devDependencies": {
     "@angular/cli": "1.6.1",

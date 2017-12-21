@@ -1,0 +1,15 @@
+<mat-drawer-container class="mat-drawer-container" autosize>
+  <mat-drawer #drawer class="mat-drawer" mode="side" [opened]="true">
+    <p>Auto-resizing sidenav</p>
+    <p *ngIf="showFiller">Lorem, ipsum dolor sit amet consectetur.</p>
+
+  </mat-drawer>
+
+  <div class="example-sidenav-content">
+    <!--<button type="button" mat-button (click)="drawer.toggle()">
+      Toggle sidenav
+    </button>-->
+    <div class="mxgraph-container" id="graphContainer"></div>
+  </div>
+  <script type="text/javascript" src="assets/graph.js"></script>
+</mat-drawer-container>
