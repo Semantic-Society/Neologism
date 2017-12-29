@@ -1,0 +1,46 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:fragment="header-css">
+        <!-- this is header-css -->
+        <link rel="stylesheet" type="text/css"
+              href="/webjars/bootstrap/3.3.7/css/bootstrap.min.css" />
+
+        <link rel="stylesheet" th:href="@{/css/main.css}"
+              href="../../css/main.css" />
+    </div>
+</head>
+<body>
+<div th:fragment="header">
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" th:href="@{/}">Neologism</a>
+            </div>
+            <div class="collapse navbar-collapse" id="myNavbar">
+                <ul class="nav navbar-nav">
+                    <li th:classappend="${#httpServletRequest.getRequestURI() == '/' ? 'active':''}"><a th:href="@{/}">Home</a></li>
+                    <li th:classappend="${#httpServletRequest.getRequestURI() == '/class' ? 'active':''}"><a th:href="@{/class}">Search class/terms</a></li>
+                    <li th:classappend="${#httpServletRequest.getRequestURI() == '/recommender' ? 'active':''}"><a th:href="@{/recommender}">Ontology Recommender</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a th:if="!${#authorization.expression('isAuthenticated()')}" th:href="@{/registration}"><span class="glyphicon glyphicon-user"></span> Sign Up</a>
+                        <a th:if="${#authorization.expression('isAuthenticated()')}"><span th:text ="${#authentication.getPrincipal().getUsername()}"></span></a>
+                    </li>
+                    <li>
+                        <a th:if="${#authorization.expression('isAuthenticated()')}" th:href="@{/logout}"><span class="glyphicon glyphicon-log-out"></span> Logout</a>
+                        <a th:if="!${#authorization.expression('isAuthenticated()')}" th:href="@{/login}"><span class="glyphicon glyphicon-log-in"></span> Login</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</div>
+
+</body>
+</html>

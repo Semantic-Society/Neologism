@@ -1,0 +1,75 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>NCBO Recommender</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <div th:replace="fragments/header :: header-css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.css" />
+</head>
+<body>
+
+<div th:replace="fragments/header :: header"/>
+
+<div class="container">
+
+    <div>
+        <form action="#" method="post" class="form-horizontal" id="recommenderForm" th:object="${recommenderForm}">
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="keywords">Write keywords:</label>
+                <div class="col-sm-6">
+                    <label th:if="${#fields.hasErrors('keywords')}" th:errors="*{keywords}" class="error"></label>
+                    <input type="text" id="keywords" th:field="*{keywords}" class="form-control" placeholder="Keywords (separated by commas)" name="keywords" required="required"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button id="submit" type="submit" class="btn btn-default">Get Recommendations</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div id="recommendations_result" class="container-fluid">
+        <div th:if="${not #lists.isEmpty(recommendations)}" style="margin-bottom: 90px;">
+            <table id="recommendations_table" class="table table-striped" data-toggle="table">
+                <thead>
+                    <tr>
+                        <th data-sortable="true">POS.</th>
+                        <th data-sortable="true">Ontology</th>
+                        <th data-sortable="true">Final score</th>
+                        <th data-sortable="true">Coverage score</th>
+                        <th data-sortable="true">Acceptance score</th>
+                        <th data-sortable="true">Detail score</th>
+                        <th data-sortable="true">Specialization score</th>
+                        <th data-sortable="true">Annotations</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="recommendation : ${recommendations}">
+                        <td th:text="${recommendationStat.index}"></td>
+                        <td><a th:href="${recommendation.ontologyLink}" th:target="_blank" th:text="${recommendation.ontology}"></a></td>
+                        <td th:text="${recommendation.finalScore}"></td>
+                        <td th:text="${recommendation.coverageScore}"></td>
+                        <td th:text="${recommendation.acceptanceScore}"></td>
+                        <td th:text="${recommendation.detailScore}"></td>
+                        <td th:text="${recommendation.specializationScore}"></td>
+                        <td th:text="${recommendation.annotations}"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div th:if="${#lists.isEmpty(recommendations)}">Recommendations not found!</div>
+    </div>
+
+</div>
+
+<div th:replace="fragments/footer :: footer"/>
+
+<script src="/webjars/jquery/3.2.1/jquery.min.js"></script>
+<script src="webjars/bootstrap/3.3.7/js/bootstrap.min.js" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.17.0/jquery.validate.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.js"></script>
+</body>
+</html>

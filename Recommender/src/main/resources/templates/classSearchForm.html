@@ -1,0 +1,60 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>NCBO</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <div th:replace="fragments/header :: header-css"/>
+</head>
+<body>
+
+<div th:replace="fragments/header :: header"/>
+
+<div class="container">
+
+    <div>
+        <form action="#" method="post" class="form-horizontal" id="searchClassForm">
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="searchTerms">Write search terms:</label>
+                <div class="col-sm-6">
+                    <input type="text" id="searchTerms" class="form-control" placeholder="Write multiple search terms separated by ','" name="searchTerms" required="required"/>
+                </div>
+            </div>
+            <div class="form-group">
+                    <label class="control-label col-sm-2" for="select-ontology">Ontologies:</label>
+                    <div class="col-sm-6">
+                        <select id="select-ontology" name="state[]" class="demo-default" placeholder="Select a ontology..." multiple="multiple">
+                            <option th:each="ontology : ${ontologies}" th:value="${ontology.acronym}" th:text="${ontology.name}"></option>
+                        </select>
+                    </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-7 col-sm-3">
+                    <a id="ont_select_clear">clear selection</a>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button id="submit" type="submit" class="btn btn-default">Search</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div id="records_tables" class="container-fluid">
+    </div>
+
+</div>
+
+<div th:replace="fragments/footer :: footer"/>
+
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.4/css/selectize.min.css" />
+<script src="/webjars/jquery/3.2.1/jquery.min.js"></script>
+<script src="webjars/bootstrap/3.3.7/js/bootstrap.min.js" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.4/js/standalone/selectize.min.js" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.17.0/axios.min.js" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.17.0/jquery.validate.min.js"></script>
+<script src="../js/classSearch.js"></script>
+</body>
+</html>
