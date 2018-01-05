@@ -1,15 +1,7 @@
-.mat-drawer {
-  background-color: #1f1f1f;
-  color: #FFFFFF;
-  padding: 1rem;
-}
-
-.mat-drawer-container {
-  height: 1000px;
-}
-
 .mxgraph-container {
-  height: 400px;
-  width: 400px;
-  background-color: red;
+  overflow:hidden;
+  width: 100%;
+  height:441px;
+  background-size: .5cm .5cm;
+  background-image: linear-gradient(to right, lightgrey 1px, transparent 1px), linear-gradient(to bottom, lightgrey 1px, transparent 1px);
 }

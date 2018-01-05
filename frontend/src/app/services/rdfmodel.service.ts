@@ -3,7 +3,6 @@ import { Observable } from 'rxjs/Observable';
 import { switchMap } from 'rxjs/operators';
 import 'rxjs/add/observable/bindCallback';
 
-import * as MxGraph from 'mxgraph';
 import * as N3 from 'n3';
 import { error } from 'util';
 import { Subject } from 'rxjs/Subject';
@@ -11,17 +10,13 @@ import { Subject } from 'rxjs/Subject';
 
 @Injectable()
 export class RdfmodelService {
-    public mxGraph: mxGraph;
-    public mxGraphModel;
+    // See https://github.com/RubenVerborgh/N3.js
     private n3parser = N3.Parser();
     private tripleStream = new Subject<[Error, N3.Triple, N3.Prefixes]>();
 
     constructor() {
-        this.mxGraph = MxGraph({
-            mxImageBasePath: './node_modules/mxgraph/javascript/src/images',
-            mxBasePath: './node_modules/mxgraph/javascript/src'
-        });
-        this.mxGraphModel = this.mxGraph.getModel();
+        
+        // this.mxGraphModel = this.mxGraph.getModel();
         console.log('RdfModel Service instantiated.');
 
         const sampleInput =

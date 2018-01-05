@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { RdfmodelService } from './services/rdfmodel.service';
 
 @Component({
   selector: 'app-root',
@@ -7,9 +6,7 @@ import { RdfmodelService } from './services/rdfmodel.service';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  constructor(private s: RdfmodelService) {
-
-  }
+  constructor() { }
 
   title = 'app';
 }

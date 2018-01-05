@@ -1,0 +1,22 @@
+.mat-drawer-container {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.mat-drawer {
+    background-color: #1f1f1f;
+    color: #FFFFFF;
+    padding: 1rem;
+  }
+  
+
+
+app-mxgraph {
+    width: 800px;
+    height: 500px;
+    color: red;
+  }
+  

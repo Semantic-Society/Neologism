@@ -1,2 +1,14 @@
-<app-mxgraph></app-mxgraph>
+<!-- c.f. https://material.angular.io/components/sidenav/api -->
+<mat-drawer-container autosize>
+    <mat-drawer #nav class="mat-drawer" mode="side" [opened]="true">
+        <p>Auto-resizing sidenav</p>
+        <p *ngIf="true">Lorem, ipsum dolor sit amet consectetur.</p>
+    </mat-drawer>
 
+    <mat-drawer-content>
+        <app-mxgraph></app-mxgraph>
+        <button type="button" mat-button (click)="nav.toggle()">
+            Toggle sidenav
+        </button>
+    </mat-drawer-content>
+</mat-drawer-container>
