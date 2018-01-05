@@ -1,4 +1,8 @@
 {
+  "extends": [
+    "tslint:recommended",
+    "rxjs-tslint-rules"
+  ],
   "rulesDirectory": [
     "node_modules/codelyzer"
   ],
@@ -139,6 +143,21 @@
     "use-life-cycle-interface": true,
     "use-pipe-transform-interface": true,
     "component-class-suffix": true,
-    "directive-class-suffix": true
+    "directive-class-suffix": true,
+    "rxjs-add": {
+      "severity": "error"
+    },
+    "rxjs-no-unused-add": {
+      "severity": "error"
+    },
+    "rxjs-no-subject-unsubscribe": {
+      "severity": "error"
+    },
+    "rxjs-no-wholesale": {
+      "severity": "error"
+    },
+    "rxjs-no-do": {
+      "severity": "error"
+    }
   }
 }

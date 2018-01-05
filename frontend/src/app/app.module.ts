@@ -8,7 +8,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatButtonModule } from '@angular/material/button';
 
 // App Services
-import { RdfmodelService } from './services/rdfmodel.service';
+// import { RdfmodelService } from './services/rdfmodel.service';
 
 // App Components
 import { AppComponent } from './app.component';
@@ -27,7 +27,7 @@ import { MxgraphComponent } from './mxgraph/mxgraph.component';
     MatButtonModule
   ],
   providers: [
-    RdfmodelService
+    // RdfmodelService
   ],
   bootstrap: [AppComponent]
 })

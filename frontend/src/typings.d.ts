@@ -460,7 +460,59 @@ declare class mxGraph {
   fireMouseEvent(evtName, me, sender);
   fireGestureEvent(evt, cell);
   destroy();
+
+  /**
+   * Adds a new vertex into the given parent {@link mxCell} using value as the user
+   * object and the given coordinates as the {@link mxGeometry} of the new vertex.
+   * The id and style are used for the respective properties of the new
+   * {@link mxCell}, which is returned.
+   *
+   * When adding new vertices from a mouse event, one should take into
+   * account the offset of the graph container and the scale and translation
+   * of the view in order to find the correct unscaled, untranslated
+   * coordinates using {@link mxGraph.getPointForEvent} as follows:
+   * 
+   * (code)
+   * var pt = graph.getPointForEvent(evt);
+   * var parent = graph.getDefaultParent();
+   * graph.insertVertex(parent, null,
+   * 			'Hello, World!', x, y, 220, 30);
+   * (end)
+   * 
+   * For adding image cells, the style parameter can be assigned as
+   * 
+   * (code)
+   * stylename;image=imageUrl
+   * (end)
+   * 
+   * See {@link mxGraph} for more information on using images.
+   *
+   * @param {mxCell} parent Specifies the parent of the new vertex.
+   * @param {?string} id Optional string that defines the Id of the new vertex.
+   * @param {Object} value User defined data object.
+   * @param {number} x Integer that defines the x coordinate of the vertex.
+   * @param {number} y Integer that defines the y coordinate of the vertex.
+   * @param {number} width Integer that defines the width of the vertex.
+   * @param {number} height Integer that defines the height of the vertex.
+   * @param {string} [style] Optional string that defines the cell style.
+   * @param {boolean} [relative] Optional boolean that specifies if the geometry is relative.
+   * Default is false.
+   */
   insertVertex(parent, id, value, x, y, width, height, style?, relative?);
+
+  /**
+   * Adds a new edge into the given parent {@link mxCell} using value as the user
+   * object and the given source and target as the terminals of the new edge.
+   * The id and style are used for the respective properties of the new
+   * {@link mxCell}, which is returned.
+   * 
+   * @param {mxCell} parent specifies the parent of the new edge.
+   * @param {?string} id Optional string that defines the Id of the new edge.
+   * @param {Object} value User defined data object.
+   * @param {mxCell} source Source of the edge.
+   * @param {mxCell} target Target of the edge.
+   * @param {string} [style] Optional string that defines the cell style.
+   */
   insertEdge(parent, id, value, source, target, style?);
 }
 
@@ -759,7 +811,7 @@ declare class mxConstraintHandler {
 declare class mxEdgeHandler {
 
   /** Graph event handler that reconnects edges and modifies control points and the edge label location.  
-  * Uses <mxTerminalMarker> for finding and highlighting new source and target vertices.  This handler is 
+  * Uses {@link mxTerminalMarker} for finding and highlighting new source and target vertices.  This handler is 
   * automatically created in mxGraph.createHandler for each selected edge. */
   constructor(state: mxCellState);
 
@@ -769,7 +821,7 @@ declare class mxEdgeHandler {
   /** Reference to the mxCellState being modified. */
   state: mxCellState;
 
-  /** Holds the <mxTerminalMarker> which is used for highlighting terminals. */
+  /** Holds the {@link mxTerminalMarker} which is used for highlighting terminals. */
   marker: mxCellMarker;
 
   /** Holds the mxConstraintHandler used for drawing and highlighting constraints. */
@@ -886,7 +938,7 @@ declare class mxEdgeHandler {
   getSelectionStrokeWidth(): number;
 
   /**
-   * Returns <mxConstants.EDGE_SELECTION_DASHED>.
+   * Returns {@link mxConstants.EDGE_SELECTION_DASHED}.
    */
   isSelectionDashed(): boolean;
 
@@ -1339,7 +1391,7 @@ declare class mxEventObject {
 }
 
 /** 
-* A wrapper class for an associative array with object keys.  Note: This implementation uses <mxObjectIdentitiy> to 
+* A wrapper class for an associative array with object keys.  Note: This implementation uses {@link mxObjectIdentitiy} to 
 * turn object keys into strings. 
 */
 declare class mxDictionary {
@@ -1474,7 +1526,7 @@ declare class mxEdgeStyle {
   /** Implements a horizontal elbow edge.  See EntityRelation for a description of the parameters */
   static TopToBottom(state: mxCellState, source: mxCell, target: mxCell, points: mxPoint[], result: any): any;
 
-  /** Implements an orthogonal edge style.  Use <mxEdgeSegmentHandler> as an interactive handler for this style. */
+  /** Implements an orthogonal edge style.  Use {@link mxEdgeSegmentHandler} as an interactive handler for this style. */
   static SegmentConnector(state: mxCellState, source: mxCell, target: mxCell, points: mxPoint[], result: any): any;
 
   /** Implements a local orthogonal router between the given cells. */
