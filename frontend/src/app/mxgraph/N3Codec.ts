@@ -7,7 +7,6 @@ import * as N3 from 'n3';
 import { Subject } from 'rxjs/Subject';
 import { error } from 'util';
 
-
 export class N3Codec {
     // See https://github.com/RubenVerborgh/N3.js
     private n3parser = N3.Parser();
@@ -41,7 +40,7 @@ export class N3Codec {
     parseRdf(rdf: string) {
         this.n3parser.parse(
             rdf,
-            (e: Error, triple: N3.Triple, prefixes: N3.Prefixes) => this.tripleStream.next([e, triple, prefixes])
+            (e: Error, triple: N3.Triple, prefixes: N3.Prefixes) => this.tripleStream.next([e, triple, prefixes]),
         );
         return this.tripleStream;
     }
