@@ -9,7 +9,8 @@
     "experimentalDecorators": true,
     "target": "es5",
     "typeRoots": [
-      "node_modules/@types"
+      "node_modules/@types",
+      "typings",
     ],
     "lib": [
       "es2017",
@@ -17,7 +18,7 @@
     ]
   },
   "include": [
-    "src/**/*.ts",
-    "typings/**/*.ts"
+    "src/**/*",
+    "typings/**/*"
   ]
 }
