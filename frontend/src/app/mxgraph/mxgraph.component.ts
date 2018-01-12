@@ -56,19 +56,26 @@ export class MxgraphComponent implements OnInit {
 
             // Adds cells to the model in a single step
             // this.graph.getModel().beginUpdate();
+           const predicateSet = new Set(['http://www.w3.org/2000/01/rdf-schema#subClassOf']);
+  
             try {
                 const codec = new N3Codec();
                 codec.parseUrl('http://xmlns.com/foaf/spec/index.rdf')
                     .take(50)
                     .subscribe(([e, triple, prefixes]) => {    // Todo: Unsubscribe on delete
-                        if (triple) {
-                            console.log(triple.subject, triple.predicate, triple.object, '.');
-
-                            this.graph.getModel().beginUpdate();
-                            const v1 = this.addVertex(triple.subject);
-                            const v2 = this.addVertex(triple.object);
-                            this.graph.insertEdge(this.canvas, triple.predicate, triple.predicate, v1, v2);
-                            this.graph.getModel().endUpdate();
+                        
+                      // Consider only those predicate for graph display which are in predicateSet
+                        if (triple && predicateSet.has(triple.predicate)) {
+                            console.log(
+                              // triple.subject, 
+                              triple.predicate, 
+                              // triple.object
+                            );
+                                this.graph.getModel().beginUpdate();
+                                const v1 = this.addVertex(triple.subject);
+                                const v2 = this.addVertex(triple.object);
+                                this.graph.insertEdge(this.canvas, triple.predicate, triple.predicate, v1, v2);
+                                this.graph.getModel().endUpdate();
                         } else {
                             console.log('# That\'s all, folks!', prefixes);
                         }
