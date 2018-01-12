@@ -24,18 +24,22 @@ export class MxgraphComponent implements OnInit, OnDestroy {
             codec.parseUrl('http://xmlns.com/foaf/spec/index.rdf')
                 .take(50)
                 .subscribe(([e, triple, prefixes]) => {    // Todo: Unsubscribe on delete
-                        if (triple && predicateSet.has(triple.predicate)) {
-                            // console.log(triple.subject, triple.predicate, triple.object, '.');
+                    if (triple && predicateSet.has(triple.predicate)) {
+                        // console.log(triple.subject, triple.predicate, triple.object, '.');
 
                         this.mx.graph.getModel().beginUpdate();
-                        const v1 = this.mx.addVertex(triple.subject);
-                        const v2 = this.mx.addVertex(triple.object);
-                        this.mx.graph.insertEdge(this.mx.canvas, triple.predicate, triple.predicate, v1, v2);
+                        this.mx.addTriple(triple.subject, triple.predicate, triple.object);
                         this.mx.graph.getModel().endUpdate();
                     } else {
                         console.log('# That\'s all, folks!', prefixes);
                     }
-                });
+                },
+                (e) => console.log(e),
+                () => {
+                    this.mx.graph.autoSizeCell(this.mx.canvas);
+                    this.mx.graph.fit();
+                },
+            );
         }
         finally {
             // Updates the display

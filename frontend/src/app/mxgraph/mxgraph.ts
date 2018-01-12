@@ -176,6 +176,8 @@ export class MxgraphService {
     graph: mx.mxGraph;
     canvas: mx.mxCell;
 
+    cellById: Map<string, mx.mxCell>;
+
     constructor(container: HTMLDivElement) {
         // Checks if the browser is supported
         if (!MxgraphService.mx.mxClient.isBrowserSupported()) {
@@ -193,16 +195,40 @@ export class MxgraphService {
         // Gets the default parent for inserting new cells. This
         // is normally the first child of the root (ie. layer 0).
         this.canvas = this.graph.getDefaultParent();
+
+        this.cellById = new Map([['', this.canvas]]);
     }
 
-    addVertex(
+    private addVertex(
         id: string,
         x: number = Math.random() * this.container.clientWidth,
         y: number = Math.random() * this.container.clientHeight,
         w: number = 80,
         h: number = 30,
     ) {
-        return this.graph.insertVertex(this.canvas, id, id, x, y, w, h);
+        let v = this.cellById.get(id);
+        if (!v) {
+            v = this.graph.insertVertex(this.canvas, id, {}, x, y, w, h);
+            this.cellById.set(id, v);
+        }
+        return v;
+    }
+
+    private addEdge(
+        id: string,
+        v1: mx.mxCell,
+        v2: mx.mxCell,
+    ) {
+        return this.graph.insertEdge(this.canvas, id, null, v1, v2);
+    }
+
+    addTriple(subject: string, predicate: string, object: string) {
+        if (typeof subject === 'string' && typeof predicate === 'string' && typeof object === 'string') {
+            const v1 = this.addVertex(subject);
+            const v2 = this.addVertex(object);
+            return this.addEdge(predicate, v1, v2);
+        }
+        return null;
     }
 
 
