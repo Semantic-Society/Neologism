@@ -1,11 +1,11 @@
 // Angular Core
-import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
 
 // Angular Material
+import { MatButtonModule } from '@angular/material/button';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatButtonModule } from '@angular/material/button';
 
 // App Services
 // import { RdfmodelService } from './services/rdfmodel.service';
@@ -14,21 +14,20 @@ import { MatButtonModule } from '@angular/material/button';
 import { AppComponent } from './app.component';
 import { MxgraphComponent } from './mxgraph/mxgraph.component';
 
-
 @NgModule({
   declarations: [
     AppComponent,
-    MxgraphComponent
+    MxgraphComponent,
   ],
   imports: [
     BrowserModule,
     MatSidenavModule,
     BrowserAnimationsModule,
-    MatButtonModule
+    MatButtonModule,
   ],
   providers: [
     // RdfmodelService
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
