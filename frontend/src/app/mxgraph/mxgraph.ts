@@ -7,17 +7,17 @@ export class MxgraphService {
         mxImageBasePath: 'mxgraph/images',
         mxBasePath: 'mxgraph',
     });
-
+    
     /*
     // Client
     private static mxClient = MxgraphService.mx.mxClient;
-
+    
     // Model
     private static mxCell = MxgraphService.mx.mxCell;
     private static mxCellPath = MxgraphService.mx.mxCellPath;
     private static mxGeometry = MxgraphService.mx.mxGeometry;
     private static mxGraphModel = MxgraphService.mx.mxGraphModel;
-
+    
     // View
     private static mxCellEditor = MxgraphService.mx.mxCellEditor;
     private static mxCellOverlay = MxgraphService.mx.mxCellOverlay;
@@ -38,13 +38,13 @@ export class MxgraphService {
     private static mxStylesheet = MxgraphService.mx.mxStylesheet;
     private static mxSwimlaneManager = MxgraphService.mx.mxSwimlaneManager;
     private static mxTemporaryCellStates = MxgraphService.mx.mxTemporaryCellStates;
-
+    
     // Editor
     private static mxDefaultKeyHandler = MxgraphService.mx.mxDefaultKeyHandler;
     private static mxDefaultPopupMenu = MxgraphService.mx.mxDefaultPopupMenu;
     private static mxDefaultToolbar = MxgraphService.mx.mxDefaultToolbar;
     private static mxEditor = MxgraphService.mx.mxEditor;
-
+    
     // Shape
     private static mxActor = MxgraphService.mx.mxActor;
     private static mxArrow = MxgraphService.mx.mxArrow;
@@ -68,7 +68,7 @@ export class MxgraphService {
     private static mxSwimlane = MxgraphService.mx.mxSwimlane;
     private static mxText = MxgraphService.mx.mxText;
     private static mxTriangle = MxgraphService.mx.mxTriangle;
-
+    
     // IO
     // private static mxCellCodec = MxgraphService.mx.mxCellCodec;
     // private static mxChildChangeCodec = MxgraphService.mx.mxChildChangeCodec;
@@ -86,7 +86,7 @@ export class MxgraphService {
     // private static mxRootChangeCodec = MxgraphService.mx.mxRootChangeCodec;
     // private static mxStylesheetCodec = MxgraphService.mx.mxStylesheetCodec;
     // private static mxTerminalChangeCodec = MxgraphService.mx.mxTerminalChangeCodec;
-
+    
     // Layout
     private static mxCircleLayout = MxgraphService.mx.mxCircleLayout;
     private static mxCompactTreeLayout = MxgraphService.mx.mxCompactTreeLayout;
@@ -113,7 +113,7 @@ export class MxgraphService {
     private static mxMedianHybridCrossingReduction = MxgraphService.mx.mxMedianHybridCrossingReduction;
     private static mxMinimumCycleRemover = MxgraphService.mx.mxMinimumCycleRemover;
     private static mxSwimlaneOrdering = MxgraphService.mx.mxSwimlaneOrdering;
-
+    
     // Util
     // private static mxAbstractCanvas2D = MxgraphService.mx.mxAbstractCanvas2D;
     // private static mxAnimation = MxgraphService.mx.mxAnimation;
@@ -151,7 +151,7 @@ export class MxgraphService {
     // private static mxWindow = MxgraphService.mx.mxWindow;
     // private static mxXmlCanvas2D = MxgraphService.mx.mxXmlCanvas2D;
     // private static mxXmlRequest = MxgraphService.mx.mxXmlRequest;
-
+    
     // Handler
     // private static mxCellHighlight = MxgraphService.mx.mxCellHighlight;
     // private static mxCellMarker = MxgraphService.mx.mxCellMarker;
@@ -171,34 +171,59 @@ export class MxgraphService {
     // private static mxTooltipHandler = MxgraphService.mx.mxTooltipHandler;
     // private static mxVertexHandler = MxgraphService.mx.mxVertexHandler;
     */
-
+    
     container: HTMLDivElement;
     graph: mx.mxGraph;
     canvas: mx.mxCell;
-
+    
     cellById: Map<string, mx.mxCell>;
-
+    //doc: MxgraphService.mx.mxUtils;
+    predicateSet = new Set(['http://www.w3.org/2000/01/rdf-schema#subClassOf']);
+    
+    
     constructor(container: HTMLDivElement) {
         // Checks if the browser is supported
         if (!MxgraphService.mx.mxClient.isBrowserSupported()) {
             MxgraphService.mx.mxUtils.error('Browser is not supported!', 200, false);
         }
-
+        
         this.container = container;
-
+        
         // Creates the graph inside the given container
         this.graph = new MxgraphService.mx.mxGraph(this.container);
+        
+        // Provide accessor for mxGraph to be able to extract Cell labels from user object
+        this.graph.convertValueToString = (cell:mx.mxCell) => {
+            if (!cell || !cell.value)
+                return '';
 
+            if (typeof cell.value === 'string')
+                return cell.value;
+                
+            return cell.value['label'] || '';
+        }
+        
+        // Overwrite label change handler in order to correctly write new lables to the user object
+        const cellLabelChanged = this.graph.cellLabelChanged;
+        this.graph.cellLabelChanged = function(cell: mx.mxCell, newValue: string, autoSize: boolean = true) {
+            if (cell && typeof cell.value !== "string")            {
+                // Clones the value for correct undo/redo
+                newValue = {...cell.value, label: newValue} as any;
+                console.log(newValue);
+            }
+            cellLabelChanged.apply(this, arguments);
+        };
+        
         // Enables rubberband selection - Weird constructor side effect stuff
         const rubberband = new MxgraphService.mx.mxRubberband(this.graph);
-
+        
         // Gets the default parent for inserting new cells. This
         // is normally the first child of the root (ie. layer 0).
         this.canvas = this.graph.getDefaultParent();
-
+        
         this.cellById = new Map([['', this.canvas]]);
     }
-
+    
     private addVertex(
         id: string,
         x: number = Math.random() * this.container.clientWidth,
@@ -208,12 +233,12 @@ export class MxgraphService {
     ) {
         let v = this.cellById.get(id);
         if (!v) {
-            v = this.graph.insertVertex(this.canvas, id, {}, x, y, w, h);
+            v = this.graph.insertVertex(this.canvas, id, {label: id}, x, y, w, h);
             this.cellById.set(id, v);
         }
         return v;
     }
-
+    
     private addEdge(
         id: string,
         v1: mx.mxCell,
@@ -221,19 +246,23 @@ export class MxgraphService {
     ) {
         return this.graph.insertEdge(this.canvas, id, null, v1, v2);
     }
-
+    
     addTriple(subject: string, predicate: string, object: string) {
         if (typeof subject === 'string' && typeof predicate === 'string' && typeof object === 'string') {
             const v1 = this.addVertex(subject);
-            const v2 = this.addVertex(object);
-            return this.addEdge(predicate, v1, v2);
+            if (this.predicateSet.has(predicate)) {
+                const v2 = this.addVertex(object);
+                return this.addEdge(predicate, v1, v2);
+            } else {
+                v1.setValue( { ...v1.getValue(), [predicate]: object } as any );
+            }
         }
         return null;
     }
-
-
+    
+    
     destroy() {
         this.graph.destroy();
     }
-
+    
 }

@@ -18,15 +18,14 @@ export class MxgraphComponent implements OnInit, OnDestroy {
     ngOnInit() {
         this.mx = new MxgraphService(this.mxGraphView.nativeElement);
 
-        const predicateSet = new Set(['http://www.w3.org/2000/01/rdf-schema#subClassOf']);
         try {
             const codec = new N3Codec();
             codec.parseUrl('http://xmlns.com/foaf/spec/index.rdf')
                 .take(50)
                 .subscribe(([e, triple, prefixes]) => {    // Todo: Unsubscribe on delete
-                    if (triple && predicateSet.has(triple.predicate)) {
+                    if (triple) {
                         // console.log(triple.subject, triple.predicate, triple.object, '.');
-
+                        
                         this.mx.graph.getModel().beginUpdate();
                         this.mx.addTriple(triple.subject, triple.predicate, triple.object);
                         this.mx.graph.getModel().endUpdate();
