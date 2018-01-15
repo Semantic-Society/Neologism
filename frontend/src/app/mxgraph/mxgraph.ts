@@ -177,9 +177,7 @@ export class MxgraphService {
     canvas: mx.mxCell;
     
     cellById: Map<string, mx.mxCell>;
-    //doc: MxgraphService.mx.mxUtils;
     predicateSet = new Set(['http://www.w3.org/2000/01/rdf-schema#subClassOf']);
-    
     
     constructor(container: HTMLDivElement) {
         // Checks if the browser is supported
