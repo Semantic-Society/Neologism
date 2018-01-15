@@ -192,6 +192,9 @@ export class MxgraphService {
         // Enables rubberband selection - Weird constructor side effect stuff
         const rubberband = new MxgraphService.mx.mxRubberband(this.graph);
 
+        // Disables dangling edges
+        this.graph.setAllowDanglingEdges(false);
+
         // Gets the default parent for inserting new cells. This
         // is normally the first child of the root (ie. layer 0).
         this.canvas = this.graph.getDefaultParent();
