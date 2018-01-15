@@ -3,8 +3,17 @@
     <mat-drawer #nav class="mat-drawer" mode="side" [opened]="true">
         <p>Auto-resizing sidenav</p>
         <p *ngIf="true">Lorem, ipsum dolor sit amet consectetur.</p>
+        <mat-accordion >
+          <mat-expansion-panel [expanded]="true" >
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Toolbar
+              </mat-panel-title>
+          </mat-expansion-panel-header>
+            <div class="mx-toolbar" id="mx-toolbar"></div>
+          </mat-expansion-panel>
+        </mat-accordion>
     </mat-drawer>
-
     <mat-drawer-content>
         <app-mxgraph></app-mxgraph>
         <button type="button" mat-button (click)="nav.toggle()">
