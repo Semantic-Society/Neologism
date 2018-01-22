@@ -52,7 +52,13 @@ export class MxgraphService {
             cellLabelChanged.apply(this, arguments);
         };
 
-        // Ensure any cell deletion in the mxGraph UI is reflected in our private data structure
+        // Ensure any cell addition/deletion in the mxGraph UI is reflected in our private data structure
+        this.graph.addListener(mx.mxEvent.CELLS_ADDED, (evt: mx.mxEventObject) => {
+            const cells: mx.mxCell[] = (evt.getProperties() || {})['cells'];
+            if (Array.isArray(cells)) {
+                cells.forEach((cell) => this.cellById.set(cell.getId(), cell));
+            }
+        });
         this.graph.addListener(mx.mxEvent.CELLS_REMOVED, (evt: mx.mxEventObject) => {
             const cells: mx.mxCell[] = (evt.getProperties() || {})['cells'];
             if (Array.isArray(cells)) {
@@ -62,6 +68,14 @@ export class MxgraphService {
 
         // Enables rubberband selection - Weird constructor side effect stuff
         const rubberband = new MxgraphService.mx.mxRubberband(this.graph);
+
+
+        const keyHandler = new MxgraphService.mx.mxKeyHandler(this.graph);
+        keyHandler.bindKey(8, (evt) => {
+            if (this.graph.isEnabled()) {
+                this.graph.removeCells();
+            }
+        })
 
         // Disables dangling edges
         this.graph.setAllowDanglingEdges(false);
@@ -132,12 +146,8 @@ export class MxgraphService {
         w: number = 80,
         h: number = 30,
     ) {
-        let v = this.cellById.get(id);
-        if (!v) {
-            v = this.graph.insertVertex(this.canvas, id, { label: id }, x, y, w, h);
-            this.cellById.set(id, v);
-        }
-        return v;
+        const v = this.cellById.get(id);
+        return v ? v : this.graph.insertVertex(this.canvas, id, { label: id }, x, y, w, h);
     }
 
     private addEdge(
