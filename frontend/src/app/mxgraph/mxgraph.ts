@@ -71,11 +71,8 @@ export class MxgraphService {
 
 
         const keyHandler = new MxgraphService.mx.mxKeyHandler(this.graph);
-        keyHandler.bindKey(8, (evt) => {
-            if (this.graph.isEnabled()) {
-                this.graph.removeCells();
-            }
-        })
+        keyHandler.bindKey(8, (evt) => this.graph.isEnabled() ? this.graph.removeCells() : null);
+        keyHandler.bindKey(43, (evt) => this.graph.isEnabled() ? this.graph.removeCells() : null);
 
         // Disables dangling edges
         this.graph.setAllowDanglingEdges(false);
