@@ -85,18 +85,18 @@ export class MxgraphService {
 
         const toolbar = new MxgraphService.mx.mxToolbar(this.toolbarContainer);
 
-       /* var addVertex = function (icon, w, h, style) {
+        /*var addVertex = function (icon, w, h, style) {
             var vertex = new MxgraphService.mx.mxCell(null, new MxgraphService.mx.mxGeometry(0, 0, w, h), style);
             vertex.setVertex(true);
 
             var img = this.addToolbarItem(container, toolbar, vertex, icon);
             img.enabled = true;
         };
-        addVertex('assets/class_mockup.gif', 80, 30, 'shape=rounded');
+        addVertex('assets/class_mockup.gif', 80, 30, 'shape=rounded');*/
 
     }
 
-    addToolbarItem(graph: HTMLDivElement, toolbar: mx.mxToolbar, prototype: HTMLElement, image: String) {
+    /*addToolbarItem(graph: HTMLDivElement, toolbar: mx.mxToolbar, prototype: HTMLElement, image: String) {
         // Function that is executed when the image is dropped on
         // the graph. The cell argument points to the cell under
         // the mousepointer if there is one.
