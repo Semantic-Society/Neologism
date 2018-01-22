@@ -53,7 +53,7 @@ export class MxgraphService {
         };
 
         // Ensure any cell addition/deletion in the mxGraph UI is reflected in our private data structure
-        this.graph.addListener(mx.mxEvent.CELLS_ADDED, (evt: mx.mxEventObject) => {
+        /*this.graph.addListener(mx.mxEvent.CELLS_ADDED, (evt: mx.mxEventObject) => {
             const cells: mx.mxCell[] = (evt.getProperties() || {})['cells'];
             if (Array.isArray(cells)) {
                 cells.forEach((cell) => this.cellById.set(cell.getId(), cell));
@@ -64,7 +64,7 @@ export class MxgraphService {
             if (Array.isArray(cells)) {
                 cells.forEach((cell) => this.cellById.delete(cell.getId()));
             }
-        });
+        });*/
 
         // Enables rubberband selection - Weird constructor side effect stuff
         const rubberband = new MxgraphService.mx.mxRubberband(this.graph);
