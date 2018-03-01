@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import mxgraphFactory, { mxgraph as mx } from 'mxgraph';
+import { mxgraph as mx } from 'mxgraph';
 
 // @Injectable()
 export class MxgraphService {
-    private static mx = mxgraphFactory({
+    private static mx = require('mxgraph')({
         mxImageBasePath: 'mxgraph/images',
         mxBasePath: 'mxgraph',
     });
@@ -43,7 +43,7 @@ export class MxgraphService {
 
         // Overwrite label change handler in order to correctly write new lables to the user object
         const cellLabelChanged = this.graph.cellLabelChanged;
-        this.graph.cellLabelChanged = function (cell: mx.mxCell, newValue: string, autoSize: boolean = true) {
+        this.graph.cellLabelChanged = function(cell: mx.mxCell, newValue: string, autoSize: boolean = true) {
             if (cell && typeof cell.value !== 'string') {
                 // Clones the value for correct undo/redo
                 newValue = { ...cell.value, label: newValue } as any;
@@ -68,7 +68,6 @@ export class MxgraphService {
 
         // Enables rubberband selection - Weird constructor side effect stuff
         const rubberband = new MxgraphService.mx.mxRubberband(this.graph);
-
 
         const keyHandler = new MxgraphService.mx.mxKeyHandler(this.graph);
         keyHandler.bindKey(8, (evt) => this.graph.isEnabled() ? this.graph.removeCells() : null);
