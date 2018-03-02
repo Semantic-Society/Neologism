@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { mxgraph as mx } from 'mxgraph';
+import { mxgraph } from 'mxgraph';
 
 // @Injectable()
 export class MxgraphService {
@@ -10,10 +10,10 @@ export class MxgraphService {
 
     container: HTMLDivElement;
     toolbarContainer: HTMLElement;
-    graph: mx.mxGraph;
-    canvas: mx.mxCell;
+    graph: mxgraph.mxGraph;
+    canvas: mxgraph.mxCell;
 
-    cellById: Map<string, mx.mxCell>;
+    cellById: Map<string, mxgraph.mxCell>;
     predicateSet = new Set(['http://www.w3.org/2000/01/rdf-schema#subClassOf']);
 
     constructor(container: HTMLDivElement, toolbarContainer: HTMLElement) {
@@ -29,7 +29,7 @@ export class MxgraphService {
         this.graph = new MxgraphService.mx.mxGraph(this.container);
 
         // Provide accessor for mxGraph to be able to extract Cell labels from user object
-        this.graph.convertValueToString = (cell: mx.mxCell) => {
+        this.graph.convertValueToString = (cell: mxgraph.mxCell) => {
             if (!cell || !cell.value) {
                 return '';
             }
@@ -43,7 +43,7 @@ export class MxgraphService {
 
         // Overwrite label change handler in order to correctly write new lables to the user object
         const cellLabelChanged = this.graph.cellLabelChanged;
-        this.graph.cellLabelChanged = function (cell: mx.mxCell, newValue: string, autoSize: boolean = true) {
+        this.graph.cellLabelChanged = function (cell: mxgraph.mxCell, newValue: string, autoSize: boolean = true) {
             if (cell && typeof cell.value !== 'string') {
                 // Clones the value for correct undo/redo
                 newValue = { ...cell.value, label: newValue } as any;
@@ -53,14 +53,14 @@ export class MxgraphService {
         };
 
         // Ensure any cell addition/deletion in the mxGraph UI is reflected in our private data structure
-        this.graph.addListener(mx.mxEvent.CELLS_ADDED, (evt: mx.mxEventObject) => {
-            const cells: mx.mxCell[] = (evt.getProperties() || {})['cells'];
+        this.graph.addListener(MxgraphService.mx.mxEvent.CELLS_ADDED, (sender: mxgraph.mxEventSource, evt: mxgraph.mxEventObject) => {
+            const cells: mxgraph.mxCell[] = (evt.getProperties() || {})['cells'];
             if (Array.isArray(cells)) {
                 cells.forEach((cell) => this.cellById.set(cell.getId(), cell));
             }
         });
-        this.graph.addListener(mx.mxEvent.CELLS_REMOVED, (evt: mx.mxEventObject) => {
-            const cells: mx.mxCell[] = (evt.getProperties() || {})['cells'];
+        this.graph.addListener(MxgraphService.mx.mxEvent.CELLS_REMOVED, (sender: mxgraph.mxEventSource, evt: mxgraph.mxEventObject) => {
+            const cells: mxgraph.mxCell[] = (evt.getProperties() || {})['cells'];
             if (Array.isArray(cells)) {
                 cells.forEach((cell) => this.cellById.delete(cell.getId()));
             }
@@ -148,8 +148,8 @@ export class MxgraphService {
 
     private addEdge(
         id: string,
-        v1: mx.mxCell,
-        v2: mx.mxCell,
+        v1: mxgraph.mxCell,
+        v2: mxgraph.mxCell,
     ) {
         return this.graph.insertEdge(this.canvas, id, null, v1, v2);
     }
