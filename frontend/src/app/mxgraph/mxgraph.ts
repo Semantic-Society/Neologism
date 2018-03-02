@@ -12,6 +12,8 @@ export class MxgraphService {
     toolbarContainer: HTMLElement;
     graph: mxgraph.mxGraph;
     canvas: mxgraph.mxCell;
+    toolbar: mxgraph.mxToolbar;
+    //mxToolbar: mxgraph.mxToolbar;
 
     cellById: Map<string, mxgraph.mxCell>;
     predicateSet = new Set(['http://www.w3.org/2000/01/rdf-schema#subClassOf']);
@@ -82,58 +84,62 @@ export class MxgraphService {
 
         this.cellById = new Map([['', this.canvas]]);
 
-        const toolbar = new MxgraphService.mx.mxToolbar(this.toolbarContainer);
 
-        /*var addVertex = function (icon, w, h, style) {
-            var vertex = new MxgraphService.mx.mxCell(null, new MxgraphService.mx.mxGeometry(0, 0, w, h), style);
-            vertex.setVertex(true);
+        this.toolbar = new MxgraphService.mx.mxToolbar(this.toolbarContainer);
+        console.log(toolbar);
 
-            var img = this.addToolbarItem(container, toolbar, vertex, icon);
-            img.enabled = true;
-        };
-        addVertex('assets/class_mockup.gif', 80, 30, 'shape=rounded');*/
-
+        this.addToolbarVertex('assets/class_mockup.gif', 80, 30, 'shape=rounded');
     }
 
-    /*addToolbarItem(graph: HTMLDivElement, toolbar: mx.mxToolbar, prototype: HTMLElement, image: String) {
-        // Function that is executed when the image is dropped on
-        // the graph. The cell argument points to the cell under
-        // the mousepointer if there is one.
-        var funct = function (graph, evt, cell, x, y) {
+    private addToolbarItem(graph: HTMLDivElement, toolbar: mxgraph.mxToolbar, prototype: HTMLElement, image: String) {
+    // Function that is executed when the image is dropped on
+    // the graph. The cell argument points to the cell under
+    // the mousepointer if there is one.
+    var funct = function (graph, evt, cell, x, y) {
+      graph.stopEditing(false);
 
-            var vertex = graph.getModel().cloneCell(prototype);
-            vertex.geometry.x = x;
-            vertex.geometry.y = y;
+      var vertex = graph.getModel().cloneCell(prototype);
+      vertex.geometry.x = x;
+      vertex.geometry.y = y;
+      console.log(vertex.geometry.y);
 
-            graph.addCell(vertex);
-            graph.setSelectionCell(vertex);
-        };
 
-        // Creates the image which is used as the drag icon (preview)
-        var img = toolbar.addMode(null, image, function (evt, cell) {
-            var pt = this.graph.getPointForEvent(evt);
-            funct(graph, evt, cell, pt.x, pt.y);
-        });
+      graph.addCell(vertex);
+      graph.setSelectionCell(vertex);
+    }
 
-        // Disables dragging if element is disabled. This is a workaround
-        // for wrong event order in IE. Following is a dummy listener that
-        // is invoked as the last listener in IE.
-        MxgraphService.mx.mxEvent.addListener(img, 'mousedown', function (evt) {
-            // do nothing
-        });
+    // Creates the image which is used as the drag icon (preview)
+    var img = toolbar.addMode(null, image, function (evt, cell) {
+      var pt = this.graph.getPointForEvent(evt);
+      funct(graph, evt, cell, pt.x, pt.y);
+    });
 
-        // This listener is always called first before any other listener
-        // in all browsers.
-        MxgraphService.mx.mxEvent.addListener(img, 'mousedown', function (evt) {
-            //if (img.enabled == false) {
-                MxgraphService.mx.mxEvent.consume(evt);
-            //}
-        });
+    /*
+    // Disables dragging if element is disabled. This is a workaround
+    // for wrong event order in IE. Following is a dummy listener that
+    // is invoked as the last listener in IE.
+    mxEvent.addListener(img, 'mousedown', function (evt) {
+      // do nothing
+    });
 
-        MxgraphService.mx.mxUtils.makeDraggable(img, graph, funct);
+    // This listener is always called first before any other listener
+    // in all browsers.
+    mxEvent.addListener(img, 'mousedown', function (evt) {
+      if (img.enabled == false) {
+        mxEvent.consume(evt);
+      }
+    });
 
-        return img;
-    }*/
+    mxUtils.makeDraggable(img, graph, funct);*/
+    console.log(img);
+    return img;
+  }
+  private addToolbarVertex(icon, w, h, style) {
+    var vertex = new MxgraphService.mx.mxCell(null, new MxgraphService.mx.mxGeometry(0, 0, w, h), style);
+    vertex.setVertex(true);
+    var img = this.addToolbarItem(this.container, this.toolbar, vertex, icon);
+    //img.enabled = true;
+  };
 
     private getOrAddVertex(
         id: string,
@@ -169,7 +175,7 @@ export class MxgraphService {
                 const newValues = [...oldValues, object];   // construct array of old + new objects
                 cur[predicate] = new Set(newValues);        // and add it (as a Set) to the new user object
                 v1.setValue(cur as any);                    // finally commit the update
-                console.log(cur);
+                //console.log(cur);
             }
         }
         return null;

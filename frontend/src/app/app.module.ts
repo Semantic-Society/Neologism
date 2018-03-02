@@ -7,6 +7,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatExpansionModule} from '@angular/material/expansion';
+import {MatListModule} from '@angular/material/list';
 
 // App Services
 // import { RdfmodelService } from './services/rdfmodel.service';
@@ -25,7 +26,8 @@ import { MxgraphComponent } from './mxgraph/mxgraph.component';
     MatSidenavModule,
     BrowserAnimationsModule,
     MatButtonModule,
-    MatExpansionModule
+    MatExpansionModule,
+    MatListModule
   ],
   providers: [
     // RdfmodelService
