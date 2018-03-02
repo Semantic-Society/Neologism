@@ -43,7 +43,7 @@ export class MxgraphService {
 
         // Overwrite label change handler in order to correctly write new lables to the user object
         const cellLabelChanged = this.graph.cellLabelChanged;
-        this.graph.cellLabelChanged = function(cell: mx.mxCell, newValue: string, autoSize: boolean = true) {
+        this.graph.cellLabelChanged = function (cell: mx.mxCell, newValue: string, autoSize: boolean = true) {
             if (cell && typeof cell.value !== 'string') {
                 // Clones the value for correct undo/redo
                 newValue = { ...cell.value, label: newValue } as any;
@@ -53,7 +53,7 @@ export class MxgraphService {
         };
 
         // Ensure any cell addition/deletion in the mxGraph UI is reflected in our private data structure
-        /*this.graph.addListener(mx.mxEvent.CELLS_ADDED, (evt: mx.mxEventObject) => {
+        this.graph.addListener(mx.mxEvent.CELLS_ADDED, (evt: mx.mxEventObject) => {
             const cells: mx.mxCell[] = (evt.getProperties() || {})['cells'];
             if (Array.isArray(cells)) {
                 cells.forEach((cell) => this.cellById.set(cell.getId(), cell));
@@ -64,7 +64,7 @@ export class MxgraphService {
             if (Array.isArray(cells)) {
                 cells.forEach((cell) => this.cellById.delete(cell.getId()));
             }
-        });*/
+        });
 
         // Enables rubberband selection - Weird constructor side effect stuff
         const rubberband = new MxgraphService.mx.mxRubberband(this.graph);
@@ -135,7 +135,7 @@ export class MxgraphService {
         return img;
     }*/
 
-    private addVertex(
+    private getOrAddVertex(
         id: string,
         x: number = Math.random() * this.container.clientWidth,
         y: number = Math.random() * this.container.clientHeight,
@@ -156,18 +156,20 @@ export class MxgraphService {
 
     addTriple(subject: string, predicate: string, object: string) {
         if (typeof subject === 'string' && typeof predicate === 'string' && typeof object === 'string') {
-            const v1 = this.addVertex(subject);
+            const v1 = this.getOrAddVertex(subject);
             if (this.predicateSet.has(predicate)) {
-                const v2 = this.addVertex(object);
+                // add it as a visible edge in graph
+                const v2 = this.getOrAddVertex(object);
                 return this.addEdge(predicate, v1, v2);
             } else {
-                const oldVal = v1.getValue();
-                const newVal = {
-                    ...oldVal,
-                    [predicate]: new Set([...(oldVal[predicate] || []), object]),
-                };
-                v1.setValue(newVal as any);
-                console.log(newVal);
+                // add it to user object
+                const old = v1.getValue();                  // get old user object
+                const cur = { ...old };                     // copy to current/new user object
+                const oldValues = old[predicate] || [];     // get the old objects for this predicate
+                const newValues = [...oldValues, object];   // construct array of old + new objects
+                cur[predicate] = new Set(newValues);        // and add it (as a Set) to the new user object
+                v1.setValue(cur as any);                    // finally commit the update
+                console.log(cur);
             }
         }
         return null;
