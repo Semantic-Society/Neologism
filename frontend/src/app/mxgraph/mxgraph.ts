@@ -31,25 +31,13 @@ export class MxgraphService {
         this.graph = new MxgraphService.mx.mxGraph(this.container);
 
         // Provide accessor for mxGraph to be able to extract Cell labels from user object
-        this.graph.convertValueToString = (cell: mxgraph.mxCell) => {
-            if (!cell || !cell.value) {
-                return '';
-            }
-
-            if (typeof cell.value === 'string') {
-                return cell.value;
-            }
-
-            return cell.value['label'] || '';
-        };
+        this.graph.convertValueToString = (cell: mxgraph.mxCell) => cell.id;
 
         // Overwrite label change handler in order to correctly write new lables to the user object
         const defaultLabelChangeHandler = this.graph.cellLabelChanged.bind(this.graph);
-        this.graph.cellLabelChanged = (cell: mxgraph.mxCell, newValue: string, autoSize: boolean = true) => { // TODO: Reject incorrect URLs
-            if (cell && typeof cell.value === 'object') {
-                newValue = { ...cell.value, label: newValue } as any; // clone the value for correct undo/redo
-            }
-            defaultLabelChangeHandler(cell, newValue, autoSize);
+        this.graph.cellLabelChanged = (cell: mxgraph.mxCell, newValue: string, autoSize: boolean = true) => {
+            cell.id = N3Codec.neologismId(newValue);
+            defaultLabelChangeHandler(cell, cell.value, autoSize);
         };
 
         // Ensure any cell addition/deletion in the mxGraph UI is reflected in our private data structure
@@ -129,7 +117,7 @@ export class MxgraphService {
         h: number = 30,
     ) {
         const v = this.cellByIRI.get(id);
-        return v ? v : this.graph.insertVertex(this.canvas, id, { label: id }, x, y, w, h);
+        return v ? v : this.graph.insertVertex(this.canvas, id, {}, x, y, w, h);
     }
 
     private addEdge(

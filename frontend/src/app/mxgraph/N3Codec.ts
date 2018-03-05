@@ -16,7 +16,7 @@ export class N3Codec {
 
     static serializeModel(model: mxgraph.mxGraphModel) {
         const cells = model.getDescendants(model.getRoot());
-        const writer = N3.Writer({ format: 'Turtle', prefixes });
+        const writer = N3.Writer({ prefixes });
         cells.forEach((cell) => {
             if (cell.isVertex() && cell.getId()) {
                 // Transform subject id to neologism query if not a valid absolute IRI
@@ -39,8 +39,8 @@ export class N3Codec {
         return new Promise((resolve, reject) => writer.end(reject, resolve));
     }
 
-    private static neologismId(id: string) {
-        return id ? new URL(id, 'http://neologism.query/').toString() : null;
+    static neologismId(id: string) {
+        return id ? new URL(id, 'neo://query/').toString() : null;
     }
 
     constructor() {
