@@ -45,7 +45,7 @@ export class MxgraphService {
 
         // Overwrite label change handler in order to correctly write new lables to the user object
         const defaultLabelChangeHandler = this.graph.cellLabelChanged.bind(this.graph);
-        this.graph.cellLabelChanged = (cell: mxgraph.mxCell, newValue: string, autoSize: boolean = true) => {
+        this.graph.cellLabelChanged = (cell: mxgraph.mxCell, newValue: string, autoSize: boolean = true) => { // TODO: Reject incorrect URLs
             if (cell && typeof cell.value === 'object') {
                 newValue = { ...cell.value, label: newValue } as any; // clone the value for correct undo/redo
             }
@@ -75,6 +75,8 @@ export class MxgraphService {
 
         // Disallows edges that are not connected to nodes
         this.graph.setAllowDanglingEdges(false);
+        this.graph.setAutoSizeCells(true);
+        this.graph.autoSizeCellsOnAdd = true;
 
         // The default parent for inserting new cells. This is normally the first child of the root (ie. layer 0).
         this.canvas = this.graph.getDefaultParent();

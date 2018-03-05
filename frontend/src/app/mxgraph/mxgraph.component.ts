@@ -21,7 +21,6 @@ export class MxgraphComponent implements OnInit, OnDestroy {
             const codec = new N3Codec();
             // codec.parseUrl('http://xmlns.com/foaf/spec/index.rdf')
             codec.parseUrl('assets/foaf.ttl')
-                .take(50)
                 .subscribe(([e, triple, prefixes]) => {    // Todo: Unsubscribe on delete
                     if (triple) {
                         // console.log(triple.subject, triple.predicate, triple.object, '.');
@@ -35,7 +34,6 @@ export class MxgraphComponent implements OnInit, OnDestroy {
                 },
                     (e) => console.log(e),
                     () => {
-                        this.mx.graph.autoSizeCell(this.mx.canvas);
                         this.mx.graph.fit();
                     },
             );
