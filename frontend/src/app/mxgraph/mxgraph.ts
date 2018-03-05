@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { mxgraph } from 'mxgraph';
+import { N3Codec } from './N3Codec';
 
 // @Injectable()
 export class MxgraphService {
@@ -155,6 +156,11 @@ export class MxgraphService {
             }
         }
         return null;
+    }
+
+    /** Returns a turtle serialization of the current model */
+    async serializeModel() {
+        return await N3Codec.serializeModel(this.graph.getModel());
     }
 
     destroy() {
