@@ -38,6 +38,7 @@ export class MxgraphService {
         this.graph.cellLabelChanged = (cell: mxgraph.mxCell, newValue: string, autoSize: boolean = true) => {
             cell.id = N3Codec.neologismId(newValue);
             defaultLabelChangeHandler(cell, cell.value, autoSize);
+            this.serializeModel().then((res) => console.log(res)).catch(e => console.log(e));
         };
 
         // Ensure any cell addition/deletion in the mxGraph UI is reflected in our private data structure

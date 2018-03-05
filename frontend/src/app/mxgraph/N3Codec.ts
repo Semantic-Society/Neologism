@@ -18,11 +18,9 @@ export class N3Codec {
         const cells = model.getDescendants(model.getRoot());
         const writer = N3.Writer({ prefixes });
         cells.forEach((cell) => {
-            if (cell.isVertex() && cell.getId()) {
-                // Transform subject id to neologism query if not a valid absolute IRI
-                const subject = this.neologismId(cell.getId());
-
-                const data = cell.getValue() || {};
+            const data = cell.getValue();
+            if (data && cell.isVertex() && cell.getId()) {
+                const subject = cell.getId();
                 Object.keys(data).forEach((predicate) => {
                     for (const object of (data[predicate] as Set<string>)) {
                         writer.addTriple(subject, predicate, object);
@@ -36,7 +34,7 @@ export class N3Codec {
                 }
             }
         });
-        return new Promise((resolve, reject) => writer.end(reject, resolve));
+        return new Promise((resolve, reject) => writer.end((err, result) => err ? reject(err) : resolve(result)));
     }
 
     static neologismId(id: string) {
