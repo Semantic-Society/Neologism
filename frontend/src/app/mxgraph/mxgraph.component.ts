@@ -19,7 +19,8 @@ export class MxgraphComponent implements OnInit, OnDestroy {
         this.mx = new MxgraphService(this.mxGraphView.nativeElement, document.getElementById('mx-toolbar'));
         try {
             const codec = new N3Codec();
-            codec.parseUrl('http://xmlns.com/foaf/spec/index.rdf')
+            // codec.parseUrl('http://xmlns.com/foaf/spec/index.rdf')
+            codec.parseUrl('assets/foaf.ttl')
                 .take(50)
                 .subscribe(([e, triple, prefixes]) => {    // Todo: Unsubscribe on delete
                     if (triple) {
