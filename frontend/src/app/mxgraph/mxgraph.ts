@@ -1,87 +1,108 @@
 import { Injectable } from '@angular/core';
-import { mxgraph } from 'mxgraph';
+import { mxgraph as m } from 'mxgraph';
 import { N3Codec } from './N3Codec';
 
 // @Injectable()
 export class MxgraphService {
-    private static mx: typeof mxgraph = require('mxgraph')({
+    private static mx: typeof m = require('mxgraph')({
         mxImageBasePath: 'mxgraph/images',
         mxBasePath: 'mxgraph',
+        mxLoadResources: false, // Disables synchronous loading of resources. Disables resource warnings for the moment.
     });
 
-    container: HTMLDivElement;
-    toolbarContainer: HTMLElement;
-    graph: mxgraph.mxGraph;
-    canvas: mxgraph.mxCell;
-    toolbar: mxgraph.mxToolbar;
+    private graph: m.mxGraph;
+    private canvas: m.mxCell;
+    private toolbar: m.mxToolbar;
 
-    cellByIRI: Map<string, mxgraph.mxCell>;
-    predicateSet = new Set(['http://www.w3.org/2000/01/rdf-schema#subClassOf']);
+    private cellByIRI: Map<string, m.mxCell>;
+    private predicateSet = new Set(['http://www.w3.org/2000/01/rdf-schema#subClassOf']);
 
-    constructor(container: HTMLDivElement, toolbarContainer: HTMLElement) {
-        // Checks if the browser is supported
-        if (!MxgraphService.mx.mxClient.isBrowserSupported()) {
-            MxgraphService.mx.mxUtils.error('Browser is not supported!', 200, false);
-        }
+    constructor(private container: HTMLDivElement, private toolbarContainer: HTMLElement, private url: string) {
+        if (!MxgraphService.mx.mxClient.isBrowserSupported()) MxgraphService.mx.mxUtils.error('Browser is not supported!', 200, false);
 
-        this.container = container;
-        this.toolbarContainer = toolbarContainer;
-
-        // Creates the graph inside the given container
-        this.graph = new MxgraphService.mx.mxGraph(this.container);
-
-        // Provide accessor for mxGraph to be able to extract Cell labels from user object
-        this.graph.convertValueToString = (cell: mxgraph.mxCell) => cell.id;
+        this.graph = new MxgraphService.mx.mxGraph(container);          // Create the graph inside the given container
+        const sel = new MxgraphService.mx.mxRubberband(this.graph);     // Enable rubberband selection (constructor side effect)
+        MxgraphService.mx.mxEvent.disableContextMenu(container);        // Disable right click menu
+        this.graph.setAllowDanglingEdges(false);                        // Disallow edges that are not connected to nodes
+        this.graph.setAutoSizeCells(true);
+        this.graph.autoSizeCellsOnAdd = true;
+        this.graph.setConnectable(true);
+        this.graph.setPanning(true);
+        this.graph.panningHandler.useLeftButtonForPanning = true;
+        this.graph.convertValueToString = (cell: m.mxCell) => cell.id;  // Enable mxGraph to extract cell labels
 
         // Overwrite label change handler in order to correctly write new lables to the user object
         const defaultLabelChangeHandler = this.graph.cellLabelChanged.bind(this.graph);
-        this.graph.cellLabelChanged = (cell: mxgraph.mxCell, newValue: string, autoSize: boolean = true) => {
+        this.graph.cellLabelChanged = (cell: m.mxCell, newValue: string, autoSize: boolean = true) => {
             cell.id = N3Codec.neologismId(newValue);
             defaultLabelChangeHandler(cell, cell.value, autoSize);
-            this.serializeModel().then((res) => console.log(res)).catch(e => console.log(e));
+            this.getRecommendations();
         };
-
-        // Ensure any cell addition/deletion in the mxGraph UI is reflected in our private data structure
-        this.graph.addListener(MxgraphService.mx.mxEvent.CELLS_ADDED, (sender: mxgraph.mxEventSource, evt: mxgraph.mxEventObject) => {
-            const cells: mxgraph.mxCell[] = (evt.getProperties() || {})['cells'];
-            if (Array.isArray(cells)) {
-                cells.forEach((cell) => this.cellByIRI.set(cell.getId(), cell));
-            }
-        });
-        this.graph.addListener(MxgraphService.mx.mxEvent.CELLS_REMOVED, (sender: mxgraph.mxEventSource, evt: mxgraph.mxEventObject) => {
-            const cells: mxgraph.mxCell[] = (evt.getProperties() || {})['cells'];
-            if (Array.isArray(cells)) {
-                cells.forEach((cell) => this.cellByIRI.delete(cell.getId()));
-            }
-        });
-
-        // Enables rubberband selection - Weird constructor side effect stuff
-        const rubberband = new MxgraphService.mx.mxRubberband(this.graph);
 
         const keyHandler = new MxgraphService.mx.mxKeyHandler(this.graph);
         keyHandler.bindKey(8, (evt) => this.graph.isEnabled() ? this.graph.removeCells() : null);   // delete key removes cell
         keyHandler.bindKey(43, (evt) => this.graph.isEnabled() ? this.graph.removeCells() : null);  // mac delete key removes cell
 
-        // Disallows edges that are not connected to nodes
-        this.graph.setAllowDanglingEdges(false);
-        this.graph.setAutoSizeCells(true);
-        this.graph.autoSizeCellsOnAdd = true;
+
+        // Adds mouse wheel handling for zoom
+        MxgraphService.mx.mxEvent.addMouseWheelListener((evt, up) => {
+            up ? this.graph.zoomIn() : this.graph.zoomOut();
+            MxgraphService.mx.mxEvent.consume(evt);
+        });
 
         // The default parent for inserting new cells. This is normally the first child of the root (ie. layer 0).
         this.canvas = this.graph.getDefaultParent();
 
-        // Initialize a lookup map from subject IRI to the corresponding mxGraph cell
-        this.cellByIRI = new Map([['', this.canvas]]);
+        // Create layout algorithms to be used with the graph
+        // const hierarchical = new MxgraphService.mx.mxHierarchicalLayout(this.graph);
+        const organic = new MxgraphService.mx.mxFastOrganicLayout(this.graph);
+        organic.forceConstant = 120;
 
-        this.toolbar = new MxgraphService.mx.mxToolbar(this.toolbarContainer);
+        // Initialize a lookup map from subject IRI to the corresponding mxGraph cell and set up automatic syncronization
+        this.cellByIRI = new Map([['', this.canvas]]);
+        this.graph.addListener(MxgraphService.mx.mxEvent.CELLS_ADDED, (sender: m.mxEventSource, evt: m.mxEventObject) => {
+            const cells: m.mxCell[] = (evt.getProperties() || {})['cells'];
+            if (Array.isArray(cells)) cells.forEach((cell) => this.cellByIRI.set(cell.getId(), cell));
+            organic.execute(this.canvas);
+        });
+        this.graph.addListener(MxgraphService.mx.mxEvent.CELLS_REMOVED, (sender: m.mxEventSource, evt: m.mxEventObject) => {
+            const cells: m.mxCell[] = (evt.getProperties() || {})['cells'];
+            if (Array.isArray(cells)) cells.forEach((cell) => this.cellByIRI.delete(cell.getId()));
+            organic.execute(this.canvas);
+        });
+
+        this.toolbar = new MxgraphService.mx.mxToolbar(toolbarContainer);
         this.addToolbarVertex('assets/class_mockup.gif', 80, 30, 'shape=rounded');
+
+        this.initialize();
     }
 
-    private addToolbarItem(prototype: mxgraph.mxCell, image: string) {
+    private initialize() {
+        try {
+            const codec = new N3Codec();
+            codec.parseUrl(this.url)
+                .subscribe(
+                    ([e, triple, prefixes]) => {    // Todo: Unsubscribe on delete
+                        if (triple) {
+                            // this.graph.getModel().beginUpdate();
+                            this.addTriple(triple.subject, triple.predicate, triple.object);
+                            // this.graph.getModel().endUpdate();
+                        } else {
+                            // console.log('# That\'s all, folks!');
+                            codec.setPrefixes(prefixes);
+                        }
+                    },
+                    (e) => console.log(e),
+                    () => this.zoomToFit(),
+            );
+        } finally { }
+    }
+
+    private addToolbarItem(prototype: m.mxCell, image: string) {
         // Function that is executed when the image is dropped on
         // the graph. The cell argument points to the cell under
         // the mousepointer if there is one.
-        const funct = (graph: mxgraph.mxGraph, evt: MouseEvent, cell: mxgraph.mxCell, x: number, y: number) => {
+        const funct = (graph: m.mxGraph, evt: MouseEvent, cell: m.mxCell, x: number, y: number) => {
             graph.stopEditing(false);
 
             const vertex = this.graph.getModel().cloneCell(prototype);
@@ -92,7 +113,7 @@ export class MxgraphService {
         };
 
         // Creates the image which is used as the drag icon (preview)
-        const img = this.toolbar.addMode(null, image, (evt: MouseEvent, cell: mxgraph.mxCell) => {
+        const img = this.toolbar.addMode(null, image, (evt: MouseEvent, cell: m.mxCell) => {
             const pt = this.graph.getPointForEvent(evt, false);
             funct(this.graph, evt, cell, pt.x, pt.y);
         });
@@ -114,28 +135,29 @@ export class MxgraphService {
         id: string,
         x: number = Math.random() * this.container.clientWidth,
         y: number = Math.random() * this.container.clientHeight,
-        w: number = 80,
-        h: number = 30,
     ) {
         const v = this.cellByIRI.get(id);
-        return v ? v : this.graph.insertVertex(this.canvas, id, {}, x, y, w, h);
+        return v ? v : this.graph.insertVertex(this.canvas, id, {}, x, y, 100, 15);
     }
 
     private addEdge(
         id: string,
-        v1: mxgraph.mxCell,
-        v2: mxgraph.mxCell,
+        v1: m.mxCell,
+        v2: m.mxCell,
     ) {
         return this.graph.insertEdge(this.canvas, id, null, v1, v2);
     }
 
-    addTriple(subject: string, predicate: string, object: string) {
+    private addTriple(subject: string, predicate: string, object: string) {
         if (typeof subject === 'string' && typeof predicate === 'string' && typeof object === 'string') {
+
+            this.graph.getModel().beginUpdate();
+
             const v1 = this.getOrAddVertex(subject);
             if (this.predicateSet.has(predicate)) {
                 // add it as a visible edge in graph
                 const v2 = this.getOrAddVertex(object);
-                return this.addEdge(predicate, v1, v2);
+                this.addEdge(predicate, v1, v2);
             } else {
                 // add it to user object
                 const old = v1.getValue();                  // get old user object
@@ -145,13 +167,21 @@ export class MxgraphService {
                 cur[predicate] = new Set(newValues);        // and add it (as a Set) to the new user object
                 v1.setValue(cur);                           // finally commit the update
             }
+            this.graph.getModel().endUpdate();
         }
-        return null;
     }
 
     /** Returns a turtle serialization of the current model */
     async serializeModel() {
         return await N3Codec.serializeModel(this.graph.getModel());
+    }
+
+    zoomToFit() {
+        this.graph.fit();
+    }
+
+    getRecommendations() { // TODO: Stub - make actual calls
+        this.serializeModel().then((res) => console.log(res)).catch((e) => console.log(e));
     }
 
     destroy() {

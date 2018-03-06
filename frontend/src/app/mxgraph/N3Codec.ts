@@ -6,17 +6,18 @@ import { Observable } from 'rxjs/Observable';
 import { switchMap } from 'rxjs/operators';
 import { Subject } from 'rxjs/Subject';
 import { error } from 'util';
-import { prefixes } from './prefix.cc';
+import { prefixes as prefix_cc } from './prefix.cc';
 
 export class N3Codec {
     // See https://github.com/RubenVerborgh/N3.js
     private absuluteURI = /^https?:\/\/|^\/\//i;
     private n3parser = N3.Parser();
     private tripleStream = new Subject<[Error, N3.Triple, N3.Prefixes]>();
+    private prefixes: { [key: string]: string } = prefix_cc;
 
     static serializeModel(model: mxgraph.mxGraphModel) {
         const cells = model.getDescendants(model.getRoot());
-        const writer = N3.Writer({ prefixes });
+        const writer = N3.Writer({ prefix_cc });
         cells.forEach((cell) => {
             const data = cell.getValue();
             if (data && cell.isVertex() && cell.getId()) {
@@ -43,7 +44,7 @@ export class N3Codec {
 
     constructor() {
         // this.mxGraphModel = this.mxGraph.getModel();
-        console.log('RdfModel Service instantiated.');
+        // console.log('RdfModel Service instantiated.');
 
         // const sampleInput =
         //     '@prefix c: <http://example.org/cartoons#>.\n' +
@@ -66,10 +67,14 @@ export class N3Codec {
         // });
     }
 
+    setPrefixes(prefixes: { [key: string]: string }) {
+        this.prefixes = prefixes;
+    }
+
     parseRdf(rdf: string) {
         this.n3parser.parse(
             rdf,
-            (e: Error, triple: N3.Triple, prefixes: N3.Prefixes) => this.tripleStream.next([e, triple, prefixes]),
+            (e: Error, triple: N3.Triple, prefs: N3.Prefixes) => this.tripleStream.next([e, triple, prefs]),
         );
         return this.tripleStream;
     }
