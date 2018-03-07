@@ -3,8 +3,20 @@
     <mat-card-title>Infobox</mat-card-title>
   </mat-card-header>
   <mat-list>
-    <mat-list-item> Pepper </mat-list-item>
-    <mat-list-item> Salt </mat-list-item>
-    <mat-list-item> Paprika </mat-list-item>
+    <mat-list-item>
+      <mat-form-field>
+        <input matInput placeholder="Input">
+      </mat-form-field>
+    </mat-list-item>
+    <mat-list-item>
+      <mat-form-field>
+        <input matInput placeholder="Input">
+      </mat-form-field>
+    </mat-list-item>
+    <mat-list-item class="info-box-description">
+      <mat-form-field>
+        <textarea matInput placeholder="Description" id="infoboxDescription"></textarea>
+      </mat-form-field>
+    </mat-list-item>
   </mat-list>
 </mat-card>

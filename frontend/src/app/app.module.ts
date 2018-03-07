@@ -17,6 +17,9 @@ import {MatCardModule} from '@angular/material/card';
 import { AppComponent } from './app.component';
 import { MxgraphComponent } from './mxgraph/mxgraph.component';
 import { InfoboxComponent } from './infobox/infobox.component';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatInputModule} from "@angular/material";
+
 
 @NgModule({
   declarations: [
@@ -31,7 +34,9 @@ import { InfoboxComponent } from './infobox/infobox.component';
     MatButtonModule,
     MatExpansionModule,
     MatListModule,
-    MatCardModule
+    MatCardModule,
+    MatFormFieldModule,
+    MatInputModule
   ],
   providers: [
     // RdfmodelService
