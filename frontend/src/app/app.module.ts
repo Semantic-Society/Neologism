@@ -8,6 +8,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatListModule} from '@angular/material/list';
+import {MatCardModule} from '@angular/material/card';
 
 // App Services
 // import { RdfmodelService } from './services/rdfmodel.service';
@@ -15,11 +16,16 @@ import {MatListModule} from '@angular/material/list';
 // App Components
 import { AppComponent } from './app.component';
 import { MxgraphComponent } from './mxgraph/mxgraph.component';
+import { InfoboxComponent } from './infobox/infobox.component';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatInputModule} from "@angular/material";
+
 
 @NgModule({
   declarations: [
     AppComponent,
     MxgraphComponent,
+    InfoboxComponent
   ],
   imports: [
     BrowserModule,
@@ -27,7 +33,10 @@ import { MxgraphComponent } from './mxgraph/mxgraph.component';
     BrowserAnimationsModule,
     MatButtonModule,
     MatExpansionModule,
-    MatListModule
+    MatListModule,
+    MatCardModule,
+    MatFormFieldModule,
+    MatInputModule
   ],
   providers: [
     // RdfmodelService
