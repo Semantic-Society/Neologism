@@ -15,11 +15,13 @@ import {MatListModule} from '@angular/material/list';
 // App Components
 import { AppComponent } from './app.component';
 import { MxgraphComponent } from './mxgraph/mxgraph.component';
+import { InfoboxComponent } from './infobox/infobox.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     MxgraphComponent,
+    InfoboxComponent
   ],
   imports: [
     BrowserModule,
