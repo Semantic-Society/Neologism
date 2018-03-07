@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { mxgraph as m } from 'mxgraph';
 import { N3Codec } from './N3Codec';
 
+type Predicates = Map<string, Set<string>>;
+
 // @Injectable()
 export class MxgraphService {
     private static mx: typeof m = require('mxgraph')({
@@ -53,7 +55,7 @@ export class MxgraphService {
         // The default parent for inserting new cells. This is normally the first child of the root (ie. layer 0).
         this.canvas = this.graph.getDefaultParent();
 
-        // Create layout algorithms to be used with the graph
+        // Create layout algorithm to be used with the graph
         // const hierarchical = new MxgraphService.mx.mxHierarchicalLayout(this.graph);
         const organic = new MxgraphService.mx.mxFastOrganicLayout(this.graph);
         organic.forceConstant = 120;
@@ -137,7 +139,7 @@ export class MxgraphService {
         y: number = Math.random() * this.container.clientHeight,
     ) {
         const v = this.cellByIRI.get(id);
-        return v ? v : this.graph.insertVertex(this.canvas, id, {}, x, y, 100, 15);
+        return v ? v : this.graph.insertVertex(this.canvas, id, new Map<string, Set<string>>(), x, y, 100, 15);
     }
 
     private addEdge(
@@ -160,12 +162,10 @@ export class MxgraphService {
                 this.addEdge(predicate, v1, v2);
             } else {
                 // add it to user object
-                const old = v1.getValue();                  // get old user object
-                const cur = { ...old };                     // copy to current/new user object
-                const oldValues = old[predicate] || [];     // get the old objects for this predicate
-                const newValues = [...oldValues, object];   // construct array of old + new objects
-                cur[predicate] = new Set(newValues);        // and add it (as a Set) to the new user object
-                v1.setValue(cur);                           // finally commit the update
+                const ps: Predicates = new Map(v1.getValue());      // copy predicates from old user object
+                const old = ps.get(predicate);                      // get the old objects for relevant predicate
+                ps.set(predicate, new Set(old).add(object));        // write back old + new objects
+                v1.setValue(ps);                                    // and commit the update
             }
             this.graph.getModel().endUpdate();
         }
