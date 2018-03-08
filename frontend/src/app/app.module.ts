@@ -3,12 +3,15 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 // Angular Material
-import { MatButtonModule } from '@angular/material/button';
-import { MatSidenavModule } from '@angular/material/sidenav';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import {MatExpansionModule} from '@angular/material/expansion';
-import {MatListModule} from '@angular/material/list';
-import {MatCardModule} from '@angular/material/card';
+
+import {MatInputModule,
+        MatSidenavModule,
+        MatFormFieldModule,
+        MatButtonModule,
+        MatExpansionModule,
+        MatListModule,
+        MatCardModule } from "@angular/material";
 
 // App Services
 // import { RdfmodelService } from './services/rdfmodel.service';
@@ -17,8 +20,6 @@ import {MatCardModule} from '@angular/material/card';
 import { AppComponent } from './app.component';
 import { MxgraphComponent } from './mxgraph/mxgraph.component';
 import { InfoboxComponent } from './infobox/infobox.component';
-import {MatFormFieldModule} from '@angular/material/form-field';
-import {MatInputModule} from "@angular/material";
 
 
 @NgModule({
@@ -36,7 +37,8 @@ import {MatInputModule} from "@angular/material";
     MatListModule,
     MatCardModule,
     MatFormFieldModule,
-    MatInputModule
+    MatInputModule,
+    MatSidenavModule
   ],
   providers: [
     // RdfmodelService

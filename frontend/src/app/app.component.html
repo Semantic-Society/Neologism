@@ -1,6 +1,6 @@
 <!-- c.f. https://material.angular.io/components/sidenav/api -->
 <mat-drawer-container autosize>
-    <mat-drawer #nav class="mat-drawer" mode="side" [opened]="true">
+    <mat-drawer #navStart class="mat-drawer" mode="side" position="start" [opened]="false">
         <p>Auto-resizing sidenav</p>
         <p *ngIf="true">Lorem, ipsum dolor sit amet consectetur.</p>
         <mat-accordion >
@@ -13,12 +13,21 @@
             <div class="mx-toolbar" id="mx-toolbar"></div>
           </mat-expansion-panel>
         </mat-accordion>
-        <app-infobox></app-infobox>
+    </mat-drawer>
+    <mat-drawer #navEnd class="mat-drawer" mode="side" position="end" [opened]="true">
+      <p>Auto-resizing sidenav</p>
+      <p *ngIf="true">Lorem, ipsum dolor sit amet consectetur.</p>
+      <app-infobox></app-infobox>
     </mat-drawer>
     <mat-drawer-content>
         <app-mxgraph></app-mxgraph>
-        <button type="button" mat-button (click)="nav.toggle()">
-            Toggle sidenav
+        <button type="button" mat-button (click)="navStart.toggle()">
+            Toggle left nav
         </button>
+        <button type="button" mat-button (click)="navEnd.toggle()">
+          Toggle right nav
+        </button>
+
     </mat-drawer-content>
+
 </mat-drawer-container>
