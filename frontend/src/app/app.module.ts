@@ -11,7 +11,8 @@ import {MatInputModule,
         MatButtonModule,
         MatExpansionModule,
         MatListModule,
-        MatCardModule } from "@angular/material";
+        MatCardModule,
+        MatGridListModule} from "@angular/material";
 
 // App Services
 // import { RdfmodelService } from './services/rdfmodel.service';
@@ -38,7 +39,8 @@ import { InfoboxComponent } from './infobox/infobox.component';
     MatCardModule,
     MatFormFieldModule,
     MatInputModule,
-    MatSidenavModule
+    MatSidenavModule,
+    MatGridListModule
   ],
   providers: [
     // RdfmodelService

@@ -161,20 +161,12 @@ export class MxgraphService {
                 const v2 = this.getOrAddVertex(object);
                 this.addEdge(predicate, v1, v2);
             } else {
+                //TODO:Commented out, since raising an error
                 // add it to user object
                 //const ps: Predicates = new Map(v1.getValue());      // copy predicates from old user object
                 //const old = ps.get(predicate);                      // get the old objects for relevant predicate
                 //ps.set(predicate, new Set(old).add(object));        // write back old + new objects
                 //v1.setValue(ps);                                    // and commit the update
-
-              //TODO: REMOVE IF FIXED
-              /*const old = v1.getValue();                  // get old user object
-              const cur = { ...old };                     // copy to current/new user object
-              const oldValues = old[predicate] || [];     // get the old objects for this predicate
-              const newValues = [...oldValues, object];   // construct array of old + new objects
-              cur[predicate] = new Set(newValues);        // and add it (as a Set) to the new user object
-              v1.setValue(cur as any);
-              console.log(cur);*/
             }
             this.graph.getModel().endUpdate();
         }

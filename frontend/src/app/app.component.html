@@ -1,7 +1,7 @@
 <!-- c.f. https://material.angular.io/components/sidenav/api -->
 <mat-drawer-container autosize>
     <mat-drawer #navStart class="mat-drawer" mode="side" position="start" [opened]="false">
-        <p>Auto-resizing sidenav</p>
+        <h3>Auto-resizing sidenav</h3>
         <p *ngIf="true">Lorem, ipsum dolor sit amet consectetur.</p>
         <mat-accordion >
           <mat-expansion-panel [expanded]="true" >
@@ -14,9 +14,19 @@
           </mat-expansion-panel>
         </mat-accordion>
     </mat-drawer>
-    <mat-drawer #navEnd class="mat-drawer" mode="side" position="end" [opened]="true">
-      <p>Auto-resizing sidenav</p>
-      <p *ngIf="true">Lorem, ipsum dolor sit amet consectetur.</p>
+    <mat-drawer #navEnd class="mat-drawer" mode="side" position="end" [opened]="true" class="no-pad">
+      <h3 class="sidebar-header">Friend of a Friend (FOAF) vocabulary</h3>
+      <hr>
+        <div class="vocabulary-link">
+          <div>
+            <a href="#">http://xmlns.com/foaf/0.1/</a>
+          </div>
+        </div>
+      <hr>
+        <p class="vocabulary-p-element">Version: 0.5.1</p>
+      <hr>
+        <p class="vocabulary-p-element">Author(s): John Doe, Jane Doe</p>
+      <hr>
       <app-infobox></app-infobox>
     </mat-drawer>
     <mat-drawer-content>
@@ -27,7 +37,5 @@
         <button type="button" mat-button (click)="navEnd.toggle()">
           Toggle right nav
         </button>
-
     </mat-drawer-content>
-
 </mat-drawer-container>

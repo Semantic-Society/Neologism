@@ -11,7 +11,7 @@
     color: #FFFFFF;
     padding: 1rem;
   }
-  
+
 
 
 app-mxgraph {
@@ -19,4 +19,43 @@ app-mxgraph {
     height: 500px;
     color: red;
   }
-  
+
+
+.sidebar-header {
+  margin-top: 0.3em;
+  margin-bottom: 0.3em;
+  text-align: center;
+  padding: 0 0.5em 0 0.5em ;
+}
+
+hr {
+  display: block;
+  height: 1px;
+  border: 0;
+  border-top: 1px solid #5F5F5F;
+  margin: 1em 0;
+  padding: 0;
+  margin: 0.3em 0em 0.3em 0em;
+  width: 100%;
+}
+
+.no-pad {
+  padding: 0;
+}
+
+.vocabulary-link{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+a {
+  color: cornflowerblue;
+  text-decoration: none;
+}
+
+.vocabulary-p-element{
+  text-align: center;
+  padding: 0em 0em 0em 0em;
+  margin: 0em 0em 0em 0em;
+}
