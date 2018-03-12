@@ -1,4 +1,4 @@
-<mat-card class="infobox-card">
+<!--<mat-card class="infobox-card">
   <mat-card-header>
     <mat-card-title>Infobox</mat-card-title>
   </mat-card-header>
@@ -19,4 +19,30 @@
       </mat-form-field>
     </mat-list-item>
   </mat-list>
+</mat-card>-->
+
+<mat-card class="infobox-card">
+  <p class="infobox-header">Infobox</p>
+  <mat-accordion multi="true">
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Namespace
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <p>This is the primary content of the panel.</p>
+    </mat-expansion-panel>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        Range
+      </mat-expansion-panel-header>
+      This the expansion 2 content
+    </mat-expansion-panel>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        Description
+      </mat-expansion-panel-header>
+      This the expansion 2 content
+    </mat-expansion-panel>
+  </mat-accordion>
 </mat-card>
