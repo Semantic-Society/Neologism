@@ -15,18 +15,7 @@
         </mat-accordion>
     </mat-drawer>
     <mat-drawer #navEnd class="mat-drawer" mode="side" position="end" [opened]="true" class="no-pad">
-      <h3 class="sidebar-header">Friend of a Friend (FOAF) vocabulary</h3>
-      <hr>
-        <div class="vocabulary-link">
-          <div>
-            <a href="#">http://xmlns.com/foaf/0.1/</a>
-          </div>
-        </div>
-      <hr>
-        <p class="vocabulary-p-element">Version: 0.5.1</p>
-      <hr>
-        <p class="vocabulary-p-element">Author(s): John Doe, Jane Doe</p>
-      <hr>
+      <app-metadata></app-metadata>
       <app-infobox></app-infobox>
     </mat-drawer>
     <mat-drawer-content>

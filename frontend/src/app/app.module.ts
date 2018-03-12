@@ -21,13 +21,15 @@ import {MatInputModule,
 import { AppComponent } from './app.component';
 import { MxgraphComponent } from './mxgraph/mxgraph.component';
 import { InfoboxComponent } from './infobox/infobox.component';
+import { MetadataComponent } from './metadata/metadata.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     MxgraphComponent,
-    InfoboxComponent
+    InfoboxComponent,
+    MetadataComponent
   ],
   imports: [
     BrowserModule,
