@@ -19,7 +19,7 @@ export class MxgraphComponent implements OnInit, OnDestroy {
         this.mx = new MxgraphService(
             this.mxGraphView.nativeElement,
             document.getElementById('mx-toolbar'),
-            'assets/foaf.ttl');
+            'assets/dcat.ttl');
         // this.mx = new MxgraphService(
         //     this.mxGraphView.nativeElement,
         //     document.getElementById('mx-toolbar'),

@@ -13,12 +13,8 @@ export class InfoboxComponent implements OnInit {
 
   recommenderForm: FormControl = new FormControl();
 
-  options = [
-    'One',
-    'Two',
-    'Three'
+  options = ["Catalog", "Bla", "usw"
   ]; //example Options
-
   recommendedOptions: Observable<string[]>;
 
   ngOnInit() {

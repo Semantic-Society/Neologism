@@ -15,7 +15,8 @@ import {MatInputModule,
         MatCardModule,
         MatGridListModule,
         MatAutocompleteModule,
-        MatProgressSpinnerModule} from "@angular/material";
+        MatProgressSpinnerModule,
+        MatTooltipModule} from "@angular/material";
 
 // App Services
 // import { RdfmodelService } from './services/rdfmodel.service';
@@ -49,7 +50,8 @@ import { MetadataComponent } from './metadata/metadata.component';
     MatSidenavModule,
     MatGridListModule,
     MatAutocompleteModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatTooltipModule
 
   ],
   providers: [
