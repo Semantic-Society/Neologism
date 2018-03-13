@@ -30,17 +30,31 @@
           Namespace
         </mat-panel-title>
       </mat-expansion-panel-header>
-      <p>This is the primary content of the panel.</p>
+      <form class="name-form">
+        <mat-form-field class="example-full-width">
+          <input type="text" placeholder="Name" aria-label="Number" matInput [formControl]="recommenderForm" [matAutocomplete]="auto">
+          <mat-autocomplete #auto="matAutocomplete">
+            <mat-option *ngFor="let option of recommendedOptions | async" [value]="option">
+              {{ option }}
+            </mat-option>
+            <mat-spinner></mat-spinner>
+          </mat-autocomplete>
+        </mat-form-field>
+      </form>
     </mat-expansion-panel>
     <mat-expansion-panel>
       <mat-expansion-panel-header>
-        Range
+        <mat-panel-title>
+          Range
+        </mat-panel-title>
       </mat-expansion-panel-header>
       This the expansion 2 content
     </mat-expansion-panel>
     <mat-expansion-panel>
       <mat-expansion-panel-header>
-        Description
+        <mat-panel-title>
+          Description
+        </mat-panel-title>
       </mat-expansion-panel-header>
       This the expansion 2 content
     </mat-expansion-panel>

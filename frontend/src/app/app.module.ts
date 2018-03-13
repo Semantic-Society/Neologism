@@ -1,5 +1,6 @@
 // Angular Core
-import { NgModule } from '@angular/core';
+import { NgModule, } from '@angular/core';
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { BrowserModule } from '@angular/platform-browser';
 
 // Angular Material
@@ -12,7 +13,9 @@ import {MatInputModule,
         MatExpansionModule,
         MatListModule,
         MatCardModule,
-        MatGridListModule} from "@angular/material";
+        MatGridListModule,
+        MatAutocompleteModule,
+        MatProgressSpinnerModule} from "@angular/material";
 
 // App Services
 // import { RdfmodelService } from './services/rdfmodel.service';
@@ -33,6 +36,8 @@ import { MetadataComponent } from './metadata/metadata.component';
   ],
   imports: [
     BrowserModule,
+    FormsModule,
+    ReactiveFormsModule,
     MatSidenavModule,
     BrowserAnimationsModule,
     MatButtonModule,
@@ -42,7 +47,10 @@ import { MetadataComponent } from './metadata/metadata.component';
     MatFormFieldModule,
     MatInputModule,
     MatSidenavModule,
-    MatGridListModule
+    MatGridListModule,
+    MatAutocompleteModule,
+    MatProgressSpinnerModule
+
   ],
   providers: [
     // RdfmodelService
