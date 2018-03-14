@@ -1,78 +1,24 @@
-<!--<mat-card class="infobox-card">
-  <mat-card-header>
-    <mat-card-title>Infobox</mat-card-title>
-  </mat-card-header>
-  <mat-list>
-    <mat-list-item>
-      <mat-form-field>
-        <input matInput placeholder="Input">
-      </mat-form-field>
-    </mat-list-item>
-    <mat-list-item>
-      <mat-form-field>
-        <input matInput placeholder="Input">
-      </mat-form-field>
-    </mat-list-item>
-    <mat-list-item class="info-box-description">
-      <mat-form-field>
-        <textarea matInput placeholder="Description" id="infoboxDescription"></textarea>
-      </mat-form-field>
-    </mat-list-item>
-  </mat-list>
-</mat-card>-->
-
 <mat-card class="infobox-card">
-  <p class="infobox-header">birthday</p>
+  <p class="infobox-header">dcat:Catalog</p>
+  <p class="infobox-subheader">http://www.w3.org/ns/dcat#Catalog</p>
   <mat-accordion multi="true">
     <mat-expansion-panel>
       <mat-expansion-panel-header>
         <mat-panel-title>
-          Namespace
+          Desription
         </mat-panel-title>
       </mat-expansion-panel-header>
-      <form class="recommender-form">
-        <mat-form-field class="label-field form-input">
-          <input type="text" placeholder="Label" matInput [formControl]="recommenderForm" [matAutocomplete]="auto">
-          <div class="test">
-          <mat-autocomplete #auto="matAutocomplete">
-            <mat-option *ngFor="let option of recommendedOptions | async" [value]="option">
-              {{ option }} |
-              <span class="autocomplete-small-text">http://www.w3.org/ns/dcat#Catalog</span>
-            </mat-option>
-            <mat-option>
-              <mat-spinner [diameter]="48"></mat-spinner> <!--<span class="spinner-text">Loading recommendations...</span>-->
-            </mat-option>
-          </mat-autocomplete>
-            <div class="recommender-additional-information hide">
-              <span class="tooltip-title">DCAT</span><br>
-              <span class="tooltip-subtitle">http://www.w3.org/ns/dcat#Catalog</span>
-              <hr>
-              <span class="tooltip-body">This section is non-normative. Data can come in many formats, ranging from spreadsheets over XML and RDF to various speciality formats. DCAT does not make any assumptions about the format of the datasets described in a catalog. Other, complementary vocabularies may be used together with DCAT to provide more detailed format-specific information. For example, properties from the VoID vocabulary [void] can be used to express various statistics about a DCAT-described dataset if that dataset is in RDF format.
-              This document does not prescribe any particular method of deploying data expressed in DCAT. DCAT is applicable in many contexts including RDF accessible via SPARQL endpoints, embedded in HTML pages as RDFa, or serialized as e.g. RDF/XML or Turtle. The examples in this document use Turtle simply because of Turtle's readability.</span>
-            </div>
-          </div>
-        </mat-form-field>
-        <span class="uri-text">http://www.w3.org/ns/dcat#Catalog</span>
-        <mat-form-field class="identifier-field form-input">
-          <input matInput placeholder="Favorite food" value="Sushi">
-        </mat-form-field>
-      </form>
+      A curated collection of metadata about datasets
     </mat-expansion-panel>
     <mat-expansion-panel>
       <mat-expansion-panel-header>
         <mat-panel-title>
-          Range
+          Properties
         </mat-panel-title>
       </mat-expansion-panel-header>
-      This the expansion 2 content
-    </mat-expansion-panel>
-    <mat-expansion-panel>
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          Description
-        </mat-panel-title>
-      </mat-expansion-panel-header>
-      This the expansion 2 content
+        <div class="list-element"> dcat:themeTaxonomy </div>
+        <div class="list-element"> dcat:dataset </div>
+        <div class="list-element"> dcat:record </div>
     </mat-expansion-panel>
   </mat-accordion>
 </mat-card>
