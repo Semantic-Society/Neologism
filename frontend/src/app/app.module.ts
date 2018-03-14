@@ -1,39 +1,38 @@
 // Angular Core
 import { NgModule, } from '@angular/core';
-import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 
 // Angular Material
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import {MatInputModule,
-        MatSidenavModule,
-        MatFormFieldModule,
+import {MatAutocompleteModule,
         MatButtonModule,
-        MatExpansionModule,
-        MatListModule,
         MatCardModule,
+        MatExpansionModule,
+        MatFormFieldModule,
         MatGridListModule,
-        MatAutocompleteModule,
+        MatInputModule,
+        MatListModule,
         MatProgressSpinnerModule,
-        MatTooltipModule} from "@angular/material";
+        MatSidenavModule,
+        MatTooltipModule} from '@angular/material';
 
 // App Services
-// import { RdfmodelService } from './services/rdfmodel.service';
+import { RecommendationService } from './services/recommendation.service';
 
 // App Components
 import { AppComponent } from './app.component';
-import { MxgraphComponent } from './mxgraph/mxgraph.component';
 import { InfoboxComponent } from './infobox/infobox.component';
 import { MetadataComponent } from './metadata/metadata.component';
-
+import { MxgraphComponent } from './mxgraph/mxgraph.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     MxgraphComponent,
     InfoboxComponent,
-    MetadataComponent
+    MetadataComponent,
   ],
   imports: [
     BrowserModule,
@@ -51,11 +50,11 @@ import { MetadataComponent } from './metadata/metadata.component';
     MatGridListModule,
     MatAutocompleteModule,
     MatProgressSpinnerModule,
-    MatTooltipModule
+    MatTooltipModule,
 
   ],
   providers: [
-    // RdfmodelService
+    RecommendationService,
   ],
   bootstrap: [AppComponent],
 })

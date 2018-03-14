@@ -30,7 +30,7 @@ export class MxgraphService {
         this.graph.autoSizeCellsOnAdd = true;
         this.graph.setConnectable(true);
         this.graph.setPanning(true);
-        this.graph.panningHandler.useLeftButtonForPanning = true;
+        // this.graph.panningHandler.useLeftButtonForPanning = true;    // Breaks lasso selection!
         this.graph.convertValueToString = (cell: m.mxCell) => cell.id;  // Enable mxGraph to extract cell labels
 
         // Overwrite label change handler in order to correctly write new lables to the user object
@@ -56,7 +56,7 @@ export class MxgraphService {
         this.canvas = this.graph.getDefaultParent();
 
         // Create layout algorithm to be used with the graph
-        // const hierarchical = new MxgraphService.mx.mxHierarchicalLayout(this.graph);
+        // const hierarchical = new MxgraphService.mx.mxHierarchicalLayout(this.graph, MxgraphService.mx.mxConstants.DIRECTION_SOUTH, true);
         const organic = new MxgraphService.mx.mxFastOrganicLayout(this.graph);
         organic.forceConstant = 120;
 
@@ -161,12 +161,11 @@ export class MxgraphService {
                 const v2 = this.getOrAddVertex(object);
                 this.addEdge(predicate, v1, v2);
             } else {
-                //TODO:Commented out, since raising an error
                 // add it to user object
-                //const ps: Predicates = new Map(v1.getValue());      // copy predicates from old user object
-                //const old = ps.get(predicate);                      // get the old objects for relevant predicate
-                //ps.set(predicate, new Set(old).add(object));        // write back old + new objects
-                //v1.setValue(ps);                                    // and commit the update
+                const ps: Predicates = new Map(v1.getValue());      // copy predicates from old user object
+                const old = ps.get(predicate);                      // get the old objects for relevant predicate
+                ps.set(predicate, new Set(old).add(object));        // write back old + new objects
+                v1.setValue(ps);                                    // and commit the update
             }
             this.graph.getModel().endUpdate();
         }

@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import {FormControl} from "@angular/forms";
-import {Observable} from 'rxjs/Observable';
-import {startWith} from 'rxjs/operators/startWith';
-import {map} from 'rxjs/operators/map';
+import { FormControl } from "@angular/forms";
+import { Observable } from 'rxjs/Observable';
+import { startWith } from 'rxjs/operators/startWith';
+import { map } from 'rxjs/operators/map';
+import { RecommendationService } from '../services/recommendation.service';
 
 @Component({
   selector: 'app-infobox',
@@ -17,6 +18,8 @@ export class InfoboxComponent implements OnInit {
   ]; //example Options
   recommendedOptions: Observable<string[]>;
 
+  constructor(private recommender: RecommendationService) { }
+
   ngOnInit() {
     this.recommendedOptions = this.recommenderForm.valueChanges
       .pipe(
@@ -29,6 +32,5 @@ export class InfoboxComponent implements OnInit {
     return this.options.filter(option =>
       option.toLowerCase().indexOf(val.toLowerCase()) === 0);
   }
-  constructor() { }
 
 }
