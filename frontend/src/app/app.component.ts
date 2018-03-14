@@ -6,7 +6,12 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  constructor() { }
-
+  constructor() {
+  }
+  editMode: Number = 0;
   title = 'app';
+
+  getEditMode(){
+    return this.editMode;
+  }
 }

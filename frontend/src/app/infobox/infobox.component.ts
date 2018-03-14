@@ -29,6 +29,7 @@ export class InfoboxComponent implements OnInit {
     return this.options.filter(option =>
       option.toLowerCase().indexOf(val.toLowerCase()) === 0);
   }
+
   constructor() { }
 
 }
