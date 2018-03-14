@@ -1,5 +1,9 @@
 <mat-card class="infobox-card">
-  <p class="infobox-header" (dblclick)="toggleEditMode()">dcat:Catalog</p>
+  <form class="example-form">
+    <mat-form-field class="example-full-width">
+      <input matInput placeholder="" value="{{inputValue}}" md-autofocus>
+    </mat-form-field>
+  </form>
   <p class="infobox-subheader">http://www.w3.org/ns/dcat#Catalog</p>
   <mat-accordion multi="true">
     <mat-expansion-panel>
@@ -16,9 +20,9 @@
           Properties
         </mat-panel-title>
       </mat-expansion-panel-header>
-        <div class="list-element"> dcat:themeTaxonomy </div>
-        <div class="list-element"> dcat:dataset </div>
-        <div class="list-element"> dcat:record </div>
+      <div class="list-element"> dcat:themeTaxonomy </div>
+      <div class="list-element"> dcat:dataset </div>
+      <div class="list-element"> dcat:record </div>
     </mat-expansion-panel>
   </mat-accordion>
 </mat-card>

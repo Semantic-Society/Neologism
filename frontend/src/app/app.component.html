@@ -15,9 +15,14 @@
         </mat-accordion>
     </mat-drawer>
     <mat-drawer [ngSwitch]="editMode" #navEnd class="mat-drawer nav-right" mode="side" position="end" [opened]="true" class="no-pad">
-
+      <button mat-button (click)="toggleEditMode()">Click me!</button>
       <app-metadata></app-metadata>
-      <app-infobox *ngSwitchCase="0"></app-infobox>
+      <div class="toolbar-container">
+        <app-infobox *ngSwitchCase="0" [currentMode]="editMode" (onEditToggled)="toggleEditMode()"></app-infobox>
+        <app-editor *ngSwitchCase="1" [inputValue]="getLabel()"></app-editor>
+      </div>
+
+
     </mat-drawer>
     <mat-drawer-content>
         <app-mxgraph></app-mxgraph>

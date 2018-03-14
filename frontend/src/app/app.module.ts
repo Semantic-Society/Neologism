@@ -26,6 +26,7 @@ import { AppComponent } from './app.component';
 import { MxgraphComponent } from './mxgraph/mxgraph.component';
 import { InfoboxComponent } from './infobox/infobox.component';
 import { MetadataComponent } from './metadata/metadata.component';
+import { EditorComponent } from './editor/editor.component';
 
 
 @NgModule({
@@ -33,7 +34,8 @@ import { MetadataComponent } from './metadata/metadata.component';
     AppComponent,
     MxgraphComponent,
     InfoboxComponent,
-    MetadataComponent
+    MetadataComponent,
+    EditorComponent
   ],
   imports: [
     BrowserModule,

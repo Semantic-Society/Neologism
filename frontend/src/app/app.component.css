@@ -34,3 +34,7 @@ app-mxgraph {
 .mat-drawer-end{
   overflow: visible;
 }
+.toolbar-container {
+  margin-top: 1.2em;
+  padding: 0.3em 0.3em 0.3em 0.3em;
+}

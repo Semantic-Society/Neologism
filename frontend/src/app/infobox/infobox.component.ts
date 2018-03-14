@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormControl} from "@angular/forms";
 import {Observable} from 'rxjs/Observable';
 import {startWith} from 'rxjs/operators/startWith';
@@ -10,7 +10,8 @@ import {map} from 'rxjs/operators/map';
   styleUrls: ['./infobox.component.css']
 })
 export class InfoboxComponent implements OnInit {
-
+  @Input() currentMode : Number;
+  @Output() onEditToggled: EventEmitter<any> = new EventEmitter<any>();
   recommenderForm: FormControl = new FormControl();
 
   options = ["Catalog", "Bla", "usw"
@@ -29,7 +30,9 @@ export class InfoboxComponent implements OnInit {
     return this.options.filter(option =>
       option.toLowerCase().indexOf(val.toLowerCase()) === 0);
   }
-
+  public toggleEditMode():void {
+    this.onEditToggled.emit(1);
+  }
   constructor() { }
 
 }

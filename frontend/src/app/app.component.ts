@@ -11,7 +11,14 @@ export class AppComponent {
   editMode: Number = 0;
   title = 'app';
 
-  getEditMode(){
-    return this.editMode;
+  toggleEditMode(){
+    if (this.editMode == 1) {
+      this.editMode=0;
+    }else{
+      this.editMode=1;
+    }
+  }
+  getLabel():String{
+    return "some";
   }
 }
