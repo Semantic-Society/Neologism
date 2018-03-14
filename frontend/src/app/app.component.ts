@@ -10,8 +10,10 @@ export class AppComponent {
   }
   editMode: Number = 0;
   title = 'app';
+  currentLabel:String ="";
 
-  toggleEditMode(){
+  toggleEditMode(event){
+    this.currentLabel = event;
     if (this.editMode == 1) {
       this.editMode=0;
     }else{

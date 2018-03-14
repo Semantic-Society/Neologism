@@ -18,8 +18,8 @@
       <button mat-button (click)="toggleEditMode()">Click me!</button>
       <app-metadata></app-metadata>
       <div class="toolbar-container">
-        <app-infobox *ngSwitchCase="0" [currentMode]="editMode" (onEditToggled)="toggleEditMode()"></app-infobox>
-        <app-editor *ngSwitchCase="1" [inputValue]="getLabel()"></app-editor>
+        <app-infobox *ngSwitchCase="0" [currentMode]="editMode" (onEditToggled)="toggleEditMode($event)"></app-infobox>
+        <app-editor *ngSwitchCase="1" [inputValue]="currentLabel"></app-editor>
       </div>
 
 

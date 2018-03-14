@@ -1,5 +1,5 @@
 <mat-card class="infobox-card">
-  <p class="infobox-header" (dblclick)="toggleEditMode()">dcat:Catalog</p>
+  <p class="infobox-header" (dblclick)="activateEditMode(labelName)">{{labelName}}</p>
   <p class="infobox-subheader">http://www.w3.org/ns/dcat#Catalog</p>
   <mat-accordion multi="true">
     <mat-expansion-panel>
