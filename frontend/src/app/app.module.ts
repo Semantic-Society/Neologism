@@ -23,6 +23,7 @@ import { RecommendationService } from './services/recommendation.service';
 
 // App Components
 import { AppComponent } from './app.component';
+import { EditorComponent } from './editor/editor.component';
 import { InfoboxComponent } from './infobox/infobox.component';
 import { MetadataComponent } from './metadata/metadata.component';
 import { MxgraphComponent } from './mxgraph/mxgraph.component';
@@ -33,6 +34,7 @@ import { MxgraphComponent } from './mxgraph/mxgraph.component';
     MxgraphComponent,
     InfoboxComponent,
     MetadataComponent,
+    EditorComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,5 +1,7 @@
 <mat-card class="infobox-card">
-  <p class="infobox-header" (dblclick)="activateEditMode(labelName)">{{labelName}}</p>
+  <form class="example-form">
+      <input #labelInput class="label-input" placeholder="" value="{{inputValue}}">
+  </form>
   <p class="infobox-subheader">http://www.w3.org/ns/dcat#Catalog</p>
   <mat-accordion multi="true">
     <mat-expansion-panel>
@@ -16,9 +18,9 @@
           Properties
         </mat-panel-title>
       </mat-expansion-panel-header>
-        <div class="list-element"> dcat:themeTaxonomy </div>
-        <div class="list-element"> dcat:dataset </div>
-        <div class="list-element"> dcat:record </div>
+      <div class="list-element"> dcat:themeTaxonomy </div>
+      <div class="list-element"> dcat:dataset </div>
+      <div class="list-element"> dcat:record </div>
     </mat-expansion-panel>
   </mat-accordion>
 </mat-card>

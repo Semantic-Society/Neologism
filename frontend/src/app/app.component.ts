@@ -6,7 +6,21 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  constructor() { }
-
+  constructor() {
+  }
+  editMode: Number = 0;
   title = 'app';
+  currentLabel:String ="";
+
+  toggleEditMode(event){
+    this.currentLabel = event;
+    if (this.editMode == 1) {
+      this.editMode=0;
+    }else{
+      this.editMode=1;
+    }
+  }
+  getLabel():String{
+    return "some";
+  }
 }

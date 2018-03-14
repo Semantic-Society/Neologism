@@ -1,36 +1,28 @@
-import { Component, OnInit } from '@angular/core';
-import { FormControl } from "@angular/forms";
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
-import { startWith } from 'rxjs/operators/startWith';
 import { map } from 'rxjs/operators/map';
+import { startWith } from 'rxjs/operators/startWith';
 import { RecommendationService } from '../services/recommendation.service';
 
 @Component({
   selector: 'app-infobox',
   templateUrl: './infobox.component.html',
-  styleUrls: ['./infobox.component.css']
+  styleUrls: ['./infobox.component.css'],
 })
 export class InfoboxComponent implements OnInit {
+  @Input() currentMode: number;
+  @Output() onEditToggled: EventEmitter<any> = new EventEmitter<any>();
 
-  recommenderForm: FormControl = new FormControl();
-
-  options = ["Catalog", "Bla", "usw"
-  ]; //example Options
-  recommendedOptions: Observable<string[]>;
+  labelName = 'dcat:Catalog';
 
   constructor(private recommender: RecommendationService) { }
 
   ngOnInit() {
-    this.recommendedOptions = this.recommenderForm.valueChanges
-      .pipe(
-        startWith(''),
-        map(val => this.filter(val))
-      );
   }
 
-  filter(val: string): string[] {
-    return this.options.filter(option =>
-      option.toLowerCase().indexOf(val.toLowerCase()) === 0);
+  public activateEditMode(): void {
+    this.onEditToggled.emit(this.labelName);
   }
 
 }
