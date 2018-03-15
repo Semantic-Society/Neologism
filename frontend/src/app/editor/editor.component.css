@@ -108,19 +108,38 @@ mat-panel-title {
 
 .description-textarea{
   margin: 0.3em 0px 0.0em 0px;
-  height:200px;
+  height:50px;
   width: 95%;
 }
 .mat-raised-button.btn-green {
   background-color: #228b22;
 }
 
-.recommender-wrapper{
-  margin: 0.3em 24px 0.3em 24px;
+.recommender-outer-wrapper{
+  max-height: 260px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  border-top: 2px solid #ededed;
+  border-bottom: 2px solid #ededed;
+}
+
+.recommender-inner-wrapper{
+  margin: 0em 0px 0.3em 2px;
   background-color: #ededed;
 }
-.recommendation-tile {
+
+.recommendation-tile-wrapper {
   margin: 0px;
+}
+.recommendation-result {
+
+  box-shadow: inset 4px 2px 0 0 #ededed;
+  background-color: #FFFFFF;
+}
+
+.recommendation-result:hover {
+  background: rgba(0,0,0,.04);
+  cursor: pointer;
 }
 
 .no-recommandation-span {

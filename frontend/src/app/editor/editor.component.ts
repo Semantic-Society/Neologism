@@ -10,9 +10,10 @@ export class EditorComponent implements OnInit {
   @Input() inputIdentifier:string;
   @Input() inputDescription:string;
   @Input() inputProperties:any;
+  //@Input() recommendations:any;
   @Output() onInputLabelUpdated: EventEmitter<any> = new EventEmitter<any>();
   @ViewChild('labelInput') labelInput: ElementRef;
-
+  recommendations = []
   showSpinner:Boolean = false;
   constructor() { }
 
@@ -34,6 +35,9 @@ export class EditorComponent implements OnInit {
   }*/
 
   public sendInputLabel(): void {
+    this.recommendations = [];
+    setTimeout(()=>{  this.recommendations = ["dcat:Catalog", "dcatap-it:Catalog", "dcatap-nl:Catalog", "someother:Catalog"]}, 2000)
+
     this.enableSpinner();
     const labelField = <HTMLInputElement>this.labelInput.nativeElement;
     this.onInputLabelUpdated.emit(labelField.value);

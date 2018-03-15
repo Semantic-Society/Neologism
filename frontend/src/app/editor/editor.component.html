@@ -3,16 +3,22 @@
       <input #labelInput class="label-input" placeholder="" value="{{inputLabel}}" (input)="sendInputLabel()">
   </form>
   <p class="infobox-subheader">{{inputIdentifier}}</p>
-  <mat-grid-list cols="1" rowHeight="4:1" class="recommender-wrapper">
-    <mat-grid-tile class="recommendation-tile" *ngIf="showSpinner;else no_result">
-      <mat-spinner [diameter]="40" ></mat-spinner>
-    </mat-grid-tile>
-    <ng-template #no_result>
-      <mat-grid-tile class="recommendation-tile" >
-        <span class="no-recommandation-span">No recommandations found</span>
+  <div class="recommender-outer-wrapper">
+    <mat-grid-list cols="1" rowHeight="4:1" class="recommender-inner-wrapper">
+      <mat-grid-tile class="recommendation-tile-wrapper recommendation-result" *ngFor="let recommendation of recommendations">
+        {{recommendation}}
       </mat-grid-tile>
-    </ng-template>
-  </mat-grid-list>
+      <mat-grid-tile class="recommendation-tile-wrapper" *ngIf="showSpinner;else no_result">
+        <mat-spinner [diameter]="40" ></mat-spinner>
+      </mat-grid-tile>
+      <ng-template #no_result>
+        <mat-grid-tile class="recommendation-tile-wrapper" >
+          <span class="no-recommandation-span">No recommandations found</span>
+        </mat-grid-tile>
+      </ng-template>
+    </mat-grid-list>
+  </div>
+
   <mat-accordion multi="true">
     <mat-expansion-panel>
       <mat-expansion-panel-header>
