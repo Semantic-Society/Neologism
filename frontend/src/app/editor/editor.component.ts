@@ -1,4 +1,5 @@
 import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
+import 'rxjs/add/operator/map';
 
 @Component({
   selector: 'app-editor',
@@ -6,6 +7,8 @@ import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} f
   styleUrls: ['./editor.component.css']
 })
 export class EditorComponent implements OnInit {
+  constructor() {}
+
   @Input() inputLabel:string;
   @Input() inputIdentifier:string;
   @Input() inputDescription:string;
@@ -13,9 +16,8 @@ export class EditorComponent implements OnInit {
   //@Input() recommendations:any;
   @Output() onInputLabelUpdated: EventEmitter<any> = new EventEmitter<any>();
   @ViewChild('labelInput') labelInput: ElementRef;
-  recommendations = []
+  recommendations = [];
   showSpinner:Boolean = false;
-  constructor() { }
 
   ngOnInit() {
     this.selectLabelInput();
@@ -48,6 +50,9 @@ export class EditorComponent implements OnInit {
   }
   disableSpinner() {
     this.showSpinner = false;
+  }
+  getRecommendations() {
+
   }
 
 
