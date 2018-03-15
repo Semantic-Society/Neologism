@@ -1,8 +1,8 @@
 <mat-card class="infobox-card">
   <form class="example-form">
-      <input #labelInput class="label-input" placeholder="" value="{{inputValue}}">
+      <input #labelInput class="label-input" placeholder="" value="{{inputLabel}}" (input)="sendInputLabel()">
   </form>
-  <p class="infobox-subheader">http://www.w3.org/ns/dcat#Catalog</p>
+  <p class="infobox-subheader">{{inputIdentifier}}</p>
   <mat-accordion multi="true">
     <mat-expansion-panel>
       <mat-expansion-panel-header>
@@ -10,7 +10,7 @@
           Desription
         </mat-panel-title>
       </mat-expansion-panel-header>
-      A curated collection of metadata about datasets
+      {{inputDescription}}
     </mat-expansion-panel>
     <mat-expansion-panel>
       <mat-expansion-panel-header>

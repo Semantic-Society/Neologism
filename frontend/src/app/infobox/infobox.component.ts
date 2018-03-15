@@ -12,9 +12,11 @@ import { RecommendationService } from '../services/recommendation.service';
 })
 export class InfoboxComponent implements OnInit {
   @Input() currentMode: number;
+  @Input() inputLabel: String;
+  @Input() inputIdentifier: String;
+  @Input() inputDescription: String;
   @Output() onEditToggled: EventEmitter<any> = new EventEmitter<any>();
 
-  labelName = 'dcat:Catalog';
 
   constructor(private recommender: RecommendationService) { }
 
@@ -22,7 +24,6 @@ export class InfoboxComponent implements OnInit {
   }
 
   public activateEditMode(): void {
-    this.onEditToggled.emit(this.labelName);
+    this.onEditToggled.emit(this.inputLabel);
   }
-
 }
