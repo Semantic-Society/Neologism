@@ -1,22 +1,25 @@
 // Angular Core
 import { NgModule, } from '@angular/core';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpModule } from '@angular/http';
 import { BrowserModule } from '@angular/platform-browser';
 
 // Angular Material
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import {MatAutocompleteModule,
-        MatButtonModule,
-        MatCardModule,
-        MatExpansionModule,
-        MatFormFieldModule,
-        MatGridListModule,
-        MatInputModule,
-        MatListModule,
-        MatProgressSpinnerModule,
-        MatSidenavModule,
-        MatTooltipModule} from '@angular/material';
+import {
+  MatAutocompleteModule,
+  MatButtonModule,
+  MatCardModule,
+  MatExpansionModule,
+  MatFormFieldModule,
+  MatGridListModule,
+  MatInputModule,
+  MatListModule,
+  MatProgressSpinnerModule,
+  MatSidenavModule,
+  MatTooltipModule,
+} from '@angular/material';
 
 // App Services
 import { RecommendationService } from './services/recommendation.service';
@@ -39,6 +42,7 @@ import { MxgraphComponent } from './mxgraph/mxgraph.component';
   imports: [
     BrowserModule,
     FormsModule,
+    HttpModule,
     ReactiveFormsModule,
     MatSidenavModule,
     BrowserAnimationsModule,

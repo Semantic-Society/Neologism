@@ -88,5 +88,3 @@ export class RecommendationService {
         return this.recommendations;
     }
 }
-
-}
