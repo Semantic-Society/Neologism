@@ -57,10 +57,6 @@ mat-panel-title {
   text-decoration: underline;
   cursor: pointer;
 }
-.label-input{
-  margin: 0.3em 24px 0.0em 24px;
-  width: 88%;
-}
 
 .autocomplete-small-text{
   font-size: smaller;
@@ -103,4 +99,31 @@ mat-panel-title {
 }
 .show {
   display: block;
+}
+
+.label-input{
+  margin: 0.3em 24px 0.0em 24px;
+  width: 83%;
+}
+
+.description-textarea{
+  margin: 0.3em 0px 0.0em 0px;
+  height:200px;
+  width: 95%;
+}
+.mat-raised-button.btn-green {
+  background-color: #228b22;
+}
+
+.recommender-wrapper{
+  margin: 0.3em 24px 0.3em 24px;
+  background-color: #ededed;
+}
+.recommendation-tile {
+  margin: 0px;
+}
+
+.no-recommandation-span {
+  font-size: 0.9rem;
+  color: grey;
 }

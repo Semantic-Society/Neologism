@@ -13,6 +13,7 @@ export class EditorComponent implements OnInit {
   @Output() onInputLabelUpdated: EventEmitter<any> = new EventEmitter<any>();
   @ViewChild('labelInput') labelInput: ElementRef;
 
+  showSpinner:Boolean = false;
   constructor() { }
 
   ngOnInit() {
@@ -33,10 +34,17 @@ export class EditorComponent implements OnInit {
   }*/
 
   public sendInputLabel(): void {
+    this.enableSpinner();
     const labelField = <HTMLInputElement>this.labelInput.nativeElement;
     this.onInputLabelUpdated.emit(labelField.value);
     console.log("input typing event fired! New label name "+ labelField.value);
 }
+  enableSpinner(){
+    this.showSpinner = true;
+  }
+  disableSpinner() {
+    this.showSpinner = false;
+  }
 
 
 
