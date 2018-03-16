@@ -20,9 +20,9 @@ type IRI = string;
 
 // REST Response Format
 interface IRestResponse {
-    ID: string;
+    ID?: string;
     recommendation: IRecommendationMetadata;
-    expected: number;   // total number of recommendation engines, i.e. make expected-1 calls to more endpoint
+    expected?: number;   // total number of recommendation engines, i.e. make expected-1 calls to more endpoint
     more: boolean;
 }
 
@@ -88,13 +88,13 @@ export class RecommendationService {
                     .map(
                         () => this._http
                             .get(`${this.baseUrl}more?ID=${res.ID}`)
-                            .map((r) => r.json() as IRecommendationMetadata)))
+                            .map((r) => r.json() as IRestResponse)))
             .mergeAll(); // and merge results as they come in
 
         // Provide single point of contact for any recommendation
         return initialRequest
-            .map((res) => res.recommendation)
             .merge(nextRecommendations)
+            .map((res) => res.recommendation)
             .scan((a, c) => [...a, c], []);
     }
 
