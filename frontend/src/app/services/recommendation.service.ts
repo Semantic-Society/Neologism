@@ -64,23 +64,29 @@ export class RecommendationService {
     /** Neologism recommendation service endpoint base path */
     private baseUrl = 'http://cloud33.dbis.rwth-aachen.de:8080/recommender/';
 
-    /** Singleton search pipeline ensures only one request is active at any time */
-    private subject = new Subject<string>(); // Should only ingest url encoded Turtle graphs
-
-    /** Single point of contact for recommendation results */
-    private recommendations: Observable<IRecommendationMetadata>;
-
     /**
      * Neologism Reccomendation Service Adapter
      * via Angular's observable http service
      */
-    constructor(private _http: Http) {
+    constructor(private _http: Http) { }
+
+    /**
+     * Generates optimization and completion recommendations for RDF vocabularies
+     * @param queryGraph Turtle encoded context graph. May include (exactly one) neologism query term.
+     * @param queryTerm Optional clear text query string. Appended as neo query iri to graph.
+     */
+    classRecommendation(queryGraph: string, queryTerm?: string) {
+        if (queryTerm)
+            queryGraph += ` <neo://query/${queryTerm}> a <http://www.w3.org/2000/01/rdf-schema#Class> .`;
+
+        queryGraph = encodeURIComponent(queryGraph);
+
         // First request to recommendation service's -start- endpoint
-        const initialRequest = this.subject
+        const initialRequest = Observable.of(queryGraph)
             .distinctUntilChanged()
             .switchMap(
-                (queryGraph) => this._http
-                    .get(`${this.baseUrl}start?model=${queryGraph}`)
+                (model) => this._http
+                    .get(`${this.baseUrl}start?model=${model}`)
                     .map((res) => res.json() as IRestStart));
 
         // Subsequent `expectedRecommendationCount - 1` many requests to -more- endpoint
@@ -89,31 +95,14 @@ export class RecommendationService {
                 (res) => Observable.range(1, res.expected - 1)
                     .map(
                         () => this._http
-                            .get(`${this.baseUrl}more?id=${res.ID}`)
+                            .get(`${this.baseUrl}more?ID=${res.ID}`)
                             .map((r) => r.json() as IRecommendationMetadata)))
             .mergeAll(); // and merge results as they come in
 
         // Provide single point of contact for any recommendation
-        this.recommendations = initialRequest
+        return initialRequest
             .map((res) => res.firstRecommendation)
-            .merge(nextRecommendations);
-    }
-
-    /**
-     * Generates optimization and completion recommendations for RDF vocabularies
-     * @param queryGraph Turtle encoded context graph. May include (exactly one) neologism query term.
-     * @param queryTerm Optional clear text query string. Appended as neo query iri to graph.
-     */
-    classRecommendation(queryGraph: string, queryTerm?: string) {
-        if (queryTerm) {
-            queryTerm = N3Codec.neologismId(queryTerm);
-            queryGraph += ` ${queryTerm} a http://www.w3.org/2000/01/rdf-schema#Class .`;
-        }
-
-        queryGraph = encodeURI(queryGraph);
-
-        this.subject.next(queryGraph);
-        return this.recommendations
+            .merge(nextRecommendations)
             .scan((a, c) => [...a, c], []);
     }
 

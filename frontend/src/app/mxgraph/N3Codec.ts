@@ -35,7 +35,7 @@ export class N3Codec {
                 }
             }
         });
-        return new Promise((resolve, reject) => writer.end((err, result) => err ? reject(err) : resolve(result)));
+        return new Promise((resolve, reject) => writer.end((err, result) => err ? reject(err) : resolve(result))) as Promise<string>;
     }
 
     static neologismId(id: string) {
