@@ -6,7 +6,7 @@ import { MxgraphService } from '../mxgraph/mxgraph';
 @Component({
     selector: 'app-editor',
     templateUrl: './editor.component.html',
-    styleUrls: ['./editor.component.css']
+    styleUrls: ['./editor.component.css'],
 })
 export class EditorComponent implements OnInit {
 

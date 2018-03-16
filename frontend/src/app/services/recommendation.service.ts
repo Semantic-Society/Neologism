@@ -19,19 +19,11 @@ import { N3Codec } from '../mxgraph/N3Codec';
 type IRI = string;
 
 // REST Response Format
-interface IRestStart {
+interface IRestResponse {
     ID: string;
-    firstRecommendation: IRecommendationMetadata;
+    recommendation: IRecommendationMetadata;
     expected: number;   // total number of recommendation engines, i.e. make expected-1 calls to more endpoint
-}
-
-interface IRestMore {
-    nextRecommendation: IRecommendationMetadata;
     more: boolean;
-}
-
-interface IRestProperties {
-    properties: IPropertyRecommendation[];
 }
 
 // Recommendation Meta Schema
@@ -87,7 +79,7 @@ export class RecommendationService {
             .switchMap(
                 (model) => this._http
                     .get(`${this.baseUrl}start?model=${model}`)
-                    .map((res) => res.json() as IRestStart));
+                    .map((res) => res.json() as IRestResponse));
 
         // Subsequent `expectedRecommendationCount - 1` many requests to -more- endpoint
         const nextRecommendations = initialRequest
@@ -101,7 +93,7 @@ export class RecommendationService {
 
         // Provide single point of contact for any recommendation
         return initialRequest
-            .map((res) => res.firstRecommendation)
+            .map((res) => res.recommendation)
             .merge(nextRecommendations)
             .scan((a, c) => [...a, c], []);
     }
@@ -112,6 +104,6 @@ export class RecommendationService {
 
         return this._http
             .get(`${this.baseUrl}properties?class=${classUri}&creator=${creator}`)
-            .map((r) => r.json() as IRestProperties);
+            .map((r) => r.json() as { properties: IPropertyRecommendation[] });
     }
 }
