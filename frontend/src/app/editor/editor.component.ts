@@ -1,5 +1,6 @@
 import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import 'rxjs/add/operator/map';
+import {RecommendationService} from '../services/recommendation.service';
 
 @Component({
   selector: 'app-editor',
@@ -7,7 +8,9 @@ import 'rxjs/add/operator/map';
   styleUrls: ['./editor.component.css']
 })
 export class EditorComponent implements OnInit {
-  constructor() {}
+  constructor() {
+
+  }
 
   @Input() inputLabel:string;
   @Input() inputIdentifier:string;
@@ -18,7 +21,7 @@ export class EditorComponent implements OnInit {
   @ViewChild('labelInput') labelInput: ElementRef;
   recommendations = [];
   showSpinner:Boolean = false;
-
+  recommendationService:RecommendationService;
   ngOnInit() {
     this.selectLabelInput();
   }
@@ -41,9 +44,10 @@ export class EditorComponent implements OnInit {
     setTimeout(()=>{  this.recommendations = ["dcat:Catalog", "dcatap-it:Catalog", "dcatap-nl:Catalog", "someother:Catalog"]}, 2000)
 
     this.enableSpinner();
-    const labelField = <HTMLInputElement>this.labelInput.nativeElement;
+    this.recommendationService.classRecommendation();
+    /*const labelField = <HTMLInputElement>this.labelInput.nativeElement;
     this.onInputLabelUpdated.emit(labelField.value);
-    console.log("input typing event fired! New label name "+ labelField.value);
+    console.log("input typing event fired! New label name "+ labelField.value);*/
 }
   enableSpinner(){
     this.showSpinner = true;
