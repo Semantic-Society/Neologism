@@ -74,12 +74,9 @@ export class RecommendationService {
         queryGraph = encodeURIComponent(queryGraph);
 
         // First request to recommendation service's -start- endpoint
-        const initialRequest = Observable.of(queryGraph)
-            .distinctUntilChanged()
-            .switchMap(
-                (model) => this._http
-                    .get(`${this.baseUrl}start?model=${model}`)
-                    .map((res) => res.json() as IRestResponse));
+        const initialRequest = this._http
+            .get(`${this.baseUrl}start?model=${queryGraph}`)
+            .map((res) => res.json() as IRestResponse);
 
         // Subsequent `expectedRecommendationCount - 1` many requests to -more- endpoint
         const nextRecommendations = initialRequest
@@ -95,12 +92,12 @@ export class RecommendationService {
         return initialRequest
             .merge(nextRecommendations)
             .map((res) => res.recommendation)
-            .scan((a, c) => [...a, c], []);
+            .scan((acc, curr) => [...acc, curr], []);
     }
 
     propertyRecommendation(classUri: IRI, creator: string) {
-        classUri = encodeURI(classUri);
-        creator = encodeURI(creator);
+        classUri = encodeURIComponent(classUri);
+        creator = encodeURIComponent(creator);
 
         return this._http
             .get(`${this.baseUrl}properties?class=${classUri}&creator=${creator}`)
