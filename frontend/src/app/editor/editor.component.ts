@@ -1,7 +1,20 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import 'rxjs/add/operator/map';
-import { RecommendationService } from '../services/recommendation.service';
+import { RecommendationService, IPropertyRecommendation } from '../services/recommendation.service';
 import { MxgraphService } from '../mxgraph/mxgraph';
+
+interface IClassRecommendation {
+    uri: string;
+    comment: string;
+    label: string;
+    creator: string;
+}
+interface IPropertyRecommendation {
+    uri: string;
+    comment: string;
+    label: string;
+    range: string;
+}
 
 @Component({
     selector: 'app-editor',
@@ -9,6 +22,7 @@ import { MxgraphService } from '../mxgraph/mxgraph';
     styleUrls: ['./editor.component.css'],
 })
 export class EditorComponent implements OnInit {
+    // TODO REFACTOR THIS
 
     constructor(private recommendationService: RecommendationService) { }
 
@@ -16,11 +30,14 @@ export class EditorComponent implements OnInit {
     @Input() inputIdentifier: string;
     @Input() inputDescription: string;
     @Input() inputProperties: any;
-    //@Input() recommendations:any;
     @Output() onInputLabelUpdated: EventEmitter<any> = new EventEmitter<any>();
     @ViewChild('labelInput') labelInput: ElementRef;
-    recommendations = [];
-    showSpinner: Boolean = false;
+
+    private recommendations: IClassRecommendation[] = [];
+    private selectedRecommendation: IClassRecommendation;
+    private propertyRecommendations: IPropertyRecommendation[] = [];
+    private showSpinner = false;
+
     ngOnInit() {
         this.selectLabelInput();
     }
@@ -31,61 +48,41 @@ export class EditorComponent implements OnInit {
         labelField.select();
     }
 
-
     public sendInputLabel(): void {
         this.recommendations = [];
-        // setTimeout(()=>{  this.recommendations = ["dcat:Catalog", "dcatap-it:Catalog", "dcatap-nl:Catalog", "someother:Catalog"]}, 2000)
 
         this.enableSpinner();
 
         const labelField = (this.labelInput.nativeElement as HTMLInputElement).value;
         const mx: MxgraphService = window['mxgraphService'];
         if (mx && labelField)
-            mx.serializeModel().then((model) => {
+            mx.serializeModel().then((model) =>
                 this.recommendationService.classRecommendation(model, labelField)
-                    .subscribe((recs) => {
-                        recs.forEach((value) => {
-                          this.recommendations = [];
-                          if(value.list)
-                            for (var i =0; i<=3; i++) {
-                              var label = "";
-                              var comment ="";
-                              if(value.list[i]){
-                                if (value.list[i].comments[0]) {
-                                  comment = value.list[i].comments[0].label;
-                                }
+                    .subscribe((recs) => this.recommendations = recs));
 
-                                if (value.list[i].labels[0]) {
-                                  label = value.list[i].labels[0].label;
-                                }
-
-                                //console.log("====",{uri: value.list[i].uri, comment: comment, label: label});
-                                this.recommendations.push({uri: value.list[i].URI, comment: comment, label: label});
-                              }
-
-                            }
-                          }
-
-                        );
-                        //this.recommendations = recs;
-                        //console.log(recs);
-                    });
-            });
-            this.disableSpinner();
+        this.disableSpinner();
         /*
         this.onInputLabelUpdated.emit(labelField.value);
         console.log("input typing event fired! New label name "+ labelField.value);*/
     }
+
+    selectRecommendation(r: IClassRecommendation) {
+        this.selectedRecommendation = r;
+        this.recommendationService.propertyRecommendation(r.uri, r.creator)
+            .subscribe((res) => { this.propertyRecommendations = res; console.log('Received Property Recommendation', res); });
+    }
+
+    addToGraph() {
+        const mx: MxgraphService = window['mxgraphService'];
+        const vertex = mx.getOrAddVertex(this.selectedRecommendation.uri);
+        mx.selectCells([vertex]);
+    }
+
+
     enableSpinner() {
         this.showSpinner = true;
     }
     disableSpinner() {
         this.showSpinner = false;
     }
-    getRecommendations() {
-
-    }
-
-
-
 }
