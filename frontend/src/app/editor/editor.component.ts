@@ -50,15 +50,14 @@ export class EditorComponent implements OnInit {
             mx.serializeModel().then((model) => {
                 this.recommendationService.classRecommendation(model, labelField)
                     .subscribe((recs) => {
-                        console.log(recs);
                         recs.forEach(function(value){
                           console.log("=======");
                           console.log(value);
-                          if(value["list"])
-                            value["list"].forEach(function(singleRecommendation){
+                          if(value.list)
+                            value.list.forEach(function(singleRecommendation){
 
                               this.recommendations.push({uri: singleRecommendation.uri, comment: singleRecommendation.comments[0].label, label:singleRecommendation.labels[0].label});
-                              console.log(this.recommendations);
+                              console.log("here",this.recommendations);
                             });
                           }
 
