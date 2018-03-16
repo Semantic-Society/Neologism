@@ -35,7 +35,7 @@ export class EditorComponent implements OnInit {
       const labelField = <HTMLInputElement>this.labelInput.nativeElement;
       this.onInputLabelUpdated.emit(labelField.value);
       console.log(labelField.value);
-  
+
     }*/
 
     public sendInputLabel(): void {
@@ -50,8 +50,20 @@ export class EditorComponent implements OnInit {
             mx.serializeModel().then((model) => {
                 this.recommendationService.classRecommendation(model, labelField)
                     .subscribe((recs) => {
+                        recs.forEach(function(value){
+                          console.log("=======");
+                          console.log(value);
+                          if(value.list)
+                            value.list.forEach(function(singleRecommendation){
+
+                              this.recommendations.push({uri: singleRecommendation.uri, comment: singleRecommendation.comments[0].label, label:singleRecommendation.labels[0].label});
+                              console.log("here",this.recommendations);
+                            });
+                          }
+
+                        );
                         this.recommendations = recs;
-                        console.log(recs);
+                        //console.log(recs);
                     });
             });
         /*
