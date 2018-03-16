@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, EventEmitter, Output} from '@angular/core';
 
 @Component({
   selector: 'app-root',
@@ -10,7 +10,10 @@ export class AppComponent {
   }
   editMode: Number = 0;
   title = 'app';
-  currentLabel:String ="";
+  currentLabel:String ="dcat:Catalog";
+  currentIdentifier:String = "http://www.w3.org/ns/dcat#Catalog";
+  currentDescrpition:String = "Some Awesome Description";
+
 
   toggleEditMode(event){
     this.currentLabel = event;
@@ -20,7 +23,11 @@ export class AppComponent {
       this.editMode=1;
     }
   }
-  getLabel():String{
-    return "some";
+
+  updateCurrentLabel(event){
+    console.log("New label name is: " +event);
+
+    this.currentLabel=event;
   }
+
 }

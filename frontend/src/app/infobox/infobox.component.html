@@ -1,14 +1,14 @@
 <mat-card class="infobox-card">
-  <p class="infobox-header" (dblclick)="activateEditMode(labelName)">{{labelName}}</p>
-  <p class="infobox-subheader">http://www.w3.org/ns/dcat#Catalog</p>
+  <p class="infobox-header" (dblclick)="activateEditMode()">{{inputLabel}}</p>
+  <p class="infobox-subheader">{{inputIdentifier}}</p>
   <mat-accordion multi="true">
     <mat-expansion-panel>
       <mat-expansion-panel-header>
         <mat-panel-title>
-          Desription
+          Description
         </mat-panel-title>
       </mat-expansion-panel-header>
-      A curated collection of metadata about datasets
+      {{inputDescription}}
     </mat-expansion-panel>
     <mat-expansion-panel>
       <mat-expansion-panel-header>
@@ -21,4 +21,5 @@
         <div class="list-element"> dcat:record </div>
     </mat-expansion-panel>
   </mat-accordion>
+
 </mat-card>

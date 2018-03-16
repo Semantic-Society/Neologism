@@ -1,4 +1,6 @@
-import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
+import 'rxjs/add/operator/map';
+import {RecommendationService} from '../services/recommendation.service';
 
 @Component({
   selector: 'app-editor',
@@ -6,19 +8,57 @@ import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
   styleUrls: ['./editor.component.css']
 })
 export class EditorComponent implements OnInit {
-  @Input() inputValue:string;
+  constructor() {
+
+  }
+
+  @Input() inputLabel:string;
+  @Input() inputIdentifier:string;
+  @Input() inputDescription:string;
+  @Input() inputProperties:any;
+  //@Input() recommendations:any;
+  @Output() onInputLabelUpdated: EventEmitter<any> = new EventEmitter<any>();
   @ViewChild('labelInput') labelInput: ElementRef;
-
-  constructor() { }
-
+  recommendations = [];
+  showSpinner:Boolean = false;
+  recommendationService:RecommendationService;
   ngOnInit() {
     this.selectLabelInput();
   }
   selectLabelInput(){
     const labelField = <HTMLInputElement>this.labelInput.nativeElement;
-    labelField.value=this.inputValue; //Workaround hack to preselect the input field text
+    labelField.value=this.inputLabel; //Workaround hack to preselect the input field text
                                       //since the value is not set immediately by angular before labelField.select
     labelField.select();
   }
+  /*public sendInputLabel():void{
+    console.log("input typing event fired!");
+    const labelField = <HTMLInputElement>this.labelInput.nativeElement;
+    this.onInputLabelUpdated.emit(labelField.value);
+    console.log(labelField.value);
+
+  }*/
+
+  public sendInputLabel(): void {
+    this.recommendations = [];
+    setTimeout(()=>{  this.recommendations = ["dcat:Catalog", "dcatap-it:Catalog", "dcatap-nl:Catalog", "someother:Catalog"]}, 2000)
+
+    this.enableSpinner();
+    this.recommendationService.classRecommendation();
+    /*const labelField = <HTMLInputElement>this.labelInput.nativeElement;
+    this.onInputLabelUpdated.emit(labelField.value);
+    console.log("input typing event fired! New label name "+ labelField.value);*/
+}
+  enableSpinner(){
+    this.showSpinner = true;
+  }
+  disableSpinner() {
+    this.showSpinner = false;
+  }
+  getRecommendations() {
+
+  }
+
+
 
 }

@@ -1,8 +1,24 @@
 <mat-card class="infobox-card">
   <form class="example-form">
-      <input #labelInput class="label-input" placeholder="" value="{{inputValue}}">
+      <input #labelInput class="label-input" placeholder="" value="{{inputLabel}}" (input)="sendInputLabel()">
   </form>
-  <p class="infobox-subheader">http://www.w3.org/ns/dcat#Catalog</p>
+  <p class="infobox-subheader">{{inputIdentifier}}</p>
+  <div class="recommender-outer-wrapper">
+    <mat-grid-list cols="1" rowHeight="4:1" class="recommender-inner-wrapper">
+      <mat-grid-tile class="recommendation-tile-wrapper recommendation-result" *ngFor="let recommendation of recommendations">
+        {{recommendation}}
+      </mat-grid-tile>
+      <mat-grid-tile class="recommendation-tile-wrapper" *ngIf="showSpinner;else no_result">
+        <mat-spinner [diameter]="40" ></mat-spinner>
+      </mat-grid-tile>
+      <ng-template #no_result>
+        <mat-grid-tile class="recommendation-tile-wrapper" >
+          <span class="no-recommandation-span">No recommandations found</span>
+        </mat-grid-tile>
+      </ng-template>
+    </mat-grid-list>
+  </div>
+
   <mat-accordion multi="true">
     <mat-expansion-panel>
       <mat-expansion-panel-header>
@@ -10,7 +26,7 @@
           Desription
         </mat-panel-title>
       </mat-expansion-panel-header>
-      A curated collection of metadata about datasets
+        <textarea class="description-textarea">{{inputDescription}}</textarea>
     </mat-expansion-panel>
     <mat-expansion-panel>
       <mat-expansion-panel-header>
@@ -23,4 +39,9 @@
       <div class="list-element"> dcat:record </div>
     </mat-expansion-panel>
   </mat-accordion>
+  <hr>
+  <mat-grid-list cols="2" rowHeight="3:1">
+    <mat-grid-tile class="button-tile"><button mat-raised-button class="btn-green" style="color:#FFFFFF">Save</button></mat-grid-tile>
+    <mat-grid-tile class="button-tile"><button mat-raised-button color="warn">Cancel</button></mat-grid-tile>
+  </mat-grid-list>
 </mat-card>
