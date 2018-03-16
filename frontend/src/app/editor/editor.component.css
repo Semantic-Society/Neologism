@@ -146,3 +146,28 @@ mat-panel-title {
   font-size: 0.9rem;
   color: grey;
 }
+
+.label-name{
+  position: absolute;
+  left: 20px;
+  top: 10px;
+  font-size: 0.8em;
+  font-weight: bold;
+  color: #3f3f3f;
+
+}
+.uri-name {
+  position: absolute;
+  left: 20px;
+  top: 30px;
+  margin-top: 1rem;
+  font-size: 0.8em;
+}
+.uri-link{
+
+  color: cornflowerblue;
+
+}
+.no-margin{
+  margin:0;
+}

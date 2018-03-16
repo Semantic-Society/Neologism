@@ -34,7 +34,7 @@ interface IRecommendationMetadata {
 
 // Actual Recommendation Schemata
 interface IClassReccomendation {
-    uri: IRI;
+    URI: IRI;
     ontology: string;
     labels: IDetails[];
     comments: IDetails[];

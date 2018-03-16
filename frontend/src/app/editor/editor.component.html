@@ -2,11 +2,20 @@
   <form class="example-form">
       <input #labelInput class="label-input" placeholder="" value="{{inputLabel}}" (input)="sendInputLabel()">
   </form>
-  <p class="infobox-subheader">{{inputIdentifier}}</p>
+  <!--<p class="infobox-subheader">{{inputIdentifier}}</p>-->
   <div class="recommender-outer-wrapper">
     <mat-grid-list cols="1" rowHeight="4:1" class="recommender-inner-wrapper">
-      <mat-grid-tile class="recommendation-tile-wrapper recommendation-result" *ngFor="let recommendation of recommendations">
-        {{recommendation}}
+      <mat-grid-tile class="recommendation-tile-wrapper recommendation-result" *ngFor="let recommendation of recommendations" matTooltip="{{recommendation.comment}}">
+          <div class="label-name">
+            <p class="no-margin">
+              {{recommendation.label}}
+            </p>
+          </div><br>
+          <div class="uri-name no-margin">
+            <p class="no-margin">
+              <a class="uri-link" href="{{recommendation.uri}}" target="_blank">{{recommendation.uri}}</a>
+            </p>
+          </div>
       </mat-grid-tile>
       <mat-grid-tile class="recommendation-tile-wrapper" *ngIf="showSpinner;else no_result">
         <mat-spinner [diameter]="40" ></mat-spinner>

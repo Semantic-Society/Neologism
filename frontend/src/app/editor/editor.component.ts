@@ -30,13 +30,7 @@ export class EditorComponent implements OnInit {
         //since the value is not set immediately by angular before labelField.select
         labelField.select();
     }
-    /*public sendInputLabel():void{
-      console.log("input typing event fired!");
-      const labelField = <HTMLInputElement>this.labelInput.nativeElement;
-      this.onInputLabelUpdated.emit(labelField.value);
-      console.log(labelField.value);
 
-    }*/
 
     public sendInputLabel(): void {
         this.recommendations = [];
@@ -50,22 +44,35 @@ export class EditorComponent implements OnInit {
             mx.serializeModel().then((model) => {
                 this.recommendationService.classRecommendation(model, labelField)
                     .subscribe((recs) => {
-                        recs.forEach(function(value){
-                          console.log("=======");
-                          console.log(value);
+                        recs.forEach((value) => {
+                          this.recommendations = [];
                           if(value.list)
-                            value.list.forEach(function(singleRecommendation){
+                            for (var i =0; i<=3; i++) {
+                              var label = "";
+                              var comment ="";
+                              if(value.list[i]){
+                                if (value.list[i].comments[0]) {
+                                  comment = value.list[i].comments[0].label;
+                                }
 
-                              this.recommendations.push({uri: singleRecommendation.uri, comment: singleRecommendation.comments[0].label, label:singleRecommendation.labels[0].label});
-                              console.log("here",this.recommendations);
-                            });
+                                if (value.list[i].labels[0]) {
+                                  label = value.list[i].labels[0].label;
+                                }
+
+                                //console.log("====",{uri: value.list[i].uri, comment: comment, label: label});
+                                this.recommendations.push({uri: value.list[i].URI, comment: comment, label: label});
+                              }
+
+                            }
+
                           }
 
                         );
-                        this.recommendations = recs;
+                        //this.recommendations = recs;
                         //console.log(recs);
                     });
             });
+            this.disableSpinner();
         /*
         this.onInputLabelUpdated.emit(labelField.value);
         console.log("input typing event fired! New label name "+ labelField.value);*/
