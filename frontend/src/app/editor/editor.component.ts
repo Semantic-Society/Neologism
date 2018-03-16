@@ -16,6 +16,19 @@ interface IPropertyRecommendation {
     range: string;
 }
 
+interface IClassRecommendation {
+    uri: string;
+    comment: string;
+    label: string;
+    creator: string;
+}
+interface IPropertyRecommendation {
+    uri: string;
+    comment: string;
+    label: string;
+    range: string;
+}
+
 @Component({
     selector: 'app-editor',
     templateUrl: './editor.component.html',
