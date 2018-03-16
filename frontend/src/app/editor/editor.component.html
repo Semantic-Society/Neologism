@@ -1,56 +1,72 @@
 <mat-card class="infobox-card">
   <form class="example-form">
-      <input #labelInput class="label-input" placeholder="" value="{{inputLabel}}" (input)="sendInputLabel()">
+    <input #labelInput class="label-input" placeholder="" value="{{inputLabel}}" (input)="sendInputLabel()">
   </form>
   <!--<p class="infobox-subheader">{{inputIdentifier}}</p>-->
   <div class="recommender-outer-wrapper">
     <mat-grid-list cols="1" rowHeight="4:1" class="recommender-inner-wrapper">
-      <mat-grid-tile class="recommendation-tile-wrapper recommendation-result" *ngFor="let recommendation of recommendations" matTooltip="{{recommendation.comment}}">
-          <div class="label-name">
-            <p class="no-margin">
-              {{recommendation.label}}
-            </p>
-          </div><br>
-          <div class="uri-name no-margin">
-            <p class="no-margin">
-              <a class="uri-link" href="{{recommendation.uri}}" target="_blank">{{recommendation.uri}}</a>
-            </p>
-          </div>
+      <mat-grid-tile class="recommendation-tile-wrapper recommendation-result" *ngFor="let recommendation of recommendations" matTooltip="{{recommendation.comment}}"
+        (click)="selectRecommendation(recommendation)" [class.selected]="recommendation === selectedRecommendation">
+        <div class="label-name">
+          <p class="no-margin">
+            {{recommendation?.label}}
+          </p>
+        </div>
+        <br>
+        <div class="uri-name no-margin">
+          <p class="no-margin">
+            <a class="uri-link" href="{{recommendation.uri}}" target="_blank">{{recommendation.uri}}</a>
+          </p>
+        </div>
       </mat-grid-tile>
-      <mat-grid-tile class="recommendation-tile-wrapper" *ngIf="showSpinner;else no_result">
-        <mat-spinner [diameter]="40" ></mat-spinner>
-      </mat-grid-tile>
-      <ng-template #no_result>
-        <mat-grid-tile class="recommendation-tile-wrapper" >
+      <!-- <mat-grid-tile class="recommendation-tile-wrapper" *ngIf="showSpinner;else no_result">
+        <mat-spinner [diameter]="40"></mat-spinner>
+      </mat-grid-tile> -->
+      <!-- <ng-template #no_result>
+        <mat-grid-tile class="recommendation-tile-wrapper">
           <span class="no-recommandation-span">No recommandations found</span>
         </mat-grid-tile>
-      </ng-template>
+      </ng-template> -->
     </mat-grid-list>
   </div>
 
-  <mat-accordion multi="true">
+  <!-- <mat-accordion multi="true">
     <mat-expansion-panel>
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          Desription
-        </mat-panel-title>
-      </mat-expansion-panel-header>
-        <textarea class="description-textarea">{{inputDescription}}</textarea>
-    </mat-expansion-panel>
-    <mat-expansion-panel>
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          Properties
-        </mat-panel-title>
-      </mat-expansion-panel-header>
-      <div class="list-element"> dcat:themeTaxonomy </div>
-      <div class="list-element"> dcat:dataset </div>
-      <div class="list-element"> dcat:record </div>
-    </mat-expansion-panel>
-  </mat-accordion>
+      <mat-expansion-panel-header> -->
+  <mat-panel-title>
+    Description
+  </mat-panel-title>
+  <!-- </mat-expansion-panel-header> -->
+  <textarea class="description-textarea" disabled=true>{{selectedRecommendation?.comment}}</textarea>
+  <!-- <textarea class="description-textarea">{{inputDescription}}</textarea> -->
+  <!-- </mat-expansion-panel> -->
+  <!-- <mat-expansion-panel>
+      <mat-expansion-panel-header> -->
+  <mat-panel-title>
+    Properties
+  </mat-panel-title>
+  <!-- </mat-expansion-panel-header> -->
+  <!-- <div class="list-element" *ngFor="let rec of propertyRecommendations"> {{rec?.uri}} </div> -->
+
+  <mat-list>
+    <mat-list-item *ngFor="let rec of propertyRecommendations" style="padding:0;margin:0;">
+      <p matLine *ngIf="rec.label" matTooltip="{{rec.label}}">Label: {{rec.label}}</p>
+      <p matLine *ngIf="rec.uri" matTooltip="{{rec.uri}}">URI: {{rec.uri}}</p>
+      <p matLine *ngIf="rec.comment" matTooltip="{{rec.comment}}">Comment: {{rec.comment}}</p>
+      <p matLine *ngIf="rec.range" matTooltip="{{rec.range}}">Range: {{rec.range}}</p>
+      <hr>
+    </mat-list-item>
+  </mat-list>
+
+  <!-- </mat-expansion-panel> -->
+  <!-- </mat-accordion> -->
   <hr>
   <mat-grid-list cols="2" rowHeight="3:1">
-    <mat-grid-tile class="button-tile"><button mat-raised-button class="btn-green" style="color:#FFFFFF">Save</button></mat-grid-tile>
-    <mat-grid-tile class="button-tile"><button mat-raised-button color="warn">Cancel</button></mat-grid-tile>
+    <mat-grid-tile class="button-tile">
+      <button mat-raised-button class="btn-green" style="color:#FFFFFF" (click)=addToGraph()>Add</button>
+    </mat-grid-tile>
+    <!-- <mat-grid-tile class="button-tile">
+      <button mat-raised-button color="warn">Cancel</button>
+    </mat-grid-tile> -->
   </mat-grid-list>
 </mat-card>

@@ -133,15 +133,6 @@ export class MxgraphService {
         // img.enabled = true;
     }
 
-    private getOrAddVertex(
-        id: string,
-        x: number = Math.random() * this.container.clientWidth,
-        y: number = Math.random() * this.container.clientHeight,
-    ) {
-        const v = this.cellByIRI.get(id);
-        return v ? v : this.graph.insertVertex(this.canvas, id, new Map<string, Set<string>>(), x, y, 100, 15);
-    }
-
     private addEdge(
         id: string,
         v1: m.mxCell,
@@ -171,6 +162,15 @@ export class MxgraphService {
         }
     }
 
+    getOrAddVertex(
+        id: string,
+        x: number = Math.random() * this.container.clientWidth,
+        y: number = Math.random() * this.container.clientHeight,
+    ) {
+        const v = this.cellByIRI.get(id);
+        return v ? v : this.graph.insertVertex(this.canvas, id, new Map<string, Set<string>>(), x, y, 100, 15);
+    }
+
     /** Returns a turtle serialization of the current model */
     async serializeModel() {
         return await N3Codec.serializeModel(this.graph.getModel());
@@ -187,5 +187,9 @@ export class MxgraphService {
     destroy() {
         this.graph.destroy();
         this.toolbar.destroy();
+    }
+
+    selectCells(cells: m.mxCell[]) {
+        this.graph.setSelectionCells(cells);
     }
 }

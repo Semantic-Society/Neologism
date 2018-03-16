@@ -39,7 +39,7 @@ interface IClassReccomendation {
     labels: IDetails[];
     comments: IDetails[];
 }
-interface IPropertyRecommendation {
+export interface IPropertyRecommendation {
     propertyIRI: IRI;
     rangeClassIRI: IRI;
     labels: IDetails[];
@@ -54,7 +54,20 @@ interface IDetails {
 export class RecommendationService {
 
     /** Neologism recommendation service endpoint base path */
-    private baseUrl = 'http://cloud33.dbis.rwth-aachen.de:8080/recommender/';
+    private baseUrl = 'https://datalab.rwth-aachen.de/recommender/';
+
+    private static strip(html: string) { return html.replace(/<(?:.|\n)*?>/gm, ''); }
+
+    private static response2recc(resp: IRecommendationMetadata) {
+        return resp.list.map((cRec) => {
+            return {
+                comment: RecommendationService.strip(cRec.comments[0] && cRec.comments[0].label || ''),
+                label: RecommendationService.strip(cRec.labels[0] && cRec.labels[0].label || ''),
+                uri: cRec.URI,
+                creator: resp.creator,
+            };
+        });
+    }
 
     /**
      * Neologism Reccomendation Service Adapter
@@ -92,15 +105,42 @@ export class RecommendationService {
         return initialRequest
             .merge(nextRecommendations)
             .map((res) => res.recommendation)
-            .scan((acc, curr) => [...acc, curr], []);
+            .map((resp: IRecommendationMetadata) =>
+                Array.isArray(resp && resp.list)
+                    ? resp.list.map((rec) => {
+                        return {
+                            comment: RecommendationService.strip(rec.comments[0] && rec.comments[0].label || ''),
+                            label: RecommendationService.strip(rec.labels[0] && rec.labels[0].label || ''),
+                            uri: rec.URI,
+                            creator: resp.creator,
+                        };
+                    })
+                    : []
+            )
+            .map((recs) => recs.slice(0, 3)) // Take only first three per recommender
+            .scan((acc, curr) => [...acc, ...curr], []);
     }
 
     propertyRecommendation(classUri: IRI, creator: string) {
         classUri = encodeURIComponent(classUri);
         creator = encodeURIComponent(creator);
 
+        const url = `${this.baseUrl}properties?class=${classUri}&creator=${creator}`;
+
         return this._http
-            .get(`${this.baseUrl}properties?class=${classUri}&creator=${creator}`)
-            .map((r) => r.json() as { properties: IPropertyRecommendation[] });
+            .get(url)
+            .map((r) => r.json() as { properties: IPropertyRecommendation[] })
+            .map((r) =>
+                Array.isArray(r && r.properties)
+                    ? r.properties.map((rec) => {
+                        return {
+                            comment: RecommendationService.strip(rec.comments[0] && rec.comments[0].label || ''),
+                            label: RecommendationService.strip(rec.labels[0] && rec.labels[0].label || ''),
+                            uri: rec.propertyIRI,
+                            range: rec.rangeClassIRI,
+                        };
+                    })
+                    : []
+            );
     }
 }
