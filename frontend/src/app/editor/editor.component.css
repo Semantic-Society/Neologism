@@ -1,5 +1,6 @@
 .infobox-card {
   padding: 0px;
+  width: 305px;
 }
 mat-list-item {
   margin-top:0;
@@ -173,3 +174,11 @@ mat-panel-title {
 }
 
 .selected { background: lightgray !important}
+
+.properties-outer-wrapper{
+  max-height: 180px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  border-top: 2px solid #ededed;
+  border-bottom: 2px solid #ededed;
+}

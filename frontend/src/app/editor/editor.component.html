@@ -5,8 +5,10 @@
   <!--<p class="infobox-subheader">{{inputIdentifier}}</p>-->
   <div class="recommender-outer-wrapper">
     <mat-grid-list cols="1" rowHeight="4:1" class="recommender-inner-wrapper">
-      <mat-grid-tile class="recommendation-tile-wrapper recommendation-result" *ngFor="let recommendation of recommendations" matTooltip="{{recommendation.comment}}"
-        (click)="selectRecommendation(recommendation)" [class.selected]="recommendation === selectedRecommendation">
+      <mat-grid-tile class="recommendation-tile-wrapper recommendation-result"
+                     *ngFor="let recommendation of recommendations" matTooltip="{{recommendation.comment}}"
+                     (click)="selectRecommendation(recommendation)"
+                     [class.selected]="recommendation === selectedRecommendation">
         <div class="label-name">
           <p class="no-margin">
             {{recommendation?.label}}
@@ -48,15 +50,17 @@
   <!-- </mat-expansion-panel-header> -->
   <!-- <div class="list-element" *ngFor="let rec of propertyRecommendations"> {{rec?.uri}} </div> -->
 
-  <mat-list>
-    <mat-list-item *ngFor="let rec of propertyRecommendations" style="padding:0;margin:0;">
-      <p matLine *ngIf="rec.label" matTooltip="{{rec.label}}">Label: {{rec.label}}</p>
-      <p matLine *ngIf="rec.uri" matTooltip="{{rec.uri}}">URI: {{rec.uri}}</p>
-      <p matLine *ngIf="rec.comment" matTooltip="{{rec.comment}}">Comment: {{rec.comment}}</p>
-      <p matLine *ngIf="rec.range" matTooltip="{{rec.range}}">Range: {{rec.range}}</p>
-      <hr>
-    </mat-list-item>
-  </mat-list>
+  <div class="properties-outer-wrapper">
+    <mat-list>
+      <mat-list-item *ngFor="let rec of propertyRecommendations" style="padding:0;margin:0;">
+        <p matLine *ngIf="rec.label" matTooltip="{{rec.label}}">Label: {{rec.label}}</p>
+        <p matLine *ngIf="rec.uri" matTooltip="{{rec.uri}}">URI: {{rec.uri}}</p>
+        <p matLine *ngIf="rec.comment" matTooltip="{{rec.comment}}">Comment: {{rec.comment}}</p>
+        <p matLine *ngIf="rec.range" matTooltip="{{rec.range}}">Range: {{rec.range}}</p>
+        <hr>
+      </mat-list-item>
+    </mat-list>
+  </div>
 
   <!-- </mat-expansion-panel> -->
   <!-- </mat-accordion> -->
