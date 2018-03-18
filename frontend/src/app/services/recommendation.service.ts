@@ -54,7 +54,7 @@ interface IDetails {
 export class RecommendationService {
 
     /** Neologism recommendation service endpoint base path */
-    private baseUrl = 'https://datalab.rwth-aachen.de/recommender/';
+    private baseUrl = 'https://datalab.rwth-aachen.de/neologism/recommender/';
 
     private static strip(html: string) { return html.replace(/<(?:.|\n)*?>/gm, ''); }
 
