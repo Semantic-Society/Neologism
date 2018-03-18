@@ -116,7 +116,7 @@ mat-panel-title {
 }
 
 .recommender-outer-wrapper{
-  max-height: 260px;
+  max-height: 180px;
   overflow-y: scroll;
   overflow-x: hidden;
   border-top: 2px solid #ededed;
