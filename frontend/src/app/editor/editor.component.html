@@ -1,6 +1,6 @@
 <mat-card class="infobox-card">
   <form class="example-form">
-    <input #labelInput class="label-input" placeholder="" value="{{inputLabel}}" (input)="sendInputLabel()">
+    <input #labelInput class="label-input" placeholder="" value="{{inputLabel}}" (keyup.enter)="sendInputLabel()">
   </form>
   <!--<p class="infobox-subheader">{{inputIdentifier}}</p>-->
   <div class="recommender-outer-wrapper">
