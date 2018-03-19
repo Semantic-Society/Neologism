@@ -15,7 +15,7 @@ export class AppComponent {
   currentDescrpition:String = "Some Awesome Description";
 
 
-  toggleEditMode(event){
+  toggleEditMode(event?){
     this.currentLabel = event;
     if (this.editMode == 1) {
       this.editMode=0;

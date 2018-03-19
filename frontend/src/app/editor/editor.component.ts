@@ -46,10 +46,10 @@ export class EditorComponent implements OnInit {
     @Output() onInputLabelUpdated: EventEmitter<any> = new EventEmitter<any>();
     @ViewChild('labelInput') labelInput: ElementRef;
 
-    private recommendations: IClassRecommendation[] = [];
-    private selectedRecommendation: IClassRecommendation;
-    private propertyRecommendations: IPropertyRecommendation[] = [];
     private showSpinner = false;
+    recommendations: IClassRecommendation[] = [];
+    selectedRecommendation: IClassRecommendation;
+    propertyRecommendations: IPropertyRecommendation[] = [];
 
     ngOnInit() {
         this.selectLabelInput();
