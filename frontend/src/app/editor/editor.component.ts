@@ -87,8 +87,9 @@ export class EditorComponent implements OnInit {
 
     addToGraph() {
         const mx: MxgraphService = window['mxgraphService'];
-        const vertex = mx.getOrAddVertex(this.selectedRecommendation.uri);
-        mx.selectCells([vertex]);
+        // TODO Michael Actually add to mxgraph model after add button clicked in recommender sidebar
+        // const vertex = mx.insertClass(this.selectedRecommendation.uri);
+        // mx.selectCells([vertex]);
     }
 
     enableSpinner() {

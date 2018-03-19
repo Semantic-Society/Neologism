@@ -6,84 +6,68 @@ import { Observable } from 'rxjs/Observable';
 import { switchMap } from 'rxjs/operators';
 import { Subject } from 'rxjs/Subject';
 import { error } from 'util';
-import { prefixes as prefix_cc } from './prefix.cc';
+// import { prefixes as prefix_cc } from './prefix.cc';
 
 export class N3Codec {
     // See https://github.com/RubenVerborgh/N3.js
     private absuluteURI = /^https?:\/\/|^\/\//i;
     private n3parser = N3.Parser();
-    private tripleStream = new Subject<[Error, N3.Triple, N3.Prefixes]>();
-    private prefixes: { [key: string]: string } = prefix_cc;
-
-    static serializeModel(model: mxgraph.mxGraphModel) {
-        const cells = model.getDescendants(model.getRoot());
-        const writer = N3.Writer({ prefix_cc });
-        cells.forEach((cell) => {
-            const data = cell.getValue();
-            if (data && cell.isVertex() && cell.getId()) {
-                const subject = cell.getId();
-                Object.keys(data).forEach((predicate) => {
-                    for (const object of (data[predicate] as Set<string>)) {
-                        writer.addTriple(subject, predicate, object);
-                    }
-                });
-            } else if (cell.isEdge()) { // Currently only subClassOf
-                const subject = this.neologismId(cell.source && cell.source.getId());
-                const object = this.neologismId(cell.target && cell.target.getId());
-                if (subject && object) {
-                    writer.addTriple(subject, 'http://www.w3.org/2000/01/rdf-schema#subClassOf', object);
-                }
-            }
-        });
-        return new Promise((resolve, reject) => writer.end((err, result) => err ? reject(err) : resolve(result))) as Promise<string>;
-    }
+    private store: N3.N3StoreWriter;
 
     static neologismId(id: string) {
         return id ? new URL(id, 'neo://query/').toString() : null;
     }
 
-    constructor() {
-        // this.mxGraphModel = this.mxGraph.getModel();
-        // console.log('RdfModel Service instantiated.');
+    constructor() { }
 
-        // const sampleInput =
-        //     '@prefix c: <http://example.org/cartoons#>.\n' +
-        //     'c:Tom a c:Cat.\n' +
-        //     'c:Jerry a c:Mouse;\n' +
-        //     '        c:smarterThan c:Tom.';
-
-        // this.tripleStream.subscribe(([e, triple, prefixes]) => {    // Todo: Unsubscribe on delete
-        //     if (triple) {
-        //         console.log(triple.subject, triple.predicate, triple.object, '.');
-        //     } else {
-        //         console.log('# That\'s all, folks!', prefixes);
-        //     }
-        // });
-
-        // this.parseRdf(sampleInput);
-
-        // this.tripleStream.subscribe(([e, triple, prefixes]) => {
-        //     this.mxGraphModel
-        // });
+    serialize() {
+        const writer = N3.Writer({ /*prefix_cc*/ });
+        this.store.forEachByIRI((quad: N3.Triple) => writer.addTriple(quad));
+        return new Promise((resolve, reject) => writer.end((err, result) => err ? reject(err) : resolve(result))) as Promise<string>;
     }
 
-    setPrefixes(prefixes: { [key: string]: string }) {
-        this.prefixes = prefixes;
-    }
+    load2store(rdf: string) {
+        this.store = N3.Store();
 
-    parseRdf(rdf: string) {
         this.n3parser.parse(
             rdf,
-            (e: Error, triple: N3.Triple, prefs: N3.Prefixes) => this.tripleStream.next([e, triple, prefs]),
+            (e: Error, triple: N3.Triple, prefixes: N3.Prefixes) => {
+                if (e) throw e;
+
+                if (triple) {
+                    this.store.addTriple(triple.subject, triple.predicate, triple.object);
+                } else {
+                    // Parsing complete
+                    // this.prefixes = prefixes;
+                }
+            }
         );
-        return this.tripleStream;
     }
 
-    parseUrl(url: string) {
-        this.getUrl(url)
-            .then(this.parseRdf.bind(this))
-            .catch((e) => console.log(e));
-        return this.tripleStream;
+    loadUrl2store(url: string) {
+        return this.getUrl(url)
+            .then(this.load2store.bind(this));
+    }
+
+    getClasses() {
+        return this.store.getTriples(null, 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', 'http://www.w3.org/2000/01/rdf-schema#Class')
+            .map((triple) => {
+                const subject = triple.subject;
+                const labels = this.store.getObjectsByIRI(subject, 'http://www.w3.org/2000/01/rdf-schema#Label'); // TODO Michael: Assuming string[] returned
+                // TODO: Michael Pluck english label
+                return {
+                    subject,
+                    label: labels[0] || subject
+                };
+            });
+    }
+
+    getPredicates() {
+        // TODO Michael 
+    }
+
+    getSubClassRelations(){
+        // TODO Michael
     }
 
     private getUrl(url: string) { // TODO: Not exactly foolproof
