@@ -8,6 +8,7 @@ import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/merge';
 import 'rxjs/add/operator/mergeAll';
+import 'rxjs/add/operator/multicast';
 import 'rxjs/add/operator/pluck';
 import 'rxjs/add/operator/scan';
 import 'rxjs/add/operator/startWith';
@@ -54,7 +55,7 @@ interface IDetails {
 export class RecommendationService {
 
     /** Neologism recommendation service endpoint base path */
-    private baseUrl = 'https://datalab.rwth-aachen.de/recommender/';
+    private static baseUrl = 'https://datalab.rwth-aachen.de/recommender/';
 
     private static strip(html: string) { return html.replace(/<(?:.|\n)*?>/gm, ''); }
 
@@ -75,21 +76,68 @@ export class RecommendationService {
      */
     constructor(private _http: Http) { }
 
+    // /**
+    //  * Generates optimization and completion recommendations for RDF vocabularies
+    //  * @param queryGraph Turtle encoded context graph. May include (exactly one) neologism query term.
+    //  * @param queryTerm Optional clear text query string. Appended as neo query iri to graph.
+    //  */
+    // classRecommendation(queryGraph: string, queryTerm?: string) {
+    //     if (queryTerm)
+    //         queryGraph += ` <neo://query/${queryTerm}> a <http://www.w3.org/2000/01/rdf-schema#Class> .`;
+
+    //     queryGraph = encodeURIComponent(queryGraph);
+
+    //     // First request to recommendation service's -start- endpoint
+    //     const initialRequest = this._http
+    //         .get(`${RecommendationService.baseUrl}start?model=${queryGraph}`)
+    //         .map((res) => res.json() as IRestResponse);
+
+    //     // Subsequent `expectedRecommendationCount - 1` many requests to -more- endpoint
+    //     const nextRecommendations = initialRequest
+    //         .switchMap( // execute requests in parallel
+    //             (res) => Observable.range(1, res.expected - 1)
+    //                 .map(
+    //                     () => this._http
+    //                         .get(`${RecommendationService.baseUrl}more?ID=${res.ID}`)
+    //                         .map((r) => r.json() as IRestResponse)))
+    //         .mergeAll(); // and merge results as they come in
+
+    //     // Provide single point of contact for any recommendation
+    //     return initialRequest
+    //         .merge(nextRecommendations)
+    //         .map((res) => res.recommendation)
+    //         .map((resp: IRecommendationMetadata) =>
+    //             Array.isArray(resp && resp.list)
+    //                 ? resp.list.map((rec) => {
+    //                     return {
+    //                         comment: RecommendationService.strip(rec.comments[0] && rec.comments[0].label || ''),
+    //                         label: RecommendationService.strip(rec.labels[0] && rec.labels[0].label || ''),
+    //                         uri: rec.URI,
+    //                         creator: resp.creator,
+    //                     };
+    //                 })
+    //                 : []
+    //         )
+    //         .map((recs) => recs.slice(0, 3)) // Take only first three per recommender
+    //         .scan((acc, curr) => [...acc, ...curr], []);
+    // }
+
     /**
      * Generates optimization and completion recommendations for RDF vocabularies
-     * @param queryGraph Turtle encoded context graph. May include (exactly one) neologism query term.
-     * @param queryTerm Optional clear text query string. Appended as neo query iri to graph.
+     * @param queryGraph Turtle encoded context graph. Neologism query terms included are ignored for the rerurn value, but might be used in the recommender.
+     * @param queryTerm Clear text non-empty query string.
      */
-    classRecommendation(queryGraph: string, queryTerm?: string) {
-        if (queryTerm)
-            queryGraph += ` <neo://query/${queryTerm}> a <http://www.w3.org/2000/01/rdf-schema#Class> .`;
+    classRecommendationforNewClass(queryGraph: string, queryTerm: string) {
+        if (queryTerm === '') throw new Error('No recommendations for empty search queryTerm');
+        // queryGraph += ` <neo://query/${queryTerm}> a <http://www.w3.org/2000/01/rdf-schema#Class> .`;
 
-        queryGraph = encodeURIComponent(queryGraph);
+        // queryGraph = encodeURIComponent(queryGraph);
 
         // First request to recommendation service's -start- endpoint
         const initialRequest = this._http
-            .get(`${this.baseUrl}start?model=${queryGraph}`)
-            .map((res) => res.json() as IRestResponse);
+            .post(`${RecommendationService.baseUrl}startForNewClass?keyword=${queryTerm}`, queryGraph)
+            .map((res) => res.json())
+            .multicast(new Subject<IRestResponse>());
 
         // Subsequent `expectedRecommendationCount - 1` many requests to -more- endpoint
         const nextRecommendations = initialRequest
@@ -97,12 +145,12 @@ export class RecommendationService {
                 (res) => Observable.range(1, res.expected - 1)
                     .map(
                         () => this._http
-                            .get(`${this.baseUrl}more?ID=${res.ID}`)
-                            .map((r) => r.json() as IRestResponse)))
+                            .get(`${RecommendationService.baseUrl}more?ID=${res.ID}`)
+                            .map((resp) => resp.json() as IRestResponse)))
             .mergeAll(); // and merge results as they come in
 
         // Provide single point of contact for any recommendation
-        return initialRequest
+        const r = initialRequest
             .merge(nextRecommendations)
             .map((res) => res.recommendation)
             .map((resp: IRecommendationMetadata) =>
@@ -119,13 +167,15 @@ export class RecommendationService {
             )
             .map((recs) => recs.slice(0, 3)) // Take only first three per recommender
             .scan((acc, curr) => [...acc, ...curr], []);
+        initialRequest.connect();
+        return r;
     }
 
     propertyRecommendation(classUri: IRI, creator: string) {
         classUri = encodeURIComponent(classUri);
         creator = encodeURIComponent(creator);
 
-        const url = `${this.baseUrl}properties?class=${classUri}&creator=${creator}`;
+        const url = `${RecommendationService.baseUrl}properties?class=${classUri}&creator=${creator}`;
 
         return this._http
             .get(url)

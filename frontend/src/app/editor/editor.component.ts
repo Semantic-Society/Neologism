@@ -63,17 +63,27 @@ export class EditorComponent implements OnInit {
 
     public sendInputLabel(): void {
         this.recommendations = [];
-
+        const queryString: string = (this.labelInput.nativeElement as HTMLInputElement).value;
+        if (queryString === '') {
+            return;
+        }
         this.enableSpinner();
-
-        const labelField = (this.labelInput.nativeElement as HTMLInputElement).value;
         const mx: MxgraphService = window['mxgraphService'];
-        if (mx && labelField)
-            mx.serializeModel().then((model) =>
-                this.recommendationService.classRecommendation(model, labelField)
-                    .subscribe((recs) => this.recommendations = recs));
+        if (!(mx && queryString)) {
+            throw new Error('mx or labelFiled null');
+        }
+        mx.serializeModel().then((model) =>
+            this.recommendationService.classRecommendationforNewClass(model, queryString)
+                .subscribe(
+                    (recs) => {
+                        this.recommendations = recs;
+                    }, null // TODO handle error?
+                    , () => {
+                        // TODO currently it would be possible that an old, still pending request which returns turns off the spinner
+                        this.disableSpinner();
+                    }
+                ));
 
-        this.disableSpinner();
         /*
         this.onInputLabelUpdated.emit(labelField.value);
         console.log("input typing event fired! New label name "+ labelField.value);*/
@@ -87,9 +97,8 @@ export class EditorComponent implements OnInit {
 
     addToGraph() {
         const mx: MxgraphService = window['mxgraphService'];
-        // TODO Michael Actually add to mxgraph model after add button clicked in recommender sidebar
-        // const vertex = mx.insertClass(this.selectedRecommendation.uri);
-        // mx.selectCells([vertex]);
+        mx.insertClass(this.selectedRecommendation.uri, this.selectedRecommendation.label, this.selectedRecommendation.creator);
+        mx.selectClass(this.selectedRecommendation.uri);
     }
 
     enableSpinner() {

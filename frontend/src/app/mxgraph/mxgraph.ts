@@ -48,7 +48,6 @@ export class MxgraphService {
         keyHandler.bindKey(43, (evt) => this.graph.isEnabled() ? this.graph.removeCells() : null);  // mac delete key removes cell
         keyHandler.bindKey(127, (evt) => this.graph.isEnabled() ? this.graph.removeCells() : null);  // proper operating systems delete
 
-
         // Adds mouse wheel handling for zoom
         MxgraphService.mx.mxEvent.addMouseWheelListener((evt, up) => {
             up ? this.graph.zoomIn() : this.graph.zoomOut();
@@ -65,33 +64,36 @@ export class MxgraphService {
 
         // Initialize a lookup map from subject IRI to the corresponding mxGraph cell and set up automatic syncronization
         this.graph.addListener(MxgraphService.mx.mxEvent.CELLS_ADDED, (sender: m.mxEventSource, evt: m.mxEventObject) => {
-            const cells: m.mxCell[] = (evt.getProperties() || {})['cells'];
-            if (Array.isArray(cells)) cells.forEach((cell) => this.mode.set(cell.getId(), cell));
-            organic.execute(this.canvas);
+            throw new Error('NOT  IMPELEMENTED'); // TODO Michael does this need to be implemented?
+            // const cells: m.mxCell[] = (evt.getProperties() || {})['cells'];
+            // if (Array.isArray(cells)) cells.forEach((cell) => this.model.set(cell.getId(), cell));
+            // organic.execute(this.canvas);
         });
-        this.graph.addListener(MxgraphService.mx.mxEvent.CELLS_REMOVED, (sender: m.mxEventSource, evt: m.mxEventObject) => {
-            const cells: m.mxCell[] = (evt.getProperties() || {})['cells'];
-            if (Array.isArray(cells)) cells.forEach((cell) => this.cellByIRI.delete(cell.getId()));
-            organic.execute(this.canvas);
-        });
+        // this.graph.addListener(MxgraphService.mx.mxEvent.CELLS_REMOVED, (sender: m.mxEventSource, evt: m.mxEventObject) => {
+        //  throw new Error('NOT  IMPELEMENTED'); // TODO Michael does this need to be implemented?
+        // const cells: m.mxCell[] = (evt.getProperties() || {})['cells'];
+        // if (Array.isArray(cells)) cells.forEach((cell) => this.cellByIRI.delete(cell.getId()));
+        // organic.execute(this.canvas);
+        // });
 
         // this.toolbar = new MxgraphService.mx.mxToolbar(toolbarContainer);
         // this.addToolbarVertex('assets/class_mockup.gif', 80, 30, 'shape=rounded');
 
         this.codec = new N3Codec();
-        this.codec.loadUrl2store(this.url)
-            .then(() => { // TODO Michael
+        const importingCodec = new N3Codec();
+        importingCodec.loadUrl2store(this.url)
+            .then(() => {
                 this.codec.getClasses()
-                    .forEach(element => {
-                        this._insertClass(element);
+                    .forEach((element) => {
+                        this.insertClass(element.uri, element.label);
                     });
                 this.codec.getPredicates()
-                    .forEach(element => {
-                        this._insertProperty(element);
+                    .forEach((element) => {
+                        this.insertProperty(element.domain, element.uri, element.label, element.range);
                     });
                 this.codec.getSubClassRelations()
-                    .forEach(element => {
-                        this._insertProperty(element);
+                    .forEach((element) => {
+                        this.insertSubclassRelation(element.domain, element.range);
                     });
                 this.zoomToFit();
             });
@@ -139,7 +141,7 @@ export class MxgraphService {
         return this.graph.insertEdge(this.canvas, null, { uri, label }, v1, v2);
     }
 
-    private _insertProperty(
+    public insertProperty(
         subject: string,
         predicate: string,
         predicateLabel: string,
@@ -158,33 +160,48 @@ export class MxgraphService {
                 return edge;
         }
 
+        // insert in the codec:
+        this.codec.addRDFSProperty(predicate, subject, object);
+        this.codec.addLabel(predicate, predicateLabel);
         return this.graph.insertEdge(this.canvas, null, { uri: predicate, label: predicateLabel }, v1, v2);
     }
 
-    private _insertClass(
-        uri: string,
-        label: string,
-        x: number = Math.random() * this.container.clientWidth,
-        y: number = Math.random() * this.container.clientHeight,
+    public insertSubclassRelation(
+        subclass: string,
+        superclass: string,
     ) {
-        let v = this.graph.getModel().getCell(uri);
-        if (!v) {
-            v = this.graph.insertVertex(this.canvas, uri, { uri, label }, x, y, 100, 15);
+        const v1 = this.model.getCell(subclass);
+        const v2 = this.model.getCell(superclass);
+
+        if (!v1 || !v2) throw new Error('Classes do not exist');
+
+        // Check if property is already existing
+        const count = v1.getEdgeCount();
+        for (let i = 0; i < count; i++) {
+            const edge = v1.getEdgeAt(i);
+            if (edge.getValue().uri === 'http://www.w3.org/2000/01/rdf-schema#subClassOf' && edge.getTerminal(false).getId() === superclass)
+                return edge;
         }
-        return v;
+
+        // insert in the codec:
+        this.codec.addRDFSSubclassOf(subclass, superclass);
+        return this.graph.insertEdge(this.canvas, null, { uri: 'http://www.w3.org/2000/01/rdf-schema#subClassOf', label: 'rdfs:subClassOf' }, v1, v2);
     }
 
     insertClass(
         uri: string,
         label: string,
+        creator?: string,
         x: number = Math.random() * this.container.clientWidth,
         y: number = Math.random() * this.container.clientHeight,
     ) {
         let v = this.graph.getModel().getCell(uri);
         if (!v) {
-            v = this.graph.insertVertex(this.canvas, uri, { uri, label }, x, y, 100, 15);
+            v = this.graph.insertVertex(this.canvas, uri, { uri, label, creator }, x, y, 100, 15);
+            this.codec.addClass(uri);
+            this.codec.addLabel(uri, label);
         }
-        return v;
+        // return v;
     }
 
     /** Returns a turtle serialization of the current model */
@@ -201,7 +218,11 @@ export class MxgraphService {
         this.toolbar.destroy();
     }
 
-    selectCells(cells: m.mxCell[]) {
+    selectClass(iri: string) {
+        this.selectCells([this.model.getCell(iri)]);
+    }
+
+    private selectCells(cells: m.mxCell[]) {
         this.graph.setSelectionCells(cells);
     }
 }
