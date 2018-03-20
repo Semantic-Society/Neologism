@@ -1,12 +1,17 @@
-<h3 class="sidebar-header">DCAT</h3>
+<h3 class="sidebar-header">{{vocabularyName}}</h3>
 <hr>
 <div class="vocabulary-link">
   <div>
-    <a href="#">https://www.w3.org/ns/dcat#</a>
+    <a href="{{vocabularyHref}}">{{vocabularyLinkText}}</a>
   </div>
 </div>
 <hr>
-<p class="vocabulary-p-element">Version: 1.1</p>
+<p class="vocabulary-p-element">{{versionString}}</p>
 <hr>
-<p class="vocabulary-p-element">Author(s): Richard Cyganiak, Vassilios Peristeras</p>
+<p class="vocabulary-p-element">Author(s):
+  <span *ngFor="let author of authors.slice(0, 2)">{{author}}, </span>
+  <span *ngFor="let author of authors.slice(2, 3)">{{author}}</span>
+  <span *ngIf="authors.length > 3">, ...</span>
+
+</p>
 <hr>

@@ -15,7 +15,7 @@
         </mat-accordion>
     </mat-drawer>
     <mat-drawer [ngSwitch]="editMode" #navEnd class="mat-drawer nav-right" mode="side" position="end" [opened]="true" class="no-pad">
-      <button mat-button (click)="toggleEditMode()">Click me!</button>
+      <!-- <button mat-button (click)="toggleEditMode()">Click me!</button> -->
       <app-metadata></app-metadata>
       <div class="toolbar-container">
         <app-infobox *ngSwitchCase="0" [currentMode]="editMode" [inputLabel]="currentLabel" [inputIdentifier]="currentIdentifier" [inputDescription]="currentDescrpition" (onInputLabelUpdated)="updateCurrentLabel($event)" (onEditToggled)="toggleEditMode($event)"></app-infobox>
