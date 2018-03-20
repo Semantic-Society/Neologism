@@ -37,6 +37,10 @@ interface IPropertyRecommendation {
 export class EditorComponent implements OnInit {
     // TODO REFACTOR THIS
 
+    // TODO MC: I don't know a better way to ensure that an old finishing request does not turn of the spinner OR fills the results.
+    // TODO before it was be possible that an old, still pending request which returns turns off the spinner or fills the result list
+    private currentRequestNumber = 0;
+
     constructor(private recommendationService: RecommendationService) { }
 
     @Input() inputLabel: string;
@@ -67,23 +71,30 @@ export class EditorComponent implements OnInit {
         if (queryString === '') {
             return;
         }
-        this.enableSpinner();
-        const mx: MxgraphService = window['mxgraphService'];
-        if (!(mx && queryString)) {
-            throw new Error('mx or labelFiled null');
-        }
-        mx.serializeModel().then((model) =>
-            this.recommendationService.classRecommendationforNewClass(model, queryString)
-                .subscribe(
-                    (recs) => {
-                        this.recommendations = recs;
-                    }, null // TODO handle error?
-                    , () => {
-                        // TODO currently it would be possible that an old, still pending request which returns turns off the spinner
-                        this.disableSpinner();
-                    }
-                ));
-
+        const exp = () => {
+            this.currentRequestNumber++;
+            const requestNumber = this.currentRequestNumber;
+            this.enableSpinner();
+            const mx: MxgraphService = window['mxgraphService'];
+            if (!(mx && queryString)) {
+                throw new Error('mx or labelFiled null');
+            }
+            mx.serializeModel().then((model) =>
+                this.recommendationService.classRecommendationforNewClass(model, queryString)
+                    .subscribe(
+                        (recs) => {
+                            if (this.currentRequestNumber === requestNumber) {
+                                this.recommendations = recs;
+                            }
+                        }, null // TODO handle error?
+                        , () => {
+                            if (this.currentRequestNumber === requestNumber) {
+                                this.disableSpinner();
+                            }
+                        }
+                    ));
+        };
+        exp();
         /*
         this.onInputLabelUpdated.emit(labelField.value);
         console.log("input typing event fired! New label name "+ labelField.value);*/
