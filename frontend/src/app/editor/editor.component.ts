@@ -55,7 +55,7 @@ export class EditorComponent implements OnInit {
         this.selectLabelInput();
     }
     selectLabelInput() {
-        const labelField = <HTMLInputElement>this.labelInput.nativeElement;
+        const labelField = this.labelInput.nativeElement as HTMLInputElement;
         labelField.value = this.inputLabel; // Workaround hack to preselect the input field text
         // since the value is not set immediately by angular before labelField.select
         labelField.select();
