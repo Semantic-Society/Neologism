@@ -23,7 +23,6 @@ export class MxgraphComponent implements OnInit, OnDestroy {
 
         window['mxgraphService'] = this.mx; // TODO: Fix this FUCKING UGLY Workaround
 
-
         // this.mx = new MxgraphService(
         //     this.mxGraphView.nativeElement,
         //     document.getElementById('mx-toolbar'),
