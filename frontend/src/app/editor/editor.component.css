@@ -112,8 +112,15 @@ mat-panel-title {
   height:50px;
   width: 95%;
 }
+
 .mat-raised-button.btn-green {
   background-color: #228b22;
+  color:#FFFFFF !important;
+}
+
+.mat-raised-button.btn-green:disabled {
+  background-color: rgb(77, 77, 77);
+  color:rgb(197, 197, 197) !important;
 }
 
 .recommender-outer-wrapper{
@@ -182,3 +189,5 @@ mat-panel-title {
   border-top: 2px solid #ededed;
   border-bottom: 2px solid #ededed;
 }
+
+

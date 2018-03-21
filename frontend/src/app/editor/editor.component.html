@@ -67,7 +67,7 @@
   <hr>
   <mat-grid-list cols="2" rowHeight="3:1">
     <mat-grid-tile class="button-tile">
-      <button mat-raised-button class="btn-green" style="color:#FFFFFF" (click)=addToGraph()>Add</button>
+      <button mat-raised-button class="btn-green" (click)=addToGraph() [disabled]="!isSelectedRecommendationVisible" >Add</button>
     </mat-grid-tile>
     <!-- <mat-grid-tile class="button-tile">
       <button mat-raised-button color="warn">Cancel</button>

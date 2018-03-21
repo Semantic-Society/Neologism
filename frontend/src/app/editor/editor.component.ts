@@ -53,6 +53,7 @@ export class EditorComponent implements OnInit {
     private showSpinner = false;
     recommendations: IClassRecommendation[] = [];
     selectedRecommendation: IClassRecommendation;
+    isSelectedRecommendationVisible = false;
     propertyRecommendations: IPropertyRecommendation[] = [];
 
     ngOnInit() {
@@ -67,6 +68,7 @@ export class EditorComponent implements OnInit {
 
     public sendInputLabel(): void {
         this.recommendations = [];
+        this.isSelectedRecommendationVisible = false;
         const queryString: string = (this.labelInput.nativeElement as HTMLInputElement).value;
         if (queryString === '') {
             return;
@@ -102,6 +104,7 @@ export class EditorComponent implements OnInit {
 
     selectRecommendation(r: IClassRecommendation) {
         this.selectedRecommendation = r;
+        this.isSelectedRecommendationVisible = true;
         this.recommendationService.propertyRecommendation(r.uri, r.creator)
             .subscribe((res) => { this.propertyRecommendations = res; console.log('Received Property Recommendation', res); });
     }
