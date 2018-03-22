@@ -146,7 +146,7 @@ export class RecommendationService {
                 Array.isArray(resp && resp.list)
                     ? resp.list.map((rec) => {
                         return {
-                            comment: RecommendationService.strip(rec.comments[0].label),
+                            comment: RecommendationService.strip(rec.comments[0] && rec.comments[0].label || rec.labels[0].label),
                             label: RecommendationService.strip(rec.labels[0].label),
                             uri: rec.URI,
                             creator: resp.creator,
@@ -173,7 +173,8 @@ export class RecommendationService {
                 Array.isArray(r && r.properties)
                     ? r.properties.map((rec) => {
                         return {
-                            comment: RecommendationService.strip(rec.comments[0].label),
+                            comment: RecommendationService.strip(rec.comments[0] && rec.comments[0].label || rec.labels[0].label),
+                            //comment: RecommendationService.strip(rec.comments[0].label),
                             label: RecommendationService.strip(rec.labels[0].label),
                             uri: rec.propertyIRI,
                             range: rec.rangeClassIRI,
