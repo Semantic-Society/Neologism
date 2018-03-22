@@ -30,11 +30,11 @@ interface IPropertyRecommendation {
 }
 
 @Component({
-    selector: 'app-editor',
-    templateUrl: './editor.component.html',
-    styleUrls: ['./editor.component.css'],
+    selector: 'app-recommender',
+    templateUrl: './recommender.component.html',
+    styleUrls: ['./recommender.component.css'],
 })
-export class EditorComponent implements OnInit {
+export class RecommenderComponent implements OnInit {
     // TODO REFACTOR THIS
 
     // TODO MC: I don't know a better way to ensure that an old finishing request does not turn of the spinner OR fills the results.
@@ -43,11 +43,7 @@ export class EditorComponent implements OnInit {
 
     constructor(private recommendationService: RecommendationService) { }
 
-    @Input() inputLabel: string;
-    @Input() inputIdentifier: string;
-    @Input() inputDescription: string;
-    @Input() inputProperties: any;
-    @Output() onInputLabelUpdated: EventEmitter<any> = new EventEmitter<any>();
+    @Input() mx: MxgraphService;
     @ViewChild('labelInput') labelInput: ElementRef;
 
     private showSpinner = false;
@@ -61,7 +57,7 @@ export class EditorComponent implements OnInit {
     }
     selectLabelInput() {
         const labelField = this.labelInput.nativeElement as HTMLInputElement;
-        labelField.value = this.inputLabel; // Workaround hack to preselect the input field text
+        // labelField.value = this.inputLabel; // Workaround hack to preselect the input field text
         // since the value is not set immediately by angular before labelField.select
         labelField.select();
     }
@@ -77,11 +73,10 @@ export class EditorComponent implements OnInit {
             this.currentRequestNumber++;
             const requestNumber = this.currentRequestNumber;
             this.enableSpinner();
-            const mx: MxgraphService = window['mxgraphService'];
-            if (!(mx && queryString)) {
+            if (!(this.mx && queryString)) {
                 throw new Error('mx or labelFiled null');
             }
-            mx.serializeModel().then((model) =>
+            this.mx.serializeModel().then((model) =>
                 this.recommendationService.classRecommendationforNewClass(model, queryString)
                     .subscribe(
                         (recs) => {
@@ -110,9 +105,8 @@ export class EditorComponent implements OnInit {
     }
 
     addToGraph() {
-        const mx: MxgraphService = window['mxgraphService'];
-        mx.insertClass(this.selectedRecommendation.uri, this.selectedRecommendation.label, this.selectedRecommendation.creator);
-        mx.selectClass(this.selectedRecommendation.uri);
+        this.mx.insertClass(this.selectedRecommendation.uri, this.selectedRecommendation.label, this.selectedRecommendation.creator);
+        this.mx.selectClass(this.selectedRecommendation.uri);
     }
 
     enableSpinner() {

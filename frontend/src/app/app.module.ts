@@ -23,13 +23,14 @@ import {
 
 // App Services
 import { RecommendationService } from './services/recommendation.service';
+import { StateService } from './services/state.service';
 
 // App Components
 import { AppComponent } from './app.component';
-import { EditorComponent } from './editor/editor.component';
 import { InfoboxComponent } from './infobox/infobox.component';
 import { MetadataComponent } from './metadata/metadata.component';
 import { MxgraphComponent } from './mxgraph/mxgraph.component';
+import { RecommenderComponent } from './recommender/recommender.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,7 @@ import { MxgraphComponent } from './mxgraph/mxgraph.component';
     MxgraphComponent,
     InfoboxComponent,
     MetadataComponent,
-    EditorComponent,
+    RecommenderComponent,
   ],
   imports: [
     BrowserModule,
@@ -61,6 +62,7 @@ import { MxgraphComponent } from './mxgraph/mxgraph.component';
   ],
   providers: [
     RecommendationService,
+    StateService,
   ],
   bootstrap: [AppComponent],
 })

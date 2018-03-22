@@ -59,17 +59,6 @@ export class RecommendationService {
 
     private static strip(html: string) { return html.replace(/<(?:.|\n)*?>/gm, ''); }
 
-    private static response2recc(resp: IRecommendationMetadata) {
-        return resp.list.map((cRec) => {
-            return {
-                comment: RecommendationService.strip(cRec.comments[0] && cRec.comments[0].label || ''),
-                label: RecommendationService.strip(cRec.labels[0] && cRec.labels[0].label || ''),
-                uri: cRec.URI,
-                creator: resp.creator,
-            };
-        });
-    }
-
     /**
      * Neologism Reccomendation Service Adapter
      * via Angular's observable http service
@@ -157,8 +146,8 @@ export class RecommendationService {
                 Array.isArray(resp && resp.list)
                     ? resp.list.map((rec) => {
                         return {
-                            comment: RecommendationService.strip(rec.comments[0] && rec.comments[0].label || ''),
-                            label: RecommendationService.strip(rec.labels[0] && rec.labels[0].label || ''),
+                            comment: RecommendationService.strip(rec.comments[0].label),
+                            label: RecommendationService.strip(rec.labels[0].label),
                             uri: rec.URI,
                             creator: resp.creator,
                         };
@@ -184,8 +173,8 @@ export class RecommendationService {
                 Array.isArray(r && r.properties)
                     ? r.properties.map((rec) => {
                         return {
-                            comment: RecommendationService.strip(rec.comments[0] && rec.comments[0].label || ''),
-                            label: RecommendationService.strip(rec.labels[0] && rec.labels[0].label || ''),
+                            comment: RecommendationService.strip(rec.comments[0].label),
+                            label: RecommendationService.strip(rec.labels[0].label),
                             uri: rec.propertyIRI,
                             range: rec.rangeClassIRI,
                         };

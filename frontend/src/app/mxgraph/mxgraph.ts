@@ -1,10 +1,9 @@
-import { Injectable } from '@angular/core';
 import { mxgraph as m } from 'mxgraph';
 import { N3Codec } from './N3Codec';
 
 type Predicates = Map<string, Set<string>>;
+export interface IUserObject { url: string; label: string; creator: string; }
 
-// @Injectable()
 export class MxgraphService {
     private static mx: typeof m = require('mxgraph')({
         mxImageBasePath: 'mxgraph/images',
@@ -12,7 +11,7 @@ export class MxgraphService {
         mxLoadResources: false, // Disables synchronous loading of resources. Disables resource warnings for the moment.
     });
 
-    private graph: m.mxGraph;
+    graph: m.mxGraph;
     private model: m.mxGraphModel;
     private canvas: m.mxCell;
     private toolbar: m.mxToolbar;
@@ -20,7 +19,11 @@ export class MxgraphService {
 
     private predicateSet = new Set(['http://www.w3.org/2000/01/rdf-schema#subClassOf']);
 
-    constructor(private container: HTMLDivElement, private toolbarContainer: HTMLElement, private url: string) {
+    constructor(
+        private container: HTMLDivElement,
+        // private toolbarContainer: HTMLElement,
+        private url: string
+    ) {
         if (!MxgraphService.mx.mxClient.isBrowserSupported()) MxgraphService.mx.mxUtils.error('Browser is not supported!', 200, false);
 
         this.graph = new MxgraphService.mx.mxGraph(container);          // Create the graph inside the given container
@@ -64,7 +67,7 @@ export class MxgraphService {
 
         // Initialize a lookup map from subject IRI to the corresponding mxGraph cell and set up automatic syncronization
         this.graph.addListener(MxgraphService.mx.mxEvent.CELLS_ADDED, (sender: m.mxEventSource, evt: m.mxEventObject) => {
-            throw new Error('NOT  IMPELEMENTED'); // TODO Michael does this need to be implemented?
+            // throw new Error('NOT  IMPELEMENTED'); // TODO Michael does this need to be implemented?
             // const cells: m.mxCell[] = (evt.getProperties() || {})['cells'];
             // if (Array.isArray(cells)) cells.forEach((cell) => this.model.set(cell.getId(), cell));
             // organic.execute(this.canvas);
@@ -224,5 +227,13 @@ export class MxgraphService {
 
     private selectCells(cells: m.mxCell[]) {
         this.graph.setSelectionCells(cells);
+    }
+
+    addSelectionListener(funct: (x: IUserObject[]) => void) {
+        // http://forum.jgraph.com/questions/252/add-listener-when-clicking-on-a-vertex/253
+        this.graph.getSelectionModel().addListener(MxgraphService.mx.mxEvent.CHANGE, (selectionModel: m.mxGraphSelectionModel, evt: m.mxEventObject) => {
+            const values = selectionModel.cells.map((cell) => cell.getValue() as IUserObject);
+            funct(values);
+        });
     }
 }
