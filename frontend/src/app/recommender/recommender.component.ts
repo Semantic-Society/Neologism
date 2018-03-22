@@ -46,7 +46,7 @@ export class RecommenderComponent implements OnInit {
     @Input() mx: MxgraphService;
     @ViewChild('labelInput') labelInput: ElementRef;
 
-    private showSpinner = false;
+    protected showSpinner = false;
     recommendations: IClassRecommendation[] = [];
     selectedRecommendation: IClassRecommendation;
     isSelectedRecommendationVisible = false;
