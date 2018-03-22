@@ -21,6 +21,13 @@
     max-width: 25%;
   }
   
+.mat-drawer button{
+  background-color: beige;
+  color:#000000 !important;
+  display: block; 
+  margin: 0 auto;
+}
+
   .no-pad {
     padding: 0;
   }
