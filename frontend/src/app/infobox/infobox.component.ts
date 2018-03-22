@@ -12,9 +12,9 @@ import { RecommendationService } from '../services/recommendation.service';
 })
 export class InfoboxComponent implements OnInit {
   @Input() currentMode: number;
-  @Input() inputLabel: String;
-  @Input() inputIdentifier: String;
-  @Input() inputDescription: String;
+  @Input() inputLabel: string;
+  @Input() inputIdentifier: string;
+  @Input() inputDescription: string;
   @Output() onEditToggled: EventEmitter<any> = new EventEmitter<any>();
 
 
