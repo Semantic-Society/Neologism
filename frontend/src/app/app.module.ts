@@ -27,7 +27,7 @@ import { StateService } from './services/state.service';
 
 // App Components
 import { AppComponent } from './app.component';
-import { InfoboxComponent } from './infobox/infobox.component';
+import { EditboxComponent } from './editbox/editbox.component';
 import { MetadataComponent } from './metadata/metadata.component';
 import { MxgraphComponent } from './mxgraph/mxgraph.component';
 import { RecommenderComponent } from './recommender/recommender.component';
@@ -36,7 +36,7 @@ import { RecommenderComponent } from './recommender/recommender.component';
   declarations: [
     AppComponent,
     MxgraphComponent,
-    InfoboxComponent,
+    EditboxComponent,
     MetadataComponent,
     RecommenderComponent,
   ],

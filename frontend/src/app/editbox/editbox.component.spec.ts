@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { InfoboxComponent } from './infobox.component';
+import { EditboxComponent } from './editbox.component';
 
-describe('InfoboxComponent', () => {
-  let component: InfoboxComponent;
-  let fixture: ComponentFixture<InfoboxComponent>;
+describe('EditboxComponent', () => {
+  let component: EditboxComponent;
+  let fixture: ComponentFixture<EditboxComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ InfoboxComponent ]
+      declarations: [ EditboxComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(InfoboxComponent);
+    fixture = TestBed.createComponent(EditboxComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

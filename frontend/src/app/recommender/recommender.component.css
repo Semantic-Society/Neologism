@@ -1,4 +1,4 @@
-.infobox-card {
+.editbox-card {
   padding: 0px;
   width: 305px;
 }
@@ -9,12 +9,12 @@ mat-list-item {
   margin-top: 1em;
 }
 
-.infobox-header{
+.editbox-header{
   margin: 0px;
   padding: 0.3em 24px 0.3em 24px;
   font-weight: bold;
 }
-.infobox-subheader {
+.editbox-subheader {
   margin: 0px;
   padding: 0.3em 24px 0.3em 24px;
   font-size: smaller;

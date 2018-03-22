@@ -7,11 +7,11 @@ import { IUserObject, MxgraphService } from '../mxgraph/mxgraph';
 import { RecommendationService } from '../services/recommendation.service';
 
 @Component({
-  selector: 'app-infobox',
-  templateUrl: './infobox.component.html',
-  styleUrls: ['./infobox.component.css'],
+  selector: 'app-editbox',
+  templateUrl: './editbox.component.html',
+  styleUrls: ['./editbox.component.css'],
 })
-export class InfoboxComponent {
+export class EditboxComponent {
   @Input() selectedClass: IUserObject;
   @Input() mx: MxgraphService;
 

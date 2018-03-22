@@ -2,7 +2,7 @@
     <mat-drawer [ngSwitch]="editMode" #navEnd class="mat-drawer nav-right" mode="side" position="end" [opened]="true" class="no-pad">
         <app-metadata></app-metadata>
         <div class="toolbar-container">
-            <app-infobox *ngSwitchCase="sideBarState.Edit" [selectedClass]="currentSelection"  [mx]="mx"></app-infobox>
+            <app-editbox *ngSwitchCase="sideBarState.Edit" [selectedClass]="currentSelection"  [mx]="mx"></app-editbox>
             <app-recommender *ngSwitchCase="sideBarState.Recommend" [mx]="mx"></app-recommender>
         </div>
         <button *ngSwitchCase="sideBarState.Default" mat-button (click)="showRecommender()">Add new class</button>
