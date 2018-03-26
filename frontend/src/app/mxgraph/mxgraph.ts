@@ -33,6 +33,7 @@ export class MxgraphService {
         this.graph.setAllowDanglingEdges(false);                        // Disallow edges that are not connected to nodes
         this.graph.setAutoSizeCells(true);
         this.graph.autoSizeCellsOnAdd = true;
+        this.graph.setCellsResizable(false);
         this.graph.setConnectable(true);
         this.graph.setPanning(true);
         this.graph.setCellsEditable(false);
