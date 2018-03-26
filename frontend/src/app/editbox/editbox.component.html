@@ -1,7 +1,33 @@
 <mat-card class="editbox-card">
-  <p class="editbox-header">Label: {{selectedClass.label}}</p>
-  <p class="editbox-subheader">URL: {{selectedClass.url}}</p>
-  <mat-accordion multi="true">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Class</mat-card-title>
+      <mat-card-subtitle>{{selectedClass.url}}</mat-card-subtitle>
+      <img mat-card-avatar  src="data:image/gif;base64,R0lGODlhOwBAAMQfAIWjzhpTo0h1tvH0+SpeqUh1tWeMwjlqr+Hp89Ld7cLR5rPG4RpSo8PS53aYyDhpr5Wv1FiBvO/z+KS62uDo8ileqWaMwXWXx7LF4KO62pSu1FeAu9Hc7P///wtHnf///yH5BAEAAB8ALAAAAAA7AEAAAAX/4CeOZGmeaJk4h+d6hLGkdG2rwssUxfMSjZtwKJq4GABKZ9mRZCouB3GaMno2EiYFwCtcCi4DdTxauCxMDvjFdgHI1EHAg9a2754EnAjwVLJMHXhtAntDcxmBHRSDbQiGNmYMihQ+jS9vkDR9G0sbl3iFmikRHgAdCqB4B6MpOacWqnitKK8dDLJtAbQnpWi5hLwmBH6CwC9iwmUvT8cuM8ofCHMuFRfOBNEfAy1slsAQ0QnEzm2syhPU5S8Bj7wIpetsBHo1AwsA+RBBKQMA6mwOAFjQwIGqCANqLMhxJ4ABdyNWAHQRAABEEQgMTERWAwHDajy+eTjgAEAEcncA/yREMQDljxoJqFXQAGiJBAC4QAm4iKLBnQk0Yrq4EEjBFx4AROoKJ6Tbi5UnWrpItEQBlFwH6gnp8+IcCq4aAmEAdgCqEJ8vREWdU0BRKlllx7DJdAKCCwWKxsrSOkUdXROlHrjNCSrZmI9/SxA7JUGpqsREEKdwgaGDhnKQh0hGcbeD48dwNp+4K2GdYSofI7gy9bYcT81pUxh80NqZ2iltUqDVa5pKgjZ8FXt4EEueALM27LKR0tPFGnkBoN1wCYOGQXltIrw2obxN5hEGsN95mKJ7SuQkwquqqKfBBI14ZKhwWgBABgUALOAKABTFAuptkGfCBE6xEUAE+VxHh7QSWiiAXxg0LGCASwI4sB0JDQDYBgN4LUGBfi9UYMlptECw0REcMMHbINK9U+ALlTFR2iUBoDcKN210oogqTCmD4wsMMnEZKNloM40LgnXAAQAYXCOLNiJcR5QEhOUC5QdonTLkMVdm2cFzwFw5gBvGOHPlB86VyeWVDM1o5pVWfOGMamJSc0GVqvBzZXd4XnIbm87UeOYIP8oSQHBnDvDRJfQMekI6lzhgo6NFRACQABCgFwIAOw==" /> 
+    </mat-card-header>
+    
+    <!-- <mat-card-title>Class</mat-card-title>
+    <mat-card-content>{{selectedClass.url}}</mat-card-content> -->
+    <mat-card-title>{{selectedClass.label}}</mat-card-title>
+    <mat-card-title>Properties</mat-card-title>
+    <mat-card-subtitle>Currently applied</mat-card-subtitle>
+    <mat-card-subtitle>Available</mat-card-subtitle>
+    <mat-card-content style="height: 200px;overflow-y: auto">
+      <mat-list>
+        <mat-list-item *ngFor="let rec of propertyRecommendations" style="padding:0;margin:0;">
+          <p matLine *ngIf="rec.label" matTooltip="{{rec.label}}">Label: {{rec.label}}</p>
+          <p matLine *ngIf="rec.uri" matTooltip="{{rec.uri}}">URI: {{rec.uri}}</p>
+          <p matLine *ngIf="rec.comment" matTooltip="{{rec.comment}}">Comment: {{rec.comment}}</p>
+          <p matLine *ngIf="rec.range" matTooltip="{{rec.range}}">Range: {{rec.range}}</p>
+          <button mat-raised-button class="btn-green" (click)=addToGraph(rec)>Add</button>
+          <hr>
+        </mat-list-item>
+      </mat-list>
+    </mat-card-content>
+    <mat-card-footer>Trying a footer</mat-card-footer>
+  </mat-card>
+
+  <!-- <mat-accordion multi="true">
     <mat-expansion-panel>
       <mat-expansion-panel-header>
         <mat-panel-title>
@@ -16,10 +42,15 @@
           Properties
         </mat-panel-title>
       </mat-expansion-panel-header>
-        <div class="list-element"> dcat:themeTaxonomy </div>
-        <div class="list-element"> dcat:dataset </div>
-        <div class="list-element"> dcat:record </div>
+      <mat-list>
+        <mat-list-item *ngFor="let rec of propertyRecommendations" style="padding:0;margin:0;">
+          <p matLine *ngIf="rec.label" matTooltip="{{rec.label}}">Label: {{rec.label}}</p>
+          <p matLine *ngIf="rec.uri" matTooltip="{{rec.uri}}">URI: {{rec.uri}}</p>
+          <p matLine *ngIf="rec.comment" matTooltip="{{rec.comment}}">Comment: {{rec.comment}}</p>
+          <p matLine *ngIf="rec.range" matTooltip="{{rec.range}}">Range: {{rec.range}}</p>
+          <hr>
+        </mat-list-item>
+      </mat-list>
     </mat-expansion-panel>
-  </mat-accordion>
-
+  </mat-accordion> -->
 </mat-card>

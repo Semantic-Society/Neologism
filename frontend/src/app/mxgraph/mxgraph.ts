@@ -192,17 +192,17 @@ export class MxgraphService {
     }
 
     insertClass(
-        uri: string,
+        url: string,
         label: string,
         creator?: string,
         x: number = Math.random() * this.container.clientWidth,
         y: number = Math.random() * this.container.clientHeight,
     ) {
-        let v = this.graph.getModel().getCell(uri);
+        let v = this.graph.getModel().getCell(url);
         if (!v) {
-            v = this.graph.insertVertex(this.canvas, uri, { uri, label, creator }, x, y, 100, 15);
-            this.codec.addClass(uri);
-            this.codec.addLabel(uri, label);
+            v = this.graph.insertVertex(this.canvas, url, { url, label, creator }, x, y, 100, 15);
+            this.codec.addClass(url);
+            this.codec.addLabel(url, label);
         }
         // return v;
     }
