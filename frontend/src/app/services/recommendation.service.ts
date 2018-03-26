@@ -13,6 +13,7 @@ import 'rxjs/add/operator/pluck';
 import 'rxjs/add/operator/scan';
 import 'rxjs/add/operator/startWith';
 import 'rxjs/add/operator/switchMap';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import { N3Codec } from '../mxgraph/N3Codec';
@@ -57,13 +58,96 @@ export class RecommendationService {
     /** Neologism recommendation service endpoint base path */
     private static baseUrl = 'https://datalab.rwth-aachen.de/recommender/';
 
+    private classReq: Subject<{ queryGraph: string, queryTerm: string }>;
+    private classResp: Subject<Array<{
+        comment: string;
+        label: string;
+        uri: string;
+        creator: string;
+    }>>;
+
+    private propsReq: Subject<{ url: IRI, creator: string }>;
+    private propsResp: Subject<Array<{
+        comment: string;
+        label: string;
+        uri: string;
+        range: string;
+        creator: string;
+    }>>;
+
     private static strip(html: string) { return html.replace(/<(?:.|\n)*?>/gm, ''); }
 
     /**
      * Neologism Reccomendation Service Adapter
      * via Angular's observable http service
      */
-    constructor(private _http: Http) { }
+    constructor(private _http: Http) {
+        this.classReq = new Subject();
+        this.classResp = new BehaviorSubject([]);
+        this.classReq.debounceTime(100)
+            .switchMap(({ queryGraph, queryTerm }) => {
+                // First request to recommendation service's -start- endpoint
+                const initialRequest = this._http
+                    .post(`${RecommendationService.baseUrl}startForNewClass?keyword=${queryTerm}`, queryGraph)
+                    .map((res) => res.json())
+                    .multicast(new Subject<IRestResponse>());
+
+                // Subsequent `expectedRecommendationCount - 1` many requests to -more- endpoint
+                const nextRecommendations = initialRequest
+                    .switchMap( // execute requests in parallel
+                        (res) => Observable.range(1, res.expected - 1)
+                            .map(
+                                () => this._http
+                                    .get(`${RecommendationService.baseUrl}more?ID=${res.ID}`)
+                                    .map((resp) => resp.json() as IRestResponse)))
+                    .mergeAll(); // and merge results as they come in
+
+                // Provide single point of contact for any recommendation
+                const r = initialRequest
+                    .merge(nextRecommendations)
+                    .map((res) => res.recommendation)
+                    .map((resp: IRecommendationMetadata) =>
+                        Array.isArray(resp && resp.list)
+                            ? resp.list.map((rec) => {
+                                return {
+                                    comment: RecommendationService.strip(rec.comments[0] && rec.comments[0].label || rec.labels[0].label),
+                                    label: RecommendationService.strip(rec.labels[0].label),
+                                    uri: rec.URI,
+                                    creator: resp.creator,
+                                };
+                            })
+                            : []
+                    )
+                    .map((recs) => recs.slice(0, 3)) // Take only first three per recommender
+                    .scan((acc, curr) => [...acc, ...curr], []);
+                initialRequest.connect();
+                return r.startWith([]);
+            }).subscribe(this.classResp);
+
+
+
+        this.propsReq = new Subject();
+        this.propsResp = new BehaviorSubject([]);
+        this.propsReq.debounceTime(100)
+            .switchMap(({ url, creator }) => this._http
+                .get(url)
+                .map((r) => r.json() as { properties: IPropertyRecommendation[] })
+                .map((r) =>
+                    Array.isArray(r && r.properties)
+                        ? r.properties.map((rec) => {
+                            return {
+                                comment: RecommendationService.strip(rec.comments[0] && rec.comments[0].label || rec.labels[0].label),
+                                // comment: RecommendationService.strip(rec.comments[0].label),
+                                label: RecommendationService.strip(rec.labels[0].label),
+                                uri: rec.propertyIRI,
+                                range: rec.rangeClassIRI,
+                                creator
+                            };
+                        })
+                        : []
+                ).startWith([])
+            ).subscribe(this.propsResp);
+    }
 
     // /**
     //  * Generates optimization and completion recommendations for RDF vocabularies
@@ -76,39 +160,8 @@ export class RecommendationService {
 
     //     queryGraph = encodeURIComponent(queryGraph);
 
-    //     // First request to recommendation service's -start- endpoint
-    //     const initialRequest = this._http
-    //         .get(`${RecommendationService.baseUrl}start?model=${queryGraph}`)
-    //         .map((res) => res.json() as IRestResponse);
-
-    //     // Subsequent `expectedRecommendationCount - 1` many requests to -more- endpoint
-    //     const nextRecommendations = initialRequest
-    //         .switchMap( // execute requests in parallel
-    //             (res) => Observable.range(1, res.expected - 1)
-    //                 .map(
-    //                     () => this._http
-    //                         .get(`${RecommendationService.baseUrl}more?ID=${res.ID}`)
-    //                         .map((r) => r.json() as IRestResponse)))
-    //         .mergeAll(); // and merge results as they come in
-
-    //     // Provide single point of contact for any recommendation
-    //     return initialRequest
-    //         .merge(nextRecommendations)
-    //         .map((res) => res.recommendation)
-    //         .map((resp: IRecommendationMetadata) =>
-    //             Array.isArray(resp && resp.list)
-    //                 ? resp.list.map((rec) => {
-    //                     return {
-    //                         comment: RecommendationService.strip(rec.comments[0] && rec.comments[0].label || ''),
-    //                         label: RecommendationService.strip(rec.labels[0] && rec.labels[0].label || ''),
-    //                         uri: rec.URI,
-    //                         creator: resp.creator,
-    //                     };
-    //                 })
-    //                 : []
-    //         )
-    //         .map((recs) => recs.slice(0, 3)) // Take only first three per recommender
-    //         .scan((acc, curr) => [...acc, ...curr], []);
+    //     this.classReq.next({ queryGraph, queryTerm });
+    //     return this.classResp.asObservable();
     // }
 
     /**
@@ -119,45 +172,10 @@ export class RecommendationService {
     classRecommendationforNewClass(queryGraph: string, queryTerm: string) {
         if (queryTerm === '') throw new Error('No recommendations for empty search queryTerm');
         // queryGraph += ` <neo://query/${queryTerm}> a <http://www.w3.org/2000/01/rdf-schema#Class> .`;
-
         // queryGraph = encodeURIComponent(queryGraph);
 
-        // First request to recommendation service's -start- endpoint
-        const initialRequest = this._http
-            .post(`${RecommendationService.baseUrl}startForNewClass?keyword=${queryTerm}`, queryGraph)
-            .map((res) => res.json())
-            .multicast(new Subject<IRestResponse>());
-
-        // Subsequent `expectedRecommendationCount - 1` many requests to -more- endpoint
-        const nextRecommendations = initialRequest
-            .switchMap( // execute requests in parallel
-                (res) => Observable.range(1, res.expected - 1)
-                    .map(
-                        () => this._http
-                            .get(`${RecommendationService.baseUrl}more?ID=${res.ID}`)
-                            .map((resp) => resp.json() as IRestResponse)))
-            .mergeAll(); // and merge results as they come in
-
-        // Provide single point of contact for any recommendation
-        const r = initialRequest
-            .merge(nextRecommendations)
-            .map((res) => res.recommendation)
-            .map((resp: IRecommendationMetadata) =>
-                Array.isArray(resp && resp.list)
-                    ? resp.list.map((rec) => {
-                        return {
-                            comment: RecommendationService.strip(rec.comments[0] && rec.comments[0].label || rec.labels[0].label),
-                            label: RecommendationService.strip(rec.labels[0].label),
-                            uri: rec.URI,
-                            creator: resp.creator,
-                        };
-                    })
-                    : []
-            )
-            .map((recs) => recs.slice(0, 3)) // Take only first three per recommender
-            .scan((acc, curr) => [...acc, ...curr], []);
-        initialRequest.connect();
-        return r;
+        this.classReq.next({ queryGraph, queryTerm });
+        return this.classResp.asObservable();
     }
 
     propertyRecommendation(classUri: IRI, creator: string) {
@@ -166,22 +184,7 @@ export class RecommendationService {
 
         const url = `${RecommendationService.baseUrl}properties?class=${classUri}&creator=${creator}`;
 
-        return this._http
-            .get(url)
-            .map((r) => r.json() as { properties: IPropertyRecommendation[] })
-            .map((r) =>
-                Array.isArray(r && r.properties)
-                    ? r.properties.map((rec) => {
-                        return {
-                            comment: RecommendationService.strip(rec.comments[0] && rec.comments[0].label || rec.labels[0].label),
-                            // comment: RecommendationService.strip(rec.comments[0].label),
-                            label: RecommendationService.strip(rec.labels[0].label),
-                            uri: rec.propertyIRI,
-                            range: rec.rangeClassIRI,
-                            creator
-                        };
-                    })
-                    : []
-            );
+        this.propsReq.next({ url, creator });
+        return this.propsResp.asObservable();
     }
 }
