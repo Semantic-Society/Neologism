@@ -108,9 +108,9 @@ mat-panel-title {
 }
 
 .description-textarea{
-  margin: 0.3em 0px 0.0em 0px;
+  margin: 0.3em 0.3rem 0.0em 0.3rem;
   height:50px;
-  width: 95%;
+  width: 91%;
 }
 
 .mat-raised-button.btn-green {
@@ -220,4 +220,10 @@ mat-panel-title {
 }
 .mat-expansion-panel-custom-header:hover {
   background-color: #f5f5f5 !important;
+}
+
+.recommender-description-title {
+  padding-left: 0.2rem;
+  font-weight: bold;
+  margin-bottom: 0.1rem;
 }

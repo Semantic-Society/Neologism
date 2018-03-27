@@ -30,13 +30,13 @@
       </ng-template>
     </mat-grid-list>
   </div>
-  <mat-panel-title>
+  <p class="recommender-description-title">
     Description
-  </mat-panel-title>
+  </p>
   <textarea class="description-textarea" disabled=true>{{selectedRecommendation?.comment}}</textarea>
-  <mat-panel-title>
+  <p class="recommender-description-title">
     Properties
-  </mat-panel-title>
+  </p>
 
   <div class="properties-outer-wrapper">
         <mat-expansion-panel *ngFor="let rec of propertyRecommendations" style="padding:0;margin:0;">
