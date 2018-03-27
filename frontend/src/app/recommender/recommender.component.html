@@ -52,15 +52,24 @@
   <!-- <div class="list-element" *ngFor="let rec of propertyRecommendations"> {{rec?.uri}} </div> -->
 
   <div class="properties-outer-wrapper">
-    <mat-list>
-      <mat-list-item *ngFor="let rec of propertyRecommendations" style="padding:0;margin:0;">
-        <p matLine *ngIf="rec.label" matTooltip="{{rec.label}}">Label: {{rec.label}}</p>
-        <p matLine *ngIf="rec.uri" matTooltip="{{rec.uri}}">URI: {{rec.uri}}</p>
-        <p matLine *ngIf="rec.comment" matTooltip="{{rec.comment}}">Comment: {{rec.comment}}</p>
-        <p matLine *ngIf="rec.range" matTooltip="{{rec.range}}">Range: {{rec.range}}</p>
+        <mat-expansion-panel *ngFor="let rec of propertyRecommendations" style="padding:0;margin:0;">
+          <mat-expansion-panel-header *ngIf="rec.label">
+            <mat-panel-title>
+              {{rec.label}}
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+
+          <!--div *ngIf="rec.label" ><p class="properties-label">Label:</p> <p class="properties-text">{{rec.label}}</p></div-->
+          <div class="properties-line" *ngIf="rec.uri"><p class="properties-label ">URI:</p><a href="{{rec.uri}}" class="properties-text uri-link"> {{rec.uri}}</a></div>
+          <div class="properties-line" *ngIf="rec.range"><p class="properties-label">Range:</p> <a href="{{rec.range}}" class="properties-text uri-link"> {{rec.range}}</a></div>
+          <div class="properties-line" *ngIf="rec.comment"><p class="properties-label ">Comment:</p> <p class="properties-text"> {{rec.comment}}</div>
+
+        </mat-expansion-panel>
+        <!--div matLine *ngIf="rec.label" matTooltip="{{rec.label}}"><p class="properties-label">Label:</p> <p class="properties-text">{{rec.label}}</p></div>
+        <div matLine *ngIf="rec.uri" matTooltip="{{rec.uri}}"><p class="properties-label">URI:</p> <p class="properties-text"> {{rec.uri}}</div>
+        <div matLine *ngIf="rec.comment" matTooltip="{{rec.comment}}"><p class="properties-label">Comment:</p> <p class="properties-text"> {{rec.comment}}</div>
+        <div matLine *ngIf="rec.range" matTooltip="{{rec.range}}"><p class="properties-label">Range:</p> <p class="properties-text"> {{rec.range}}</div-->
         <hr>
-      </mat-list-item>
-    </mat-list>
   </div>
 
   <!-- </mat-expansion-panel> -->

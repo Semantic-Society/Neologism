@@ -190,4 +190,20 @@ mat-panel-title {
   border-bottom: 2px solid #ededed;
 }
 
-
+.properties-label {
+  font-size: 0.78em !important;
+  font-weight: bold;
+  margin:0 !important;
+}
+.properties-text {
+  font-size: 0.78em !important;
+  margin:0 !important;
+  padding-left: 0.5rem;
+}
+.properties-line {
+  margin-left:auto;
+  margin-right:auto;
+  height:auto;
+  width:auto;
+  margin-bottom: 0.5rem;
+}
