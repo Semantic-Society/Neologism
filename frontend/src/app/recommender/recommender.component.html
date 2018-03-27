@@ -40,8 +40,8 @@
 
   <div class="properties-outer-wrapper">
         <mat-expansion-panel *ngFor="let rec of propertyRecommendations" style="padding:0;margin:0;">
-          <mat-expansion-panel-header *ngIf="rec.label" [collapsedHeight]="'30px'" [expandedHeight]="'30px'">
-            <mat-panel-title>
+          <mat-expansion-panel-header class="mat-expansion-panel-custom-header" *ngIf="rec.label" [collapsedHeight]="'30px'" [expandedHeight]="'30px'">
+            <mat-panel-title class="mat-panel-custom-title">
               {{rec.label}}
             </mat-panel-title>
           </mat-expansion-panel-header>
