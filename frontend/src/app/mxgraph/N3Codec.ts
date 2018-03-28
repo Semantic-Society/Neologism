@@ -131,7 +131,6 @@ export class N3Codec {
         this.store.addTriple(propertyURI, 'http://www.w3.org/2000/01/rdf-schema#range', range);
     }
 
-
     addRDFSSubclassOf(subclass: string, superclass: string) {
         this.store.addTriple(subclass, 'http://www.w3.org/2000/01/rdf-schema#subClassOf', superclass);
     }
