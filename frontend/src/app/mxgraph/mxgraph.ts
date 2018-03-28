@@ -28,7 +28,7 @@ export class MxgraphService {
 
         this.graph = new MxgraphService.mx.mxGraph(container);          // Create the graph inside the given container
         this.model = this.graph.getModel();
-        const sel = new MxgraphService.mx.mxRubberband(this.graph);     // Enable rubberband selection (constructor side effect)
+        // const sel = new MxgraphService.mx.mxRubberband(this.graph);     // Enable rubberband selection (constructor side effect)
         MxgraphService.mx.mxEvent.disableContextMenu(container);        // Disable right click menu
         this.graph.setAllowDanglingEdges(false);                        // Disallow edges that are not connected to nodes
         this.graph.setAutoSizeCells(true);
@@ -37,7 +37,7 @@ export class MxgraphService {
         this.graph.setConnectable(true);
         this.graph.setPanning(true);
         this.graph.setCellsEditable(false);
-        // this.graph.panningHandler.useLeftButtonForPanning = true;    // Breaks lasso selection!
+        this.graph.panningHandler.useLeftButtonForPanning = true;    // Breaks lasso selection!
         this.graph.convertValueToString = (cell: m.mxCell) => cell.getValue().label;  // Enable mxGraph to extract cell labels
 
         // Overwrite label change handler in order to correctly write new lables to the user object
@@ -53,9 +53,32 @@ export class MxgraphService {
         keyHandler.bindKey(127, (evt) => this.graph.isEnabled() ? this.graph.removeCells() : null);  // proper operating systems delete
 
         // Adds mouse wheel handling for zoom
-        MxgraphService.mx.mxEvent.addMouseWheelListener((evt, up) => {
-            up ? this.graph.zoomIn() : this.graph.zoomOut();
-            MxgraphService.mx.mxEvent.consume(evt);
+        // see https://github.com/jgraph/mxgraph/blob/master/javascript/examples/grapheditor/www/js/EditorUi.js
+        MxgraphService.mx.mxEvent.addMouseWheelListener((evt: MouseEvent, scrollUp: boolean) => {
+            // Ctrl+wheel (or pinch on touchpad) is a native browser zoom event is OS X
+            // LATER: Add support for zoom via pinch on trackpad for Chrome in OS X
+            // if (((mxEvent.isControlDown(evt) && !MxgraphService.mx.mxClient.IS_MAC) || mxEvent.isAltDown(evt) ||
+            //     this.graph.panningHandler.isActive()) /* && (this.dialogs == null || this.dialogs.length == 0) */) {
+
+            if (this.container.contains(MxgraphService.mx.mxEvent.getSource(evt))) {
+
+                scrollUp ? this.graph.zoomIn() : this.graph.zoomOut();
+
+                const offset = MxgraphService.mx.mxUtils.getOffset(this.container); // 0:0
+                const dx = offset.x + this.container.offsetWidth / 2 - MxgraphService.mx.mxEvent.getClientX(evt);
+                const dy = offset.y + this.container.offsetHeight / 2 - MxgraphService.mx.mxEvent.getClientY(evt);
+
+                const cx = dx * (this.graph.zoomFactor - 1);
+                const cy = dy * (this.graph.zoomFactor - 1);
+
+                if (cx !== 0 || cy !== 0) {
+                    const t = this.graph.view.translate;
+                    const s = this.graph.view.scale;
+
+                    this.graph.view.setTranslate(Math.floor(t.x + cx / s), Math.floor(t.y + cy / s));
+                }
+            }
+            // }
         });
 
         // The default parent for inserting new cells. This is normally the first child of the root (ie. layer 0).
@@ -211,7 +234,7 @@ export class MxgraphService {
     /** Returns a turtle serialization of the current model */
     async serializeModel() {
         const model = await this.codec.serialize();
-        // console.log('GraphSerialization:', model);
+        console.log('GraphSerialization:', model);
         return model;
     }
 
