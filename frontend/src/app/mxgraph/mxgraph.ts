@@ -64,9 +64,9 @@ export class MxgraphService {
 
                 scrollUp ? this.graph.zoomIn() : this.graph.zoomOut();
 
-                const offset = MxgraphService.mx.mxUtils.getOffset(this.container); // 0:0
-                const dx = offset.x + this.container.offsetWidth / 2 - MxgraphService.mx.mxEvent.getClientX(evt);
-                const dy = offset.y + this.container.offsetHeight / 2 - MxgraphService.mx.mxEvent.getClientY(evt);
+                const windowContainerOffset = MxgraphService.mx.mxUtils.getOffset(this.container); // 0:0
+                const dx = windowContainerOffset.x + this.container.offsetWidth / 2 - MxgraphService.mx.mxEvent.getClientX(evt);
+                const dy = windowContainerOffset.y + this.container.offsetHeight / 2 - MxgraphService.mx.mxEvent.getClientY(evt);
 
                 const cx = dx * (this.graph.zoomFactor - 1);
                 const cy = dy * (this.graph.zoomFactor - 1);
@@ -168,6 +168,30 @@ export class MxgraphService {
         return this.graph.insertEdge(this.canvas, null, { uri, label }, v1, v2);
     }
 
+    /**
+     * Inserts a new class into the model
+     * @param url The IRI / PID of the class to be added
+     * @param label The label to show in the rendering
+     * @param creator The id of the Neologism Recommender Backend used to suggest this item
+     * @param x The x offset of the new class. Middle of screen by default.
+     * @param y The y offset of the new class. Middle of screen by default.
+     */
+    insertClass(
+        url: string,
+        label: string,
+        creator?: string,
+        x: number = this.container.clientWidth / 2 / this.graph.view.scale - this.graph.view.translate.x,   // -translate is the point at the top left of the screen
+        y: number = this.container.clientHeight / 2 / this.graph.view.scale - this.graph.view.translate.y,  // containerDims/2/scale = offset to middle of screen
+    ) {
+        let v = this.graph.getModel().getCell(url);
+        if (!v) {
+            v = this.graph.insertVertex(this.canvas, url, { url, label, creator }, x, y, 100, 15);
+            this.codec.addClass(url);
+            this.codec.addLabel(url, label);
+        }
+        // return v;
+    }
+
     public insertProperty(
         subject: string,
         predicate: string,
@@ -213,22 +237,6 @@ export class MxgraphService {
         // insert in the codec:
         this.codec.addRDFSSubclassOf(subclass, superclass);
         return this.graph.insertEdge(this.canvas, null, { uri: 'http://www.w3.org/2000/01/rdf-schema#subClassOf', label: 'rdfs:subClassOf' }, v1, v2);
-    }
-
-    insertClass(
-        url: string,
-        label: string,
-        creator?: string,
-        x: number = Math.random() * this.container.clientWidth,
-        y: number = Math.random() * this.container.clientHeight,
-    ) {
-        let v = this.graph.getModel().getCell(url);
-        if (!v) {
-            v = this.graph.insertVertex(this.canvas, url, { url, label, creator }, x, y, 100, 15);
-            this.codec.addClass(url);
-            this.codec.addLabel(url, label);
-        }
-        // return v;
     }
 
     /** Returns a turtle serialization of the current model */
