@@ -18,6 +18,7 @@ import {
   MatListModule,
   MatProgressSpinnerModule,
   MatSidenavModule,
+  MatTabsModule,
   MatTooltipModule,
 } from '@angular/material';
 
@@ -30,6 +31,7 @@ import { AppComponent } from './app.component';
 import { EditboxComponent } from './editbox/editbox.component';
 import { MetadataComponent } from './metadata/metadata.component';
 import { MxgraphComponent } from './mxgraph/mxgraph.component';
+import { StandardViewComponent } from './mxgraph/standardView/standardView.component';
 import { RecommenderComponent } from './recommender/recommender.component';
 
 @NgModule({
@@ -39,6 +41,7 @@ import { RecommenderComponent } from './recommender/recommender.component';
     EditboxComponent,
     MetadataComponent,
     RecommenderComponent,
+    StandardViewComponent,
   ],
   imports: [
     BrowserModule,
@@ -57,8 +60,8 @@ import { RecommenderComponent } from './recommender/recommender.component';
     MatGridListModule,
     MatAutocompleteModule,
     MatProgressSpinnerModule,
+    MatTabsModule,
     MatTooltipModule,
-
   ],
   providers: [
     RecommendationService,

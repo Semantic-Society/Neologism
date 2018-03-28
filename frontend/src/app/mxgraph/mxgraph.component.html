@@ -2,13 +2,20 @@
     <mat-drawer [ngSwitch]="editMode" #navEnd class="mat-drawer nav-right" mode="side" position="end" [opened]="true" class="no-pad">
         <app-metadata></app-metadata>
         <div class="toolbar-container">
-            <app-editbox *ngSwitchCase="sideBarState.Edit" [selectedClass]="currentSelection"  [mx]="mx"></app-editbox>
+            <app-editbox *ngSwitchCase="sideBarState.Edit" [selectedClass]="currentSelection" [mx]="mx"></app-editbox>
             <app-recommender *ngSwitchCase="sideBarState.Recommend" [mx]="mx"></app-recommender>
         </div>
         <button *ngSwitchCase="sideBarState.Default" mat-button (click)="showRecommender()">Add new class</button>
     </mat-drawer>
     <mat-drawer-content>
-        <div class="mxgraph-container" #view></div>
+        <mat-tab-group headerPosition="below">
+            <mat-tab label="One">
+                    <div class="mxgraph-container" #view></div>
+            </mat-tab>
+            <mat-tab label="Two">
+                <app-standardview></app-standardview>
+            </mat-tab>
+        </mat-tab-group>
         <!-- <button type="button" mat-button (click)="navStart.toggle()">
             Toggle left nav
         </button>
