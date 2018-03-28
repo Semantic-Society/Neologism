@@ -30,6 +30,7 @@ export class EditboxComponent implements OnChanges {
   }
 
   addToGraph(rec: { comment: string; label: string; uri: string; range: string; creator: string; }) {
+    // console.log('editbox -> addToGraph:', this.selectedClass.url, rec.uri, rec.label, rec.range)
     this.mx.insertProperty(this.selectedClass.url, rec.uri, rec.label, rec.range);
   }
 }

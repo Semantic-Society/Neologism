@@ -210,7 +210,9 @@ export class MxgraphService {
 
     /** Returns a turtle serialization of the current model */
     async serializeModel() {
-        return await this.codec.serialize();
+        const model = await this.codec.serialize();
+        // console.log('GraphSerialization:', model);
+        return model;
     }
 
     zoomToFit() {

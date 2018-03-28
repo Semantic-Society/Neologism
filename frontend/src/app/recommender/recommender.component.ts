@@ -101,10 +101,14 @@ export class RecommenderComponent implements OnInit {
         this.selectedRecommendation = r;
         this.isSelectedRecommendationVisible = true;
         this.recommendationService.propertyRecommendation(r.uri, r.creator)
-            .subscribe((res) => { this.propertyRecommendations = res; console.log('Received Property Recommendation', res); });
+            .subscribe((res) => {
+                this.propertyRecommendations = res;
+                // console.log('Received Property Recommendation', res);
+            });
     }
 
     addToGraph() {
+        console.log('recommenderComponent -> addToGraph:', this.selectedRecommendation.uri, this.selectedRecommendation.label, this.selectedRecommendation.creator);
         this.mx.insertClass(this.selectedRecommendation.uri, this.selectedRecommendation.label, this.selectedRecommendation.creator);
         this.mx.selectClass(this.selectedRecommendation.uri);
     }
