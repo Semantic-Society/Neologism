@@ -95,7 +95,10 @@ export class N3Codec {
             });
     }
 
-    addLabel(entityIRI: string, label : string){
+    addLabel(entityIRI: string, label: string) {
+        if (!N3.Util.isLiteral(label))
+            label = `"${label}"`;
+
         this.store.addTriple(entityIRI, 'http://www.w3.org/2000/01/rdf-schema#label', label);
     }
 
