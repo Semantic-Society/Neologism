@@ -1,4 +1,6 @@
 import { mxgraph as m } from 'mxgraph';
+
+import { enableDynamicGrid } from './dynamicGrid';
 import { N3Codec } from './N3Codec';
 
 type Predicates = Map<string, Set<string>>;
@@ -39,6 +41,8 @@ export class MxgraphService {
         this.graph.setCellsEditable(false);
         this.graph.panningHandler.useLeftButtonForPanning = true;    // Breaks lasso selection!
         this.graph.convertValueToString = (cell: m.mxCell) => cell.getValue().label;  // Enable mxGraph to extract cell labels
+        enableDynamicGrid(this.graph, MxgraphService.mx);
+        this.graph.view.refresh();
 
         // Overwrite label change handler in order to correctly write new lables to the user object
         // const defaultLabelChangeHandler = this.graph.cellLabelChanged.bind(this.graph);
@@ -168,6 +172,10 @@ export class MxgraphService {
         return this.graph.insertEdge(this.canvas, null, { uri, label }, v1, v2);
     }
 
+    private alignToGrid(x: number) {
+        return Math.round(x / this.graph.gridSize) * this.graph.gridSize;
+    }
+
     /**
      * Inserts a new class into the model
      * @param url The IRI / PID of the class to be added
@@ -183,6 +191,9 @@ export class MxgraphService {
         x: number = this.container.clientWidth / 2 / this.graph.view.scale - this.graph.view.translate.x,   // -translate is the point at the top left of the screen
         y: number = this.container.clientHeight / 2 / this.graph.view.scale - this.graph.view.translate.y,  // containerDims/2/scale = offset to middle of screen
     ) {
+        x = this.alignToGrid(x);
+        y = this.alignToGrid(y);
+
         let v = this.graph.getModel().getCell(url);
         if (!v) {
             v = this.graph.insertVertex(this.canvas, url, { url, label, creator }, x, y, 100, 15);
