@@ -1,15 +1,11 @@
 <mat-card class="editbox-card">
   <form class="example-form">
     <input #labelInput class="label-input" placeholder="" value="" (keyup.enter)="sendInputLabel()">
-    <!-- <input #labelInput class="label-input" placeholder="" value="{{inputLabel}}" (keyup.enter)="sendInputLabel()"> -->
   </form>
-  <!--<p class="editbox-subheader">{{inputIdentifier}}</p>-->
   <div class="recommender-outer-wrapper">
     <mat-grid-list cols="1" rowHeight="4:1" class="recommender-inner-wrapper">
-      <mat-grid-tile class="recommendation-tile-wrapper recommendation-result"
-                     *ngFor="let recommendation of recommendations" matTooltip="{{recommendation.comment}}"
-                     (click)="selectRecommendation(recommendation)"
-                     [class.selected]="recommendation === selectedRecommendation">
+      <mat-grid-tile class="recommendation-tile-wrapper recommendation-result" *ngFor="let recommendation of recommendations" (click)="selectRecommendation(recommendation)"
+        [class.selected]="recommendation === selectedRecommendation">
         <div class="label-name">
           <p class="no-margin">
             {{recommendation?.label}}
@@ -32,46 +28,45 @@
       </ng-template>
     </mat-grid-list>
   </div>
+  <div *ngIf="this.isSelectedRecommendationVisible">
 
-  <!-- <mat-accordion multi="true">
-    <mat-expansion-panel>
-      <mat-expansion-panel-header> -->
-  <mat-panel-title>
-    Description
-  </mat-panel-title>
-  <!-- </mat-expansion-panel-header> -->
-  <textarea class="description-textarea" disabled=true>{{selectedRecommendation?.comment}}</textarea>
-  <!-- <textarea class="description-textarea">{{inputDescription}}</textarea> -->
-  <!-- </mat-expansion-panel> -->
-  <!-- <mat-expansion-panel>
-      <mat-expansion-panel-header> -->
-  <mat-panel-title>
-    Properties
-  </mat-panel-title>
-  <!-- </mat-expansion-panel-header> -->
-  <!-- <div class="list-element" *ngFor="let rec of propertyRecommendations"> {{rec?.uri}} </div> -->
+    <p class="recommender-description-title">
+      Description
+    </p>
+    <textarea class="description-textarea" disabled=true>{{selectedRecommendation?.comment}}</textarea>
+    <p class="recommender-description-title">
+      Properties
+    </p>
 
-  <div class="properties-outer-wrapper">
-    <mat-list>
-      <mat-list-item *ngFor="let rec of propertyRecommendations" style="padding:0;margin:0;">
-        <p matLine *ngIf="rec.label" matTooltip="{{rec.label}}">Label: {{rec.label}}</p>
-        <p matLine *ngIf="rec.uri" matTooltip="{{rec.uri}}">URI: {{rec.uri}}</p>
-        <p matLine *ngIf="rec.comment" matTooltip="{{rec.comment}}">Comment: {{rec.comment}}</p>
-        <p matLine *ngIf="rec.range" matTooltip="{{rec.range}}">Range: {{rec.range}}</p>
-        <hr>
-      </mat-list-item>
-    </mat-list>
+    <div *ngIf="propertyRecommendations.length > 0" class="properties-outer-wrapper">
+      <mat-expansion-panel *ngFor="let rec of propertyRecommendations" style="padding:0;margin:0;">
+        <mat-expansion-panel-header class="mat-expansion-panel-custom-header" *ngIf="rec.label" [collapsedHeight]="'30px'" [expandedHeight]="'30px'">
+          <mat-panel-title class="mat-panel-custom-title">
+            {{rec.label}}
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <!--div *ngIf="rec.label" ><p class="properties-label">Label:</p> <p class="properties-text">{{rec.label}}</p></div-->
+        <div class="properties-line" *ngIf="rec.uri">
+          <p class="properties-label ">URI:</p>
+          <a href="{{rec.uri}}" class="properties-text uri-link"> {{rec.uri}}</a>
+        </div>
+        <div class="properties-line" *ngIf="rec.range">
+          <p class="properties-label">Range:</p>
+          <a href="{{rec.range}}" class="properties-text uri-link"> {{rec.range}}</a>
+        </div>
+        <div class="properties-line" *ngIf="rec.comment">
+          <p class="properties-label ">Comment:</p>
+          <p class="properties-text"> {{rec.comment}}</div>
+      </mat-expansion-panel>
+      <hr>
+    </div>
+    <mat-label *ngIf="propertyRecommendations.length == 0">No properties found (yet)</mat-label>
+    <hr>
+    <mat-grid-list cols="2" rowHeight="3:1">
+      <mat-grid-tile class="button-tile">
+        <button mat-raised-button class="btn-green" (click)=addToGraph() [disabled]="!isSelectedRecommendationVisible">Add</button>
+      </mat-grid-tile>
+    </mat-grid-list>
   </div>
 
-  <!-- </mat-expansion-panel> -->
-  <!-- </mat-accordion> -->
-  <hr>
-  <mat-grid-list cols="2" rowHeight="3:1">
-    <mat-grid-tile class="button-tile">
-      <button mat-raised-button class="btn-green" (click)=addToGraph() [disabled]="!isSelectedRecommendationVisible" >Add</button>
-    </mat-grid-tile>
-    <!-- <mat-grid-tile class="button-tile">
-      <button mat-raised-button color="warn">Cancel</button>
-    </mat-grid-tile> -->
-  </mat-grid-list>
 </mat-card>

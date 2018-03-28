@@ -33,6 +33,7 @@ export class MxgraphService {
         this.graph.setAllowDanglingEdges(false);                        // Disallow edges that are not connected to nodes
         this.graph.setAutoSizeCells(true);
         this.graph.autoSizeCellsOnAdd = true;
+        this.graph.setCellsResizable(false);
         this.graph.setConnectable(true);
         this.graph.setPanning(true);
         this.graph.setCellsEditable(false);
@@ -232,7 +233,9 @@ export class MxgraphService {
     addSelectionListener(funct: (x: IUserObject[]) => void) {
         // http://forum.jgraph.com/questions/252/add-listener-when-clicking-on-a-vertex/253
         this.graph.getSelectionModel().addListener(MxgraphService.mx.mxEvent.CHANGE, (selectionModel: m.mxGraphSelectionModel, evt: m.mxEventObject) => {
-            const values = selectionModel.cells.map((cell) => cell.getValue() as IUserObject);
+            const values = selectionModel.cells
+            .filter((cell) => cell.vertex)
+            .map((cell) => cell.getValue() as IUserObject);
             funct(values);
         });
     }
