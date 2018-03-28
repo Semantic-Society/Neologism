@@ -166,7 +166,7 @@ export class MxgraphService {
 
         // insert in the codec:
         this.codec.addRDFSProperty(predicate, subject, object);
-        this.codec.addLabel(predicate, predicateLabel);
+        this.codec.addEnglishLabel(predicate, predicateLabel);
         return this.graph.insertEdge(this.canvas, null, { uri: predicate, label: predicateLabel }, v1, v2);
     }
 
@@ -203,7 +203,7 @@ export class MxgraphService {
         if (!v) {
             v = this.graph.insertVertex(this.canvas, url, { url, label, creator }, x, y, 100, 15);
             this.codec.addClass(url);
-            this.codec.addLabel(url, label);
+            this.codec.addEnglishLabel(url, label);
         }
         // return v;
     }
@@ -236,8 +236,8 @@ export class MxgraphService {
         // http://forum.jgraph.com/questions/252/add-listener-when-clicking-on-a-vertex/253
         this.graph.getSelectionModel().addListener(MxgraphService.mx.mxEvent.CHANGE, (selectionModel: m.mxGraphSelectionModel, evt: m.mxEventObject) => {
             const values = selectionModel.cells
-            .filter((cell) => cell.vertex)
-            .map((cell) => cell.getValue() as IUserObject);
+                .filter((cell) => cell.vertex)
+                .map((cell) => cell.getValue() as IUserObject);
             funct(values);
         });
     }

@@ -95,11 +95,17 @@ export class N3Codec {
             });
     }
 
-    addLabel(entityIRI: string, label: string) {
-        if (!N3.Util.isLiteral(label))
-            label = `"${label}"`;
+    /**
+     * Add a label for an entity. The label should be the plain text of the label. The language will be fixed to 'en'
+     * @param entityIRI the resource for which the label has to be added.
+     * @param label The label
+     */
+    addEnglishLabel(entityIRI: string, label: string) {
+        // if (!N3.Util.isLiteral(label))
+        //    label = `"${label}"`;
+        const literal = N3.Util.createLiteral(label, 'en');
 
-        this.store.addTriple(entityIRI, 'http://www.w3.org/2000/01/rdf-schema#label', label);
+        this.store.addTriple(entityIRI, 'http://www.w3.org/2000/01/rdf-schema#label', literal);
     }
 
     getPredicates() {
