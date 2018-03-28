@@ -187,7 +187,7 @@ export class MxgraphService {
         if (!v) {
             v = this.graph.insertVertex(this.canvas, url, { url, label, creator }, x, y, 100, 15);
             this.codec.addClass(url);
-            this.codec.addLabel(url, label);
+            this.codec.addEnglishLabel(url, label);
         }
         // return v;
     }
@@ -213,7 +213,7 @@ export class MxgraphService {
 
         // insert in the codec:
         this.codec.addRDFSProperty(predicate, subject, object);
-        this.codec.addLabel(predicate, predicateLabel);
+        this.codec.addEnglishLabel(predicate, predicateLabel);
         return this.graph.insertEdge(this.canvas, null, { uri: predicate, label: predicateLabel }, v1, v2);
     }
 
