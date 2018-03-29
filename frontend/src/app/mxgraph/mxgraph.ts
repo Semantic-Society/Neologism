@@ -17,7 +17,7 @@ export class MxgraphService {
     private model: m.mxGraphModel;
     private canvas: m.mxCell;
     private toolbar: m.mxToolbar;
-    private codec: N3Codec;
+    public codec: N3Codec;
 
     private predicateSet = new Set(['http://www.w3.org/2000/01/rdf-schema#subClassOf']);
 

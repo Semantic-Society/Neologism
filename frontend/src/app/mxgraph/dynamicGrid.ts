@@ -44,8 +44,8 @@ export function enableDynamicGrid(graph: m.mxGraph, mx: typeof m) {
                     if (!sizeChanged) {
                         ctx.clearRect(0, 0, w, h);
                     } else {
-                        canvas.setAttribute('width', w);
-                        canvas.setAttribute('height', h);
+                        canvas.setAttribute('width', w as any);
+                        canvas.setAttribute('height', h as any);
                     }
 
                     const tx = tr.x * s;

@@ -9,11 +9,11 @@
     </mat-drawer>
     <mat-drawer-content>
         <mat-tab-group headerPosition="below">
-            <mat-tab label="One">
+            <mat-tab label="View &amp; Edit">
                     <div class="mxgraph-container" #view></div>
             </mat-tab>
-            <mat-tab label="Two">
-                <app-standardview></app-standardview>
+            <mat-tab label="List">
+                <app-standardview [vocab]="mx.codec"></app-standardview>
             </mat-tab>
         </mat-tab-group>
         <!-- <button type="button" mat-button (click)="navStart.toggle()">
