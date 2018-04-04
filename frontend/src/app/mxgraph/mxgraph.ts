@@ -50,12 +50,12 @@ export class MxgraphService {
         //     cell.id = N3Codec.neologismId(newValue);
         //     defaultLabelChangeHandler(cell, cell.value, autoSize);
         // };
-        var vertexStyle = this.graph.stylesheet.getDefaultVertexStyle();
+        const vertexStyle = this.graph.stylesheet.getDefaultVertexStyle();
         vertexStyle[MxgraphService.mx.mxConstants.GUIDE_STROKEWIDTH] = 100;
         vertexStyle[MxgraphService.mx.mxConstants.HIGHLIGHT_STROKEWIDTH] = 10;
 
-        //var edgeStyle = this.graph.stylesheet.getDefaultEdgeStyle();
-        //edgeStyle[MxgraphService.mx.mxConstants.STYLE_EDGE] = MxgraphService.mx.mxEdgeStyle.EntityRelation;
+        // var edgeStyle = this.graph.stylesheet.getDefaultEdgeStyle();
+        // edgeStyle[MxgraphService.mx.mxConstants.STYLE_EDGE] = MxgraphService.mx.mxEdgeStyle.EntityRelation;
 
         const keyHandler = new MxgraphService.mx.mxKeyHandler(this.graph);
         keyHandler.bindKey(8, (evt) => this.graph.isEnabled() ? this.graph.removeCells() : null);   // backspace key removes cell
