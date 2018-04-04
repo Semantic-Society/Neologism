@@ -29,38 +29,51 @@
     </mat-grid-list>
   </div>
   <div *ngIf="this.isSelectedRecommendationVisible">
-
-    <p class="recommender-description-title">
-      Description
-    </p>
-    <textarea class="description-textarea" disabled=true>{{selectedRecommendation?.comment}}</textarea>
-    <p class="recommender-description-title">
+    <mat-expansion-panel>
+      <mat-expansion-panel-header class="mat-expansion-panel-custom-header" [collapsedHeight]="'30px'" [expandedHeight]="'30px'">
+        <mat-panel-title class="mat-panel-custom-title">
+          Description
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <!-- <textarea class="description-textarea" disabled=true>{{selectedRecommendation?.comment}}</textarea> -->
+      <p>{{selectedRecommendation?.comment}}</p>
+    </mat-expansion-panel>
+    <!-- <p class="recommender-description-title">
       Properties
-    </p>
+    </p> -->
+    <mat-expansion-panel style="padding:0;margin:0;">
+      <mat-expansion-panel-header class="mat-expansion-panel-custom-header" [collapsedHeight]="'30px'" [expandedHeight]="'30px'">
+        <mat-panel-title class="mat-panel-custom-title">
+          Properties
+        </mat-panel-title>
+      </mat-expansion-panel-header>
 
-    <div *ngIf="propertyRecommendations.length > 0" class="properties-outer-wrapper">
-      <mat-expansion-panel *ngFor="let rec of propertyRecommendations" style="padding:0;margin:0;">
-        <mat-expansion-panel-header class="mat-expansion-panel-custom-header" *ngIf="rec.label" [collapsedHeight]="'30px'" [expandedHeight]="'30px'">
-          <mat-panel-title class="mat-panel-custom-title">
-            {{rec.label}}
-          </mat-panel-title>
-        </mat-expansion-panel-header>
-        <!--div *ngIf="rec.label" ><p class="properties-label">Label:</p> <p class="properties-text">{{rec.label}}</p></div-->
-        <div class="properties-line" *ngIf="rec.uri">
-          <p class="properties-label ">URI:</p>
-          <a href="{{rec.uri}}" class="properties-text uri-link"> {{rec.uri}}</a>
-        </div>
-        <div class="properties-line" *ngIf="rec.range">
-          <p class="properties-label">Range:</p>
-          <a href="{{rec.range}}" class="properties-text uri-link"> {{rec.range}}</a>
-        </div>
-        <div class="properties-line" *ngIf="rec.comment">
-          <p class="properties-label ">Comment:</p>
-          <p class="properties-text"> {{rec.comment}}</div>
-      </mat-expansion-panel>
-      <hr>
-    </div>
-    <mat-label *ngIf="propertyRecommendations.length == 0">No properties found (yet)</mat-label>
+      <div *ngIf="propertyRecommendations.length > 0" class="properties-outer-wrapper">
+
+        <mat-expansion-panel *ngFor="let rec of propertyRecommendations" style="padding:0;margin:0;">
+          <mat-expansion-panel-header class="mat-expansion-panel-custom-header" *ngIf="rec.label" [collapsedHeight]="'30px'" [expandedHeight]="'30px'">
+            <mat-panel-title class="mat-panel-custom-title">
+              {{rec.label}}
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <!--div *ngIf="rec.label" ><p class="properties-label">Label:</p> <p class="properties-text">{{rec.label}}</p></div-->
+          <div class="properties-line" *ngIf="rec.uri">
+            <p class="properties-label ">URI:</p>
+            <a href="{{rec.uri}}" class="properties-text uri-link"> {{rec.uri}}</a>
+          </div>
+          <div class="properties-line" *ngIf="rec.range">
+            <p class="properties-label">Range:</p>
+            <a href="{{rec.range}}" class="properties-text uri-link"> {{rec.range}}</a>
+          </div>
+          <div class="properties-line" *ngIf="rec.comment">
+            <p class="properties-label ">Comment:</p>
+            <p class="properties-text"> {{rec.comment}}</div>
+        </mat-expansion-panel>
+        <!-- <hr> -->
+      </div>
+      <mat-label *ngIf="propertyRecommendations.length == 0">No properties found (yet)</mat-label>
+    </mat-expansion-panel>
+
     <hr>
     <mat-grid-list cols="2" rowHeight="3:1">
       <mat-grid-tile class="button-tile">
