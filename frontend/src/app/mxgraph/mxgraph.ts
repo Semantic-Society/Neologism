@@ -50,9 +50,15 @@ export class MxgraphService {
         //     cell.id = N3Codec.neologismId(newValue);
         //     defaultLabelChangeHandler(cell, cell.value, autoSize);
         // };
-        const vertexStyle = this.graph.stylesheet.getDefaultVertexStyle();
-        vertexStyle[MxgraphService.mx.mxConstants.GUIDE_STROKEWIDTH] = 100;
-        vertexStyle[MxgraphService.mx.mxConstants.HIGHLIGHT_STROKEWIDTH] = 10;
+        /*const vertexStyle = this.graph.stylesheet.getDefaultVertexStyle();
+      vertexStyle[MxgraphService.mx.mxConstants.DEFAULT_VALID_COLOR] = '#FF0000';
+      vertexStyle[MxgraphService.mx.mxConstants.OUTLINE_HIGHLIGHT_COLOR] = '#FF0000';
+      vertexStyle[MxgraphService.mx.mxConstants.HIGHLIGHT_COLOR] = '#FF0000';
+      vertexStyle[MxgraphService.mx.mxConstants.VALID_COLOR] = '#FF0000';
+      vertexStyle[MxgraphService.mx.mxConstants.EDGE_SELECTION_COLOR] = '#FF0000';
+      vertexStyle[MxgraphService.mx.mxConstants.VERTEX_SELECTION_COLOR] = '#FF0000';
+      vertexStyle[MxgraphService.mx.mxConstants.HANDLE_FILLCOLOR] = '#FF0000';
+        vertexStyle[MxgraphService.mx.mxConstants.HIGHLIGHT_STROKEWIDTH] = 10;*/
 
 
         const edgeStyle = this.graph.stylesheet.getDefaultEdgeStyle();
