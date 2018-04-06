@@ -104,7 +104,7 @@ export class RecommenderComponent implements OnInit {
   }
 
   selectRecommendation(r: IClassRecommendation) {
-    console.log("Send request");
+    console.log('Send request');
     this.enableSpinnerProp();
     this.selectedRecommendation = r;
     this.isSelectedRecommendationVisible = true;
@@ -113,12 +113,13 @@ export class RecommenderComponent implements OnInit {
         this.propertyRecommendations = res;
         // console.log('Received Property Recommendation', res);
 
-
-      }, null
-      , ()=> {
-          console.log("request finished")
+      }, () => {
+          console.log('request failed');
+      }
+      , () => {
+          console.log('request finished');
           this.disableSpinnerProp();
-          if(this.propertyRecommendations == []) {
+          if (this.propertyRecommendations === []) {
             this.noPropertiesFound = false;
           }
         });
