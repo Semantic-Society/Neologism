@@ -1,30 +1,103 @@
 <mat-card class="editbox-card">
-  <mat-card>
-    <mat-card-header>
-      <mat-card-title>Class</mat-card-title>
-      <mat-card-subtitle>{{selectedClass.url}}</mat-card-subtitle>
-      <img mat-card-avatar  src="data:image/gif;base64,R0lGODlhOwBAAMQfAIWjzhpTo0h1tvH0+SpeqUh1tWeMwjlqr+Hp89Ld7cLR5rPG4RpSo8PS53aYyDhpr5Wv1FiBvO/z+KS62uDo8ileqWaMwXWXx7LF4KO62pSu1FeAu9Hc7P///wtHnf///yH5BAEAAB8ALAAAAAA7AEAAAAX/4CeOZGmeaJk4h+d6hLGkdG2rwssUxfMSjZtwKJq4GABKZ9mRZCouB3GaMno2EiYFwCtcCi4DdTxauCxMDvjFdgHI1EHAg9a2754EnAjwVLJMHXhtAntDcxmBHRSDbQiGNmYMihQ+jS9vkDR9G0sbl3iFmikRHgAdCqB4B6MpOacWqnitKK8dDLJtAbQnpWi5hLwmBH6CwC9iwmUvT8cuM8ofCHMuFRfOBNEfAy1slsAQ0QnEzm2syhPU5S8Bj7wIpetsBHo1AwsA+RBBKQMA6mwOAFjQwIGqCANqLMhxJ4ABdyNWAHQRAABEEQgMTERWAwHDajy+eTjgAEAEcncA/yREMQDljxoJqFXQAGiJBAC4QAm4iKLBnQk0Yrq4EEjBFx4AROoKJ6Tbi5UnWrpItEQBlFwH6gnp8+IcCq4aAmEAdgCqEJ8vREWdU0BRKlllx7DJdAKCCwWKxsrSOkUdXROlHrjNCSrZmI9/SxA7JUGpqsREEKdwgaGDhnKQh0hGcbeD48dwNp+4K2GdYSofI7gy9bYcT81pUxh80NqZ2iltUqDVa5pKgjZ8FXt4EEueALM27LKR0tPFGnkBoN1wCYOGQXltIrw2obxN5hEGsN95mKJ7SuQkwquqqKfBBI14ZKhwWgBABgUALOAKABTFAuptkGfCBE6xEUAE+VxHh7QSWiiAXxg0LGCASwI4sB0JDQDYBgN4LUGBfi9UYMlptECw0REcMMHbINK9U+ALlTFR2iUBoDcKN210oogqTCmD4wsMMnEZKNloM40LgnXAAQAYXCOLNiJcR5QEhOUC5QdonTLkMVdm2cFzwFw5gBvGOHPlB86VyeWVDM1o5pVWfOGMamJSc0GVqvBzZXd4XnIbm87UeOYIP8oSQHBnDvDRJfQMekI6lzhgo6NFRACQABCgFwIAOw==" /> 
+  <mat-card class="no-pad">
+    <mat-card-header class="pad-fix">
+      <mat-card-title>
+        <div class="label-name">
+          <p class="no-margin">
+            {{selectedClass.label}}
+          </p>
+        </div>
+      </mat-card-title>
+      <mat-card-subtitle class="uri-link">
+        <div class="uri-name">
+          <p class="">
+            <a class="uri-link" href="{{selectedClass.url}}" target="_blank">{{selectedClass.url}}</a>
+          </p>
+        </div>
+      </mat-card-subtitle>
+      <img mat-card-avatar  src="data:image/gif;base64,R0lGODlhOwBAAMQfAIWjzhpTo0h1tvH0+SpeqUh1tWeMwjlqr+Hp89Ld7cLR5rPG4RpSo8PS53aYyDhpr5Wv1FiBvO/z+KS62uDo8ileqWaMwXWXx7LF4KO62pSu1FeAu9Hc7P///wtHnf///yH5BAEAAB8ALAAAAAA7AEAAAAX/4CeOZGmeaJk4h+d6hLGkdG2rwssUxfMSjZtwKJq4GABKZ9mRZCouB3GaMno2EiYFwCtcCi4DdTxauCxMDvjFdgHI1EHAg9a2754EnAjwVLJMHXhtAntDcxmBHRSDbQiGNmYMihQ+jS9vkDR9G0sbl3iFmikRHgAdCqB4B6MpOacWqnitKK8dDLJtAbQnpWi5hLwmBH6CwC9iwmUvT8cuM8ofCHMuFRfOBNEfAy1slsAQ0QnEzm2syhPU5S8Bj7wIpetsBHo1AwsA+RBBKQMA6mwOAFjQwIGqCANqLMhxJ4ABdyNWAHQRAABEEQgMTERWAwHDajy+eTjgAEAEcncA/yREMQDljxoJqFXQAGiJBAC4QAm4iKLBnQk0Yrq4EEjBFx4AROoKJ6Tbi5UnWrpItEQBlFwH6gnp8+IcCq4aAmEAdgCqEJ8vREWdU0BRKlllx7DJdAKCCwWKxsrSOkUdXROlHrjNCSrZmI9/SxA7JUGpqsREEKdwgaGDhnKQh0hGcbeD48dwNp+4K2GdYSofI7gy9bYcT81pUxh80NqZ2iltUqDVa5pKgjZ8FXt4EEueALM27LKR0tPFGnkBoN1wCYOGQXltIrw2obxN5hEGsN95mKJ7SuQkwquqqKfBBI14ZKhwWgBABgUALOAKABTFAuptkGfCBE6xEUAE+VxHh7QSWiiAXxg0LGCASwI4sB0JDQDYBgN4LUGBfi9UYMlptECw0REcMMHbINK9U+ALlTFR2iUBoDcKN210oogqTCmD4wsMMnEZKNloM40LgnXAAQAYXCOLNiJcR5QEhOUC5QdonTLkMVdm2cFzwFw5gBvGOHPlB86VyeWVDM1o5pVWfOGMamJSc0GVqvBzZXd4XnIbm87UeOYIP8oSQHBnDvDRJfQMekI6lzhgo6NFRACQABCgFwIAOw==" />
     </mat-card-header>
-    
+
     <!-- <mat-card-title>Class</mat-card-title>
     <mat-card-content>{{selectedClass.url}}</mat-card-content> -->
-    <mat-card-title>{{selectedClass.label}}</mat-card-title>
     <mat-card-title>Properties</mat-card-title>
-    <mat-card-subtitle>Currently applied</mat-card-subtitle>
-    <mat-card-subtitle>Available</mat-card-subtitle>
+
     <mat-card-content style="height: 200px;overflow-y: auto">
       <mat-list>
-        <mat-list-item *ngFor="let rec of propertyRecommendations" style="padding:0;margin:0;">
+        <div>
+          <!-- Applied Properties -->
+          <mat-expansion-panel style="padding:0;margin:0;" [expanded]="true">
+            <mat-expansion-panel-header class="mat-expansion-panel-custom-header" [collapsedHeight]="'30px'" [expandedHeight]="'30px'">
+              <mat-panel-title class="mat-panel-custom-title">
+                Applied Properties
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <div *ngIf="propertyRecommendations.length > 0" class="properties-outer-wrapper">
+              <mat-expansion-panel *ngFor="let rec of propertyRecommendations" style="padding:0;margin:0;">
+                <mat-expansion-panel-header class="mat-expansion-panel-custom-header" *ngIf="rec.label" [collapsedHeight]="'30px'" [expandedHeight]="'30px'">
+                  <mat-panel-title class="mat-panel-custom-title">
+                    {{rec.label}}
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+                <!--div *ngIf="rec.label" ><p class="properties-label">Label:</p> <p class="properties-text">{{rec.label}}</p></div-->
+                <div class="properties-line" *ngIf="rec.uri">
+                  <p class="properties-label ">URI:</p>
+                  <a href="{{rec.uri}}" class="properties-text uri-link"> {{rec.uri}}</a>
+                </div>
+                <div class="properties-line" *ngIf="rec.range">
+                  <p class="properties-label">Range:</p>
+                  <a href="{{rec.range}}" class="properties-text uri-link"> {{rec.range}}</a>
+                </div>
+                <div class="properties-line" *ngIf="rec.comment">
+                  <p class="properties-label ">Comment:</p>
+                  <p class="properties-text"> {{rec.comment}}</div>
+              </mat-expansion-panel>
+            </div>
+            <mat-label *ngIf="propertyRecommendations.length == 0">No properties found (yet)</mat-label>
+          </mat-expansion-panel>
+          <!-- AVAILABLE PROPERTIES -->
+          <mat-expansion-panel style="padding:0;margin:0;" [expanded]="true">
+          <mat-expansion-panel-header class="mat-expansion-panel-custom-header" [collapsedHeight]="'30px'" [expandedHeight]="'30px'">
+            <mat-panel-title class="mat-panel-custom-title">
+              Available Properties
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <div *ngIf="propertyRecommendations.length > 0" class="properties-outer-wrapper">
+            <mat-expansion-panel *ngFor="let rec of propertyRecommendations" style="padding:0;margin:0;">
+              <mat-expansion-panel-header class="mat-expansion-panel-custom-header" *ngIf="rec.label" [collapsedHeight]="'30px'" [expandedHeight]="'30px'">
+                <mat-panel-title class="mat-panel-custom-title">
+                  {{rec.label}}
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <!--div *ngIf="rec.label" ><p class="properties-label">Label:</p> <p class="properties-text">{{rec.label}}</p></div-->
+              <div class="properties-line" *ngIf="rec.uri">
+                <p class="properties-label ">URI:</p>
+                <a href="{{rec.uri}}" class="properties-text uri-link"> {{rec.uri}}</a>
+              </div>
+              <div class="properties-line" *ngIf="rec.range">
+                <p class="properties-label">Range:</p>
+                <a href="{{rec.range}}" class="properties-text uri-link"> {{rec.range}}</a>
+              </div>
+              <div class="properties-line" *ngIf="rec.comment">
+                <p class="properties-label ">Comment:</p>
+                <p class="properties-text"> {{rec.comment}}</div>
+            </mat-expansion-panel>
+            <!-- <hr> -->
+          </div>
+          <mat-label *ngIf="propertyRecommendations.length == 0">No properties found (yet)</mat-label>
+          </mat-expansion-panel>
+        </div>
+        <!--mat-list-item *ngFor="let rec of propertyRecommendations" style="padding:0;margin:0;">
           <p matLine *ngIf="rec.label" matTooltip="{{rec.label}}">Label: {{rec.label}}</p>
           <p matLine *ngIf="rec.uri" matTooltip="{{rec.uri}}">URI: {{rec.uri}}</p>
           <p matLine *ngIf="rec.comment" matTooltip="{{rec.comment}}">Comment: {{rec.comment}}</p>
           <p matLine *ngIf="rec.range" matTooltip="{{rec.range}}">Range: {{rec.range}}</p>
           <button mat-raised-button class="btn-green" (click)=addToGraph(rec)>Add</button>
           <hr>
-        </mat-list-item>
+        </mat-list-item-->
       </mat-list>
     </mat-card-content>
-    <mat-card-footer>Trying a footer</mat-card-footer>
+    <mat-card-footer></mat-card-footer>
   </mat-card>
 
   <!-- <mat-accordion multi="true">
