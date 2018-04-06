@@ -7,6 +7,7 @@ type Predicates = Map<string, Set<string>>;
 export interface IUserObject { url: string; label: string; creator: string; }
 
 export class MxgraphService {
+
     private static mx: typeof m = require('mxgraph')({
         mxImageBasePath: 'mxgraph/images',
         mxBasePath: 'mxgraph',
@@ -133,7 +134,7 @@ export class MxgraphService {
                     });
                 this.codec.getPredicates()
                     .forEach((element) => {
-                        this.insertProperty(element.domain, element.uri, element.label, element.range);
+                        this.insertProperty(element.domain, element.uri, element.label, element.comment, element.range);
                     });
                 this.codec.getSubClassRelations()
                     .forEach((element) => {
@@ -216,10 +217,27 @@ export class MxgraphService {
         // return v;
     }
 
+    public getProperties(classIRI: string): Array<{
+        label: string; uri: string; range: string; comment: string;
+    }> {
+        const classCell = this.model.getCell(classIRI);
+        const properties: Array<{ label: string; uri: string; range: string; comment: string }> = [];
+
+        const count = classCell.getEdgeCount();
+        for (let i = 0; i < count; i++) {
+            const edge = classCell.getEdgeAt(i);
+            const edgeVal = edge.getValue();
+            const propDetails = { uri: edgeVal.uri, label: edgeVal.label, range: edge.getTerminal(false).getId(), comment: edgeVal.comment };
+            properties.push(propDetails);
+        }
+        return properties;
+    }
+
     public insertProperty(
         subject: string,
         predicate: string,
         predicateLabel: string,
+        predicateComment: string,
         object: string
     ) {
         const v1 = this.model.getCell(subject);
@@ -238,7 +256,8 @@ export class MxgraphService {
         // insert in the codec:
         this.codec.addRDFSProperty(predicate, subject, object);
         this.codec.addEnglishLabel(predicate, predicateLabel);
-        return this.graph.insertEdge(this.canvas, null, { uri: predicate, label: predicateLabel }, v1, v2);
+        this.codec.addEnglishComment(predicate, predicateComment);
+        return this.graph.insertEdge(this.canvas, null, { uri: predicate, label: predicateLabel, comment: predicateComment }, v1, v2);
     }
 
     public insertSubclassRelation(

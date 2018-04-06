@@ -71,7 +71,7 @@ mat-panel-title {
   top: 28px;
   left: -288px;
   height: 256px;
-  width: 256px;
+  width: 316px;
   background-color: #FFFFFF;
   box-shadow: 0 5px 5px -3px rgba(0,0,0,.2), 0 8px 10px 1px rgba(0,0,0,.14), 0 3px 14px 2px rgba(0,0,0,.12);
   z-index: 10;
@@ -133,7 +133,7 @@ mat-panel-title {
 .selected { background: lightgray !important}
 
 .properties-outer-wrapper{
-  max-height: 180px;
+  max-height: 240px;
   overflow-y: scroll;
   overflow-x: hidden;
   border-top: 2px solid #ededed;
@@ -176,4 +176,9 @@ mat-panel-title {
   padding-left: 0.2rem;
   font-weight: bold;
   margin-bottom: 0.1rem;
+}
+
+.mat-raised-button.btn-green {
+  background-color: #228b22;
+  color:#FFFFFF !important;
 }

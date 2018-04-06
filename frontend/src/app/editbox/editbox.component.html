@@ -22,7 +22,7 @@
     <mat-card-content>{{selectedClass.url}}</mat-card-content> -->
     <mat-card-title>Properties</mat-card-title>
 
-    <mat-card-content style="height: 200px;overflow-y: auto">
+    <mat-card-content style="height: 400px;overflow-y: auto">
       <mat-list>
         <div>
           <!-- Applied Properties -->
@@ -30,6 +30,36 @@
             <mat-expansion-panel-header class="mat-expansion-panel-custom-header" [collapsedHeight]="'30px'" [expandedHeight]="'30px'">
               <mat-panel-title class="mat-panel-custom-title">
                 Applied Properties
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <div *ngIf="alreadyThere.length > 0" class="properties-outer-wrapper">
+              <mat-expansion-panel *ngFor="let rec of alreadyThere" style="padding:0;margin:0;">
+                <mat-expansion-panel-header class="mat-expansion-panel-custom-header" *ngIf="rec.label" [collapsedHeight]="'30px'" [expandedHeight]="'30px'">
+                  <mat-panel-title class="mat-panel-custom-title">
+                    {{rec.label}}
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+                <!--div *ngIf="rec.label" ><p class="properties-label">Label:</p> <p class="properties-text">{{rec.label}}</p></div-->
+                <div class="properties-line" *ngIf="rec.uri">
+                  <p class="properties-label ">URI:</p>
+                  <a href="{{rec.uri}}" class="properties-text uri-link"> {{rec.uri}}</a>
+                </div>
+                <div class="properties-line" *ngIf="rec.range">
+                  <p class="properties-label">Range:</p>
+                  <a href="{{rec.range}}" class="properties-text uri-link"> {{rec.range}}</a>
+                </div>
+                <div class="properties-line" *ngIf="rec.comment">
+                  <p class="properties-label ">Comment:</p>
+                  <p class="properties-text"> {{rec.comment}}</div>
+              </mat-expansion-panel>
+            </div>
+            <mat-label *ngIf="alreadyThere.length == 0">No properties found (yet)</mat-label>
+          </mat-expansion-panel>
+          <!-- AVAILABLE PROPERTIES -->
+          <mat-expansion-panel style="padding:0;margin:0;" [expanded]="true">
+            <mat-expansion-panel-header class="mat-expansion-panel-custom-header" [collapsedHeight]="'30px'" [expandedHeight]="'30px'">
+              <mat-panel-title class="mat-panel-custom-title">
+                Available Properties
               </mat-panel-title>
             </mat-expansion-panel-header>
             <div *ngIf="propertyRecommendations.length > 0" class="properties-outer-wrapper">
@@ -50,41 +80,15 @@
                 </div>
                 <div class="properties-line" *ngIf="rec.comment">
                   <p class="properties-label ">Comment:</p>
-                  <p class="properties-text"> {{rec.comment}}</div>
+                  <p class="properties-text"> {{rec.comment}}</p>
+                </div>
+                <div class="properties-line">
+                    <button mat-raised-button class="btn-green" (click)=addToGraph(rec)>Add</button>
+                </div>
               </mat-expansion-panel>
+              <!-- <hr> -->
             </div>
             <mat-label *ngIf="propertyRecommendations.length == 0">No properties found (yet)</mat-label>
-          </mat-expansion-panel>
-          <!-- AVAILABLE PROPERTIES -->
-          <mat-expansion-panel style="padding:0;margin:0;" [expanded]="true">
-          <mat-expansion-panel-header class="mat-expansion-panel-custom-header" [collapsedHeight]="'30px'" [expandedHeight]="'30px'">
-            <mat-panel-title class="mat-panel-custom-title">
-              Available Properties
-            </mat-panel-title>
-          </mat-expansion-panel-header>
-          <div *ngIf="propertyRecommendations.length > 0" class="properties-outer-wrapper">
-            <mat-expansion-panel *ngFor="let rec of propertyRecommendations" style="padding:0;margin:0;">
-              <mat-expansion-panel-header class="mat-expansion-panel-custom-header" *ngIf="rec.label" [collapsedHeight]="'30px'" [expandedHeight]="'30px'">
-                <mat-panel-title class="mat-panel-custom-title">
-                  {{rec.label}}
-                </mat-panel-title>
-              </mat-expansion-panel-header>
-              <!--div *ngIf="rec.label" ><p class="properties-label">Label:</p> <p class="properties-text">{{rec.label}}</p></div-->
-              <div class="properties-line" *ngIf="rec.uri">
-                <p class="properties-label ">URI:</p>
-                <a href="{{rec.uri}}" class="properties-text uri-link"> {{rec.uri}}</a>
-              </div>
-              <div class="properties-line" *ngIf="rec.range">
-                <p class="properties-label">Range:</p>
-                <a href="{{rec.range}}" class="properties-text uri-link"> {{rec.range}}</a>
-              </div>
-              <div class="properties-line" *ngIf="rec.comment">
-                <p class="properties-label ">Comment:</p>
-                <p class="properties-text"> {{rec.comment}}</div>
-            </mat-expansion-panel>
-            <!-- <hr> -->
-          </div>
-          <mat-label *ngIf="propertyRecommendations.length == 0">No properties found (yet)</mat-label>
           </mat-expansion-panel>
         </div>
         <!--mat-list-item *ngFor="let rec of propertyRecommendations" style="padding:0;margin:0;">

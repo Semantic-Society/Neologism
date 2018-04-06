@@ -104,21 +104,28 @@ export class N3Codec {
         // if (!N3.Util.isLiteral(label))
         //    label = `"${label}"`;
         const literal = N3.Util.createLiteral(label, 'en');
-
         this.store.addTriple(entityIRI, 'http://www.w3.org/2000/01/rdf-schema#label', literal);
+    }
+
+    addEnglishComment(entityIRI: string, label: string) {
+        const literal = N3.Util.createLiteral(label, 'en');
+        this.store.addTriple(entityIRI, 'http://www.w3.org/2000/01/rdf-schema#comment', literal);
     }
 
     getPredicates() {
         return this.store.getTriples(null, 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', 'http://www.w3.org/2000/01/rdf-schema#Property')
             .map((triple) => {
                 const propertyURI = triple.subject;
-                const labels = this.store.getObjectsByIRI(propertyURI, 'http://www.w3.org/2000/01/rdf-schema#label'); // TODO Michael: Assuming string[] returned
+                const labels = this.store.getObjectsByIRI(propertyURI, 'http://www.w3.org/2000/01/rdf-schema#label');
                 const oneLabel = N3Codec.getEnlishLiteral(labels);
-                const domain = N3Codec.getOneandOnly(this.store.getObjectsByIRI(propertyURI, 'http://www.w3.org/2000/01/rdf-schema#domain')); // TODO Michael: Assuming string[] returned
-                const range = N3Codec.getOneandOnly(this.store.getObjectsByIRI(propertyURI, 'http://www.w3.org/2000/01/rdf-schema#range')); // TODO Michael: Assuming string[] returned
+                const comments = this.store.getObjectsByIRI(propertyURI, 'http://www.w3.org/2000/01/rdf-schema#comment');
+                const oneComment = N3Codec.getEnlishLiteral(comments);
+                const domain = N3Codec.getOneandOnly(this.store.getObjectsByIRI(propertyURI, 'http://www.w3.org/2000/01/rdf-schema#domain'));
+                const range = N3Codec.getOneandOnly(this.store.getObjectsByIRI(propertyURI, 'http://www.w3.org/2000/01/rdf-schema#range'));
                 return {
                     uri: propertyURI,
                     label: oneLabel || propertyURI,
+                    comment: oneComment || propertyURI,
                     domain,
                     range
                 };
