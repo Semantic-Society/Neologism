@@ -71,7 +71,15 @@
         </mat-expansion-panel>
         <!-- <hr> -->
       </div>
-      <mat-label *ngIf="propertyRecommendations.length == 0">No properties found (yet)</mat-label>
+      <div class="recommendation-tile-wrapper" *ngIf="showSpinnerProp;else no_result_prop">
+        <mat-spinner [diameter]="40"></mat-spinner>
+      </div>
+      <ng-template #no_result_prop>
+        <div class="recommendation-tile-wrapper">
+          <span class="no-recommandation-span">No properties found</span>
+        </div>
+      </ng-template>
+      <!--mat-label *ngIf="propertyRecommendations.length == 0">No propertiesds found (yet)</mat-label-->
     </mat-expansion-panel>
 
     <hr>
