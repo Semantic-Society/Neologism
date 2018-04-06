@@ -60,10 +60,9 @@ export class MxgraphService {
       vertexStyle[MxgraphService.mx.mxConstants.HANDLE_FILLCOLOR] = '#FF0000';
         vertexStyle[MxgraphService.mx.mxConstants.HIGHLIGHT_STROKEWIDTH] = 10;*/
 
-
         const edgeStyle = this.graph.stylesheet.getDefaultEdgeStyle();
-        edgeStyle[MxgraphService.mx.mxConstants.STYLE_FILLCOLOR] = "#FFFFFF";
-        edgeStyle[MxgraphService.mx.mxConstants.STYLE_LABEL_BACKGROUNDCOLOR] = "#FFFFFF";
+        edgeStyle[MxgraphService.mx.mxConstants.STYLE_FILLCOLOR] = '#FFFFFF';
+        edgeStyle[MxgraphService.mx.mxConstants.STYLE_LABEL_BACKGROUNDCOLOR] = '#FFFFFF';
 
         const keyHandler = new MxgraphService.mx.mxKeyHandler(this.graph);
         keyHandler.bindKey(8, (evt) => this.graph.isEnabled() ? this.graph.removeCells() : null);   // backspace key removes cell

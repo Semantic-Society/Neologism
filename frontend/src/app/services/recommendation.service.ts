@@ -56,8 +56,8 @@ interface IDetails {
 export class RecommendationService {
 
     /** Neologism recommendation service endpoint base path */
-    private static baseUrl = 'https://datalab.rwth-aachen.de/recommender/';
-    // private static baseUrl = 'http://localhost:8080/recommender/';
+    // private static baseUrl = 'https://datalab.rwth-aachen.de/recommender/';
+     private static baseUrl = 'http://localhost:8080/recommender/';
 
     private classReq: Subject<{ queryGraph: string, queryTerm: string }>;
     private classResp: Subject<Array<{
