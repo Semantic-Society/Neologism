@@ -55,27 +55,32 @@ export class N3Codec {
         return new Promise((resolve, reject) => writer.end((err, result) => err ? reject(err) : resolve(result))) as Promise<string>;
     }
 
-    load2store(rdf: string) {
-        this.store = N3.Store();
-
-        this.n3parser.parse(
-            rdf,
-            (e: Error, triple: N3.Triple, prefixes: N3.Prefixes) => {
-                if (e) throw e;
-
-                if (triple) {
-                    this.store.addTriple(triple.subject, triple.predicate, triple.object);
-                } else {
-                    // Parsing complete
-                    // this.prefixes = prefixes;
-                }
+    load2store(rdf: string): Promise<N3Codec> {
+        // this.store = N3.Store();
+        const finished = new Promise<N3Codec>(
+            () => {
+                this.n3parser.parse(
+                    rdf,
+                    (e: Error, triple: N3.Triple, prefixes: N3.Prefixes) => {
+                        if (e) throw e;
+                        if (triple) {
+                            this.store.addTriple(triple.subject, triple.predicate, triple.object);
+                        } else {
+                            // Parsing complete
+                            // this.prefixes = prefixes;
+                            return this;
+                        }
+                    }
+                );
             }
         );
+        return finished;
     }
 
-    loadUrl2store(url: string) {
+    loadUrl2store(url: string): Promise<N3Codec> {
         return this.getUrl(url)
-            .then(this.load2store.bind(this));
+            // .then(this.load2store.bind(this));
+            .then((outcome) => this.load2store(outcome));
     }
 
     addClass(classIRI: string) {
@@ -166,7 +171,7 @@ export class N3Codec {
     //     return this.store.addTriple(subject, predicate, object);
     // }
 
-    private getUrl(url: string) { // TODO: Not exactly foolproof
+    private getUrl(url: string): Promise<string> { // TODO: Not exactly foolproof
         url = encodeURI(url);
         const conversionService = `http://rdf-translator.appspot.com/convert/detect/n3/${url}`;
         const toGet = this.absuluteURI.test(url) ? conversionService : url;

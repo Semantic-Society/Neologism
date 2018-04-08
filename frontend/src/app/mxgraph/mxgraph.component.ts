@@ -4,7 +4,7 @@ import 'rxjs/add/operator/take';
 import { mxgraph as m } from 'mxgraph';
 import { Observable } from 'rxjs/Observable';
 import { IUserObject, MxgraphService } from './mxgraph';
-import { N3Codec } from './N3Codec';
+// import { N3Codec } from './N3Codec';
 
 enum SideBarState {
     Default,
@@ -33,7 +33,7 @@ export class MxgraphComponent implements OnInit, OnDestroy {
         this.mx = new MxgraphService(
             this.mxGraphView.nativeElement,
             // document.getElementById('mx-toolbar'),
-            'assets/dcat.ttl'
+            // 'assets/dcat.ttl'
         );
 
         this.mx.addSelectionListener((userobjects: IUserObject[]) => {
@@ -55,6 +55,12 @@ export class MxgraphComponent implements OnInit, OnDestroy {
 
     showRecommender() {
         this.editMode = SideBarState.Recommend;
+    }
+
+    protected loadVocabulary() {
+        this.mx.destroy();
+        this.ngOnInit();
+        this.mx.loadRDFSFromURL('assets/dcat.ttl');
     }
 
     ngOnDestroy() {

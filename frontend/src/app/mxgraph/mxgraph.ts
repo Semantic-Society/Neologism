@@ -17,7 +17,7 @@ export class MxgraphService {
     graph: m.mxGraph;
     private model: m.mxGraphModel;
     private canvas: m.mxCell;
-    private toolbar: m.mxToolbar;
+    //    private toolbar: m.mxToolbar; //this field was only refered from the onDestroy method.
     public codec: N3Codec;
 
     private predicateSet = new Set(['http://www.w3.org/2000/01/rdf-schema#subClassOf']);
@@ -25,7 +25,7 @@ export class MxgraphService {
     constructor(
         private container: HTMLDivElement,
         // private toolbarContainer: HTMLElement,
-        private url: string
+        // private url: string -> moved to own method loadRDFSFromURL
     ) {
         if (!MxgraphService.mx.mxClient.isBrowserSupported()) MxgraphService.mx.mxUtils.error('Browser is not supported!', 200, false);
 
@@ -125,18 +125,21 @@ export class MxgraphService {
         // this.addToolbarVertex('assets/class_mockup.gif', 80, 30, 'shape=rounded');
 
         this.codec = new N3Codec();
+    }
+
+    public loadRDFSFromURL(url: string) {
         const importingCodec = new N3Codec();
-        importingCodec.loadUrl2store(this.url)
-            .then(() => {
-                this.codec.getClasses()
+        importingCodec.loadUrl2store(url)
+            .then((filledCodec) => {
+                filledCodec.getClasses()
                     .forEach((element) => {
                         this.insertClass(element.uri, element.label);
                     });
-                this.codec.getPredicates()
+                filledCodec.getPredicates()
                     .forEach((element) => {
                         this.insertProperty(element.domain, element.uri, element.label, element.comment, element.range);
                     });
-                this.codec.getSubClassRelations()
+                filledCodec.getSubClassRelations()
                     .forEach((element) => {
                         this.insertSubclassRelation(element.domain, element.range);
                     });
@@ -295,7 +298,7 @@ export class MxgraphService {
 
     destroy() {
         this.graph.destroy();
-        this.toolbar.destroy();
+        // this.toolbar.destroy();
     }
 
     selectClass(iri: string) {

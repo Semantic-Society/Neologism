@@ -16,7 +16,6 @@ import 'rxjs/add/operator/switchMap';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
-import { N3Codec } from '../mxgraph/N3Codec';
 
 type IRI = string;
 

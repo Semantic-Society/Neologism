@@ -1,16 +1,24 @@
 <mat-drawer-container autosize>
-    <mat-drawer [ngSwitch]="editMode" #navEnd class="mat-drawer nav-right" mode="side" position="end" [opened]="true" class="no-pad" disableClose>
+    <mat-drawer [ngSwitch]="editMode" #navEnd class="mat-drawer nav-right" mode="side" position="end" [opened]="true" class="no-pad"
+        disableClose>
         <app-metadata></app-metadata>
         <div class="toolbar-container">
             <app-editbox *ngSwitchCase="sideBarState.Edit" [selectedClass]="currentSelection" [mx]="mx"></app-editbox>
             <app-recommender *ngSwitchCase="sideBarState.Recommend" [mx]="mx"></app-recommender>
         </div>
-        <button *ngSwitchCase="sideBarState.Default" mat-button (click)="showRecommender()">Add new class</button>
+        <div *ngSwitchCase="sideBarState.Default">
+            <p>
+                <button mat-button (click)="showRecommender()">Add new class</button>
+            </p>
+            <p>
+                <button mat-button (click)="loadVocabulary()">Load vocabulary</button>
+            </p>
+        </div>
     </mat-drawer>
     <mat-drawer-content>
         <mat-tab-group headerPosition="below">
             <mat-tab label="View &amp; Edit">
-                    <div class="mxgraph-container" #view></div>
+                <div class="mxgraph-container" #view></div>
             </mat-tab>
             <mat-tab label="List">
                 <app-standardview [vocab]="mx.codec"></app-standardview>
