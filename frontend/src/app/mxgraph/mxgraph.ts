@@ -129,8 +129,8 @@ export class MxgraphService {
 
     public loadRDFSFromURL(url: string) {
         const importingCodec = new N3Codec();
-        importingCodec.loadUrl2store(url)
-            .then((filledCodec) => {
+        importingCodec.loadUrl2store(url,
+            (filledCodec) => {
                 filledCodec.getClasses()
                     .forEach((element) => {
                         this.insertClass(element.uri, element.label);
