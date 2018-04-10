@@ -7,12 +7,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MetadataComponent implements OnInit {
 
-  vocabularyName = 'Vocabulary Name';
-  vocabularyHref = '#';
-  vocabularyLinkText = 'Persistent link to the vocabulary';
-  versionString = 'Version: 0.0';
+  vocabularyName = 'My test vocabulary';
+  vocabularyHref = '#Persistent link to the vocabulary';
+  vocabularyLinkText = '';
+  versionString = 'Version: 0.2';
 
-  authors: string[] = ['Author 1', 'Author 2', 'Author 3', 'Author 4', 'Author 5', 'Author 6', 'Author 7',];
+  public collapsed = true;
+
+  authors: string[] = ['Michael Cochez', 'Iraklis Dimitriadis'];
 
   constructor() { }
 
