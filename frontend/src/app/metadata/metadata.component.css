@@ -19,6 +19,10 @@ hr {
   padding: 0 0.5em 0 0.5em ;
 }
 
+.neologism-sidebar-header{
+  color: rgb(103, 174, 255);
+}
+
 .vocabulary-link{
   display:flex;
   justify-content:center;
