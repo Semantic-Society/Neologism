@@ -49,7 +49,7 @@ export class RecommenderComponent implements OnInit {
   @Input() mx: MxgraphService;
   @ViewChild('labelInput') labelInput: ElementRef;
 
-  protected showSpinner = false;
+  public showSpinner = false;
   protected showSpinnerProp = false;
   protected noPropertiesFound = false;
   recommendations: IClassRecommendation[] = [];

@@ -12,8 +12,8 @@ import { RecommendationService } from '../services/recommendation.service';
   styleUrls: ['./editbox.component.css'],
 })
 export class EditboxComponent implements OnChanges {
-  protected alreadyThere: Array<{ comment: string; label: string; uri: string; range: string; }> = [];
-  protected propertyRecommendations: Array<{ comment: string; label: string; uri: string; range: string; creator: string; }> = [];
+  public alreadyThere: Array<{ comment: string; label: string; uri: string; range: string; }> = [];
+  public propertyRecommendations: Array<{ comment: string; label: string; uri: string; range: string; creator: string; }> = [];
   @Input() selectedClass: IUserObject;
   @Input() mx: MxgraphService;
 
