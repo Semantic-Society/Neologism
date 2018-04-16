@@ -24,7 +24,6 @@ import {
 
 // App Services
 import { RecommendationService } from './services/recommendation.service';
-import { StateService } from './services/state.service';
 
 // App Components
 import { AppComponent } from './app.component';
@@ -65,7 +64,6 @@ import { RecommenderComponent } from './recommender/recommender.component';
   ],
   providers: [
     RecommendationService,
-    StateService,
   ],
   bootstrap: [AppComponent],
 })
