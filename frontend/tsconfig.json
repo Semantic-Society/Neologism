@@ -1,14 +1,19 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "baseUrl": ".",
     "declaration": false,
     "downlevelIteration": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "importHelpers": true,
+    "module": "commonjs",
     "moduleResolution": "node",
+    "noImplicitAny": false,
     "outDir": "./dist/out-tsc",
+    "skipLibCheck": true,
     "sourceMap": true,
+    "stripInternal": true,
     "target": "es5",
     "typeRoots": [
       "node_modules/@types",
@@ -22,7 +27,13 @@
     ]
   },
   "include": [
-    "src/**/*", 
-    "typings/**/*"
+    "src/**/*.ts",
+    "typings/**/*",
+    "api/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "api/node_modules",
+    "api"
   ]
 }
