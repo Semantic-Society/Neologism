@@ -4,8 +4,9 @@
   </form>
   <div class="recommender-outer-wrapper">
     <mat-grid-list cols="1" rowHeight="4:1" class="recommender-inner-wrapper">
-      <mat-grid-tile class="recommendation-tile-wrapper recommendation-result" *ngFor="let recommendation of recommendations" (click)="selectRecommendation(recommendation)"
-        [class.selected]="recommendation === selectedRecommendation">
+      <mat-grid-tile class="recommendation-tile-wrapper recommendation-result"
+                     *ngFor="let recommendation of recommendations" (click)="selectRecommendation(recommendation)"
+                     [class.selected]="recommendation === selectedRecommendation">
         <div class="label-name">
           <p class="no-margin">
             {{recommendation?.label}}
@@ -30,19 +31,21 @@
   </div>
   <div *ngIf="this.isSelectedRecommendationVisible">
     <mat-expansion-panel>
-      <mat-expansion-panel-header class="mat-expansion-panel-custom-header" [collapsedHeight]="'30px'" [expandedHeight]="'30px'">
+      <mat-expansion-panel-header class="mat-expansion-panel-custom-header" [collapsedHeight]="'30px'"
+                                  [expandedHeight]="'30px'">
         <mat-panel-title class="mat-panel-custom-title">
           Description
         </mat-panel-title>
       </mat-expansion-panel-header>
       <!-- <textarea class="description-textarea" disabled=true>{{selectedRecommendation?.comment}}</textarea> -->
-      <p>{{selectedRecommendation?.comment}}</p>
+      <truncated-text [text]="selectedRecommendation?.comment" limit="20"></truncated-text>
     </mat-expansion-panel>
     <!-- <p class="recommender-description-title">
       Properties
     </p> -->
     <mat-expansion-panel style="padding:0;margin:0;">
-      <mat-expansion-panel-header class="mat-expansion-panel-custom-header" [collapsedHeight]="'30px'" [expandedHeight]="'30px'">
+      <mat-expansion-panel-header class="mat-expansion-panel-custom-header" [collapsedHeight]="'30px'"
+                                  [expandedHeight]="'30px'">
         <mat-panel-title class="mat-panel-custom-title">
           Properties
         </mat-panel-title>
@@ -51,7 +54,8 @@
       <div *ngIf="propertyRecommendations.length > 0" class="properties-outer-wrapper">
 
         <mat-expansion-panel *ngFor="let rec of propertyRecommendations" style="padding:0;margin:0;">
-          <mat-expansion-panel-header class="mat-expansion-panel-custom-header" *ngIf="rec.label" [collapsedHeight]="'30px'" [expandedHeight]="'30px'">
+          <mat-expansion-panel-header class="mat-expansion-panel-custom-header" *ngIf="rec.label"
+                                      [collapsedHeight]="'30px'" [expandedHeight]="'30px'">
             <mat-panel-title class="mat-panel-custom-title">
               {{rec.label}}
             </mat-panel-title>
@@ -85,7 +89,9 @@
     <hr>
     <mat-grid-list cols="2" rowHeight="3:1">
       <mat-grid-tile class="button-tile">
-        <button mat-raised-button class="btn-green" (click)=addToGraph() [disabled]="!isSelectedRecommendationVisible">Add</button>
+        <button mat-raised-button class="btn-green" (click)=addToGraph() [disabled]="!isSelectedRecommendationVisible">
+          Add
+        </button>
       </mat-grid-tile>
     </mat-grid-list>
   </div>

@@ -1,7 +1,9 @@
+///<reference path="../../../node_modules/@angular/core/src/metadata/directives.d.ts"/>
 import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import 'rxjs/add/operator/map';
 import {MxgraphService} from '../mxgraph/mxgraph';
 import {RecommendationService} from '../services/recommendation.service';
+
 
 interface IClassRecommendation {
   uri: string;

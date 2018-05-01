@@ -33,6 +33,10 @@ import { MxgraphComponent } from './mxgraph/mxgraph.component';
 import { StandardViewComponent } from './mxgraph/standardView/standardView.component';
 import { RecommenderComponent } from './recommender/recommender.component';
 
+// Pipes
+import { TruncateModule } from '@yellowspot/ng-truncate';
+import { TruncatedTextComponentComponent } from './truncated-text-component/truncated-text-component.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -41,6 +45,7 @@ import { RecommenderComponent } from './recommender/recommender.component';
     MetadataComponent,
     RecommenderComponent,
     StandardViewComponent,
+    TruncatedTextComponentComponent
   ],
   imports: [
     BrowserModule,
@@ -61,6 +66,7 @@ import { RecommenderComponent } from './recommender/recommender.component';
     MatProgressSpinnerModule,
     MatTabsModule,
     MatTooltipModule,
+    TruncateModule
   ],
   providers: [
     RecommendationService,
