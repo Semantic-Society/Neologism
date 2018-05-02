@@ -1,26 +1,38 @@
 <mat-drawer-container autosize>
-    <mat-drawer [ngSwitch]="editMode" #navEnd class="mat-drawer nav-right" mode="side" position="end" [opened]="true" class="no-pad" disableClose>
-        <app-metadata></app-metadata>
-        <div class="toolbar-container">
-            <app-editbox *ngSwitchCase="sideBarState.Edit" [selectedClass]="currentSelection" [mx]="mx"></app-editbox>
-            <app-recommender *ngSwitchCase="sideBarState.Recommend" [mx]="mx"></app-recommender>
-        </div>
-        <button *ngSwitchCase="sideBarState.Default" mat-button (click)="showRecommender()">Add new class</button>
-    </mat-drawer>
-    <mat-drawer-content>
-        <mat-tab-group headerPosition="below">
-            <mat-tab label="View &amp; Edit">
-                    <div class="mxgraph-container" #view></div>
-            </mat-tab>
-            <mat-tab label="List">
-                <app-standardview [vocab]="mx.codec"></app-standardview>
-            </mat-tab>
-        </mat-tab-group>
-        <!-- <button type="button" mat-button (click)="navStart.toggle()">
-            Toggle left nav
+  <mat-drawer [ngSwitch]="editMode" #navEnd class="mat-drawer nav-right" mode="side" position="end" [opened]="true"
+              class="no-pad" disableClose>
+    <app-metadata></app-metadata>
+    <div class="toolbar-container">
+      <app-editbox *ngSwitchCase="sideBarState.Edit" [selectedClass]="currentSelection" [mx]="mx"></app-editbox>
+      <app-recommender *ngSwitchCase="sideBarState.Recommend" [mx]="mx"></app-recommender>
+    </div>
+    <div class="button-div">
+      <div class="pad-1">
+        <button *ngSwitchCase="sideBarState.Default" mat-button (click)="showRecommender()" >Search new
+          class
         </button>
-        <button type="button" mat-button (click)="navEnd.toggle()">
-          Toggle right nav
-        </button> -->
-    </mat-drawer-content>
+      </div>
+      <div class="pad-1">
+        <button *ngSwitchCase="sideBarState.Default" mat-button (click)="showRecommender()" >Add new
+          class
+        </button>
+      </div>
+    </div>
+  </mat-drawer>
+  <mat-drawer-content>
+    <mat-tab-group headerPosition="below">
+      <mat-tab label="View &amp; Edit">
+        <div class="mxgraph-container" #view></div>
+      </mat-tab>
+      <mat-tab label="List">
+        <app-standardview [vocab]="mx.codec"></app-standardview>
+      </mat-tab>
+    </mat-tab-group>
+    <!-- <button type="button" mat-button (click)="navStart.toggle()">
+        Toggle left nav
+    </button>
+    <button type="button" mat-button (click)="navEnd.toggle()">
+      Toggle right nav
+    </button> -->
+  </mat-drawer-content>
 </mat-drawer-container>
