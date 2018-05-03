@@ -1,7 +1,8 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "project": {
-    "name": "frontend"
+    "name": "frontend",
+    "ejected": true
   },
   "apps": [
     {
@@ -10,7 +11,12 @@
       "assets": [
         "assets",
         "favicon.ico",
-        { "glob": "**/*", "input": "../node_modules/mxgraph/javascript/src", "output": "./mxgraph/" }
+        {
+  "glob": "**/*",
+  "input": "/home/g/neologism2/frontend/node_modules/mxgraph/javascript/src",
+  "output": "./mxgraph/",
+  "allowOutsideOutDir": false
+}
       ],
       "index": "index.html",
       "main": "main.ts",
@@ -56,6 +62,7 @@
   },
   "defaults": {
     "styleExt": "css",
-    "component": {}
+    "component": {
+    }
   }
 }
