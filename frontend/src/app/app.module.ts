@@ -19,6 +19,7 @@ import {
   MatProgressSpinnerModule,
   MatSidenavModule,
   MatTabsModule,
+  MatToolbarModule,
   MatTooltipModule,
 } from '@angular/material';
 
@@ -32,6 +33,7 @@ import { MetadataComponent } from './metadata/metadata.component';
 import { MxgraphComponent } from './mxgraph/mxgraph.component';
 import { StandardViewComponent } from './mxgraph/standardView/standardView.component';
 import { RecommenderComponent } from './recommender/recommender.component';
+import { VocablistComponent } from './vocablist/vocablist.component';
 
 // Pipes
 import { TruncateModule } from '@yellowspot/ng-truncate';
@@ -45,8 +47,9 @@ import { TruncatedTextComponentComponent } from './truncated-text-component/trun
     MetadataComponent,
     RecommenderComponent,
     StandardViewComponent,
-    TruncatedTextComponentComponent
-  ],
+    TruncatedTextComponentComponent,
+    VocablistComponent
+],
   imports: [
     BrowserModule,
     FormsModule,
@@ -65,6 +68,7 @@ import { TruncatedTextComponentComponent } from './truncated-text-component/trun
     MatAutocompleteModule,
     MatProgressSpinnerModule,
     MatTabsModule,
+    MatToolbarModule,
     MatTooltipModule,
     TruncateModule
   ],

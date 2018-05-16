@@ -1,1 +1,5 @@
-<app-mxgraph></app-mxgraph>
+<mat-toolbar>
+    <span>Browse Vocabs</span>
+</mat-toolbar>
+<app-mxgraph *ngIf="state === 'graphView'"></app-mxgraph>
+<app-vocablist *ngIf="state === 'vocabList'"></app-vocablist>
