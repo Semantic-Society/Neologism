@@ -1,10 +1,18 @@
 # Frontend
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.6.1.
+## Installation
+
+1. Clone the repository
+2. Install meteor using `curl https://install.meteor.com/ | sh`
+3. Run npm install in the `frontend` folder
+4. Run the meteor bundler (see below)
 
 ## Development server
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+Initially & every time you make a change to the server code (which affects the client side code), rebundle the meteor client side code by running `npm run meteor-client:bundle`.
+
+Run `npm run api` to start a local meteor server running on ???`http://localhost:4200/`??? with a connection to a local mongodb at port 3001.
+Run `npm run start` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
 ## Code scaffolding
 
