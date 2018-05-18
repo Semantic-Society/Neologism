@@ -49,3 +49,6 @@ crashlytics-build.properties
 fabric.properties
 
 .idea/
+
+chromiumprofile
+.vscode
