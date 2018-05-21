@@ -3,3 +3,26 @@
 </mat-list>
 <button  mat-button (click)="addRandom()">Add random name</button>
 
+
+<div>
+  <mat-table [dataSource]="vocab">
+    <ng-container matColumnDef="name">
+      <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
+      <mat-cell *matCellDef="let vocab"> {{vocab.name}} </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="authors">
+      <mat-header-cell *matHeaderCellDef> Authors </mat-header-cell>
+      <mat-cell *matCellDef="let vocab"> {{vocab.authors}} </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="description">
+      <mat-header-cell *matHeaderCellDef> Phone </mat-header-cell>
+      <mat-cell *matCellDef="let vocab"> {{vocab.description}} </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="uriPrefix">
+      <mat-header-cell *matHeaderCellDef> URI </mat-header-cell>
+      <mat-cell *matCellDef="let vocab"> {{vocab.uriPrefix}} </mat-cell>
+    </ng-container>
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  </mat-table>
+</div>

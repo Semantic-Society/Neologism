@@ -13,6 +13,7 @@ export class VocablistComponent implements OnInit {
 
   constructor() { }
   vocab; // : ObservableCursor<Ivocabulary>;
+  displayedColumns = ['name', 'authors', 'description', 'uriPrefix'];
 
   ngOnInit() {
     this.vocab = Vocabularies.find({}).pipe(zoneOperator()).map((x) => { console.log(x); return x; });

@@ -17,7 +17,7 @@ import {
   MatInputModule,
   MatListModule,
   MatProgressSpinnerModule,
-  MatSidenavModule,
+  MatSidenavModule, MatTableModule,
   MatTabsModule,
   MatToolbarModule,
   MatTooltipModule,
@@ -70,7 +70,8 @@ import { TruncatedTextComponentComponent } from './truncated-text-component/trun
     MatTabsModule,
     MatToolbarModule,
     MatTooltipModule,
-    TruncateModule
+    TruncateModule,
+    MatTableModule
   ],
   providers: [
     RecommendationService,
