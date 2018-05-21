@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ObservableCursor, zoneOperator } from 'meteor-rxjs';
 import { Vocabularies } from '../../../api/collections';
 import { Ivocabulary } from '../../../api/models';
+import {DataSource} from '@angular/cdk/collections';
+import { Observable } from 'rxjs/Observable';
 import {Meteor} from 'meteor/meteor';
 
 @Component({
@@ -13,6 +15,7 @@ export class VocablistComponent implements OnInit {
 
   constructor() { }
   vocab; // : ObservableCursor<Ivocabulary>;
+  dataSource = new VocabularyDataSource();
   displayedColumns = ['name', 'authors', 'description', 'uriPrefix'];
 
   ngOnInit() {
@@ -39,4 +42,14 @@ export class VocablistComponent implements OnInit {
     return s;
   }
 
+}
+
+export class VocabularyDataSource extends DataSource<any> {
+  constructor() {
+    super();
+  }
+  connect(): Observable<Ivocabulary[]> {
+    return Vocabularies.find({}).pipe(zoneOperator()).map((x) => { console.log(x); return x; }) as Observable<Ivocabulary[]>;
+  }
+  disconnect() {}
 }
