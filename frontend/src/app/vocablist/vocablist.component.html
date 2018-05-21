@@ -1,4 +1,5 @@
 <mat-list>
-  <mat-list-item *ngFor='let v of vocab | async'> {{v.name}} </mat-list-item>
+  <mat-list-item *ngFor='let v of vocab | async'> {{v.name}} || {{v.authors}} || {{v.description}} || {{v.uriPrefix}}</mat-list-item>
 </mat-list>
 <button  mat-button (click)="addRandom()">Add random name</button>
+

@@ -20,7 +20,14 @@ export class VocablistComponent implements OnInit {
   }
 
   addRandom() {
-    Meteor.call('vocabulary.create', {name:this.randomStr(10)});
+    Meteor.call('vocabulary.create',
+      {
+        name:this.randomStr(10),
+        authors: [this.randomStr(6),this.randomStr(6)],
+        description: this.randomStr(100),
+        uriPrefix: this.randomStr(14)
+      }
+        );
   }
 
   randomStr(m) {
