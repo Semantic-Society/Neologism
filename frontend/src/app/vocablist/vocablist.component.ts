@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ObservableCursor, zoneOperator } from 'meteor-rxjs';
 import { Vocabularies } from '../../../api/collections';
 import { Ivocabulary } from '../../../api/models';
+import {Meteor} from 'meteor/meteor';
 
 @Component({
   selector: 'app-vocablist',
@@ -19,9 +20,7 @@ export class VocablistComponent implements OnInit {
   }
 
   addRandom() {
-    Vocabularies.insert({
-      name: this.randomStr(10)
-    });
+    Meteor.call('vocabulary.create', {name:this.randomStr(10)});
   }
 
   randomStr(m) {
