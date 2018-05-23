@@ -1,10 +1,10 @@
+import { DataSource } from '@angular/cdk/collections';
 import { Component, OnInit } from '@angular/core';
-import { ObservableCursor, zoneOperator } from 'meteor-rxjs';
+import { MeteorObservable, ObservableCursor, zoneOperator } from 'meteor-rxjs';
+import { Observable } from 'rxjs/Observable';
+
 import { Vocabularies } from '../../../api/collections';
 import { Ivocabulary } from '../../../api/models';
-import {DataSource} from '@angular/cdk/collections';
-import { Observable } from 'rxjs/Observable';
-import {Meteor} from 'meteor/meteor';
 
 @Component({
   selector: 'app-vocablist',
@@ -14,24 +14,36 @@ import {Meteor} from 'meteor/meteor';
 export class VocablistComponent implements OnInit {
 
   constructor() { }
-  vocab; // : ObservableCursor<Ivocabulary>;
   dataSource = new VocabularyDataSource();
-  displayedColumns = ['name', 'authors', 'description', 'uriPrefix'];
+  displayedColumns = ['name', 'authors', 'description', 'uriPrefix', 'actions'];
 
   ngOnInit() {
-    this.vocab = Vocabularies.find({}).pipe(zoneOperator()).map((x) => { console.log(x); return x; });
-    console.log('WTF');
   }
 
   addRandom() {
-    Meteor.call('vocabulary.create',
+    MeteorObservable.call('vocabulary.create',
       {
-        name:this.randomStr(10),
-        authors: [this.randomStr(6),this.randomStr(6)],
+        name: this.randomStr(10),
+        authors: [this.randomStr(6), this.randomStr(6)],
         description: this.randomStr(100),
         uriPrefix: this.randomStr(14)
       }
-        );
+    ).pipe(zoneOperator())
+      .subscribe((response) => {
+        // Handle success and response from server!
+      }, (err) => {
+        // Handle error
+      });
+  }
+
+  deleteVocab(id) {
+    MeteorObservable.call('vocabulary.remove', id)
+      .pipe(zoneOperator())
+      .subscribe((response) => {
+        // Handle success and response from server!
+      }, (err) => {
+        // Handle error
+      });
   }
 
   randomStr(m) {
@@ -44,6 +56,7 @@ export class VocablistComponent implements OnInit {
 
 }
 
+// tslint:disable-next-line:max-classes-per-file
 export class VocabularyDataSource extends DataSource<any> {
   constructor() {
     super();
@@ -51,5 +64,5 @@ export class VocabularyDataSource extends DataSource<any> {
   connect(): Observable<Ivocabulary[]> {
     return Vocabularies.find({}).pipe(zoneOperator()).map((x) => { console.log(x); return x; }) as Observable<Ivocabulary[]>;
   }
-  disconnect() {}
+  disconnect() { }
 }

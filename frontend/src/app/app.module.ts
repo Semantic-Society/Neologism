@@ -21,6 +21,7 @@ import {
   MatTabsModule,
   MatToolbarModule,
   MatTooltipModule,
+  MatIconModule,
 } from '@angular/material';
 
 // App Services
@@ -62,6 +63,7 @@ import { TruncatedTextComponentComponent } from './truncated-text-component/trun
     MatListModule,
     MatCardModule,
     MatFormFieldModule,
+    MatIconModule,
     MatInputModule,
     MatSidenavModule,
     MatGridListModule,
