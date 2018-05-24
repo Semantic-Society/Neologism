@@ -1,5 +1,4 @@
 <mat-toolbar>
-    <span>Browse Vocabs</span>
+    <a routerLink="/vocabularies">Browse Vocabs</a>
 </mat-toolbar>
-<app-mxgraph *ngIf="state === 'graphView'"></app-mxgraph>
-<app-vocablist *ngIf="state === 'vocabList'"></app-vocablist>
+<router-outlet></router-outlet>

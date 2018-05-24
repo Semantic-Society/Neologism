@@ -25,7 +25,7 @@ export class MxgraphService {
     constructor(
         private container: HTMLDivElement,
         // private toolbarContainer: HTMLElement,
-        private url: string
+        private vocabID: string
     ) {
         if (!MxgraphService.mx.mxClient.isBrowserSupported()) MxgraphService.mx.mxUtils.error('Browser is not supported!', 200, false);
 
@@ -104,8 +104,8 @@ export class MxgraphService {
 
         // Create layout algorithm to be used with the graph
         // const hierarchical = new MxgraphService.mx.mxHierarchicalLayout(this.graph, MxgraphService.mx.mxConstants.DIRECTION_SOUTH, true);
-        const organic = new MxgraphService.mx.mxFastOrganicLayout(this.graph);
-        organic.forceConstant = 120;
+        // const organic = new MxgraphService.mx.mxFastOrganicLayout(this.graph);
+        // organic.forceConstant = 120;
 
         // Initialize a lookup map from subject IRI to the corresponding mxGraph cell and set up automatic syncronization
         this.graph.addListener(MxgraphService.mx.mxEvent.CELLS_ADDED, (sender: m.mxEventSource, evt: m.mxEventObject) => {
@@ -126,22 +126,22 @@ export class MxgraphService {
 
         this.codec = new N3Codec();
         const importingCodec = new N3Codec();
-        importingCodec.loadUrl2store(this.url)
-            .then(() => {
-                this.codec.getClasses()
-                    .forEach((element) => {
-                        this.insertClass(element.uri, element.label);
-                    });
-                this.codec.getPredicates()
-                    .forEach((element) => {
-                        this.insertProperty(element.domain, element.uri, element.label, element.comment, element.range);
-                    });
-                this.codec.getSubClassRelations()
-                    .forEach((element) => {
-                        this.insertSubclassRelation(element.domain, element.range);
-                    });
-                this.zoomToFit();
-            });
+        // importingCodec.loadUrl2store(this.url)
+        //     .then(() => {
+        //         this.codec.getClasses()
+        //             .forEach((element) => {
+        //                 this.insertClass(element.uri, element.label);
+        //             });
+        //         this.codec.getPredicates()
+        //             .forEach((element) => {
+        //                 this.insertProperty(element.domain, element.uri, element.label, element.comment, element.range);
+        //             });
+        //         this.codec.getSubClassRelations()
+        //             .forEach((element) => {
+        //                 this.insertSubclassRelation(element.domain, element.range);
+        //             });
+        //         this.zoomToFit();
+        //     });
     }
 
     // private addToolbarItem(prototype: m.mxCell, image: string) {
@@ -295,7 +295,7 @@ export class MxgraphService {
 
     destroy() {
         this.graph.destroy();
-        this.toolbar.destroy();
+        // this.toolbar.destroy();
     }
 
     selectClass(iri: string) {

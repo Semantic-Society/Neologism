@@ -6,7 +6,5 @@ import { Component, EventEmitter, Output } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  state: 'vocabList' | 'graphView' = 'vocabList';
   constructor() { }
-
 }

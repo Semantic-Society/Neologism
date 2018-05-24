@@ -1,45 +1,45 @@
 <!--<mat-list>
   <mat-list-item *ngFor='let v of vocab | async'> {{v.name}} || {{v.authors}} || {{v.description}} || {{v.uriPrefix}}</mat-list-item>
 </mat-list>-->
-<button  mat-button (click)="addRandom()">Add random name</button>
+<button mat-button (click)="addRandom()">Add random name</button>
 
 
 <div>
   <mat-table [dataSource]="dataSource">
-    <ng-container matColumnDef="name">
-      <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
-      <mat-cell *matCellDef="let dataSource"> {{dataSource.name}} </mat-cell>
-    </ng-container>
-    <ng-container matColumnDef="authors">
-      <mat-header-cell *matHeaderCellDef> Authors </mat-header-cell>
-      <mat-cell *matCellDef="let dataSource"> {{dataSource.authors}} </mat-cell>
-    </ng-container>
-    <ng-container matColumnDef="description">
-      <mat-header-cell *matHeaderCellDef> Description </mat-header-cell>
-      <mat-cell *matCellDef="let dataSource"> {{dataSource.description}} </mat-cell>
-    </ng-container>
-    <ng-container matColumnDef="uriPrefix">
-      <mat-header-cell *matHeaderCellDef> URI </mat-header-cell>
-      <mat-cell *matCellDef="let dataSource"> {{dataSource.uriPrefix}} </mat-cell>
-    </ng-container>
-    <ng-container matColumnDef="actions">
-      <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
-      <mat-cell *matCellDef="let dataSource">
-        <!-- <button mat-icon-button>
+      <ng-container matColumnDef="name">
+        <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
+        <mat-cell *matCellDef="let dataSource"> {{dataSource.name}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="authors">
+        <mat-header-cell *matHeaderCellDef> Authors </mat-header-cell>
+        <mat-cell *matCellDef="let dataSource"> {{dataSource.authors}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="description">
+        <mat-header-cell *matHeaderCellDef> Description </mat-header-cell>
+        <mat-cell *matCellDef="let dataSource"> {{dataSource.description}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="uriPrefix">
+        <mat-header-cell *matHeaderCellDef> URI </mat-header-cell>
+        <mat-cell *matCellDef="let dataSource"> {{dataSource.uriPrefix}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="actions">
+        <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
+        <mat-cell *matCellDef="let dataSource">
+          <!-- <button mat-icon-button>
             <mat-icon aria-label="Example icon-button with a heart icon">more_vert</mat-icon>
         </button> -->
-        <button mat-icon-button (click)="deleteVocab(dataSource._id)">
+          <button mat-icon-button (click)="deleteVocab(dataSource._id); $event.stopPropagation()">
             <mat-icon>delete</mat-icon>
-        </button>
-        <button mat-icon-button>
+          </button>
+          <button mat-icon-button>
             <mat-icon>call_split</mat-icon>
-        </button>
-        <button mat-icon-button>
+          </button>
+          <button mat-icon-button>
             <mat-icon>share</mat-icon>
-        </button>
-      </mat-cell>
-    </ng-container>
+          </button>
+        </mat-cell>
+      </ng-container>
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="this.router.navigateByUrl('/v/' + row._id)"></mat-row>
   </mat-table>
 </div>

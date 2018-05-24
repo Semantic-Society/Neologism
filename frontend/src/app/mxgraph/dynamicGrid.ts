@@ -27,7 +27,7 @@ export function enableDynamicGrid(graph: m.mxGraph, mx: typeof m) {
         let h = 0;
         const repaintGrid = () => {
             // TODO attach window resize listener
-            if (ctx != null) {
+            if (ctx != null && !!graph.container) {
                 const width = graph.container.clientWidth;
                 const height = graph.container.clientHeight;
                 const sizeChanged = width !== w || height !== h;

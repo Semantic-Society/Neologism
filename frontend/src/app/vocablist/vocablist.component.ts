@@ -1,5 +1,6 @@
 import { DataSource } from '@angular/cdk/collections';
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { MeteorObservable, ObservableCursor, zoneOperator } from 'meteor-rxjs';
 import { Observable } from 'rxjs/Observable';
 
@@ -13,7 +14,7 @@ import { Ivocabulary } from '../../../api/models';
 })
 export class VocablistComponent implements OnInit {
 
-  constructor() { }
+  constructor(private router: Router) { }
   dataSource = new VocabularyDataSource();
   displayedColumns = ['name', 'authors', 'description', 'uriPrefix', 'actions'];
 

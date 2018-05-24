@@ -5,6 +5,7 @@ import { mxgraph as m } from 'mxgraph';
 import { Observable } from 'rxjs/Observable';
 import { IUserObject, MxgraphService } from './mxgraph';
 import { N3Codec } from './N3Codec';
+import { ActivatedRoute } from '@angular/router';
 
 enum SideBarState {
     Default,
@@ -25,15 +26,17 @@ export class MxgraphComponent implements OnInit, OnDestroy {
     @ViewChild('view') mxGraphView: ElementRef;
     protected mx: MxgraphService;
 
-    constructor() {
+    constructor(private route: ActivatedRoute) {
         this.editMode = SideBarState.Default;
     }
 
     ngOnInit() {
+        const id = this.route.snapshot.paramMap.get('id');
+
         this.mx = new MxgraphService(
             this.mxGraphView.nativeElement,
             // document.getElementById('mx-toolbar'),
-            'assets/dcat.ttl'
+            id
         );
 
         this.mx.addSelectionListener((userobjects: IUserObject[]) => {

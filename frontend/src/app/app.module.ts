@@ -14,15 +14,17 @@ import {
   MatExpansionModule,
   MatFormFieldModule,
   MatGridListModule,
+  MatIconModule,
   MatInputModule,
   MatListModule,
-  MatProgressSpinnerModule,
-  MatSidenavModule, MatTableModule,
+  MatProgressSpinnerModule, MatSidenavModule,
+  MatTableModule,
   MatTabsModule,
   MatToolbarModule,
   MatTooltipModule,
-  MatIconModule,
 } from '@angular/material';
+
+import { RoutingModule } from './routing.module';
 
 // App Services
 import { RecommendationService } from './services/recommendation.service';
@@ -50,7 +52,7 @@ import { TruncatedTextComponentComponent } from './truncated-text-component/trun
     StandardViewComponent,
     TruncatedTextComponentComponent,
     VocablistComponent
-],
+  ],
   imports: [
     BrowserModule,
     FormsModule,
@@ -69,11 +71,12 @@ import { TruncatedTextComponentComponent } from './truncated-text-component/trun
     MatGridListModule,
     MatAutocompleteModule,
     MatProgressSpinnerModule,
+    MatTableModule,
     MatTabsModule,
     MatToolbarModule,
     MatTooltipModule,
+    RoutingModule,
     TruncateModule,
-    MatTableModule
   ],
   providers: [
     RecommendationService,
