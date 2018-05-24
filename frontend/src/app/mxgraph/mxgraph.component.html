@@ -1,7 +1,7 @@
 <mat-drawer-container autosize>
   <mat-drawer [ngSwitch]="editMode" #navEnd class="mat-drawer nav-right" mode="side" position="end" [opened]="true"
               class="no-pad" disableClose>
-    <app-metadata></app-metadata>
+    <app-metadata [vocabID]="id"></app-metadata>
     <div class="toolbar-container">
       <app-editbox *ngSwitchCase="sideBarState.Edit" [selectedClass]="currentSelection" [mx]="mx"></app-editbox>
       <app-recommender *ngSwitchCase="sideBarState.Recommend" [mx]="mx"></app-recommender>

@@ -1,5 +1,7 @@
 import { mxgraph as m } from 'mxgraph';
 
+import { Terms, Vocabularies } from '../../../api/collections';
+import { Iterm, Ivocabulary } from '../../../api/models';
 import { enableDynamicGrid } from './dynamicGrid';
 import { N3Codec } from './N3Codec';
 
@@ -124,8 +126,8 @@ export class MxgraphService {
         // this.toolbar = new MxgraphService.mx.mxToolbar(toolbarContainer);
         // this.addToolbarVertex('assets/class_mockup.gif', 80, 30, 'shape=rounded');
 
-        this.codec = new N3Codec();
-        const importingCodec = new N3Codec();
+        // this.codec = new N3Codec();
+        // const importingCodec = new N3Codec();
         // importingCodec.loadUrl2store(this.url)
         //     .then(() => {
         //         this.codec.getClasses()
@@ -142,6 +144,10 @@ export class MxgraphService {
         //             });
         //         this.zoomToFit();
         //     });
+
+
+        // TODO: ...
+        Terms.find({vocabID: this.vocabID});
     }
 
     // private addToolbarItem(prototype: m.mxCell, image: string) {

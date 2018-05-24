@@ -1,11 +1,10 @@
 import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import 'rxjs/add/operator/take';
-
+import { ActivatedRoute } from '@angular/router';
 import { mxgraph as m } from 'mxgraph';
 import { Observable } from 'rxjs/Observable';
+
 import { IUserObject, MxgraphService } from './mxgraph';
 import { N3Codec } from './N3Codec';
-import { ActivatedRoute } from '@angular/router';
 
 enum SideBarState {
     Default,
@@ -25,18 +24,19 @@ export class MxgraphComponent implements OnInit, OnDestroy {
 
     @ViewChild('view') mxGraphView: ElementRef;
     protected mx: MxgraphService;
+    private id: string;
 
     constructor(private route: ActivatedRoute) {
         this.editMode = SideBarState.Default;
     }
 
     ngOnInit() {
-        const id = this.route.snapshot.paramMap.get('id');
+        this.id = this.route.snapshot.paramMap.get('id');
 
         this.mx = new MxgraphService(
             this.mxGraphView.nativeElement,
             // document.getElementById('mx-toolbar'),
-            id
+            this.id
         );
 
         this.mx.addSelectionListener((userobjects: IUserObject[]) => {

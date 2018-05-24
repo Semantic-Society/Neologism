@@ -1,4 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+
+import { Vocabularies } from '../../../api/collections';
+import { Ivocabulary } from '../../../api/models';
 
 @Component({
   selector: 'app-metadata',
@@ -6,19 +10,17 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./metadata.component.css']
 })
 export class MetadataComponent implements OnInit {
+  @Input() vocabID: string;
 
-  vocabularyName = 'My test vocabulary';
-  vocabularyHref = '#Persistent link to the vocabulary';
-  vocabularyLinkText = '';
-  versionString = 'Version: 0.2';
-
-  public collapsed = true;
-
-  authors: string[] = ['Michael Cochez', 'Iraklis Dimitriadis'];
+  private vocabulary: Observable<Ivocabulary[]>;
 
   constructor() { }
 
   ngOnInit() {
+    this.vocabulary =
+      Vocabularies
+        .find({ _id: this.vocabID })
+        .filter((vArr) => vArr.length > 0)
   }
 
 }

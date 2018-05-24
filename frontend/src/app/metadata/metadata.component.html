@@ -1,19 +1,24 @@
 <h1 class="sidebar-header neologism-sidebar-header">Neologism</h1>
 <hr>
 <hr>
-<h3 class="sidebar-header">{{vocabularyName}}</h3>
-<hr>
-<div class="vocabulary-link">
-  <div>
-    <a href="{{vocabularyHref}}">{{vocabularyLinkText}}</a>
+<div *ngFor="let v of vocabulary | async">
+  <h3 class="sidebar-header">{{v.name}}</h3>
+  <hr>
+  <div class="vocabulary-link">
+    <div>
+      <a href="{{uriPrefix}}">{{uriPrefix}}</a>
+    </div>
   </div>
-</div>
-<hr>
-<p class="vocabulary-p-element">{{versionString}}</p>
-<hr>
-<p class="vocabulary-p-element authorlist">
+  <hr>
+  <p class="vocabulary-p-element">Description: {{v.description}}</p>
+  <p class="vocabulary-p-element">Version: XXX</p>
+  <hr>
+  <p class="vocabulary-p-element authorlist">
+    <span>Authors: {{v.authors}}</span>
+    <!-- <span *ngFor="let author of v.authors">{{author}}</span> -->
+  </p>
 
-  <span *ngIf="authors.length == 1">Author: {{authors[0]}}</span>
+  <!-- <span *ngIf="authors.length == 1">Author: {{authors[0]}}</span>
   <span *ngIf="authors.length == 2">Authors: {{authors[0]}}, {{authors[1]}}</span>
   <span *ngIf="authors.length == 3">Authors: {{authors[0]}}, {{authors[1]}}, {{authors[2]}}</span>
   <div *ngIf="authors.length > 3">
@@ -26,5 +31,6 @@
         <span *ngFor="let author of authors.slice(1, -1)">, {{author}}</span>
         <a href="#" (click)="this.collapsed=true" >(less)</a>
     </div>
-  </div>
+  </div> -->
+</div>
 <hr>
