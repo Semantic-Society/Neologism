@@ -12,7 +12,7 @@ import { Ivocabulary } from '../../../api/models';
 export class MetadataComponent implements OnInit {
   @Input() vocabID: string;
 
-  private vocabulary: Observable<Ivocabulary[]>;
+  private vocabulary;//: Observable<Ivocabulary[]>;
 
   constructor() { }
 
