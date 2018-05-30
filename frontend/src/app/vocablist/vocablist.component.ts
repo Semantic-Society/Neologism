@@ -65,5 +65,6 @@ export class VocabularyDataSource extends DataSource<any> {
   connect(): Observable<Ivocabulary[]> {
     return Vocabularies.find({}).pipe(zoneOperator()).map((x) => { console.log(x); return x; }) as Observable<Ivocabulary[]>;
   }
-  disconnect() { }
+  disconnect() {}
 }
+
