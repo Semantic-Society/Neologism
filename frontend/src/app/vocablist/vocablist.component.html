@@ -1,9 +1,24 @@
 <!--<mat-list>
   <mat-list-item *ngFor='let v of vocab | async'> {{v.name}} || {{v.authors}} || {{v.description}} || {{v.uriPrefix}}</mat-list-item>
 </mat-list>-->
-<button mat-button (click)="addRandom()">Add random name</button>
 
 
+<mat-card class="add-vocab-container">
+  <h3>Add new Vocabulary</h3>
+  <mat-form-field class="vobab-form-cell">
+    <input matInput placeholder="Name" [(ngModel)]="vocabForm.name">
+  </mat-form-field>
+  <!--<mat-form-field class="example-full-width">
+    <input matInput placeholder="Authors" value="">
+  </mat-form-field>-->
+  <mat-form-field class="vobab-form-cell">
+    <textarea matInput placeholder="Description" [(ngModel)]="vocabForm.description"></textarea>
+  </mat-form-field>
+  <mat-form-field class="vobab-form-cell">
+    <input matInput placeholder="URI" [(ngModel)]="vocabForm.uriPrefix">
+  </mat-form-field>
+  <button mat-raised-button color="primary" (click)="addVocabulary()" class="vobab-form-cell">Add Vocabulary</button>
+</mat-card>
 <div>
   <mat-table [dataSource]="dataSource">
       <ng-container matColumnDef="name">

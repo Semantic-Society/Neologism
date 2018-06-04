@@ -16,19 +16,26 @@ export class VocablistComponent implements OnInit {
 
   constructor(private router: Router) { }
   dataSource = new VocabularyDataSource();
+  vocabForm: Ivocabulary = {
+    name: '',
+    authors: ['You'],
+    description: '',
+    uriPrefix: ''
+  }
   displayedColumns = ['name', 'authors', 'description', 'uriPrefix', 'actions'];
 
   ngOnInit() {
   }
 
-  addRandom() {
+  addVocabulary() {
     MeteorObservable.call('vocabulary.create',
-      {
-        name: this.randomStr(10),
-        authors: [this.randomStr(6), this.randomStr(6)],
-        description: this.randomStr(100),
-        uriPrefix: this.randomStr(14)
-      }
+      this.vocabForm
+      /*{
+        name: this.vocabForm.name,
+        authors: this.vocabForm.authors,
+        description: this.vocabForm.description,
+        uriPrefix: this.vocabForm.uriPrefix
+      }*/
     ).pipe(zoneOperator())
       .subscribe((response) => {
         // Handle success and response from server!
@@ -67,4 +74,6 @@ export class VocabularyDataSource extends DataSource<any> {
   }
   disconnect() {}
 }
+
+
 
