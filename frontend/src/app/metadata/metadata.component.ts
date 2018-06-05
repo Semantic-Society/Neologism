@@ -20,7 +20,7 @@ export class MetadataComponent implements OnInit {
     this.vocabulary =
       Vocabularies
         .find({ _id: this.vocabID })
-        .filter((vArr) => vArr.length > 0)
+        .filter((vArr) => vArr.length > 0);
   }
 
 }

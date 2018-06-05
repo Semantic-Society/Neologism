@@ -11,7 +11,7 @@
 
 Initially & every time you make a change to the server code (which affects the client side code), rebundle the meteor client side code by running `npm run meteor-client:bundle`.
 
-Run `npm run api` to start a local meteor server running on ???`http://localhost:4200/`??? with a connection to a local mongodb at port 3001.
+Run `npm run api` to start a local meteor server (running on `http://localhost:3000/` with a connection to a local mongodb at port `3001`).
 Run `npm run start` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
 ## Code scaffolding
