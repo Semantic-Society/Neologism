@@ -50,7 +50,6 @@
     "@types/jasmine": "~2.5.53",
     "@types/jasminewd2": "~2.0.2",
     "@types/meteor": "^1.4.14",
-    "@types/mxgraph": "github:lgleim/mxgraph-typings",
     "@types/n3": "^0.0.3",
     "@types/node": "^6.0.103",
     "autoprefixer": "^7.2.3",
