@@ -1,7 +1,8 @@
-import { mxgraph as m } from 'mxgraph';
+import { zoneOperator } from 'meteor-rxjs';
+import * as m from 'mxgraph';
 
-import { Terms, Vocabularies } from '../../../api/collections';
-import { Iterm, Ivocabulary } from '../../../api/models';
+import { Vocabularies } from '../../../api/collections';
+import { Ivocabulary } from '../../../api/models';
 import { enableDynamicGrid } from './dynamicGrid';
 import { N3Codec } from './N3Codec';
 
@@ -20,6 +21,7 @@ export class MxgraphService {
     private model: m.mxGraphModel;
     private canvas: m.mxCell;
     private toolbar: m.mxToolbar;
+    private vocabSubscription;
     public codec: N3Codec;
 
     private predicateSet = new Set(['http://www.w3.org/2000/01/rdf-schema#subClassOf']);
@@ -146,8 +148,13 @@ export class MxgraphService {
         //     });
 
 
-        // TODO: ...
-        Terms.find({vocabID: this.vocabID});
+        this.vocabSubscription = Vocabularies.find({ _id: vocabID })
+            .filter((vs) => vs.length > 0)
+            .map((vs) => vs[0])
+            .subscribe((vocab) => {
+                // this.model
+            });
+
     }
 
     // private addToolbarItem(prototype: m.mxCell, image: string) {
