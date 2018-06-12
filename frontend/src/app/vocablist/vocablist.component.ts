@@ -16,12 +16,13 @@ export class VocablistComponent implements OnInit {
 
   constructor(private router: Router) { }
   dataSource = new VocabularyDataSource();
-  vocabForm: Ivocabulary = {
+  private vocabForm = {
     name: '',
     authors: ['You'],
     description: '',
-    uriPrefix: ''
-  }
+    uriPrefix: '',
+    // classes: []
+  };
   displayedColumns = ['name', 'authors', 'description', 'uriPrefix', 'actions'];
 
   ngOnInit() {
@@ -74,6 +75,3 @@ export class VocabularyDataSource extends DataSource<any> {
   }
   disconnect() {}
 }
-
-
-

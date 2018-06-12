@@ -13,7 +13,8 @@ export interface Ivocabulary {
   description: string;
   authors: string[];
   uriPrefix: string;
-  classes?: meteorID[]; // List of all classes in the vocab
+  // version: string;
+  classes: meteorID[]; // List of all classes in the vocab
 }
 
 export interface Iclass {

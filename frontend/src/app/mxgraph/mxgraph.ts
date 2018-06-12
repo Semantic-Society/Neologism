@@ -4,7 +4,7 @@ import * as m from 'mxgraph';
 import { Vocabularies } from '../../../api/collections';
 import { Ivocabulary } from '../../../api/models';
 import { enableDynamicGrid } from './dynamicGrid';
-import { N3Codec } from './N3Codec';
+// import { N3Codec } from './N3Codec';
 
 type Predicates = Map<string, Set<string>>;
 export interface IUserObject { url: string; label: string; creator: string; }
@@ -22,7 +22,7 @@ export class MxgraphService {
     private canvas: m.mxCell;
     private toolbar: m.mxToolbar;
     private vocabSubscription;
-    public codec: N3Codec;
+    // public codec: N3Codec;
 
     private predicateSet = new Set(['http://www.w3.org/2000/01/rdf-schema#subClassOf']);
 
