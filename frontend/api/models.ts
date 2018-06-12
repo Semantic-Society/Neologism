@@ -8,7 +8,7 @@ export interface Ivocabulary {
   _id?: meteorID; //Mongo generated ID
   name: string;
   description: string;
-  authors:string[];
+  authors: string[];
   uriPrefix: string;
   classes?: meteorID[]; // List of all classes in the vocab
 }
