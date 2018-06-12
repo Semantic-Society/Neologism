@@ -1,11 +1,14 @@
 export type meteorID = string;
 
 export interface IpropertyMeta {
-  name, URI, range, comment
+  name: string;
+  URI: string;
+  range: string;
+  comment: string;
 }
 
 export interface Ivocabulary {
-  _id?: meteorID; //Mongo generated ID
+  _id?: meteorID; // Mongo generated ID
   name: string;
   description: string;
   authors: string[];
@@ -14,7 +17,7 @@ export interface Ivocabulary {
 }
 
 export interface Iclass {
-  _id?: meteorID; //Mongo generated ID
+  _id?: meteorID; // Mongo generated ID
   name: string;
   description: string;
   URI: string;
@@ -31,10 +34,9 @@ export interface Iclass {
 }
 
 export interface Iproperty {
-  _id?: meteorID; //Mongo generated ID
+  _id?: meteorID; // Mongo generated ID
   name: string;
   description: string;
   URI: string;
   range: meteorID;
 }
-
