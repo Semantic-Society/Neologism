@@ -15,7 +15,7 @@ Meteor.methods({
   'class.create'({vocabId, name, description, URI}) {
     // TODO: Sanitize
     const classId = Classes.insert({name, description, URI, properties : [], position: {x: 0, y: 0}, skos: {closeMatch: [], exactMatch: []}});
-    Vocabularies.update({_id:vocabId}, { $push: {classes: classId}});
+    Vocabularies.update({_id: vocabId}, { $push: {classes: classId}});
   },
 
 });

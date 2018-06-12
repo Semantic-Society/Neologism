@@ -14,9 +14,9 @@ import { Ivocabulary } from '../../../api/models';
 })
 export class VocablistComponent implements OnInit {
 
-  constructor(private router: Router) { }
   dataSource = new VocabularyDataSource();
-  private vocabForm = {
+
+  protected vocabForm = {
     name: '',
     authors: ['You'],
     description: '',
@@ -24,6 +24,8 @@ export class VocablistComponent implements OnInit {
     // classes: []
   };
   displayedColumns = ['name', 'authors', 'description', 'uriPrefix', 'actions'];
+
+  constructor(protected router: Router) { }
 
   ngOnInit() {
   }
