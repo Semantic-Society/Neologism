@@ -6,6 +6,9 @@ import { Observable } from 'rxjs/Observable';
 import { IUserObject, MxgraphService } from './mxgraph';
 import { N3Codec } from './N3Codec';
 
+import { Iclass } from '../../../api/models';
+import { VocabulariesService } from '../services/vocabularies.service';
+
 enum SideBarState {
     Default,
     Edit,
@@ -24,9 +27,10 @@ export class MxgraphComponent implements OnInit, OnDestroy {
 
     @ViewChild('view') mxGraphView: ElementRef;
     protected mx: MxgraphService;
-    private id: string;
+    protected id: string;
+    protected classes: Observable<Iclass[]>;
 
-    constructor(private route: ActivatedRoute) {
+    constructor(private route: ActivatedRoute, private vocabService: VocabulariesService) {
         this.editMode = SideBarState.Default;
     }
 
@@ -39,6 +43,9 @@ export class MxgraphComponent implements OnInit, OnDestroy {
             this.id
         );
 
+        console.log('the is of the vocb is ' + this.id);
+        this.classes = this.vocabService.getClasses(this.id);
+        
         this.mx.addSelectionListener((userobjects: IUserObject[]) => {
             if (userobjects.length === 1) {
                 this.currentSelection = userobjects[0];

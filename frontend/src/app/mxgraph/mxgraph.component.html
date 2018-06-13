@@ -26,7 +26,7 @@
         <div class="mxgraph-container" #view></div>
       </mat-tab>
       <mat-tab label="List">
-        <app-standardview [vocab]="mx.codec"></app-standardview>
+        <app-standardview [classes] = "classes" > <!-- [properties] = "properties" [meta] = "meta" --> </app-standardview>
       </mat-tab>
     </mat-tab-group>
     <!-- <button type="button" mat-button (click)="navStart.toggle()">
