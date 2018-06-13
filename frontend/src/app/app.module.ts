@@ -41,6 +41,7 @@ import { VocablistComponent } from './vocablist/vocablist.component';
 // Pipes
 import { TruncateModule } from '@yellowspot/ng-truncate';
 import { TruncatedTextComponentComponent } from './truncated-text-component/truncated-text-component.component';
+import { VocabulariesService } from './services/vocabularies.service';
 
 @NgModule({
   declarations: [
@@ -80,6 +81,7 @@ import { TruncatedTextComponentComponent } from './truncated-text-component/trun
   ],
   providers: [
     RecommendationService,
+    VocabulariesService,
   ],
   bootstrap: [AppComponent],
 })

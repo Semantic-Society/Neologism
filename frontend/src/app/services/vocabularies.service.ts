@@ -9,15 +9,12 @@ import {Iclass} from '../../../api/models';
 
 @Injectable()
 export class VocabulariesService {
-  vocabularyId: string;
-  constructor(vocabularyId: string) {
-    this.vocabularyId = vocabularyId;
-  }
+  
+  constructor() {  }
 
-  addClass(name: string, description: string, URI: string) {
-    const vId = this.vocabularyId;
+  addClass(vocabularyId: string, name: string, description: string, URI: string) {
     MeteorObservable.call('class.create',
-      {vId, name, description, URI}
+      {vocabularyId, name, description, URI}
     ).pipe(zoneOperator())
       .subscribe((response) => {
         // Handle success and response from server!
@@ -25,8 +22,8 @@ export class VocabulariesService {
         // Handle error
       });
   }
-  getClasses(): Observable<Iclass[]> {
-    const classes = Vocabularies.findOne({_id: this.vocabularyId}).classes;
+  getClasses(vocabularyId: string): Observable<Iclass[]> {
+    const classes = Vocabularies.findOne({_id: vocabularyId}).classes;
     return Classes.find({_id: {$in: classes}}).pipe(zoneOperator()).map((x) => { console.log(x); return x; }) as any;
   }
 }

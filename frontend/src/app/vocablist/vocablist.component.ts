@@ -41,6 +41,7 @@ export class VocablistComponent implements OnInit {
       }*/
     ).pipe(zoneOperator())
       .subscribe((response) => {
+        console.log(response);
         // Handle success and response from server!
       }, (err) => {
         // Handle error

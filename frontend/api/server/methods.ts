@@ -19,8 +19,9 @@ Meteor.methods({
 
     // TODO: is the following implmentation any better:
 
+    // Note, these operations must occur in this order. Otherwise an observer of the vocabualry might 
     const classIdO = Classes.insert({ name, description, URI, properties: [], position: { x: 0, y: 0 }, skos: { closeMatch: [], exactMatch: [] } });
-    classIdO.take(1).map((theID) => {
+    classIdO.map((theID) => {
       Vocabularies.update({ _id: vocabId }, { $push: { classes: theID } });
     } );
 

@@ -1,6 +1,6 @@
 <mat-drawer-container autosize>
-  <mat-drawer [ngSwitch]="editMode" #navEnd class="mat-drawer nav-right" mode="side" position="end" [opened]="true"
-              class="no-pad" disableClose>
+  <mat-drawer [ngSwitch]="editMode" #navEnd class="mat-drawer nav-right" mode="side" position="end" [opened]="true" class="no-pad"
+    disableClose>
     <app-metadata [vocabID]="id"></app-metadata>
     <div class="toolbar-container">
       <app-editbox *ngSwitchCase="sideBarState.Edit" [selectedClass]="currentSelection" [mx]="mx"></app-editbox>
@@ -8,15 +8,16 @@
     </div>
     <div class="button-div">
       <div class="pad-1">
-        <button *ngSwitchCase="sideBarState.Default" mat-button (click)="showRecommender()" >Search new
-          class
+        <button *ngSwitchCase="sideBarState.Default" mat-button (click)="showRecommender()">Search new class
         </button>
       </div>
       <div class="pad-1">
-        <button *ngSwitchCase="sideBarState.Default" mat-button (click)="showRecommender()" >Add new
-          class
+        <button *ngSwitchCase="sideBarState.Default" mat-button (click)="showRecommender()">Add new class
         </button>
       </div>
+      <mat-toolbar class = "global-buttons">
+        <a routerLink="/vocabularies">Browse Vocabs</a>
+      </mat-toolbar>  
     </div>
   </mat-drawer>
   <mat-drawer-content>
