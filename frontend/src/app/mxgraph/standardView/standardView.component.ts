@@ -1,9 +1,11 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { VocabulariesService } from '../../services/vocabularies.service';
 
 import { Observable } from 'rxjs/Observable';
 
 import { Iclass } from '../../../../api/models';
+
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'app-standardview',
@@ -11,19 +13,17 @@ import { Iclass } from '../../../../api/models';
   styleUrls: ['./standardView.component.css']
 })
 
-export class StandardViewComponent implements OnInit {
+export class StandardViewComponent implements OnInit, OnDestroy {
 
+  private subscription: Subscription;
   @Input() classes: Observable<Iclass[]>;
 
   constructor() { }
 
   ngOnInit() {
+  }
 
-    console.log(this.classes);
-    this.classes.map((clazzes) => {
-      console.log(clazzes);
-      return 0;
-    }).subscribe();
+  ngOnDestroy() {
   }
 
 }

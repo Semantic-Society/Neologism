@@ -43,9 +43,11 @@ export class MxgraphComponent implements OnInit, OnDestroy {
             this.id
         );
 
-        console.log('the is of the vocb is ' + this.id);
+        // console.log('the is of the vocb is ' + this.id);
         this.classes = this.vocabService.getClasses(this.id);
-        
+
+        this.vocabService.addClass(this.id, 'ClassName', 'Iraklis did it', 'the URI');
+
         this.mx.addSelectionListener((userobjects: IUserObject[]) => {
             if (userobjects.length === 1) {
                 this.currentSelection = userobjects[0];

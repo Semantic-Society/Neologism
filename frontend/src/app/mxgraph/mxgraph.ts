@@ -147,7 +147,6 @@ export class MxgraphService {
         //         this.zoomToFit();
         //     });
 
-
         this.vocabSubscription = Vocabularies.find({ _id: vocabID })
             .filter((vs) => vs.length > 0)
             .map((vs) => vs[0])

@@ -4,6 +4,9 @@ import { N3Codec } from '../mxgraph/N3Codec';
 import { MeteorObservable, zoneOperator } from 'meteor-rxjs';
 import { Observable } from 'rxjs/Observable';
 
+import { EmptyObservable } from 'rxjs/observable/EmptyObservable';
+import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
+
 import { Classes, Vocabularies } from '../../../api/collections';
 import { Iclass, Ivocabulary } from '../../../api/models';
 
@@ -14,12 +17,12 @@ export class VocabulariesService {
 
   addClass(vocabularyId: string, name: string, description: string, URI: string) {
     MeteorObservable.call('class.create',
-      { vocabularyId, name, description, URI }
+      { vocabId: vocabularyId, name, description, URI }
     ).pipe(zoneOperator())
       .subscribe((response) => {
         // Handle success and response from server!
       }, (err) => {
-        // Handle error
+        console.log(err);
       });
   }
   getClasses(vocabularyId: string): Observable<Iclass[]> {
@@ -28,25 +31,22 @@ export class VocabulariesService {
     }
 
     const thevocabO = Vocabularies.find({ _id: vocabularyId });
-    const res: Observable<Iclass[]> = thevocabO.mergeMap(
+    const res: Observable<Iclass[]> = thevocabO.flatMap(
       (theVocab, test) => {
         if (theVocab.length > 1) {
-          //return Observable.Throw<string>(new Exception()); 
-          //TODO return observable
-          console.log("bla");
-          throw new Error();
+          // return Observable.Throw<string>(new Exception());
+          // TODO return observable
+          throw new ErrorObservable(new Error('More than 1 vocab returned for id'));
         } else if (theVocab.length === 0) {
-          console.log("none found");
-          return Observable.empty;
+          return new EmptyObservable();
         } else {
-          console.log("Found 1");
           const classes = theVocab[0].classes;
-          return Classes.find({ _id: { $in: classes } }).pipe(zoneOperator()).map((x) => { console.log(x); return x; }) as any;
+          return Classes.find({ _id: { $in: classes } }).pipe(zoneOperator()).map((x) => { // console.log(x);
+            return x; }) as any;
         }
       }
     );
     return res;
-
 
     // Subject s = new Subject();
 
