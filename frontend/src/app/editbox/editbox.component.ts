@@ -26,29 +26,29 @@ export class EditboxComponent implements OnChanges {
   }
 
   getProperties(theClass: IUserObject) {
-    this.alreadyThere = this.mx.getProperties(theClass.url);
-    this.recommender.propertyRecommendation(theClass.url, theClass.creator)
-      .subscribe((allPropRecommendations) => {
-        // TODO: what if there is discrepancy between what is recommended and what is already there?
-        console.log('Received Property Recommendation', allPropRecommendations);
-        const newReccommendations = [];
-        allPropRecommendations.forEach((recommendation) => {
-          // TODO is there a better way in JS?
-          if (!this.alreadyThere.some((already) => {
-            return already.uri === recommendation.uri;
-          })) {
-            // the property is not there yet
-            newReccommendations.push(recommendation);
-          }
-        });
-        this.propertyRecommendations = newReccommendations;
-      });
+    // this.alreadyThere = this.mx.getProperties(theClass.url);
+    // this.recommender.propertyRecommendation(theClass.url, theClass.creator)
+    //   .subscribe((allPropRecommendations) => {
+    //     // TODO: what if there is discrepancy between what is recommended and what is already there?
+    //     console.log('Received Property Recommendation', allPropRecommendations);
+    //     const newReccommendations = [];
+    //     allPropRecommendations.forEach((recommendation) => {
+    //       // TODO is there a better way in JS?
+    //       if (!this.alreadyThere.some((already) => {
+    //         return already.uri === recommendation.uri;
+    //       })) {
+    //         // the property is not there yet
+    //         newReccommendations.push(recommendation);
+    //       }
+    //     });
+    //     this.propertyRecommendations = newReccommendations;
+    //   });
   }
 
   addToGraph(rec: { comment: string; label: string; uri: string; range: string; creator: string; }) {
-    // console.log('editbox -> addToGraph:', this.selectedClass.url, rec.uri, rec.label, rec.range)
-    this.mx.insertProperty(this.selectedClass.url, rec.uri, rec.label, rec.comment, rec.range);
-    // TODO: it feals a bit like a hack to call this directly...
-    this.getProperties(this.selectedClass);
+    // // console.log('editbox -> addToGraph:', this.selectedClass.url, rec.uri, rec.label, rec.range)
+    // this.mx.insertProperty(this.selectedClass.url, rec.uri, rec.label, rec.comment, rec.range);
+    // // TODO: it feals a bit like a hack to call this directly...
+    // this.getProperties(this.selectedClass);
   }
 }

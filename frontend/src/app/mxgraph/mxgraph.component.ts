@@ -28,7 +28,7 @@ export class MxgraphComponent implements OnInit, OnDestroy {
     @ViewChild('view') mxGraphView: ElementRef;
     protected mx: MxgraphService;
     protected id: string;
-    protected classes: Observable<IClassWithProperties[]>;
+    protected classes; //: Observable<IClassWithProperties[]>;
 
     constructor(private route: ActivatedRoute, private vocabService: VocabulariesService) {
         this.editMode = SideBarState.Default;
@@ -55,6 +55,10 @@ export class MxgraphComponent implements OnInit, OnDestroy {
                 this.editMode = SideBarState.Default;
             }
         });
+
+        this.mx.addDragListener((ids, dx, dy) =>
+            this.vocabService.translateClasses(ids, dx, dy)
+        );
 
         this.classes.subscribe((cs) => {
             this.mx.startTransaction();

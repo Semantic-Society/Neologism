@@ -313,10 +313,7 @@ export class MxgraphService {
         // this.toolbar.destroy();
     }
 
-    /** Highlight cell in graph by its ID */SideBarState;
-
-    @ViewChild('view') mxGraphView: ElementRef;
-    protected mx: MxgraphService;
+    /** Highlight cell in graph by its ID */
     public selectClass(id: string) {
         this.selectCells([this.model.getCell(id)]);
     }
@@ -345,10 +342,15 @@ export class MxgraphService {
     }
 
     /** Call the given function with data of selected mxCell */
-    public addDragListener(funct: (x: string) => void) {
+    public addDragListener(funct: (ids: string[], dx: number, dy: number ) => void) {
         // http://forum.jgraph.com/questions/252/add-listener-when-clicking-on-a-vertex/253
         this.graph.addListener(MxgraphService.mx.mxEvent.CELLS_MOVED, (sender, evt: m.mxEventObject) => {
-            // evt.
+            const cells: m.mxCell[] = evt.getProperty('cells');
+            const ids: string[] = cells.map((cell) => cell.getId());
+            const dx: number = evt.getProperty('dx');
+            const dy: number = evt.getProperty('dy');
+
+            funct( ids, dx, dy );
         });
     }
 }

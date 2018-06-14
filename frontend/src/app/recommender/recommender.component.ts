@@ -84,20 +84,20 @@ export class RecommenderComponent implements OnInit {
       if (!(this.mx && queryString)) {
         throw new Error('mx or labelFiled null');
       }
-      this.mx.serializeModel().then((model) =>
-        this.recommendationService.classRecommendationforNewClass(model, queryString)
-          .subscribe(
-            (recs) => {
-              if (this.currentRequestNumber === requestNumber) {
-                this.recommendations = recs;
-              }
-            }, null // TODO handle error?
-            , () => {
-              if (this.currentRequestNumber === requestNumber) {
-                this.disableSpinner();
-              }
-            }
-          ));
+      // this.mx.serializeModel().then((model) =>
+      //   this.recommendationService.classRecommendationforNewClass(model, queryString)
+      //     .subscribe(
+      //       (recs) => {
+      //         if (this.currentRequestNumber === requestNumber) {
+      //           this.recommendations = recs;
+      //         }
+      //       }, null // TODO handle error?
+      //       , () => {
+      //         if (this.currentRequestNumber === requestNumber) {
+      //           this.disableSpinner();
+      //         }
+      //       }
+      //     ));
     };
     exp();
     /*
@@ -128,9 +128,9 @@ export class RecommenderComponent implements OnInit {
   }
 
   addToGraph() {
-    console.log('recommenderComponent -> addToGraph:', this.selectedRecommendation.uri, this.selectedRecommendation.label, this.selectedRecommendation.creator);
-    this.mx.insertClass(this.selectedRecommendation.uri, this.selectedRecommendation.label, this.selectedRecommendation.creator);
-    this.mx.selectClass(this.selectedRecommendation.uri);
+    // console.log('recommenderComponent -> addToGraph:', this.selectedRecommendation.uri, this.selectedRecommendation.label, this.selectedRecommendation.creator);
+    // this.mx.insertClass(this.selectedRecommendation.uri, this.selectedRecommendation.label, this.selectedRecommendation.creator);
+    // this.mx.selectClass(this.selectedRecommendation.uri);
   }
 
   enableSpinner() {

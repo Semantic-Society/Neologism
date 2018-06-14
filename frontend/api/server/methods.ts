@@ -27,6 +27,14 @@ Meteor.methods({
       Vocabularies.update({ _id: vocabId }, { $push: { classes: classID } })
     );
   },
+  'classes.translate'( classids: string[], dx: number, dy: number ) {
+    // TODO: Sanitize
+    Classes.update(
+      { _id: { $in: classids } },
+      { $inc: { 'location.x': dx, 'location.y': dy } },
+      { multi: true }
+    );
+  },
   'property.create'({ classId, name, description, URI, range }) {
     // TODO: Sanitize
     // Note, these operations must occur in this order. Otherwise an observer of the vocabualry might

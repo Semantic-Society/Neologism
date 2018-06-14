@@ -42,32 +42,29 @@ export class VocabulariesService {
   addClass(vocabularyId: string, name: string, description: string, URI: string) {
     MeteorObservable.call('class.create',
       { vocabId: vocabularyId, name, description, URI }
-    ).pipe(zoneOperator())
-      .subscribe((response) => {
-        // Handle success and response from server!
-      }, (err) => {
-        console.log(err);
-      });
+    ).subscribe((response) => {
+      // Handle success and response from server!
+    }, (err) => {
+      console.log(err);
+    });
   }
   addProperty(toClass: meteorID, name: string, description: string, URI: string, range: meteorID) {
     MeteorObservable.call('property.create',
       { classId: toClass, name, description, URI, range }
-    ).pipe(zoneOperator())
-      .subscribe((response) => {
-        // Handle success and response from server!
-      }, (err) => {
-        console.log(err);
-      });
+    ).subscribe((response) => {
+      // Handle success and response from server!
+    }, (err) => {
+      console.log(err);
+    });
   }
 
-
-  getClasses(vocabularyId: string): Observable<Iclass[]> {
+  getClasses(vocabularyId: string) /*: Observable<Iclass[]> */ {
     if (vocabularyId === undefined || vocabularyId === '') {
       throw new Error('Oh no');
     }
 
     const thevocabO = Vocabularies.find({ _id: vocabularyId });
-    const res: Observable<Iclass[]> = thevocabO.flatMap(
+    const res /*: Observable<Iclass[]>*/ = thevocabO.flatMap(
       (theVocab, _ignored) => {
         if (theVocab.length > 1) {
           return new ErrorObservable(new Error('More than 1 vocab returned for id'));
@@ -82,13 +79,22 @@ export class VocabulariesService {
     return res;
   }
 
+  translateClasses(ids: meteorID[], dx: number, dy: number) {
+    MeteorObservable.call('classes.translate', ids, dx, dy)
+      .subscribe((response) => {
+        // Handle success and response from server!
+      }, (err) => {
+        console.log(err);
+      });
+  }
+
   /**
    *  TODO: In the current implmentation, ANY update will cause all information to be requeried.
    *  This can be improved by listening to specific updates instead.
    *
    * @param vocabularyId
    */
-  getClassesWithProperties(vocabularyId: string): Observable<IClassWithProperties[]> {
+  getClassesWithProperties(vocabularyId: string) /*: Observable<IClassWithProperties[]>*/ {
     const classes = this.getClasses(vocabularyId)
       .switchMap((cs) =>
         Observable.combineLatest(
@@ -99,9 +105,9 @@ export class VocabulariesService {
               })
           )
         )
-      );
+      ) as any;
 
-    const filledClasses: Observable<IClassWithProperties[]> = classes.map((cs) => {
+    const filledClasses /*: Observable<IClassWithProperties[]>*/ = classes.map((cs) => {
       const newClassesWithoutRangeFilledLater = cs.map((c) => {
         const filledProps = c.properties.map((p) => {
           return { ...p, range: null };
