@@ -15,7 +15,7 @@
     <div class="attribute-container" *ngIf="c.properties.length >0">
       <span class="label"> Properties: </span>
       <div class="text">
-        <div class="properties-container" *ngFor="let prop of c.properties">
+        <div class="properties-container" *ngFor="let p of c.properties">
           <span> <a href="{{p.URI}}"> {{p.name}} </a></span>
         </div>
       </div>
