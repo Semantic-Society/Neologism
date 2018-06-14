@@ -1,4 +1,4 @@
-import { Classes, Vocabularies } from '../collections';
+import { Classes, Vocabularies, Properties } from '../collections';
 import { meteorID } from '../models';
 
 /**
@@ -20,18 +20,20 @@ Meteor.methods({
   },
   'class.create'({ vocabId, name, description, URI }) {
     // TODO: Sanitize
-    // const classId = Classes.insert({ name, description, URI, properties: [], position: { x: 0, y: 0 }, skos: { closeMatch: [], exactMatch: [] } });
-    // Vocabularies.update({ _id: vocabId }, { $push: { classes: classId } });
-
-    // TODO: is the following implmentation any better:
 
     // Note, these operations must occur in this order. Otherwise an observer of the vocabualry might
     const classIdO = Classes.insert({ name, description, URI, properties: [], position: { x: 0, y: 0 }, skos: { closeMatch: [], exactMatch: [] } });
-    const subscription = classIdO.flatMap((theID) => {
-      subscription.unsubscribe();
-      return Vocabularies.update({ _id: vocabId }, { $push: { classes: theID } });
-    }).subscribe();
-
+    classIdO.subscribe((classID) =>
+      Vocabularies.update({ _id: vocabId }, { $push: { classes: classID } })
+    );
+  },
+  'property.create'({ classId, name, description, URI, range }) {
+    // TODO: Sanitize
+    // Note, these operations must occur in this order. Otherwise an observer of the vocabualry might
+    const propID = Properties.insert({ name, description, URI, range });
+    propID.subscribe((pID) =>
+      Classes.update({ _id: classId }, { $push: { properties: pID } })
+    );
   },
 
 });

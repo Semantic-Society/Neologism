@@ -1,3 +1,9 @@
+/**
+ * These types are only to be used for communication between server and client.
+ *
+ * NOT in the frontend application otherwise.
+ */
+
 export type meteorID = string;
 
 export interface IpropertyMeta {

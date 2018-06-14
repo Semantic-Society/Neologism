@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { VocabulariesService } from '../../services/vocabularies.service';
+import { IClassWithProperties, VocabulariesService } from '../../services/vocabularies.service';
 
 import { Observable } from 'rxjs/Observable';
 
@@ -16,7 +16,7 @@ import { Subscription } from 'rxjs/Subscription';
 export class StandardViewComponent implements OnInit, OnDestroy {
 
   private subscription: Subscription;
-  @Input() classes: Observable<Iclass[]>;
+  @Input() classes: Observable<IClassWithProperties[]>;
 
   constructor() { }
 

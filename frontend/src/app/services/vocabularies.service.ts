@@ -7,8 +7,32 @@ import { Observable } from 'rxjs/Observable';
 import { EmptyObservable } from 'rxjs/observable/EmptyObservable';
 import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 
-import { Classes, Vocabularies } from '../../../api/collections';
-import { Iclass, Ivocabulary } from '../../../api/models';
+import 'rxjs/add/observable/combineLatest';
+import { Classes, Properties, Vocabularies } from '../../../api/collections';
+import { Iclass, Iproperty, Ivocabulary, meteorID } from '../../../api/models';
+
+export interface IClassWithProperties {
+  _id?: string; // Mongo generated ID
+  name: string;
+  description: string;
+  URI: string;
+
+  properties: Array<{
+    _id?: string; // Mongo generated ID
+    name: string;
+    description: string;
+    URI: string;
+    range: IClassWithProperties;
+  }>;
+  position: {
+    x: number;
+    y: number;
+  };
+  skos: {
+    closeMatch: string[];
+    exactMatch: string[];
+  };
+}
 
 @Injectable()
 export class VocabulariesService {
@@ -25,6 +49,18 @@ export class VocabulariesService {
         console.log(err);
       });
   }
+  addProperty(toClass: meteorID, name: string, description: string, URI: string, range: meteorID) {
+    MeteorObservable.call('property.create',
+      { classId: toClass, name, description, URI, range }
+    ).pipe(zoneOperator())
+      .subscribe((response) => {
+        // Handle success and response from server!
+      }, (err) => {
+        console.log(err);
+      });
+  }
+
+
   getClasses(vocabularyId: string): Observable<Iclass[]> {
     if (vocabularyId === undefined || vocabularyId === '') {
       throw new Error('Oh no');
@@ -32,42 +68,57 @@ export class VocabulariesService {
 
     const thevocabO = Vocabularies.find({ _id: vocabularyId });
     const res: Observable<Iclass[]> = thevocabO.flatMap(
-      (theVocab, test) => {
+      (theVocab, _ignored) => {
         if (theVocab.length > 1) {
-          // return Observable.Throw<string>(new Exception());
-          // TODO return observable
-          throw new ErrorObservable(new Error('More than 1 vocab returned for id'));
+          return new ErrorObservable(new Error('More than 1 vocab returned for id'));
         } else if (theVocab.length === 0) {
           return new EmptyObservable();
         } else {
           const classes = theVocab[0].classes;
-          return Classes.find({ _id: { $in: classes } }).pipe(zoneOperator()).map((x) => { // console.log(x);
-            return x; }) as any;
+          return Classes.find({ _id: { $in: classes } });
         }
       }
     );
     return res;
-
-    // Subject s = new Subject();
-
-    // const all = Vocabularies.find({});
-    // all.subscribe(
-    //   {
-    //     next: (res) => {
-    //       console.log('vocabs ', res);
-    //     },
-    //     error: (e) => {
-    //       console.log('ERROR' + e)
-    //     }
-    //   }
-    // );
-
-    // const theOne = Vocabularies.findOne({ _id: vocabularyId });
-    // if (theOne === undefined) {
-    //   throw new Error('Could not find a vocabulary with the given ID ' + vocabularyId);
-    // }
-    // // console.log(theOne);
-    // const classes = theOne.classes;
-    // return Classes.find({ _id: { $in: classes } }).pipe(zoneOperator()).map((x) => { console.log(x); return x; }) as any;
   }
+
+  /**
+   *  TODO: In the current implmentation, ANY update will cause all information to be requeried.
+   *  This can be improved by listening to specific updates instead.
+   *
+   * @param vocabularyId
+   */
+  getClassesWithProperties(vocabularyId: string): Observable<IClassWithProperties[]> {
+    const classes = this.getClasses(vocabularyId)
+      .switchMap((cs) =>
+        Observable.combineLatest(
+          cs.map((c) =>
+            Properties.find({ _id: { $in: c.properties } })
+              .map((ps: Iproperty[]) => {
+                return { ...c, properties: ps };
+              })
+          )
+        )
+      );
+
+    const filledClasses: Observable<IClassWithProperties[]> = classes.map((cs) => {
+      const newClassesWithoutRangeFilledLater = cs.map((c) => {
+        const filledProps = c.properties.map((p) => {
+          return { ...p, range: null };
+        });
+        return { ...c, properties: filledProps };
+      });
+
+      newClassesWithoutRangeFilledLater.forEach((c, i) =>
+        c.properties.forEach((p, j) =>
+          p.range = newClassesWithoutRangeFilledLater.find((cr) => cr._id === cs[i].properties[j].range)
+        )
+      );
+
+      return newClassesWithoutRangeFilledLater;
+    });
+
+    return filledClasses;
+  }
+
 }

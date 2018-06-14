@@ -4,6 +4,10 @@
           <mat-list-item> {{clazz.name}} </mat-list-item>
           <mat-list-item> {{clazz.description}} </mat-list-item>
           <mat-list-item> {{clazz.URI}} </mat-list-item>
+          <mat-list *ngFor="let prop of clazz.properties">
+              <mat-list-item> {{prop.name}} </mat-list-item>
+          </mat-list>
+          <mat-list-item> {{clazz._id}} </mat-list-item>
       </mat-list>
     </mat-card>
 

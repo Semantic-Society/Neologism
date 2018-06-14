@@ -7,7 +7,7 @@ import { IUserObject, MxgraphService } from './mxgraph';
 import { N3Codec } from './N3Codec';
 
 import { Iclass } from '../../../api/models';
-import { VocabulariesService } from '../services/vocabularies.service';
+import { IClassWithProperties, VocabulariesService } from '../services/vocabularies.service';
 
 enum SideBarState {
     Default,
@@ -28,7 +28,7 @@ export class MxgraphComponent implements OnInit, OnDestroy {
     @ViewChild('view') mxGraphView: ElementRef;
     protected mx: MxgraphService;
     protected id: string;
-    protected classes: Observable<Iclass[]>;
+    protected classes: Observable<IClassWithProperties[]>;
 
     constructor(private route: ActivatedRoute, private vocabService: VocabulariesService) {
         this.editMode = SideBarState.Default;
@@ -44,9 +44,10 @@ export class MxgraphComponent implements OnInit, OnDestroy {
         );
 
         // console.log('the is of the vocb is ' + this.id);
-        this.classes = this.vocabService.getClasses(this.id);
+        this.classes = this.vocabService.getClassesWithProperties(this.id);
 
-        this.vocabService.addClass(this.id, 'ClassName', 'Iraklis did it', 'the URI');
+        // this.vocabService.addClass(this.id, 'ClassName', 'Iraklis did it', 'the URI');
+        // this.vocabService.addProperty('t7LhQpL5GpkK9qsuc', 'myprop', 'nice prop', 'example.org', 't7LhQpL5GpkK9qsuc');
 
         this.mx.addSelectionListener((userobjects: IUserObject[]) => {
             if (userobjects.length === 1) {
