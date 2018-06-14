@@ -56,27 +56,31 @@ export class MxgraphComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.mx.addDragListener((ids, dx, dy) =>
-            this.vocabService.translateClasses(ids, dx, dy)
-        );
-
-        this.classes.subscribe((cs) => {
-            this.mx.startTransaction();
-
-            // insert classes
-            cs.forEach((c) =>
-                this.mx.insertClass(c._id, c.name, c.position.x, c.position.y)
-            );
-
-            // insert properties
-            cs.forEach((c) =>
-                c.properties.forEach((p) =>
-                    this.mx.insertProperty(c._id, p._id, p.name, p.range._id)
-                )
-            );
-
-            this.mx.endTransaction();
+        this.mx.addDragListener((ids, dx, dy) => {
+            console.log(ids, dx, dy);
+            this.vocabService.translateClasses(ids, dx, dy);
         });
+
+        this.classes.debounceTime(80)
+            .subscribe((cs) => {
+                this.mx.startTransaction();
+
+                this.mx.clearModel();
+
+                // insert classes
+                cs.forEach((c) =>
+                    this.mx.insertClass(c._id, c.name, c.position.x, c.position.y)
+                );
+
+                // insert properties
+                cs.forEach((c) =>
+                    c.properties.forEach((p) =>
+                        this.mx.insertProperty(c._id, p._id, p.name, p.range._id)
+                    )
+                );
+
+                this.mx.endTransaction();
+            });
 
         // this.mx = new MxgraphService(
         //     this.mxGraphView.nativeElement,
