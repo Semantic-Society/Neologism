@@ -12,17 +12,17 @@ import { Classes, Properties, Vocabularies } from '../../../api/collections';
 import { Iclass, Iproperty, Ivocabulary, meteorID } from '../../../api/models';
 
 export interface IClassWithProperties {
-  _id?: string; // Mongo generated ID
+  _id: string; // Mongo generated ID
   name: string;
   description: string;
   URI: string;
 
   properties: Array<{
-    _id?: string; // Mongo generated ID
+    _id: string; // Mongo generated ID
     name: string;
     description: string;
     URI: string;
-    range: IClassWithProperties;
+    range: IClassWithProperties; // these MUST be in the same vocabulary!
   }>;
   position: {
     x: number;

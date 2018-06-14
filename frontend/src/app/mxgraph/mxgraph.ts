@@ -1,10 +1,7 @@
-import { zoneOperator } from 'meteor-rxjs';
 import * as m from 'mxgraph';
 
-import { Vocabularies } from '../../../api/collections';
-import { Ivocabulary } from '../../../api/models';
 import { enableDynamicGrid } from './dynamicGrid';
-import { N3Codec } from './N3Codec';
+// import { N3Codec } from './N3Codec';
 
 type Predicates = Map<string, Set<string>>;
 export interface IUserObject { url: string; label: string; creator: string; }
@@ -20,16 +17,13 @@ export class MxgraphService {
     graph: m.mxGraph;
     private model: m.mxGraphModel;
     private canvas: m.mxCell;
-    private toolbar: m.mxToolbar;
-    private vocabSubscription;
-    public codec: N3Codec;
-
-    private predicateSet = new Set(['http://www.w3.org/2000/01/rdf-schema#subClassOf']);
+    private transactionSelection;
+    // private toolbar: m.mxToolbar;
+    // public codec: N3Codec;
 
     constructor(
         private container: HTMLDivElement,
         // private toolbarContainer: HTMLElement,
-        private vocabID: string
     ) {
         if (!MxgraphService.mx.mxClient.isBrowserSupported()) MxgraphService.mx.mxUtils.error('Browser is not supported!', 200, false);
 
@@ -41,11 +35,11 @@ export class MxgraphService {
         this.graph.setAutoSizeCells(true);
         this.graph.autoSizeCellsOnAdd = true;
         this.graph.setCellsResizable(false);
-        this.graph.setConnectable(true);
+        this.graph.setConnectable(false); // TODO: Implement this in the future?
         this.graph.setPanning(true);
         this.graph.setCellsEditable(false);
         this.graph.panningHandler.useLeftButtonForPanning = true;    // Breaks lasso selection!
-        this.graph.convertValueToString = (cell: m.mxCell) => cell.getValue().label;  // Enable mxGraph to extract cell labels
+        // this.graph.convertValueToString = (cell: m.mxCell) => cell.getValue().label;  // Enable mxGraph to extract cell labels
         enableDynamicGrid(this.graph, MxgraphService.mx);
         this.graph.view.refresh();
 
@@ -69,10 +63,10 @@ export class MxgraphService {
         edgeStyle[MxgraphService.mx.mxConstants.STYLE_FILLCOLOR] = '#FFFFFF';
         edgeStyle[MxgraphService.mx.mxConstants.STYLE_LABEL_BACKGROUNDCOLOR] = '#FFFFFF';
 
-        const keyHandler = new MxgraphService.mx.mxKeyHandler(this.graph);
-        keyHandler.bindKey(8, (evt) => this.graph.isEnabled() ? this.graph.removeCells() : null);   // backspace key removes cell
-        keyHandler.bindKey(43, (evt) => this.graph.isEnabled() ? this.graph.removeCells() : null);  // mac delete key removes cell
-        keyHandler.bindKey(127, (evt) => this.graph.isEnabled() ? this.graph.removeCells() : null);  // proper operating systems delete
+        // const keyHandler = new MxgraphService.mx.mxKeyHandler(this.graph);
+        // keyHandler.bindKey(8, (evt) => this.graph.isEnabled() ? this.graph.removeCells() : null);   // backspace key removes cell
+        // keyHandler.bindKey(43, (evt) => this.graph.isEnabled() ? this.graph.removeCells() : null);  // mac delete key removes cell
+        // keyHandler.bindKey(127, (evt) => this.graph.isEnabled() ? this.graph.removeCells() : null);  // proper operating systems delete
 
         // Adds mouse wheel handling for zoom
         // see https://github.com/jgraph/mxgraph/blob/master/javascript/examples/grapheditor/www/js/EditorUi.js
@@ -112,12 +106,12 @@ export class MxgraphService {
         // organic.forceConstant = 120;
 
         // Initialize a lookup map from subject IRI to the corresponding mxGraph cell and set up automatic syncronization
-        this.graph.addListener(MxgraphService.mx.mxEvent.CELLS_ADDED, (sender: m.mxEventSource, evt: m.mxEventObject) => {
-            // throw new Error('NOT  IMPELEMENTED'); // TODO Michael does this need to be implemented?
-            // const cells: m.mxCell[] = (evt.getProperties() || {})['cells'];
-            // if (Array.isArray(cells)) cells.forEach((cell) => this.model.set(cell.getId(), cell));
-            // organic.execute(this.canvas);
-        });
+        // this.graph.addListener(MxgraphService.mx.mxEvent.CELLS_ADDED, (sender: m.mxEventSource, evt: m.mxEventObject) => {
+        // throw new Error('NOT  IMPELEMENTED'); // TODO Michael does this need to be implemented?
+        // const cells: m.mxCell[] = (evt.getProperties() || {})['cells'];
+        // if (Array.isArray(cells)) cells.forEach((cell) => this.model.set(cell.getId(), cell));
+        // organic.execute(this.canvas);
+        // });
         // this.graph.addListener(MxgraphService.mx.mxEvent.CELLS_REMOVED, (sender: m.mxEventSource, evt: m.mxEventObject) => {
         //  throw new Error('NOT  IMPELEMENTED'); // TODO Michael does this need to be implemented?
         // const cells: m.mxCell[] = (evt.getProperties() || {})['cells'];
@@ -146,13 +140,6 @@ export class MxgraphService {
         //             });
         //         this.zoomToFit();
         //     });
-
-        this.vocabSubscription = Vocabularies.find({ _id: vocabID })
-            .filter((vs) => vs.length > 0)
-            .map((vs) => vs[0])
-            .subscribe((vocab) => {
-                // this.model
-            });
 
     }
 
@@ -189,117 +176,133 @@ export class MxgraphService {
     //     // img.enabled = true;
     // }
 
+    public startTransaction() {
+        this.model.beginUpdate();
+        this.transactionSelection = this.graph.getSelectionModel().cells;
+    }
+    public endTransaction() {
+        this.assertTransaction();
+        this.selectCells(this.transactionSelection);
+        this.transactionSelection = null;
+        this.model.endUpdate();
+    }
+    public clearModel() {
+        this.assertTransaction();
+        this.graph.removeCells(this.graph.getChildCells(this.canvas, true, true)); // TODO: Assert this clear selection model
+    }
+    private assertTransaction() {
+        if (this.model.updateLevel <= 0) {
+            throw new Error('Start a transaction before making changes');
+        }
+    }
+
+    /** Add edge as mxcell to actual graph */
     private addEdge(
-        uri: string,
+        id: string,
         label: string,
         v1: m.mxCell,
         v2: m.mxCell,
     ) {
-        return this.graph.insertEdge(this.canvas, null, { uri, label }, v1, v2);
+        return this.graph.insertEdge(this.canvas, id, label, v1, v2);
     }
 
+    /** takes a number and rounds it to align with drawing grid */
     private alignToGrid(x: number) {
         return Math.round(x / this.graph.gridSize) * this.graph.gridSize;
     }
 
-    /**
-     * Inserts a new class into the model
-     * @param url The IRI / PID of the class to be added
-     * @param label The label to show in the rendering
-     * @param creator The id of the Neologism Recommender Backend used to suggest this item
-     * @param x The x offset of the new class. Middle of screen by default.
-     * @param y The y offset of the new class. Middle of screen by default.
-     */
-    insertClass(
-        url: string,
-        label: string,
-        creator?: string,
-        x: number = this.container.clientWidth / 2 / this.graph.view.scale - this.graph.view.translate.x,   // -translate is the point at the top left of the screen
-        y: number = this.container.clientHeight / 2 / this.graph.view.scale - this.graph.view.translate.y,  // containerDims/2/scale = offset to middle of screen
-    ) {
+    private viewCenter() {
+        // -translate is the point at the top left of the screen
+        let x: number = this.container.clientWidth / 2 / this.graph.view.scale - this.graph.view.translate.x;
+
+        // containerDims/2/scale = offset to middle of screen
+        let y: number = this.container.clientHeight / 2 / this.graph.view.scale - this.graph.view.translate.y;
+
         x = this.alignToGrid(x);
         y = this.alignToGrid(y);
 
-        let v = this.graph.getModel().getCell(url);
-        if (!v) {
-            v = this.graph.insertVertex(this.canvas, url, { url, label, creator }, x, y, 100, 15);
-            this.codec.addClass(url);
-            this.codec.addEnglishLabel(url, label);
-        }
-        // return v;
+        return { x, y };
     }
 
-    public getProperties(classIRI: string): Array<{
-        label: string; uri: string; range: string; comment: string;
-    }> {
-        const classCell = this.model.getCell(classIRI);
-        const properties: Array<{ label: string; uri: string; range: string; comment: string }> = [];
-
-        const count = classCell.getEdgeCount();
-        for (let i = 0; i < count; i++) {
-            const edge = classCell.getEdgeAt(i);
-            const edgeVal = edge.getValue();
-            const propDetails = { uri: edgeVal.uri, label: edgeVal.label, range: edge.getTerminal(false).getId(), comment: edgeVal.comment };
-            properties.push(propDetails);
+    /**
+     * Inserts a new class into the graph
+     * @param id The internal ID of the class
+     * @param label The label to show in the rendering
+     * @param x The x offset of the new class. Middle of screen by default.
+     * @param y The y offset of the new class. Middle of screen by default.
+     */
+    public insertClass(id: string, label: string, x: number, y: number) {
+        if (this.model.getCell(id)) {
+            throw new Error('Class already exists');
         }
-        return properties;
+        this.assertTransaction();
+
+        this.graph.insertVertex(this.canvas, id, label, x, y, 100, 15);
     }
 
+    /**
+     * Inserts a new property into the graph
+     * @param subject The internal id of the property's domain
+     * @param predicateID The internal id of the property itself
+     * @param predicateLabel The label to display on the edge
+     * @param object The internal id of the property's range
+     */
     public insertProperty(
         subject: string,
-        predicate: string,
+        predicateID: string,
         predicateLabel: string,
-        predicateComment: string,
         object: string
     ) {
+        this.assertTransaction();
+
         const v1 = this.model.getCell(subject);
         const v2 = this.model.getCell(object);
 
-        if (!v1 || !v2) throw new Error('Classes do not exist');
+        if (!v1 || !v2) {
+            throw new Error('Classes do not exist');
+        }
 
         // Check if property is already existing
         const count = v1.getEdgeCount();
         for (let i = 0; i < count; i++) {
             const edge = v1.getEdgeAt(i);
-            if (edge.getValue().uri === predicate && edge.getTerminal(false).getId() === object)
-                return edge;
+            if (edge.getId() === predicateID && edge.getTerminal(false).getId() === object) {
+                // return;
+                throw new Error('Trying to add same property twice');
+            }
         }
 
-        // insert in the codec:
-        this.codec.addRDFSProperty(predicate, subject, object);
-        this.codec.addEnglishLabel(predicate, predicateLabel);
-        this.codec.addEnglishComment(predicate, predicateComment);
-        return this.graph.insertEdge(this.canvas, null, { uri: predicate, label: predicateLabel, comment: predicateComment }, v1, v2);
+        this.graph.insertEdge(this.canvas, predicateID, predicateLabel, v1, v2);
     }
 
-    public insertSubclassRelation(
-        subclass: string,
-        superclass: string,
-    ) {
-        const v1 = this.model.getCell(subclass);
-        const v2 = this.model.getCell(superclass);
+    // public insertSubclassRelation(
+    //     subclass: string,
+    //     superclass: string,
+    // ) {
+    //     const v1 = this.model.getCell(subclass);
+    //     const v2 = this.model.getCell(superclass);
 
-        if (!v1 || !v2) throw new Error('Classes do not exist');
+    //     if (!v1 || !v2) throw new Error('Classes do not exist');
 
-        // Check if property is already existing
-        const count = v1.getEdgeCount();
-        for (let i = 0; i < count; i++) {
-            const edge = v1.getEdgeAt(i);
-            if (edge.getValue().uri === 'http://www.w3.org/2000/01/rdf-schema#subClassOf' && edge.getTerminal(false).getId() === superclass)
-                return edge;
-        }
+    //     // Check if property is already existing
+    //     const count = v1.getEdgeCount();
+    //     for (let i = 0; i < count; i++) {
+    //         const edge = v1.getEdgeAt(i);
+    //         if (edge.getValue().uri === 'http://www.w3.org/2000/01/rdf-schema#subClassOf' && edge.getTerminal(false).getId() === superclass)
+    //             return edge;
+    //     }
 
-        // insert in the codec:
-        this.codec.addRDFSSubclassOf(subclass, superclass);
-        return this.graph.insertEdge(this.canvas, null, { uri: 'http://www.w3.org/2000/01/rdf-schema#subClassOf', label: 'rdfs:subClassOf' }, v1, v2);
-    }
+    //     // insert in the codec:
+    //     this.codec.addRDFSSubclassOf(subclass, superclass);
+    //     return this.graph.insertEdge(this.canvas, null, { uri: 'http://www.w3.org/2000/01/rdf-schema#subClassOf', label: 'rdfs:subClassOf' }, v1, v2);
+    // }
 
-    /** Returns a turtle serialization of the current model */
-    async serializeModel() {
-        const model = await this.codec.serialize();
-        console.log('GraphSerialization:', model);
-        return model;
-    }
+    // /** Returns a turtle serialization of the current model */
+    // async serializeModel() {
+    //     const model = await this.codec.serialize();
+    //     console.log('GraphSerialization:', model);
+    //     return model;
+    // }
 
     zoomToFit() {
         this.graph.fit();
@@ -310,21 +313,42 @@ export class MxgraphService {
         // this.toolbar.destroy();
     }
 
-    selectClass(iri: string) {
-        this.selectCells([this.model.getCell(iri)]);
+    /** Highlight cell in graph by its ID */SideBarState;
+
+    @ViewChild('view') mxGraphView: ElementRef;
+    protected mx: MxgraphService;
+    public selectClass(id: string) {
+        this.selectCells([this.model.getCell(id)]);
     }
 
+    /** Select an array of mxcells in the graph */
     private selectCells(cells: m.mxCell[]) {
         this.graph.setSelectionCells(cells);
     }
 
-    addSelectionListener(funct: (x: IUserObject[]) => void) {
+    /** Call the given function with data of selected mxCell */
+    public addSelectionListener(funct: (x: string) => void) {
         // http://forum.jgraph.com/questions/252/add-listener-when-clicking-on-a-vertex/253
         this.graph.getSelectionModel().addListener(MxgraphService.mx.mxEvent.CHANGE, (selectionModel: m.mxGraphSelectionModel, evt: m.mxEventObject) => {
             const values = selectionModel.cells
                 .filter((cell) => cell.vertex)
-                .map((cell) => cell.getValue() as IUserObject);
-            funct(values);
+                .map((cell) => cell.getId());
+
+            if (values.length === 1) {
+                funct(values[0]);
+            } else if (values.length === 0) {
+                funct(null);
+            } else {
+                throw new Error('Multiple items selected. Should not be possible');
+            }
+        });
+    }
+
+    /** Call the given function with data of selected mxCell */
+    public addDragListener(funct: (x: string) => void) {
+        // http://forum.jgraph.com/questions/252/add-listener-when-clicking-on-a-vertex/253
+        this.graph.addListener(MxgraphService.mx.mxEvent.CELLS_MOVED, (sender, evt: m.mxEventObject) => {
+            // evt.
         });
     }
 }

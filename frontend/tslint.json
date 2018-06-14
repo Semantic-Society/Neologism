@@ -22,7 +22,6 @@
     "forin": true,
     "import-blacklist": [
       true,
-      "rxjs",
       "rxjs/Rx"
     ],
     "import-spacing": true,
@@ -154,9 +153,7 @@
     "rxjs-no-subject-unsubscribe": {
       "severity": "error"
     },
-    "rxjs-no-wholesale": {
-      "severity": "error"
-    },
+    "rxjs-no-wholesale": false,
     "rxjs-no-do": {
       "severity": "error"
     }

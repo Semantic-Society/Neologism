@@ -1,12 +1,12 @@
 import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { mxgraph as m } from 'mxgraph';
-import { Observable } from 'rxjs/Observable';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 import { IUserObject, MxgraphService } from './mxgraph';
 import { N3Codec } from './N3Codec';
 
-import { Iclass } from '../../../api/models';
+import { Iclass, meteorID } from '../../../api/models';
 import { IClassWithProperties, VocabulariesService } from '../services/vocabularies.service';
 
 enum SideBarState {
@@ -22,7 +22,7 @@ enum SideBarState {
 })
 export class MxgraphComponent implements OnInit, OnDestroy {
     editMode: SideBarState;
-    currentSelection: IUserObject;
+    currentSelection: meteorID;
     sideBarState = SideBarState;
 
     @ViewChild('view') mxGraphView: ElementRef;
@@ -36,28 +36,42 @@ export class MxgraphComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.id = this.route.snapshot.paramMap.get('id');
-
-        this.mx = new MxgraphService(
-            this.mxGraphView.nativeElement,
-            // document.getElementById('mx-toolbar'),
-            this.id
-        );
+        // TODO: Currently creates a new instance with each subscription. Use something like this instead: .multicast(new BehaviorSubject([])); 
+        // This did, however, not work.
+        this.classes = this.vocabService.getClassesWithProperties(this.id);
+        this.mx = new MxgraphService(this.mxGraphView.nativeElement);
 
         // console.log('the is of the vocb is ' + this.id);
-        this.classes = this.vocabService.getClassesWithProperties(this.id);
 
-        // this.vocabService.addClass(this.id, 'ClassName', 'Iraklis did it', 'the URI');
-        // this.vocabService.addProperty('t7LhQpL5GpkK9qsuc', 'myprop', 'nice prop', 'example.org', 't7LhQpL5GpkK9qsuc');
+        this.vocabService.addClass(this.id, 'ClassName', 'Iraklis did it', 'the URI');
+        this.vocabService.addProperty('t7LhQpL5GpkK9qsuc', 'myprop', 'nice prop', 'example.org', 't7LhQpL5GpkK9qsuc');
 
-        this.mx.addSelectionListener((userobjects: IUserObject[]) => {
-            if (userobjects.length === 1) {
-                this.currentSelection = userobjects[0];
+        this.mx.addSelectionListener((id: meteorID) => {
+            if (id) {
+                this.currentSelection = id;
                 this.editMode = SideBarState.Edit;
-            } else if (userobjects.length === 0) {
-                this.editMode = SideBarState.Default;
             } else {
-                throw new Error('Selection of more than one element can currently not be handled.');
+                this.currentSelection = null;
+                this.editMode = SideBarState.Default;
             }
+        });
+
+        this.classes.subscribe((cs) => {
+            this.mx.startTransaction();
+
+            // insert classes
+            cs.forEach((c) =>
+                this.mx.insertClass(c._id, c.name, c.position.x, c.position.y)
+            );
+
+            // insert properties
+            cs.forEach((c) =>
+                c.properties.forEach((p) =>
+                    this.mx.insertProperty(c._id, p._id, p.name, p.range._id)
+                )
+            );
+
+            this.mx.endTransaction();
         });
 
         // this.mx = new MxgraphService(
