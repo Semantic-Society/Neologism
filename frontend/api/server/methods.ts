@@ -31,7 +31,7 @@ Meteor.methods({
     // TODO: Sanitize
     Classes.update(
       { _id: { $in: classids } },
-      { $inc: { 'location.x': dx, 'location.y': dy } },
+      { $inc: { 'position.x': dx, 'position.y': dy } },
       { multi: true }
     );
   },
