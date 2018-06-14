@@ -15,7 +15,7 @@ export function enableDynamicGrid(graph: m.mxGraph, mx: typeof m) {
 
         // Modify event filtering to accept canvas as container
         const mxGraphViewIsContainerEvent = mx.mxGraphView.prototype.isContainerEvent;
-        mx.mxGraphView.prototype.isContainerEvent = function (evt) {
+        mx.mxGraphView.prototype.isContainerEvent = function(evt) {
             return mxGraphViewIsContainerEvent.apply(this, arguments) ||
                 mx.mxEvent.getSource(evt) === canvas;
         };
@@ -100,7 +100,7 @@ export function enableDynamicGrid(graph: m.mxGraph, mx: typeof m) {
         };
 
         const mxGraphViewValidateBackground = mx.mxGraphView.prototype.validateBackground;
-        mx.mxGraphView.prototype.validateBackground = function () {
+        mx.mxGraphView.prototype.validateBackground = function() {
             mxGraphViewValidateBackground.apply(this, arguments);
             setTimeout(repaintGrid);
         };

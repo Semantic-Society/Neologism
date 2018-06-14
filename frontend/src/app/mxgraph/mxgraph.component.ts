@@ -28,7 +28,7 @@ export class MxgraphComponent implements OnInit, OnDestroy {
     @ViewChild('view') mxGraphView: ElementRef;
     protected mx: MxgraphService;
     protected id: string;
-    protected classes; //: Observable<IClassWithProperties[]>;
+    protected classes; // : Observable<IClassWithProperties[]>;
 
     constructor(private route: ActivatedRoute, private vocabService: VocabulariesService) {
         this.editMode = SideBarState.Default;
@@ -36,7 +36,7 @@ export class MxgraphComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.id = this.route.snapshot.paramMap.get('id');
-        // TODO: Currently creates a new instance with each subscription. Use something like this instead: .multicast(new BehaviorSubject([])); 
+        // TODO: Currently creates a new instance with each subscription. Use something like this instead: .multicast(new BehaviorSubject([]));
         // This did, however, not work.
         this.classes = this.vocabService.getClassesWithProperties(this.id);
         this.mx = new MxgraphService(this.mxGraphView.nativeElement);

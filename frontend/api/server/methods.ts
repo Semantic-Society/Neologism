@@ -1,4 +1,4 @@
-import { Classes, Vocabularies, Properties } from '../collections';
+import { Classes, Properties, Vocabularies } from '../collections';
 import { meteorID } from '../models';
 
 /**
