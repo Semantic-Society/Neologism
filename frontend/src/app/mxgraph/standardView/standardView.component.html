@@ -1,13 +1,25 @@
-    <mat-card>
-      <mat-card-title>Classes</mat-card-title>
-      <mat-list *ngFor="let clazz of (classes | async)">
-          <mat-list-item> {{clazz.name}} </mat-list-item>
-          <mat-list-item> {{clazz.description}} </mat-list-item>
-          <mat-list-item> {{clazz.URI}} </mat-list-item>
-          <mat-list *ngFor="let prop of clazz.properties">
-              <mat-list-item> {{prop.name}} </mat-list-item>
-          </mat-list>
-          <mat-list-item> {{clazz._id}} </mat-list-item>
-      </mat-list>
-    </mat-card>
-
+<div *ngFor="let c of (classes | async)">
+  <div class="attributes-container">
+    <div class="attribute-container">
+      <span class="label"> Class: </span>
+      <span class="text"><a href="{{c.URI}}">{{c.name}}</a> </span>
+    </div>
+    <div class="attribute-container">
+      <span class="label"> URI: </span>
+      <span class="text"> <a href="{{c.URI}}">{{c.URI}}</a> </span>
+    </div>
+    <div class="attribute-container">
+      <span class="label"> Description: </span>
+      <span class="text">  {{c.description}} </span>
+    </div>
+    <div class="attribute-container" *ngIf="c.properties.length >0">
+      <span class="label"> Properties: </span>
+      <div class="text">
+        <div class="properties-container" *ngFor="let p of c.properties">
+          <span> <a href="{{p.URI}}"> {{p.name}} </a></span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <hr class="divider">
+</div>

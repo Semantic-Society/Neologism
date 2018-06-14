@@ -1,0 +1,35 @@
+.attributes-container {
+  padding: 1rem;
+}
+
+.attribute-container {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+}
+
+.attribute-container .label {
+  font-weight: bolder;
+  margin-right: 0.5rem;
+}
+
+.attribute-container .text a, .attribute-container .text a:visited, .attribute-container .text a:active {
+  color: cornflowerblue;
+  text-decoration: none;
+}
+
+.attribute-container .text a:hover {
+  color: cornflowerblue;
+  text-decoration: underline;
+}
+
+.divider {
+  width: 95%
+}
+
+.properties-container {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  justify-items: flex-start;
+}
