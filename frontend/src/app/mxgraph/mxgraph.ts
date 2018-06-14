@@ -178,18 +178,22 @@ export class MxgraphService {
 
     public startTransaction() {
         this.model.beginUpdate();
-        this.transactionSelection = this.graph.getSelectionModel().cells;
+        this.transactionSelection = this.graph.getSelectionModel().cells.map((cell) => cell.getId());
     }
+
     public endTransaction() {
         this.assertTransaction();
-        this.selectCells(this.transactionSelection);
+        const selectedNewCells = this.transactionSelection.map((id) => this.model.getCell(id)).filter((x) => x);
+        this.selectCells(selectedNewCells);
         this.transactionSelection = null;
         this.model.endUpdate();
     }
+
     public clearModel() {
         this.assertTransaction();
         this.graph.removeCells(this.graph.getChildCells(this.canvas, true, true)); // TODO: Assert this clear selection model
     }
+
     private assertTransaction() {
         if (this.model.updateLevel <= 0) {
             throw new Error('Start a transaction before making changes');
@@ -342,7 +346,7 @@ export class MxgraphService {
     }
 
     /** Call the given function with data of selected mxCell */
-    public addDragListener(funct: (ids: string[], dx: number, dy: number ) => void) {
+    public addDragListener(funct: (ids: string[], dx: number, dy: number) => void) {
         // http://forum.jgraph.com/questions/252/add-listener-when-clicking-on-a-vertex/253
         this.graph.addListener(MxgraphService.mx.mxEvent.CELLS_MOVED, (sender, evt: m.mxEventObject) => {
             const cells: m.mxCell[] = evt.getProperty('cells');
@@ -350,7 +354,7 @@ export class MxgraphService {
             const dx: number = evt.getProperty('dx');
             const dy: number = evt.getProperty('dy');
 
-            funct( ids, dx, dy );
+            funct(ids, dx, dy);
         });
     }
 }
