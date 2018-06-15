@@ -4,7 +4,7 @@
     <app-metadata [vocabulary]="vocabulary"></app-metadata>
     <div class="toolbar-container">
       <app-editbox *ngSwitchCase="sideBarState.Edit" [selectedClassID]="this.currentSelection" [vocabID]="this.vocabID"></app-editbox>
-      <app-recommender *ngSwitchCase="sideBarState.Recommend" [mx]="mx"></app-recommender>
+      <app-recommender *ngSwitchCase="sideBarState.Recommend" [vocabID]="this.vocabID"></app-recommender>
     </div>
     <div class="button-div">
       <div class="pad-1">

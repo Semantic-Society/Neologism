@@ -1,7 +1,7 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, Output, ViewChild } from '@angular/core';
 
-import { MxgraphService } from '../mxgraph/mxgraph';
 import { RecommendationService } from '../services/recommendation.service';
+import { VocabulariesService } from '../services/vocabularies.service';
 
 interface IClassRecommendation {
   uri: string;
@@ -43,10 +43,11 @@ export class RecommenderComponent implements OnInit {
   // TODO before it was be possible that an old, still pending request which returns turns off the spinner or fills the result list
   private currentRequestNumber = 0;
 
-  constructor(private recommendationService: RecommendationService) {
+  @Input() vocabID: string;
+
+  constructor(private recommendationService: RecommendationService, private vocabService: VocabulariesService) {
   }
 
-  @Input() mx: MxgraphService;
   @ViewChild('labelInput') labelInput: ElementRef;
 
   public showSpinner = false;
@@ -79,23 +80,24 @@ export class RecommenderComponent implements OnInit {
       this.currentRequestNumber++;
       const requestNumber = this.currentRequestNumber;
       this.enableSpinner();
-      if (!(this.mx && queryString)) {
-        throw new Error('mx or labelFiled null');
+      if (!(queryString)) {
+        throw new Error('labelFiled null');
       }
-      // this.mx.serializeModel().then((model) =>
-      //   this.recommendationService.classRecommendationforNewClass(model, queryString)
-      //     .subscribe(
-      //       (recs) => {
-      //         if (this.currentRequestNumber === requestNumber) {
-      //           this.recommendations = recs;
-      //         }
-      //       }, null // TODO handle error?
-      //       , () => {
-      //         if (this.currentRequestNumber === requestNumber) {
-      //           this.disableSpinner();
-      //         }
-      //       }
-      //     ));
+      // this.mx.serializeModel().then((context) =>
+      // TODO re-enable context
+      this.recommendationService.classRecommendationforNewClass(''/*context*/, queryString)
+        .subscribe(
+          (recs) => {
+            if (this.currentRequestNumber === requestNumber) {
+              this.recommendations = recs;
+            }
+          }, null // TODO handle error?
+          , () => {
+            if (this.currentRequestNumber === requestNumber) {
+              this.disableSpinner();
+            }
+          }
+        );
     };
     exp();
     /*
@@ -104,7 +106,7 @@ export class RecommenderComponent implements OnInit {
   }
 
   selectRecommendation(r: IClassRecommendation) {
-    console.log('Send request');
+    // console.log('Send request');
     this.enableSpinnerProp();
     this.selectedRecommendation = r;
     this.isSelectedRecommendationVisible = true;
