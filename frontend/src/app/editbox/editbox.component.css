@@ -182,3 +182,13 @@ mat-panel-title {
   background-color: #228b22;
   color:#FFFFFF !important;
 }
+
+mat-form-field.description {
+  padding: 0.5rem;
+  min-height: 100px;
+  width: calc(100% - 1rem);
+}
+
+mat-form-field.description textarea {
+  min-height: 100px;
+}
