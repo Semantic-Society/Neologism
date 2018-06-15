@@ -3,9 +3,10 @@
 }
 
 .attribute-container {
+  padding: 0.25rem 0rem;
   display: flex;
   flex-wrap: wrap;
-  flex-direction: row;
+  flex-direction: column;
 }
 
 .attribute-container .label {
@@ -17,6 +18,11 @@
   color: cornflowerblue;
   text-decoration: none;
 }
+.attribute-container .uri a, .attribute-container .uri a:visited, .attribute-container .uri a:active {
+  color: cornflowerblue;
+  text-decoration: none;
+}
+
 
 .attribute-container .text a:hover {
   color: cornflowerblue;
@@ -28,8 +34,35 @@
 }
 
 .properties-container {
+  padding: 0.25rem 0rem;
   display: flex;
   flex-wrap: wrap;
   flex-direction: column;
   justify-items: flex-start;
+}
+
+.attribute-container.description {
+  margin-left: 1rem;
+}
+
+.attribute-container.properties {
+  margin-left: 1rem;
+  flex-direction: column;
+
+}
+
+.properties-container .property-range {
+  padding-top: 0.25rem;
+  margin-left: 1rem;
+  font-size: 0.75rem;
+}
+
+.properties-container .label {
+  font-weight: bolder;
+  margin-right: 0.25rem;
+}
+
+.attribute-container .uri {
+  margin-left: 0.25rem;
+  font-size: 0.75rem;
 }
