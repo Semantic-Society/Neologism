@@ -10,8 +10,13 @@
 }
 
 .attribute-container .label {
+  color: lightslategray;
+  margin-right: 0.1rem;
+  font-size: calc(100% - 5px);
+}
+
+.attribute-container .name {
   font-weight: bolder;
-  margin-right: 0.5rem;
 }
 
 .attribute-container .text a, .attribute-container .text a:visited, .attribute-container .text a:active {
