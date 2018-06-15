@@ -1,12 +1,8 @@
 import { Injectable } from '@angular/core';
 import { mxgraph } from 'mxgraph';
 import * as N3 from 'n3';
-import 'rxjs/add/observable/bindCallback';
-import { Observable } from 'rxjs/Observable';
+import { Observable, Subject } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
-import { Subject } from 'rxjs/Subject';
-import { error } from 'util';
-// import { prefixes as prefix_cc } from './prefix.cc';
 
 export class N3Codec {
     // See https://github.com/RubenVerborgh/N3.js

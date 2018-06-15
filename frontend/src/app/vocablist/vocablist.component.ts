@@ -2,10 +2,11 @@ import { DataSource } from '@angular/cdk/collections';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MeteorObservable, ObservableCursor, zoneOperator } from 'meteor-rxjs';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 import { Vocabularies } from '../../../api/collections';
 import { Ivocabulary } from '../../../api/models';
+import { VocabulariesService } from '../services/vocabularies.service';
 
 @Component({
   selector: 'app-vocablist',
@@ -14,7 +15,7 @@ import { Ivocabulary } from '../../../api/models';
 })
 export class VocablistComponent implements OnInit {
 
-  dataSource = new VocabularyDataSource();
+  protected dataSource: Observable<Ivocabulary[]>; // new VocabularyDataSource();
 
   protected vocabForm = {
     name: '',
@@ -25,37 +26,24 @@ export class VocablistComponent implements OnInit {
   };
   displayedColumns = ['name', 'authors', 'description', 'uriPrefix', 'actions'];
 
-  constructor(protected router: Router) { }
+  constructor(protected router: Router, private vocabService: VocabulariesService) { }
 
   ngOnInit() {
+    this.dataSource = this.vocabService.getVocabularies();
   }
 
+  // TODO: Move to VocabService #decouple
   addVocabulary() {
-    MeteorObservable.call('vocabulary.create',
-      this.vocabForm
-      /*{
-        name: this.vocabForm.name,
-        authors: this.vocabForm.authors,
-        description: this.vocabForm.description,
-        uriPrefix: this.vocabForm.uriPrefix
-      }*/
-    ).pipe(zoneOperator())
-      .subscribe((response) => {
-        console.log(response);
-        // Handle success and response from server!
-      }, (err) => {
-        // Handle error
-      });
+    this.vocabService.createVocabulary(
+      this.vocabForm.name,
+      this.vocabForm.authors,
+      this.vocabForm.description,
+      this.vocabForm.uriPrefix
+    );
   }
 
   deleteVocab(id) {
-    MeteorObservable.call('vocabulary.remove', id)
-      .pipe(zoneOperator())
-      .subscribe((response) => {
-        // Handle success and response from server!
-      }, (err) => {
-        // Handle error
-      });
+    this.vocabService.deleteVocabulary(id);
   }
 
   randomStr(m) {
@@ -69,13 +57,20 @@ export class VocablistComponent implements OnInit {
 }
 
 // tslint:disable-next-line:max-classes-per-file
-export class VocabularyDataSource extends DataSource<any> {
-  constructor() {
-    super();
-  }
-  connect(): Observable<Ivocabulary[]> {
-    return Vocabularies.find({}).pipe(zoneOperator()).map((x) => { // console.log(x);
-      return x; }) as any;
-  }
-  disconnect() {}
-}
+// export class VocabularyDataSource extends DataSource<any> {
+//   constructor() {
+//     super();
+//   }
+//   connect(): Observable<Ivocabulary[]> {
+//     return
+
+//     (Vocabularies.find({})
+//       .pipe(
+//         zoneOperator(),
+//         // map((x) => { // console.log(x);
+//         //   return x;
+//         // })
+//       ) as any;
+//   }
+//   disconnect() { }
+// }

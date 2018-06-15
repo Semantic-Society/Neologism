@@ -1,9 +1,7 @@
-///<reference path="../../../node_modules/@angular/core/src/metadata/directives.d.ts"/>
-import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
-import 'rxjs/add/operator/map';
-import {MxgraphService} from '../mxgraph/mxgraph';
-import {RecommendationService} from '../services/recommendation.service';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 
+import { MxgraphService } from '../mxgraph/mxgraph';
+import { RecommendationService } from '../services/recommendation.service';
 
 interface IClassRecommendation {
   uri: string;
@@ -116,9 +114,9 @@ export class RecommenderComponent implements OnInit {
         // console.log('Received Property Recommendation', res);
 
       }, () => {
-          console.log('request failed');
+        console.log('request failed');
       }
-      , () => {
+        , () => {
           console.log('request finished');
           this.disableSpinnerProp();
           if (this.propertyRecommendations === []) {

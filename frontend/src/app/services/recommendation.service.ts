@@ -1,22 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
-import 'rxjs/add/observable/merge';
-import 'rxjs/add/observable/of';
-import 'rxjs/add/observable/range';
-import 'rxjs/add/operator/debounceTime';
-import 'rxjs/add/operator/distinctUntilChanged';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/merge';
-import 'rxjs/add/operator/mergeAll';
-import 'rxjs/add/operator/multicast';
-import 'rxjs/add/operator/pluck';
-import 'rxjs/add/operator/scan';
-import 'rxjs/add/operator/startWith';
-import 'rxjs/add/operator/switchMap';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { Observable } from 'rxjs/Observable';
-import { Subject } from 'rxjs/Subject';
+import { BehaviorSubject, ConnectableObservable, Observable, range, Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged, map, merge, mergeAll, multicast, scan, startWith, switchMap } from 'rxjs/operators';
 import { N3Codec } from '../mxgraph/N3Codec';
+import { VocabulariesService } from './vocabularies.service';
 
 type IRI = string;
 
@@ -85,29 +72,35 @@ export class RecommendationService {
     constructor(private _http: Http) {
         this.classReq = new Subject();
         this.classResp = new BehaviorSubject([]);
-        this.classReq.debounceTime(100)
-            .switchMap(({ queryGraph, queryTerm }) => {
+        this.classReq.pipe(
+            debounceTime(100),
+            switchMap(({ queryGraph, queryTerm }) => {
                 // First request to recommendation service's -start- endpoint
-                const initialRequest = this._http
-                    .post(`${RecommendationService.baseUrl}startForNewClass?keyword=${queryTerm}`, queryGraph)
-                    .map((res) => res.json())
-                    .multicast(new Subject<IRestResponse>());
+                const initialRequest = VocabulariesService.wrapFunkyObservables(
+                    this._http.post(`${RecommendationService.baseUrl}startForNewClass?keyword=${queryTerm}`, queryGraph)
+                ).pipe(
+                    map((res) => res.json()),
+                    multicast(new Subject<IRestResponse>()),
+                ) as ConnectableObservable<IRestResponse>;
 
                 // Subsequent `expectedRecommendationCount - 1` many requests to -more- endpoint
-                const nextRecommendations = initialRequest
-                    .switchMap( // execute requests in parallel
-                        (res) => Observable.range(1, res.expected - 1)
-                            .map(
-                                () => this._http
-                                    .get(`${RecommendationService.baseUrl}more?ID=${res.ID}`)
-                                    .map((resp) => resp.json() as IRestResponse)))
-                    .mergeAll(); // and merge results as they come in
+                const nextRecommendations = initialRequest.pipe(
+                    switchMap( // execute requests in parallel
+                        (res) => range(1, res.expected - 1).pipe(
+                            map(() => VocabulariesService.wrapFunkyObservables(
+                                this._http.get(`${RecommendationService.baseUrl}more?ID=${res.ID}`))
+                                .pipe(map((resp) => resp.json() as IRestResponse))
+                            )
+                        )
+                    ),
+                    mergeAll()
+                ); // and merge results as they come in
 
                 // Provide single point of contact for any recommendation
-                const r = initialRequest
-                    .merge(nextRecommendations)
-                    .map((res) => res.recommendation)
-                    .map((resp: IRecommendationMetadata) =>
+                const r = initialRequest.pipe(
+                    merge(nextRecommendations),
+                    map((res) => res.recommendation),
+                    map((resp: IRecommendationMetadata) =>
                         Array.isArray(resp && resp.list)
                             ? resp.list.map((rec) => {
                                 return {
@@ -118,20 +111,25 @@ export class RecommendationService {
                                 };
                             })
                             : []
-                    )
-                    .map((recs) => recs.slice(0, 3)) // Take only first three per recommender
-                    .scan((acc, curr) => [...acc, ...curr], []);
+                    ),
+                    map((recs) => recs.slice(0, 3)), // Take only first three per recommender
+                    scan((acc, curr) => [...acc, ...curr], []),
+                );
                 initialRequest.connect();
-                return r.startWith([]);
-            }).subscribe(this.classResp);
+                return r.pipe(startWith([]));
+            })
+        )
+            .subscribe(this.classResp);
 
         this.propsReq = new Subject();
         this.propsResp = new BehaviorSubject([]);
-        this.propsReq.debounceTime(100)
-            .switchMap(({ url, creator }) => this._http
-                .get(url)
-                .map((r) => r.json() as { properties: IPropertyRecommendation[] })
-                .map((r) =>
+        this.propsReq.pipe(
+            debounceTime(100),
+            switchMap(({ url, creator }) => VocabulariesService.wrapFunkyObservables(
+                this._http.get(url)
+            ).pipe(
+                map((r) => r.json() as { properties: IPropertyRecommendation[] }),
+                map((r) =>
                     Array.isArray(r && r.properties)
                         ? r.properties.map((rec) => {
                             return {
@@ -144,8 +142,11 @@ export class RecommendationService {
                             };
                         })
                         : []
-                ).startWith([])
-            ).subscribe(this.propsResp);
+                ),
+                startWith([]),
+            )
+            )
+        ).subscribe(this.propsResp);
     }
 
     // /**

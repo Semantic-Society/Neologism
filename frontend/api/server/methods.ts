@@ -8,7 +8,7 @@ import { meteorID } from '../models';
  */
 
 Meteor.methods({
-  'vocabulary.create'({ name, authors, description, uriPrefix }) {
+  'vocabulary.create'(name: string, authors: string[], description: string, uriPrefix: string ) {
     Vocabularies.insert({ name, authors, description, uriPrefix, classes: [] });
   },
   /*'vocabulary.insertClass'({id, vClass}) {

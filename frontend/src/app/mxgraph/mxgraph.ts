@@ -1,7 +1,6 @@
 import * as m from 'mxgraph';
-
 import { Observable } from 'rxjs';
-import 'rxjs/add/operator/distinctUntilChanged';
+import { distinctUntilChanged } from 'rxjs/operators';
 
 import { enableDynamicGrid } from './dynamicGrid';
 // import { N3Codec } from './N3Codec';
@@ -162,7 +161,7 @@ export class MxgraphService {
             };
             this.graph.getSelectionModel().addListener(MxgraphService.mx.mxEvent.CHANGE, handler);
             return () => this.graph.getSelectionModel().removeListener(handler);
-        }).distinctUntilChanged() as any;
+        }).pipe(distinctUntilChanged()) as any;
 
     }
 

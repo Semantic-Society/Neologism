@@ -1,11 +1,8 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { IClassWithProperties, VocabulariesService } from '../../services/vocabularies.service';
-
-import { Observable } from 'rxjs/Observable';
+import { Observable, Subscription } from 'rxjs';
 
 import { Iclass } from '../../../../api/models';
-
-import { Subscription } from 'rxjs/Subscription';
+import { IClassWithProperties, VocabulariesService } from '../../services/vocabularies.service';
 
 @Component({
   selector: 'app-standardview',

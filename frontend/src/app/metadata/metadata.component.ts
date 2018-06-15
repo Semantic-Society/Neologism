@@ -1,5 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Component, Input } from '@angular/core';
 
 import { Vocabularies } from '../../../api/collections';
 import { Ivocabulary } from '../../../api/models';
@@ -9,18 +8,9 @@ import { Ivocabulary } from '../../../api/models';
   templateUrl: './metadata.component.html',
   styleUrls: ['./metadata.component.css']
 })
-export class MetadataComponent implements OnInit {
-  @Input() vocabID: string;
-
-  protected vocabulary; //: Observable<Ivocabulary[]>;
+export class MetadataComponent {
+  @Input() vocabulary: Ivocabulary;
 
   constructor() { }
-
-  ngOnInit() {
-    this.vocabulary =
-      Vocabularies
-        .find({ _id: this.vocabID })
-        .filter((vArr) => vArr.length > 0);
-  }
 
 }

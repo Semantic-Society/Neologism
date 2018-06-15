@@ -28,6 +28,7 @@ import { RoutingModule } from './routing.module';
 
 // App Services
 import { RecommendationService } from './services/recommendation.service';
+import { VocabulariesService } from './services/vocabularies.service';
 
 // App Components
 import { AppComponent } from './app.component';
@@ -41,7 +42,6 @@ import { VocablistComponent } from './vocablist/vocablist.component';
 // Pipes
 import { TruncateModule } from '@yellowspot/ng-truncate';
 import { TruncatedTextComponentComponent } from './truncated-text-component/truncated-text-component.component';
-import { VocabulariesService } from './services/vocabularies.service';
 
 @NgModule({
   declarations: [

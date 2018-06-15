@@ -1,10 +1,7 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, } from '@angular/core';
 import { FormControl } from '@angular/forms';
-
-import { Observable } from 'rxjs/Observable';
-
-// import { switchMap } from 'rxjs/operators';
-import { map } from 'rxjs/operators/map';
+import { Observable, of } from 'rxjs';
+import { map, startWith } from 'rxjs/operators';
 
 // import { multicast } from 'rxjs/operators/multicast';
 // import { startWith } from 'rxjs/operators/startWith';
@@ -66,23 +63,29 @@ export class EditboxComponent implements OnInit, OnChanges {
       return;
     }
 
-    const theClassO = this.vocabService.getClassWithProperties(this.vocabID, Observable.of(classID));
+    const theClassO = this.vocabService.getClassWithProperties(this.vocabID, of(classID));
     // we get several small pieces of info from the class. multicast is likely a good idea, but did not get it working.
-    this.classInfo = theClassO.map((theClass) => {
-      return { label: theClass.name, description: theClass.description, url: theClass.URI };
-    }).startWith({ label: '', description: '', url: '' });
+    this.classInfo = theClassO.pipe(
+      map((theClass) => {
+        return { label: theClass.name, description: theClass.description, url: theClass.URI };
+      }),
+      startWith({ label: '', description: '', url: '' }),
+    );
 
-    this.alreadyThere2 = theClassO.map((theClass) => {
-      return theClass.properties.map((prop) => {
-        console.log(prop);
-        return {
-          comment: prop.description,
-          label: prop.name,
-          uri: prop.URI,
-          range: prop.range.name
-        };
-      });
-    }).startWith([]);
+    this.alreadyThere2 = theClassO.pipe(
+      map((theClass) => {
+        return theClass.properties.map((prop) => {
+          console.log(prop);
+          return {
+            comment: prop.description,
+            label: prop.name,
+            uri: prop.URI,
+            range: prop.range.name
+          };
+        });
+      }),
+      startWith([]),
+    );
 
   }
 
