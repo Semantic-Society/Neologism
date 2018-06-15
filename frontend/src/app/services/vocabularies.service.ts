@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { N3Codec } from '../mxgraph/N3Codec';
 
 import { MeteorObservable, zoneOperator } from 'meteor-rxjs';
 import { Observable } from 'rxjs/Observable';
@@ -8,8 +7,11 @@ import { EmptyObservable } from 'rxjs/observable/EmptyObservable';
 import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 
 import 'rxjs/add/observable/combineLatest';
+
 import { Classes, Properties, Vocabularies } from '../../../api/collections';
 import { Iclass, Iproperty, Ivocabulary, meteorID } from '../../../api/models';
+
+import 'rxjs/add/operator/filter';
 
 export interface IClassWithProperties {
   _id: string; // Mongo generated ID
@@ -48,6 +50,7 @@ export class VocabulariesService {
       console.log(err);
     });
   }
+
   addProperty(toClass: meteorID, name: string, description: string, URI: string, range: meteorID) {
     MeteorObservable.call('property.create',
       { classId: toClass, name, description, URI, range }
@@ -125,6 +128,41 @@ export class VocabulariesService {
     });
 
     return filledClasses;
+  }
+
+  /**
+   * Currently this still needs the vocab ID. A future improved version should not need that.
+   * @param vocabID
+   * @param selectedClassID
+   */
+  getClassWithProperties(vocabID: string, selectedClassID: Observable<string>)/* Observable<IClassWithProperties> */ {
+    // TODO: this following steps are overkill. We can use something more granular later.
+    const theClassO: Observable<IClassWithProperties> = selectedClassID.switchMap((classID) => {
+      const allClassesO: Observable<IClassWithProperties[]> = this.getClassesWithProperties(vocabID);
+      return allClassesO.map((allClasses) => {
+        console.log(allClasses);
+        const potentiallyTheClass = allClasses.filter((clazz) => clazz._id === classID);
+        if (potentiallyTheClass.length !== 1) {
+          // throw new Error('zero or more than 1 class found, while there should only be 1');
+          // This can happen when the result for that class is not yet in the result, but still coming.
+          // return null now, filter our below.
+          return null;
+          // Still not as filter does not work :-S so now returning some empty thing
+          // return {
+          //   _id: '', name: 'waiting...', description: 'waiting...', URI: '', properties: [], position: {
+          //     x: 0, y: 0
+          //   },
+          //   skos: {
+          //     closeMatch: [],
+          //     exactMatch: []
+          //   }
+          // };
+        }
+        const theClass = potentiallyTheClass[0];
+        return theClass;
+      });
+    }).filter((cl) => cl !== null);
+    return theClassO;
   }
 
 }

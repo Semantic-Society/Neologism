@@ -1,5 +1,8 @@
 import * as m from 'mxgraph';
 
+import { Observable } from 'rxjs';
+import 'rxjs/add/operator/distinctUntilChanged';
+
 import { enableDynamicGrid } from './dynamicGrid';
 // import { N3Codec } from './N3Codec';
 
@@ -18,6 +21,8 @@ export class MxgraphService {
     private model: m.mxGraphModel;
     private canvas: m.mxCell;
     private transactionSelection;
+    private selection$: Observable<string>;
+
     // private toolbar: m.mxToolbar;
     // public codec: N3Codec;
 
@@ -42,7 +47,8 @@ export class MxgraphService {
         // this.graph.convertValueToString = (cell: m.mxCell) => cell.getValue().label;  // Enable mxGraph to extract cell labels
         enableDynamicGrid(this.graph, MxgraphService.mx);
         this.graph.view.refresh();
-
+        // allow only one thing to be selected at the same time.
+        this.graph.getSelectionModel().setSingleSelection(true);
         // Overwrite label change handler in order to correctly write new lables to the user object
         // const defaultLabelChangeHandler = this.graph.cellLabelChanged.bind(this.graph);
         // this.graph.cellLabelChanged = (cell: m.mxCell, newValue: string, autoSize: boolean = true) => {
@@ -102,7 +108,7 @@ export class MxgraphService {
 
         // Create layout algorithm to be used with the graph
         // const hierarchical = new MxgraphService.mx.mxHierarchicalLayout(this.graph, MxgraphService.mx.mxConstants.DIRECTION_SOUTH, true);
-        // const organic = new MxgraphService.mx.mxFastOrganicLayout(this.graph);
+        // const organic = new MxgraphServiBehaviorSubject,e.mx.mxFastOrganicLayout(this.graph);
         // organic.forceConstant = 120;
 
         // Initialize a lookup map from subject IRI to the corresponding mxGraph cell and set up automatic syncronization
@@ -140,6 +146,23 @@ export class MxgraphService {
         //             });
         //         this.zoomToFit();
         //     });
+
+        this.selection$ = new Observable((observer) => {
+            const handler = (selectionModel: m.mxGraphSelectionModel, evt: m.mxEventObject) => {
+                const values = selectionModel.cells
+                    .filter((cell) => cell.vertex)
+                    .map((cell) => cell.getId());
+                if (values.length === 1) {
+                    observer.next(values[0]);
+                } else if (values.length === 0) {
+                    observer.next(null);
+                } else {
+                    throw new Error('Multiple items selected. Should not be possible');
+                }
+            };
+            this.graph.getSelectionModel().addListener(MxgraphService.mx.mxEvent.CHANGE, handler);
+            return () => this.graph.getSelectionModel().removeListener(handler);
+        }).distinctUntilChanged() as any;
 
     }
 
@@ -327,23 +350,28 @@ export class MxgraphService {
         this.graph.setSelectionCells(cells);
     }
 
-    /** Call the given function with data of selected mxCell */
-    public addSelectionListener(funct: (x: string) => void) {
-        // http://forum.jgraph.com/questions/252/add-listener-when-clicking-on-a-vertex/253
-        this.graph.getSelectionModel().addListener(MxgraphService.mx.mxEvent.CHANGE, (selectionModel: m.mxGraphSelectionModel, evt: m.mxEventObject) => {
-            const values = selectionModel.cells
-                .filter((cell) => cell.vertex)
-                .map((cell) => cell.getId());
-
-            if (values.length === 1) {
-                funct(values[0]);
-            } else if (values.length === 0) {
-                funct(null);
-            } else {
-                throw new Error('Multiple items selected. Should not be possible');
-            }
-        });
+    public currentSelection(): Observable<string> {
+        return this.selection$;
     }
+
+    // This has been rewritten with observables above.
+    // /** Call the given function with data of selected mxCell */
+    // public addSelectionListener(funct: (x: string) => void) {
+    //     // http://forum.jgraph.com/questions/252/add-listener-when-clicking-on-a-vertex/253
+    //     this.graph.getSelectionModel().addListener(MxgraphService.mx.mxEvent.CHANGE, (selectionModel: m.mxGraphSelectionModel, evt: m.mxEventObject) => {
+    //         const values = selectionModel.cells
+    //             .filter((cell) => cell.vertex)
+    //             .map((cell) => cell.getId());
+
+    //         if (values.length === 1) {
+    //             funct(values[0]);
+    //         } else if (values.length === 0) {
+    //             funct(null);
+    //         } else {
+    //             throw new Error('Multiple items selected. Should not be possible');
+    //         }
+    //     });
+    // }
 
     /** Call the given function with data of selected mxCell */
     public addDragListener(funct: (ids: string[], dx: number, dy: number) => void) {

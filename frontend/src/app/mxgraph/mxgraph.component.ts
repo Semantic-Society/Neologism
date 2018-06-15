@@ -1,7 +1,7 @@
 import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { mxgraph as m } from 'mxgraph';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 
 import { IUserObject, MxgraphService } from './mxgraph';
 import { N3Codec } from './N3Codec';
@@ -21,13 +21,14 @@ enum SideBarState {
     styleUrls: ['./mxgraph.component.css'],
 })
 export class MxgraphComponent implements OnInit, OnDestroy {
+    currentSelectionSub: Subscription;
     editMode: SideBarState;
     currentSelection: meteorID;
     sideBarState = SideBarState;
 
     @ViewChild('view') mxGraphView: ElementRef;
     protected mx: MxgraphService;
-    protected id: string;
+    protected vocabID: string;
     protected classes; // : Observable<IClassWithProperties[]>;
 
     constructor(private route: ActivatedRoute, private vocabService: VocabulariesService) {
@@ -35,26 +36,33 @@ export class MxgraphComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.id = this.route.snapshot.paramMap.get('id');
+        this.vocabID = this.route.snapshot.paramMap.get('id');
         // TODO: Currently creates a new instance with each subscription. Use something like this instead: .multicast(new BehaviorSubject([]));
         // This did, however, not work.
-        this.classes = this.vocabService.getClassesWithProperties(this.id);
+        this.classes = this.vocabService.getClassesWithProperties(this.vocabID);
         this.mx = new MxgraphService(this.mxGraphView.nativeElement);
 
         // console.log('the is of the vocb is ' + this.id);
 
-        this.vocabService.addClass(this.id, 'ClassName', 'Iraklis did it', 'the URI');
-        this.vocabService.addProperty('t7LhQpL5GpkK9qsuc', 'myprop', 'nice prop', 'example.org', 't7LhQpL5GpkK9qsuc');
+      //  this.vocabService.addClass(this.id, 'ClassName', 'Iraklis did it', 'the URI');
+       // this.vocabService.addProperty('5AKNc4LQYSmXkeA24', 'myprop', 'nice prop', 'example.org', 'xgb8yFveQarJpuYa6');
 
-        this.mx.addSelectionListener((id: meteorID) => {
-            if (id) {
-                this.currentSelection = id;
-                this.editMode = SideBarState.Edit;
-            } else {
-                this.currentSelection = null;
-                this.editMode = SideBarState.Default;
-            }
+        // this.currentSelection = this.mx.currentSelection().publish(new BehaviorSubject<string>(null));
+        this.currentSelectionSub = this.mx.currentSelection().subscribe((selection) => {
+            console.log('selectionChange:', selection);
+            this.editMode = selection ? SideBarState.Edit : SideBarState.Default;
+            this.currentSelection = selection;
         });
+
+        // this.mx.addSelectionListener((id: meteorID) => {
+        //     if (id) {
+        //         this.currentSelection = id;
+        //         this.editMode = SideBarState.Edit;
+        //     } else {
+        //         this.currentSelection = null;
+        //         this.editMode = SideBarState.Default;
+        //     }
+        // });
 
         this.mx.addDragListener((ids, dx, dy) => {
             console.log(ids, dx, dy);
@@ -69,13 +77,15 @@ export class MxgraphComponent implements OnInit, OnDestroy {
 
                 // insert classes
                 cs.forEach((c) =>
-                    this.mx.insertClass(c._id, c.name, c.position.x, c.position.y)
+                    this.mx.insertClass(c._id, c._id, c.position.x, c.position.y)
                 );
 
                 // insert properties
                 cs.forEach((c) =>
                     c.properties.forEach((p) =>
-                        this.mx.insertProperty(c._id, p._id, p.name, p.range._id)
+                        this.mx.insertProperty(c._id,
+                            p._id, p.name,
+                            p.range._id)
                     )
                 );
 
@@ -94,5 +104,6 @@ export class MxgraphComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         this.mx.destroy();
+        this.currentSelectionSub.unsubscribe();
     }
 }
