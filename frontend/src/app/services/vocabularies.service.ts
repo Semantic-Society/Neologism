@@ -169,18 +169,22 @@ export class VocabulariesService {
           return { ...c, _id: c._id, properties: filledProps };
         });
 
+        let failed = false;
         newClassesWithoutRangeFilledLater.forEach((c, i) =>
           c.properties.forEach((p, j) => {
             p.range = newClassesWithoutRangeFilledLater.find((cr) => cr._id === cs[i].properties[j].range);
             if (!p.range) {
-              return null; // not all required classes returned yet
+              //return null; // not all required classes returned yet
+              failed = true;
             }
           })
         );
-
+        if (failed) {
+          return null;
+        }
         return newClassesWithoutRangeFilledLater;
       }),
-      filter ((x) => !!x),
+      filter((x) => !!x),
     );
 
     return filledClasses;
