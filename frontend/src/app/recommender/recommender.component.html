@@ -38,7 +38,7 @@
         </mat-panel-title>
       </mat-expansion-panel-header>
       <!-- <textarea class="description-textarea" disabled=true>{{selectedRecommendation?.comment}}</textarea> -->
-      <truncated-text [text]="selectedRecommendation?.comment" limit="50"></truncated-text>
+      <app-truncated-text [text]="selectedRecommendation?.comment" limit="50"></app-truncated-text>
     </mat-expansion-panel>
     <!-- <p class="recommender-description-title">
       Properties

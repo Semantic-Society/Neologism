@@ -105,7 +105,7 @@ export class EditboxComponent implements OnInit, OnChanges {
     this.alreadyThere2 = theClassO.pipe(
       map((theClass) => {
         return theClass.properties.map((prop) => {
-          //console.log(prop);
+          // console.log(prop);
           return {
             comment: prop.description,
             label: prop.name,

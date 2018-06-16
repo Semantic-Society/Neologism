@@ -112,10 +112,10 @@ export class MxgraphComponent implements OnInit, OnDestroy {
         this.editMode = SideBarState.Recommend;
     }
 
-  showEditBox() {
-      this.currentSelection = null;
-    this.editMode = SideBarState.Edit;
-  }
+    showEditBox() {
+        this.currentSelection = null;
+        this.editMode = SideBarState.Edit;
+    }
 
     ngOnDestroy() {
         this.mx.destroy();
