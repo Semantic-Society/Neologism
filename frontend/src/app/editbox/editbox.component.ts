@@ -10,6 +10,7 @@ import { map, startWith } from 'rxjs/operators';
 
 import { RecommendationService } from '../services/recommendation.service';
 import { IClassWithProperties, VocabulariesService } from '../services/vocabularies.service';
+import {Vocabularies} from '../../../api/collections';
 
 @Component({
   selector: 'app-editbox',
@@ -34,7 +35,11 @@ export class EditboxComponent implements OnInit, OnChanges {
   // TODO: strictly speaking, this component does not need this as it only needs access to classes and properties.
   // However, more fine grained methods in the VocabulariesService are not yet implemented.
   @Input() vocabID: string;
-
+  vocab = {
+    name: '',
+    URI: '',
+    description: ''
+  }
   constructor(private recommender: RecommendationService, private vocabService: VocabulariesService) {
   }
 
@@ -114,5 +119,8 @@ export class EditboxComponent implements OnInit, OnChanges {
     // this.mx.insertProperty(this.selectedClass.url, rec.uri, rec.label, rec.comment, rec.range);
     // // TODO: it feals a bit like a hack to call this directly...
     // this.getProperties(this.selectedClass);
+  }
+  addClass() {
+    this.vocabService.addClass(this.vocabID, this.vocab.name, this.vocab.description, this.vocab.URI);
   }
 }

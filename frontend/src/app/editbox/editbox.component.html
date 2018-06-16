@@ -7,7 +7,7 @@
             {{(classInfo | async).label}}
           </p>
           <mat-form-field class="" *ngIf="!selectedClassID">
-            <input matInput placeholder="Class Name" value="">
+            <input matInput placeholder="Class Name" value="" [ngModel]="vocab.name">
           </mat-form-field>
         </div>
       </mat-card-title>
@@ -17,7 +17,7 @@
             <a class="uri-link" href="{{(classInfo | async).url}}" target="_blank">{{(classInfo | async).url}}</a>
           </p>
           <mat-form-field class="" *ngIf="!selectedClassID">
-            <input matInput placeholder="URI" value="">
+            <input matInput placeholder="URI" value="" [ngModel]="vocab.URI">
           </mat-form-field>
         </div>
       </mat-card-subtitle>
@@ -30,10 +30,12 @@
         {{(classInfo | async).description}}
       </ng-container>
       <mat-form-field class="description" *ngIf="!selectedClassID">
-        <textarea matInput placeholder="Description" value=""></textarea>
+        <textarea matInput placeholder="Description" value="" [ngModel]="vocab.description"></textarea>
       </mat-form-field>
     </mat-card-content>
-
+    <div class="add-class">
+      <button mat-raised-button color="primary" (click)="addClass()" *ngIf="!selectedClassID">Add Class</button>
+    </div>
     <mat-card-title>Properties</mat-card-title>
     <mat-card-content style="height: 400px;overflow-y: auto">
       <mat-list>
@@ -83,6 +85,7 @@
         </mat-list-item-->
       </mat-list>
     </mat-card-content>
+
     <mat-card-footer></mat-card-footer>
   </mat-card>
 
