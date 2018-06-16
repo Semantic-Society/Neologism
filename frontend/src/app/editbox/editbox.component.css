@@ -223,3 +223,31 @@ mat-form-field.description textarea {
   max-width: calc(10% - 1rem) !important;
   min-width: calc(10% - 1rem) !important;
 }*/
+
+.edit-icon {
+}
+.edit-icon-wrapper{
+
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  color: #343434;
+  cursor: pointer;
+}
+
+mat-card-header {
+  position: relative;
+}
+
+.button-group-edit {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 0.5rem;
+}
+
+.button-group-edit button {
+  margin:0.25rem;
+  width: calc(50% - 1rem);
+}

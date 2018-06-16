@@ -1,10 +1,19 @@
 <mat-card class="editbox-card">
+
   <mat-card class="no-pad">
     <mat-card-header class="pad-fix">
       <mat-card-title>
         <div class="label-name" >
+          <div class="edit-icon-wrapper" (click)="toggleEdit()" *ngIf="!editToggle">
+            <mat-icon class="edit-icon">
+              create
+            </mat-icon>
+          </div>
           <p class="no-margin" *ngIf="selectedClassID">
-            {{(classInfo | async).label}}
+            <ng-container *ngIf="!editToggle">
+              {{(classInfo | async).label}}
+            </ng-container>
+            <input *ngIf="editToggle" value="{{(classInfo | async).label}}">
           </p>
           <mat-form-field class="" *ngIf="!selectedClassID">
             <input matInput placeholder="Class Name" value="" [(ngModel)]="newClass.name">
@@ -14,7 +23,8 @@
       <mat-card-subtitle class="uri-link">
         <div class="uri-name">
           <p class="" *ngIf="selectedClassID">
-            <a class="uri-link" href="{{(classInfo | async).url}}" target="_blank">{{(classInfo | async).url}}</a>
+            <a class="uri-link" href="{{(classInfo | async).url}}" target="_blank" *ngIf="!editToggle">{{(classInfo | async).url}}</a>
+            <input *ngIf="editToggle" value="{{(classInfo | async).url}}">
           </p>
           <mat-form-field class="" *ngIf="!selectedClassID">
             <input matInput placeholder="URI" value="" [(ngModel)]="newClass.URI">
@@ -27,11 +37,20 @@
     <mat-card-title>Description</mat-card-title>
     <mat-card-content>
       <ng-container *ngIf="selectedClassID">
-        {{(classInfo | async).description}}
+        <ng-container *ngIf="!editToggle">
+          {{(classInfo | async).description}}
+        </ng-container>
+        <mat-form-field class="description" *ngIf="editToggle">
+          <textarea matInput placeholder="Description" value="{{(classInfo | async).description}}"></textarea>
+        </mat-form-field>
       </ng-container>
       <mat-form-field class="description" *ngIf="!selectedClassID">
         <textarea matInput placeholder="Description" value="" [(ngModel)]="newClass.description"></textarea>
       </mat-form-field>
+      <div class="button-group-edit" *ngIf="editToggle">
+        <button mat-raised-button color="primary" (click)="updateEdit()">Update</button>
+        <button mat-raised-button color="primary" (click)="cancleEdit()">Cancle</button>
+      </div>
     </mat-card-content>
     <div class="button-full-width">
       <button mat-raised-button color="primary" (click)="addClass()" *ngIf="!selectedClassID">Add Class</button>

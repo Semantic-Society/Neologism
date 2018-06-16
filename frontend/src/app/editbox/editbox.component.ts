@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnChanges, OnInit, Output,} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, } from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {Observable, of} from 'rxjs';
 import {map, startWith} from 'rxjs/operators';
@@ -58,6 +58,8 @@ export class EditboxComponent implements OnInit, OnChanges {
     }
   };
 
+  protected classToUpdate;
+  protected editToggle = false;
   protected classes;
 
   constructor(private recommender: RecommendationService, private vocabService: VocabulariesService) {
@@ -65,6 +67,8 @@ export class EditboxComponent implements OnInit, OnChanges {
 
   ngOnInit() {
     this.classes = this.vocabService.getClassesWithProperties(this.vocabID);
+    this.classToUpdate = this.vocabService.getClassWithProperties(this.vocabID, of(this.selectedClassID));
+    console.log(this.classToUpdate);
     // this.selectedClassID.subscribe((classID) => {
     //   this.getProperties(classID);
     // });
@@ -101,7 +105,7 @@ export class EditboxComponent implements OnInit, OnChanges {
     this.alreadyThere2 = theClassO.pipe(
       map((theClass) => {
         return theClass.properties.map((prop) => {
-          console.log(prop);
+          //console.log(prop);
           return {
             comment: prop.description,
             label: prop.name,
@@ -154,4 +158,17 @@ export class EditboxComponent implements OnInit, OnChanges {
       this.newClass = this.emptyClass;
     }
   }
+
+  toggleEdit() {
+    this.editToggle = !this.editToggle;
+  }
+
+  cancleEdit() {
+    this.editToggle = !this.editToggle;
+  }
+
+  updateEdit() {
+    // TODO: Call the updateClass (needs to be implemented) of vocabService and call toggleEdit() afterwards
+  }
+
 }
