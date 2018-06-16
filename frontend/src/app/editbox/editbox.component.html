@@ -51,9 +51,11 @@
           </mat-form-field>
           <mat-form-field class="class-dropdown">
             <mat-select placeholder="Range" [(ngModel)]="newClass.property.range">
-              <mat-option *ngFor="let c of classes | async" [value]="c._id">
-                {{ c.name }}
-              </mat-option>
+              <ng-container  *ngFor="let c of classes | async">
+                <mat-option [value]="c._id" *ngIf="c._id != selectedClassID">
+                  {{ c.name }}
+                </mat-option>
+              </ng-container>
             </mat-select>
           </mat-form-field>
           <button mat-raised-button color="primary" (click)="addProperty()">Add Property</button>

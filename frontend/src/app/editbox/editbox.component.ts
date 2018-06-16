@@ -149,10 +149,9 @@ export class EditboxComponent implements OnInit, OnChanges {
   }
 
   addProperty() {
-    //console.log(this.newClass)
-    this.vocabService.addProperty(this.selectedClassID, this.newClass.property.name, this.newClass.property.description, this.newClass.property.URI, this.newClass.property.range);
-    this.newClass = this.emptyClass;
-    //this.vocabService.addProperty(this.selectedClassID,'test', 'test', 'test', this.newClass.dest);
-    //this.vocabService.addProperty('ikhjrcSqXJQQrgfC6', 'myprop', 'nice prop', 'example.org', 'c8YSBREPsKex4526d');
+    if (this.selectedClassID !== this.newClass.property.range) {
+      this.vocabService.addProperty(this.selectedClassID, this.newClass.property.name, this.newClass.property.description, this.newClass.property.URI, this.newClass.property.range);
+      this.newClass = this.emptyClass;
+    }
   }
 }
