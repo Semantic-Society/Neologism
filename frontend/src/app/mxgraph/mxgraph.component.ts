@@ -16,11 +16,22 @@ enum SideBarState {
     Recommend,
 }
 
+interface IMergedPropertiesClass {
+    _id: string; // Mongo generated ID
+    name: string;
+    properties: Array<{
+        _id: string;
+        name: string;
+        rangeID: string; // just the ID
+    }>;
+}
+
 @Component({
     selector: 'app-mxgraph',
     templateUrl: './mxgraph.component.html',
     styleUrls: ['./mxgraph.component.css'],
 })
+
 export class MxgraphComponent implements OnInit, OnDestroy {
     editMode: SideBarState;
     currentSelection: meteorID;
@@ -31,7 +42,7 @@ export class MxgraphComponent implements OnInit, OnDestroy {
     @ViewChild('view') mxGraphView: ElementRef;
     protected mx: MxgraphService;
     protected vocabID: string;
-    protected classes; // : Observable<IClassWithProperties[]>;
+    protected classes: Observable<IClassWithProperties[]>;
     protected vocabulary: Ivocabulary;
 
     constructor(private route: ActivatedRoute, private vocabService: VocabulariesService) {
@@ -87,17 +98,19 @@ export class MxgraphComponent implements OnInit, OnDestroy {
 
             // insert classes
             cs.forEach((c) =>
-                this.mx.insertClass(c._id, c._id, c.position.x, c.position.y)
+                this.mx.insertClass(c._id, c.name, c.position.x, c.position.y)
             );
 
             // insert properties
-            cs.forEach((c) =>
-                c.properties.forEach((p) =>
+            cs.forEach((c) => {
+                // grouping the properties by their target
+                const merged = this.mergeProperties(c);
+                merged.properties.forEach((p) =>
                     this.mx.insertProperty(c._id,
                         p._id, p.name,
-                        p.range._id)
-                )
-            );
+                        p.rangeID)
+                );
+            });
 
             this.mx.endTransaction();
         });
@@ -106,6 +119,37 @@ export class MxgraphComponent implements OnInit, OnDestroy {
         //     this.mxGraphView.nativeElement,
         //     document.getElementById('mx-toolbar'),
         //     'http://xmlns.com/foaf/spec/index.rdf');
+    }// end ngOnInit
+
+    mergeProperties(c: IClassWithProperties): IMergedPropertiesClass {
+        // only takes the necessary parts
+        const withMergedProps: IMergedPropertiesClass = { _id: c._id, properties: [], name: c.name };
+        // merge the properties and fill
+        const grouped = c.properties.reduce(
+            (groups, x, ignored) => {
+                (groups[x.range._id] = groups[x.range._id] || []).push(x);
+                return groups;
+            }, {});
+
+        for (const key in grouped) {
+            if (grouped.hasOwnProperty(key)) {
+                const group: Array<{
+                    _id: string;
+                    name: string;
+
+                    range: IClassWithProperties;
+                }> = grouped[key];
+                // join names
+                const nameList: string[] = group.reduce<string[]>(
+                    (combinedNameAcc, prop, ignores) => {
+                        combinedNameAcc.push(prop.name);
+                        return combinedNameAcc;
+                    }, []);
+                const combinedName = nameList.join(' | ');
+                withMergedProps.properties.push({ _id: key, name: combinedName, rangeID: group[0].range._id });
+            }
+        }
+        return withMergedProps;
     }
 
     showRecommender() {
