@@ -24,7 +24,8 @@ export class VocablistComponent implements OnInit {
     uriPrefix: '',
     // classes: []
   };
-  displayedColumns = ['name', 'authors', 'description', 'uriPrefix', 'actions'];
+  // displayedColumns = ['name', 'authors', 'description', 'uriPrefix', 'actions'];
+  displayedColumns = ['name', 'authors', 'description', 'uriPrefix'];
 
   constructor(protected router: Router, private vocabService: VocabulariesService) { }
 
@@ -44,6 +45,10 @@ export class VocablistComponent implements OnInit {
 
   deleteVocab(id) {
     this.vocabService.deleteVocabulary(id);
+  }
+
+  openVocab(id: string) {
+    window.open('../v/' + id);
   }
 
   // randomStr(m) {

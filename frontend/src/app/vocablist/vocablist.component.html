@@ -55,6 +55,7 @@
         </mat-cell>
       </ng-container>
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="this.router.navigateByUrl('/v/' + row._id)"></mat-row>
+    <!-- <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="this.router.navigateByUrl('/v/' + row._id)"></mat-row> -->
+    <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="this.openVocab(row._id)"></mat-row>
   </mat-table>
 </div>
