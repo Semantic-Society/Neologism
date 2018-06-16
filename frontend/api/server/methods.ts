@@ -9,7 +9,7 @@ import { meteorID } from '../models';
 
 Meteor.methods({
   'vocabulary.create'(name: string, authors: string[], description: string, uriPrefix: string) {
-    Vocabularies.insert({ name, authors, description, uriPrefix, classes: [] });
+    Vocabularies.insert({name, authors, description, uriPrefix, classes: []});
   },
   /*'vocabulary.insertClass'({id, vClass}) {
     Vocabularies.update({_id:id}, { $push: {classes: vClass}});
@@ -18,7 +18,7 @@ Meteor.methods({
     // TODO: Sanitize
     Vocabularies.remove(vocabId);
   },
-  'class.create'({ vocabId, name, description, URI }) {
+  'class.create'(vocabId, name, description, URI) {
     // TODO: Sanitize
 
     // Note, these operations must occur in this order. Otherwise an observer of the vocabualry might
@@ -56,7 +56,7 @@ Meteor.methods({
       { multi: true }
     );
   },
-  'property.create'({ classId, name, description, URI, range }) {
+  'property.create'(classId, name, description, URI, range) {
     // TODO: Sanitize
     // Note, these operations must occur in this order. Otherwise an observer of the vocabualry might
     const propID = Properties.insert({ name, description, URI, range });

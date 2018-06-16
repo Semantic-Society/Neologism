@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 
 import { MeteorObservable, zoneOperator } from 'meteor-rxjs';
-import { combineLatest, empty, Observable, throwError } from 'rxjs';
-import { catchError, filter, flatMap, map, switchMap } from 'rxjs/operators';
+import { combineLatest, empty, Observable, of, throwError } from 'rxjs';
+import { catchError, debounceTime, distinctUntilChanged, filter, flatMap, map, switchMap } from 'rxjs/operators';
 
 import { Classes, Properties, Vocabularies } from '../../../api/collections';
 import { Iclass, Iproperty, Ivocabulary, meteorID } from '../../../api/models';
@@ -83,10 +83,9 @@ export class VocabulariesService {
   }
 
   addClass(vocabularyId: string, name: string, description: string, URI: string) {
-    MeteorObservable.call('class.create',
-      { vocabId: vocabularyId, name, description, URI }
-    ).subscribe((response) => {
+    MeteorObservable.call('class.create', vocabularyId, name, description, URI).subscribe((response) => {
       // Handle success and response from server!
+      console.log('addClass' , response);
     }, (err) => {
       console.log(err);
     });
@@ -117,36 +116,43 @@ export class VocabulariesService {
   }
 
   addProperty(toClass: meteorID, name: string, description: string, URI: string, range: meteorID) {
-    MeteorObservable.call('property.create',
-      { classId: toClass, name, description, URI, range }
-    ).subscribe((response) => {
-      // Handle success and response from server!
-    }, (err) => {
-      console.log(err);
-    });
+    MeteorObservable.call('property.create', toClass, name, description, URI, range)
+      .subscribe((response) => {
+        // Handle success and response from server!
+      }, (err) => {
+        console.log(err);
+      });
+  }
+
+  /**
+   * Gets the list of class IDs for the given vocabulary
+   * @param vocabularyId
+   */
+  private getClassIDsForVocabID(vocabularyId: string): Observable<meteorID[]> {
+    const thevocabO: Observable<Array<{ classes: meteorID[] }>> = VocabulariesService.wrapFunkyObservables(
+      Vocabularies.find({ _id: vocabularyId }, { fields: { classes: 1 }, limit: 1 })
+    );
+
+    return thevocabO.pipe(
+      switchMap((theVocab, ignored) => {
+        if (theVocab.length > 1) {
+          return throwError(new Error('More than 1 vocab returned for id'));
+        } else if (theVocab.length === 0) {
+          return empty();
+        } else {
+          return of(theVocab[0].classes);
+        }
+      }),
+    );
   }
 
   getClasses(vocabularyId: string): Observable<Iclass[]> {
     if (vocabularyId === undefined || vocabularyId === '') {
-      throw new Error('Oh no');
+      throw new Error('vocabularyID not correctly specified. Got "' + vocabularyId + '"');
     }
-
-    const thevocabO = VocabulariesService.wrapFunkyObservables(
-      Vocabularies.find({ _id: vocabularyId })
-    );
-    const res /*: Observable<Iclass[]>*/ = thevocabO.pipe(
-      flatMap(
-        (theVocab, _ignored) => {
-          if (theVocab.length > 1) {
-            return throwError(new Error('More than 1 vocab returned for id'));
-          } else if (theVocab.length === 0) {
-            return empty();
-          } else {
-            const classes = theVocab[0].classes;
-            return Classes.find({ _id: { $in: classes } });
-          }
-        }
-      )
+    const thevocabO: Observable<meteorID[]> = this.getClassIDsForVocabID(vocabularyId);
+    const res: Observable<Iclass[]> = thevocabO.pipe(
+      flatMap((classes, _ignored) => VocabulariesService.wrapFunkyObservables(Classes.find({ _id: { $in: classes } })))
     );
     return res;
   }
@@ -221,7 +227,7 @@ export class VocabulariesService {
    * @param vocabID
    * @param selectedClassID
    */
-  getClassWithProperties(vocabID: string, selectedClassID: Observable<string>)/* Observable<IClassWithProperties> */ {
+  getClassWithProperties(vocabID: string, selectedClassID: Observable<string>): Observable<IClassWithProperties> {
     // TODO: this following steps are overkill. We can use something more granular later.
     const theClassO: Observable<IClassWithProperties> = selectedClassID.pipe(
       switchMap((classID) => {
@@ -253,6 +259,31 @@ export class VocabulariesService {
       filter((cl) => cl !== null)
     );
     return theClassO;
+  }
+
+  /**
+   * Get the meteorID for the class in the given vocabulary, which has that URI
+   * @param vocabID
+   * @param URI
+   */
+  getClassIDFromVocabForURI(vocabularyId: string, URI: string): Observable<string> {
+    const res = this.getClassIDsForVocabID(vocabularyId).pipe(
+      flatMap((classes, _ignored) => {
+        const classqueryRes: Observable<Array<{ _id: meteorID }>> = VocabulariesService.wrapFunkyObservables(Classes.find({ _id: { $in: classes }, URI }, { fields: { _id: 1 }, limit: 1 }));
+        return classqueryRes;
+      }),
+      map((classes) => {
+        if (classes[0]) {
+          return classes[0]._id;
+        } else {
+          return null;
+        }
+      }),
+      // ideally last would be used, but does not seem to work. Perhaps never completed
+      debounceTime(30),
+      distinctUntilChanged()
+    );
+    return res;
   }
 
 }
