@@ -36,7 +36,7 @@
            src="data:image/gif;base64,R0lGODlhOwBAAMQfAIWjzhpTo0h1tvH0+SpeqUh1tWeMwjlqr+Hp89Ld7cLR5rPG4RpSo8PS53aYyDhpr5Wv1FiBvO/z+KS62uDo8ileqWaMwXWXx7LF4KO62pSu1FeAu9Hc7P///wtHnf///yH5BAEAAB8ALAAAAAA7AEAAAAX/4CeOZGmeaJk4h+d6hLGkdG2rwssUxfMSjZtwKJq4GABKZ9mRZCouB3GaMno2EiYFwCtcCi4DdTxauCxMDvjFdgHI1EHAg9a2754EnAjwVLJMHXhtAntDcxmBHRSDbQiGNmYMihQ+jS9vkDR9G0sbl3iFmikRHgAdCqB4B6MpOacWqnitKK8dDLJtAbQnpWi5hLwmBH6CwC9iwmUvT8cuM8ofCHMuFRfOBNEfAy1slsAQ0QnEzm2syhPU5S8Bj7wIpetsBHo1AwsA+RBBKQMA6mwOAFjQwIGqCANqLMhxJ4ABdyNWAHQRAABEEQgMTERWAwHDajy+eTjgAEAEcncA/yREMQDljxoJqFXQAGiJBAC4QAm4iKLBnQk0Yrq4EEjBFx4AROoKJ6Tbi5UnWrpItEQBlFwH6gnp8+IcCq4aAmEAdgCqEJ8vREWdU0BRKlllx7DJdAKCCwWKxsrSOkUdXROlHrjNCSrZmI9/SxA7JUGpqsREEKdwgaGDhnKQh0hGcbeD48dwNp+4K2GdYSofI7gy9bYcT81pUxh80NqZ2iltUqDVa5pKgjZ8FXt4EEueALM27LKR0tPFGnkBoN1wCYOGQXltIrw2obxN5hEGsN95mKJ7SuQkwquqqKfBBI14ZKhwWgBABgUALOAKABTFAuptkGfCBE6xEUAE+VxHh7QSWiiAXxg0LGCASwI4sB0JDQDYBgN4LUGBfi9UYMlptECw0REcMMHbINK9U+ALlTFR2iUBoDcKN210oogqTCmD4wsMMnEZKNloM40LgnXAAQAYXCOLNiJcR5QEhOUC5QdonTLkMVdm2cFzwFw5gBvGOHPlB86VyeWVDM1o5pVWfOGMamJSc0GVqvBzZXd4XnIbm87UeOYIP8oSQHBnDvDRJfQMekI6lzhgo6NFRACQABCgFwIAOw=="/>
     </mat-card-header>
 
-    <mat-card-title>Description</mat-card-title>
+    <mat-card-title></mat-card-title>
     <mat-card-content>
       <ng-container *ngIf="selectedClassID">
         <ng-container *ngIf="!editToggle">
@@ -81,11 +81,11 @@
                   <!--div *ngIf="rec.label" ><p class="properties-label">Label:</p> <p class="properties-text">{{rec.label}}</p></div-->
                   <div class="properties-line" *ngIf="rec.uri">
                     <p class="properties-label ">URI:</p>
-                    <a href="{{rec.uri}}" class="properties-text uri-link"> {{rec.uri}}</a>
+                    <a href="{{rec.uri}}" class="properties-text uri-link" target="_blank"> {{rec.uri}}</a>
                   </div>
                   <div class="properties-line" *ngIf="rec.range">
                     <p class="properties-label">Range:</p>
-                    <a href="{{rec.range}}" class="properties-text uri-link"> {{rec.range}}</a>
+                    <a href="{{rec.range}}" class="properties-text uri-link inactive-uri-link" > {{rec.range}}</a>
                   </div>
                   <div class="properties-line" *ngIf="rec.comment">
                     <p class="properties-label ">Comment:</p>
@@ -116,7 +116,7 @@
                 </mat-form-field>
                 <mat-form-field class="class-dropdown">
                   <mat-select placeholder="Range" [(ngModel)]="newClass.property.range">
-                    <ng-container *ngFor="let c of classes | async">
+                    <ng-container *ngFor="let c of rangeOption | async">
                       <mat-option [value]="c._id" *ngIf="c._id != selectedClassID">
                         {{ c.name }}
                       </mat-option>

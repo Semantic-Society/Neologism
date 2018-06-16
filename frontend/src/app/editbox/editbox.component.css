@@ -58,6 +58,12 @@ mat-panel-title {
   text-decoration: underline;
   cursor: pointer;
 }
+
+.inactive-uri-link {
+  pointer-events: none;
+  cursor: default;
+}
+
 .label-field{
   z-index: 1;
 }

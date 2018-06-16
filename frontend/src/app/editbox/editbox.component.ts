@@ -1,16 +1,16 @@
-import {Component, EventEmitter, Input, OnChanges, OnInit, Output, } from '@angular/core';
-import {FormControl} from '@angular/forms';
-import {Observable, of} from 'rxjs';
-import {map, startWith} from 'rxjs/operators';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, } from '@angular/core';
+import { FormControl } from '@angular/forms';
+import { Observable, of } from 'rxjs';
+import { map, startWith } from 'rxjs/operators';
 
 // import { multicast } from 'rxjs/operators/multicast';
 // import { startWith } from 'rxjs/operators/startWith';
 
 // import { IUserObject, MxgraphService } from '../mxgraph/mxgraph';
 
-import {Classes, Vocabularies} from '../../../api/collections';
-import {RecommendationService} from '../services/recommendation.service';
-import {IClassWithProperties, VocabulariesService} from '../services/vocabularies.service';
+import { Classes, Vocabularies } from '../../../api/collections';
+import { RecommendationService } from '../services/recommendation.service';
+import { IClassWithProperties, VocabulariesService } from '../services/vocabularies.service';
 
 @Component({
   selector: 'app-editbox',
@@ -58,15 +58,21 @@ export class EditboxComponent implements OnInit, OnChanges {
     }
   };
 
-  protected classToUpdate;
+  protected classToUpdate: Observable<IClassWithProperties>;
   protected editToggle = false;
-  protected classes;
+  // protected classes;
+  protected rangeOption: Observable<Array<{ _id: string, name: string }>>;
 
   constructor(private recommender: RecommendationService, private vocabService: VocabulariesService) {
   }
 
   ngOnInit() {
-    this.classes = this.vocabService.getClassesWithProperties(this.vocabID);
+    this.rangeOption = this.vocabService.getClasses(this.vocabID).pipe(
+      map((classes) => {
+        return classes.map((aclass) => ({ _id: aclass._id, name: aclass.name }));
+      })
+    );
+
     this.classToUpdate = this.vocabService.getClassWithProperties(this.vocabID, of(this.selectedClassID));
     console.log(this.classToUpdate);
     // this.selectedClassID.subscribe((classID) => {
@@ -97,9 +103,9 @@ export class EditboxComponent implements OnInit, OnChanges {
     // we get several small pieces of info from the class. multicast is likely a good idea, but did not get it working.
     this.classInfo = theClassO.pipe(
       map((theClass) => {
-        return {label: theClass.name, description: theClass.description, url: theClass.URI};
+        return { label: theClass.name, description: theClass.description, url: theClass.URI };
       }),
-      startWith({label: '', description: '', url: ''}),
+      startWith({ label: '', description: '', url: '' }),
     );
 
     this.alreadyThere2 = theClassO.pipe(
@@ -139,12 +145,12 @@ export class EditboxComponent implements OnInit, OnChanges {
   //   });
   // }
 
-  addToGraph(rec: { comment: string; label: string; uri: string; range: string; creator: string; }) {
-    // // console.log('editbox -> addToGraph:', this.selectedClass.url, rec.uri, rec.label, rec.range)
-    // this.mx.insertProperty(this.selectedClass.url, rec.uri, rec.label, rec.comment, rec.range);
-    // // TODO: it feals a bit like a hack to call this directly...
-    // this.getProperties(this.selectedClass);
-  }
+  // addToGraph(rec: { comment: string; label: string; uri: string; range: string; creator: string; }) {
+  // // console.log('editbox -> addToGraph:', this.selectedClass.url, rec.uri, rec.label, rec.range)
+  // this.mx.insertProperty(this.selectedClass.url, rec.uri, rec.label, rec.comment, rec.range);
+  // // TODO: it feals a bit like a hack to call this directly...
+  // this.getProperties(this.selectedClass);
+  // }
 
   addClass() {
     console.log(this.newClass);
@@ -169,6 +175,8 @@ export class EditboxComponent implements OnInit, OnChanges {
 
   updateEdit() {
     // TODO: Call the updateClass (needs to be implemented) of vocabService and call toggleEdit() afterwards
+    // this.vocabService.updateClass(this.newClass.name);
+
   }
 
 }
