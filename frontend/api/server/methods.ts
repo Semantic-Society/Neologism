@@ -8,7 +8,7 @@ import { meteorID } from '../models';
  */
 
 Meteor.methods({
-  'vocabulary.create'(name: string, authors: string[], description: string, uriPrefix: string ) {
+  'vocabulary.create'(name: string, authors: string[], description: string, uriPrefix: string) {
     Vocabularies.insert({ name, authors, description, uriPrefix, classes: [] });
   },
   /*'vocabulary.insertClass'({id, vClass}) {
@@ -27,7 +27,28 @@ Meteor.methods({
       Vocabularies.update({ _id: vocabId }, { $push: { classes: classID } })
     );
   },
-  'classes.translate'( classids: string[], dx: number, dy: number ) {
+  'class.update.name'(classID: string, name: string) {
+    Classes.update(
+      { _id: classID },
+      { $set: { name } },
+      {}
+    );
+  },
+  'class.update.description'(classID: string, description: string) {
+    Classes.update(
+      { _id: classID },
+      { $set: { description } },
+      {}
+    );
+  },
+  'class.update.URI'(classID: string, URI: string) {
+    Classes.update(
+      { _id: classID },
+      { $set: { URI } },
+      {}
+    );
+  },
+  'classes.translate'(classids: string[], dx: number, dy: number) {
     // TODO: Sanitize
     Classes.update(
       { _id: { $in: classids } },

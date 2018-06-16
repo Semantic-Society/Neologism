@@ -13,7 +13,7 @@
             <ng-container *ngIf="!editToggle">
               {{(classInfo | async).label}}
             </ng-container>
-            <input *ngIf="editToggle" value="{{(classInfo | async).label}}">
+            <input matInput *ngIf="editToggle" [(ngModel)]="editedClass.name" value="{{(classInfo | async).label}}">
           </p>
           <mat-form-field class="" *ngIf="!selectedClassID">
             <input matInput placeholder="Class Name" value="" [(ngModel)]="newClass.name">
@@ -23,17 +23,16 @@
       <mat-card-subtitle class="uri-link">
         <div class="uri-name">
           <p class="" *ngIf="selectedClassID">
-            <a class="uri-link" href="{{(classInfo | async).url}}" target="_blank"
-               *ngIf="!editToggle">{{(classInfo | async).url}}</a>
-            <input *ngIf="editToggle" value="{{(classInfo | async).url}}">
+            <a class="uri-link" href="{{(classInfo | async).url}}" target="_blank" *ngIf="!editToggle">{{(classInfo | async).url}}</a>
+            <input *ngIf="editToggle" [(ngModel)]="editedClass.URI" value="{{(classInfo | async).url}}">
           </p>
-          <mat-form-field class="" *ngIf="!selectedClassID">
+          <mat-form-field *ngIf="!selectedClassID">
             <input matInput placeholder="URI" value="" [(ngModel)]="newClass.URI">
           </mat-form-field>
         </div>
       </mat-card-subtitle>
-      <img mat-card-avatar
-           src="data:image/gif;base64,R0lGODlhOwBAAMQfAIWjzhpTo0h1tvH0+SpeqUh1tWeMwjlqr+Hp89Ld7cLR5rPG4RpSo8PS53aYyDhpr5Wv1FiBvO/z+KS62uDo8ileqWaMwXWXx7LF4KO62pSu1FeAu9Hc7P///wtHnf///yH5BAEAAB8ALAAAAAA7AEAAAAX/4CeOZGmeaJk4h+d6hLGkdG2rwssUxfMSjZtwKJq4GABKZ9mRZCouB3GaMno2EiYFwCtcCi4DdTxauCxMDvjFdgHI1EHAg9a2754EnAjwVLJMHXhtAntDcxmBHRSDbQiGNmYMihQ+jS9vkDR9G0sbl3iFmikRHgAdCqB4B6MpOacWqnitKK8dDLJtAbQnpWi5hLwmBH6CwC9iwmUvT8cuM8ofCHMuFRfOBNEfAy1slsAQ0QnEzm2syhPU5S8Bj7wIpetsBHo1AwsA+RBBKQMA6mwOAFjQwIGqCANqLMhxJ4ABdyNWAHQRAABEEQgMTERWAwHDajy+eTjgAEAEcncA/yREMQDljxoJqFXQAGiJBAC4QAm4iKLBnQk0Yrq4EEjBFx4AROoKJ6Tbi5UnWrpItEQBlFwH6gnp8+IcCq4aAmEAdgCqEJ8vREWdU0BRKlllx7DJdAKCCwWKxsrSOkUdXROlHrjNCSrZmI9/SxA7JUGpqsREEKdwgaGDhnKQh0hGcbeD48dwNp+4K2GdYSofI7gy9bYcT81pUxh80NqZ2iltUqDVa5pKgjZ8FXt4EEueALM27LKR0tPFGnkBoN1wCYOGQXltIrw2obxN5hEGsN95mKJ7SuQkwquqqKfBBI14ZKhwWgBABgUALOAKABTFAuptkGfCBE6xEUAE+VxHh7QSWiiAXxg0LGCASwI4sB0JDQDYBgN4LUGBfi9UYMlptECw0REcMMHbINK9U+ALlTFR2iUBoDcKN210oogqTCmD4wsMMnEZKNloM40LgnXAAQAYXCOLNiJcR5QEhOUC5QdonTLkMVdm2cFzwFw5gBvGOHPlB86VyeWVDM1o5pVWfOGMamJSc0GVqvBzZXd4XnIbm87UeOYIP8oSQHBnDvDRJfQMekI6lzhgo6NFRACQABCgFwIAOw=="/>
+      <img mat-card-avatar src="data:image/gif;base64,R0lGODlhOwBAAMQfAIWjzhpTo0h1tvH0+SpeqUh1tWeMwjlqr+Hp89Ld7cLR5rPG4RpSo8PS53aYyDhpr5Wv1FiBvO/z+KS62uDo8ileqWaMwXWXx7LF4KO62pSu1FeAu9Hc7P///wtHnf///yH5BAEAAB8ALAAAAAA7AEAAAAX/4CeOZGmeaJk4h+d6hLGkdG2rwssUxfMSjZtwKJq4GABKZ9mRZCouB3GaMno2EiYFwCtcCi4DdTxauCxMDvjFdgHI1EHAg9a2754EnAjwVLJMHXhtAntDcxmBHRSDbQiGNmYMihQ+jS9vkDR9G0sbl3iFmikRHgAdCqB4B6MpOacWqnitKK8dDLJtAbQnpWi5hLwmBH6CwC9iwmUvT8cuM8ofCHMuFRfOBNEfAy1slsAQ0QnEzm2syhPU5S8Bj7wIpetsBHo1AwsA+RBBKQMA6mwOAFjQwIGqCANqLMhxJ4ABdyNWAHQRAABEEQgMTERWAwHDajy+eTjgAEAEcncA/yREMQDljxoJqFXQAGiJBAC4QAm4iKLBnQk0Yrq4EEjBFx4AROoKJ6Tbi5UnWrpItEQBlFwH6gnp8+IcCq4aAmEAdgCqEJ8vREWdU0BRKlllx7DJdAKCCwWKxsrSOkUdXROlHrjNCSrZmI9/SxA7JUGpqsREEKdwgaGDhnKQh0hGcbeD48dwNp+4K2GdYSofI7gy9bYcT81pUxh80NqZ2iltUqDVa5pKgjZ8FXt4EEueALM27LKR0tPFGnkBoN1wCYOGQXltIrw2obxN5hEGsN95mKJ7SuQkwquqqKfBBI14ZKhwWgBABgUALOAKABTFAuptkGfCBE6xEUAE+VxHh7QSWiiAXxg0LGCASwI4sB0JDQDYBgN4LUGBfi9UYMlptECw0REcMMHbINK9U+ALlTFR2iUBoDcKN210oogqTCmD4wsMMnEZKNloM40LgnXAAQAYXCOLNiJcR5QEhOUC5QdonTLkMVdm2cFzwFw5gBvGOHPlB86VyeWVDM1o5pVWfOGMamJSc0GVqvBzZXd4XnIbm87UeOYIP8oSQHBnDvDRJfQMekI6lzhgo6NFRACQABCgFwIAOw=="
+      />
     </mat-card-header>
 
     <mat-card-title></mat-card-title>
@@ -43,7 +42,7 @@
           {{(classInfo | async).description}}
         </ng-container>
         <mat-form-field class="description" *ngIf="editToggle">
-          <textarea matInput placeholder="Description" value="{{(classInfo | async).description}}"></textarea>
+          <textarea matInput placeholder="Description" [(ngModel)]="editedClass.description" value="{{(classInfo | async).description}}"></textarea>
         </mat-form-field>
       </ng-container>
       <mat-form-field class="description" *ngIf="!selectedClassID">
@@ -63,8 +62,7 @@
         <div>
           <!-- Applied Properties -->
           <mat-expansion-panel style="padding:0;margin:0;" [expanded]="true">
-            <mat-expansion-panel-header class="mat-expansion-panel-custom-header" [collapsedHeight]="'30px'"
-                                        [expandedHeight]="'30px'">
+            <mat-expansion-panel-header class="mat-expansion-panel-custom-header" [collapsedHeight]="'30px'" [expandedHeight]="'30px'">
               <mat-panel-title class="mat-panel-custom-title">
                 Applied Properties
               </mat-panel-title>
@@ -72,8 +70,7 @@
             <ng-container *ngIf="selectedClassID">
               <div *ngIf="(alreadyThere2| async).length > 0" class="properties-outer-wrapper">
                 <mat-expansion-panel *ngFor="let rec of (alreadyThere2| async)" style="padding:0;margin:0;">
-                  <mat-expansion-panel-header class="mat-expansion-panel-custom-header" *ngIf="rec.label"
-                                              [collapsedHeight]="'30px'" [expandedHeight]="'30px'">
+                  <mat-expansion-panel-header class="mat-expansion-panel-custom-header" *ngIf="rec.label" [collapsedHeight]="'30px'" [expandedHeight]="'30px'">
                     <mat-panel-title class="mat-panel-custom-title">
                       {{rec.label}}
                     </mat-panel-title>
@@ -85,7 +82,7 @@
                   </div>
                   <div class="properties-line" *ngIf="rec.range">
                     <p class="properties-label">Range:</p>
-                    <a href="{{rec.range}}" class="properties-text uri-link inactive-uri-link" > {{rec.range}}</a>
+                    <a href="{{rec.range}}" class="properties-text uri-link inactive-uri-link"> {{rec.range}}</a>
                   </div>
                   <div class="properties-line" *ngIf="rec.comment">
                     <p class="properties-label ">Comment:</p>
@@ -96,9 +93,9 @@
             </ng-container>
 
           </mat-expansion-panel>
+          <!--Adding properties manually-->
           <mat-expansion-panel style="padding:0;margin:0;" [expanded]="false">
-            <mat-expansion-panel-header class="mat-expansion-panel-custom-header" [collapsedHeight]="'30px'"
-                                        [expandedHeight]="'30px'">
+            <mat-expansion-panel-header class="mat-expansion-panel-custom-header" [collapsedHeight]="'30px'" [expandedHeight]="'30px'">
               <mat-panel-title class="mat-panel-custom-title">
                 Add Properties
               </mat-panel-title>
@@ -116,7 +113,7 @@
                 </mat-form-field>
                 <mat-form-field class="class-dropdown">
                   <mat-select placeholder="Range" [(ngModel)]="newClass.property.range">
-                    <ng-container *ngFor="let c of rangeOption | async">
+                    <ng-container *ngFor="let c of rangeOptions | async">
                       <mat-option [value]="c._id" *ngIf="c._id != selectedClassID">
                         {{ c.name }}
                       </mat-option>
@@ -127,15 +124,27 @@
               </div>
             </div>
           </mat-expansion-panel>
+
+          <!--Add properties from recommender-->
+          <!-- <mat-expansion-panel style="padding:0;margin:0;" [expanded]="false">
+            <mat-expansion-panel-header class="mat-expansion-panel-custom-header" [collapsedHeight]="'30px'" [expandedHeight]="'30px'">
+              <mat-panel-title class="mat-panel-custom-title">
+                Add Recommeded Properties
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <div class="add-properties-container" *ngIf="selectedClassID">
+              <mat-list-item *ngFor="let rec of propertyRecommendations" style="padding:0;margin:0;">
+                <p matLine *ngIf="rec.label" matTooltip="{{rec.label}}">Label: {{rec.label}}</p>
+                <p matLine *ngIf="rec.uri" matTooltip="{{rec.uri}}">URI: {{rec.uri}}</p>
+                <p matLine *ngIf="rec.comment" matTooltip="{{rec.comment}}">Comment: {{rec.comment}}</p>
+                <p matLine *ngIf="rec.range" matTooltip="{{rec.range}}">Range: {{rec.range}}</p>
+                <button mat-raised-button class="btn-green" (click)=addToGraph(rec)>Add</button>
+                <hr>
+              </mat-list-item>
+
+            </div>
+          </mat-expansion-panel> -->
         </div>
-        <!--mat-list-item *ngFor="let rec of propertyRecommendations" style="padding:0;margin:0;">
-          <p matLine *ngIf="rec.label" matTooltip="{{rec.label}}">Label: {{rec.label}}</p>
-          <p matLine *ngIf="rec.uri" matTooltip="{{rec.uri}}">URI: {{rec.uri}}</p>
-          <p matLine *ngIf="rec.comment" matTooltip="{{rec.comment}}">Comment: {{rec.comment}}</p>
-          <p matLine *ngIf="rec.range" matTooltip="{{rec.range}}">Range: {{rec.range}}</p>
-          <button mat-raised-button class="btn-green" (click)=addToGraph(rec)>Add</button>
-          <hr>
-        </mat-list-item-->
       </mat-list>
     </mat-card-content>
 

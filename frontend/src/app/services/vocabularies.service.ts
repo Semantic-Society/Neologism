@@ -60,6 +60,7 @@ export class VocabulariesService {
       )
     );
   }
+
   createVocabulary(name: string, authors: string[], description: string, uriPrefix: string) {
     MeteorObservable.call('vocabulary.create', name, authors, description, uriPrefix)
       .pipe(zoneOperator())
@@ -70,6 +71,7 @@ export class VocabulariesService {
         // Handle error
       });
   }
+
   deleteVocabulary(id: string) {
     MeteorObservable.call('vocabulary.remove', id)
       .pipe(zoneOperator())
@@ -84,6 +86,30 @@ export class VocabulariesService {
     MeteorObservable.call('class.create',
       { vocabId: vocabularyId, name, description, URI }
     ).subscribe((response) => {
+      // Handle success and response from server!
+    }, (err) => {
+      console.log(err);
+    });
+  }
+
+  updateClassName(classID: string, name: string) {
+    MeteorObservable.call('class.update.name', classID, name).subscribe((response) => {
+      // Handle success and response from server!
+    }, (err) => {
+      console.log(err);
+    });
+  }
+
+  updateClassDescription(classID: string, description: string) {
+    MeteorObservable.call('class.update.description', classID, description).subscribe((response) => {
+      // Handle success and response from server!
+    }, (err) => {
+      console.log(err);
+    });
+  }
+
+  updateClassURI(classID: string, URI: string) {
+    MeteorObservable.call('class.update.URI', classID, URI).subscribe((response) => {
       // Handle success and response from server!
     }, (err) => {
       console.log(err);

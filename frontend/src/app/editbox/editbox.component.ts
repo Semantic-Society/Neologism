@@ -46,6 +46,13 @@ export class EditboxComponent implements OnInit, OnChanges {
       range: ''
     }
   };
+
+  protected editedClass: {
+    name: string;
+    URI: string;
+    description: string;
+  };
+
   protected emptyClass = {
     name: '',
     URI: '',
@@ -61,13 +68,13 @@ export class EditboxComponent implements OnInit, OnChanges {
   protected classToUpdate: Observable<IClassWithProperties>;
   protected editToggle = false;
   // protected classes;
-  protected rangeOption: Observable<Array<{ _id: string, name: string }>>;
+  protected rangeOptions: Observable<Array<{ _id: string, name: string }>>;
 
   constructor(private recommender: RecommendationService, private vocabService: VocabulariesService) {
   }
 
   ngOnInit() {
-    this.rangeOption = this.vocabService.getClasses(this.vocabID).pipe(
+    this.rangeOptions = this.vocabService.getClasses(this.vocabID).pipe(
       map((classes) => {
         return classes.map((aclass) => ({ _id: aclass._id, name: aclass.name }));
       })
@@ -94,6 +101,13 @@ export class EditboxComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(input) {
+
+    this.editedClass = {
+      name: undefined,
+      URI: undefined,
+      description: undefined,
+    };
+
     const classID: string = input.selectedClassID.currentValue;
     if (!classID) {
       return;
@@ -170,13 +184,29 @@ export class EditboxComponent implements OnInit, OnChanges {
   }
 
   cancelEdit() {
-    this.editToggle = !this.editToggle;
+    this.editToggle = false;
+    this.editedClass = {
+      name: undefined,
+      URI: undefined,
+      description: undefined,
+    };
   }
 
   updateEdit() {
+    // console.log(this.)
     // TODO: Call the updateClass (needs to be implemented) of vocabService and call toggleEdit() afterwards
     // this.vocabService.updateClass(this.newClass.name);
-
+    console.log(this.editedClass);
+    if (this.editedClass.name) {
+      this.vocabService.updateClassName(this.selectedClassID, this.editedClass.name);
+    }
+    if (this.editedClass.description) {
+      this.vocabService.updateClassDescription(this.selectedClassID, this.editedClass.description);
+    }
+    if (this.editedClass.URI) {
+      this.vocabService.updateClassURI(this.selectedClassID, this.editedClass.URI);
+    }
+    this.cancelEdit();
   }
 
 }
