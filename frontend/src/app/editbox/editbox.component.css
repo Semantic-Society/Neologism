@@ -193,11 +193,33 @@ mat-form-field.description textarea {
   min-height: 100px;
 }
 
-.add-class {
+.button-full-width {
   padding: 1rem;
   width: calc(100% - 2rem);
 }
 
-.add-class button {
+.button-full-width button {
   width: 100%;
 }
+
+.add-properties-container {
+  padding: 0rem .5rem;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.add-properties-container .prop-input {
+  width: calc(100% - .5rem);
+}
+
+.add-properties-container .class-dropdown {
+  width: calc(100% - .5rem);
+}
+
+
+/*.prop-button button {
+  max-width: calc(10% - 1rem) !important;
+  min-width: calc(10% - 1rem) !important;
+}*/

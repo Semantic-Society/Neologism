@@ -1,16 +1,16 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, } from '@angular/core';
-import { FormControl } from '@angular/forms';
-import { Observable, of } from 'rxjs';
-import { map, startWith } from 'rxjs/operators';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output,} from '@angular/core';
+import {FormControl} from '@angular/forms';
+import {Observable, of} from 'rxjs';
+import {map, startWith} from 'rxjs/operators';
 
 // import { multicast } from 'rxjs/operators/multicast';
 // import { startWith } from 'rxjs/operators/startWith';
 
 // import { IUserObject, MxgraphService } from '../mxgraph/mxgraph';
 
-import { RecommendationService } from '../services/recommendation.service';
-import { IClassWithProperties, VocabulariesService } from '../services/vocabularies.service';
-import {Vocabularies} from '../../../api/collections';
+import {Classes, Vocabularies} from '../../../api/collections';
+import {RecommendationService} from '../services/recommendation.service';
+import {IClassWithProperties, VocabulariesService} from '../services/vocabularies.service';
 
 @Component({
   selector: 'app-editbox',
@@ -35,15 +35,36 @@ export class EditboxComponent implements OnInit, OnChanges {
   // TODO: strictly speaking, this component does not need this as it only needs access to classes and properties.
   // However, more fine grained methods in the VocabulariesService are not yet implemented.
   @Input() vocabID: string;
-  vocab = {
+  protected newClass = {
     name: '',
     URI: '',
-    description: ''
-  }
+    description: '',
+    property: {
+      name: '',
+      URI: '',
+      description: '',
+      range: ''
+    }
+  };
+  protected emptyClass = {
+    name: '',
+    URI: '',
+    description: '',
+    property: {
+      name: '',
+      URI: '',
+      description: '',
+      range: ''
+    }
+  };
+
+  protected classes;
+
   constructor(private recommender: RecommendationService, private vocabService: VocabulariesService) {
   }
 
   ngOnInit() {
+    this.classes = this.vocabService.getClassesWithProperties(this.vocabID);
     // this.selectedClassID.subscribe((classID) => {
     //   this.getProperties(classID);
     // });
@@ -72,9 +93,9 @@ export class EditboxComponent implements OnInit, OnChanges {
     // we get several small pieces of info from the class. multicast is likely a good idea, but did not get it working.
     this.classInfo = theClassO.pipe(
       map((theClass) => {
-        return { label: theClass.name, description: theClass.description, url: theClass.URI };
+        return {label: theClass.name, description: theClass.description, url: theClass.URI};
       }),
-      startWith({ label: '', description: '', url: '' }),
+      startWith({label: '', description: '', url: ''}),
     );
 
     this.alreadyThere2 = theClassO.pipe(
@@ -120,7 +141,18 @@ export class EditboxComponent implements OnInit, OnChanges {
     // // TODO: it feals a bit like a hack to call this directly...
     // this.getProperties(this.selectedClass);
   }
+
   addClass() {
-    this.vocabService.addClass(this.vocabID, this.vocab.name, this.vocab.description, this.vocab.URI);
+    console.log(this.newClass);
+    this.vocabService.addClass(this.vocabID, this.newClass.name, this.newClass.description, this.newClass.URI);
+    this.newClass = this.emptyClass;
+  }
+
+  addProperty() {
+    //console.log(this.newClass)
+    this.vocabService.addProperty(this.selectedClassID, this.newClass.property.name, this.newClass.property.description, this.newClass.property.URI, this.newClass.property.range);
+    this.newClass = this.emptyClass;
+    //this.vocabService.addProperty(this.selectedClassID,'test', 'test', 'test', this.newClass.dest);
+    //this.vocabService.addProperty('ikhjrcSqXJQQrgfC6', 'myprop', 'nice prop', 'example.org', 'c8YSBREPsKex4526d');
   }
 }
