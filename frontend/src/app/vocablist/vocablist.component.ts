@@ -46,13 +46,13 @@ export class VocablistComponent implements OnInit {
     this.vocabService.deleteVocabulary(id);
   }
 
-  randomStr(m) {
-    m = m || 9;
-    let s = '';
-    const r = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    for (let i = 0; i < m; i++) { s += r.charAt(Math.floor(Math.random() * r.length)); }
-    return s;
-  }
+  // randomStr(m) {
+  //   m = m || 9;
+  //   let s = '';
+  //   const r = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  //   for (let i = 0; i < m; i++) { s += r.charAt(Math.floor(Math.random() * r.length)); }
+  //   return s;
+  // }
 
 }
 

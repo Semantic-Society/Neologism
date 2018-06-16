@@ -163,7 +163,7 @@ export class EditboxComponent implements OnInit, OnChanges {
     this.editToggle = !this.editToggle;
   }
 
-  cancleEdit() {
+  cancelEdit() {
     this.editToggle = !this.editToggle;
   }
 

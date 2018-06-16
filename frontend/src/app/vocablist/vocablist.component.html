@@ -5,19 +5,19 @@
 
 <mat-card class="add-vocab-container">
   <h3>Add new Vocabulary</h3>
-  <mat-form-field class="vobab-form-cell">
+  <mat-form-field class="vocab-form-cell">
     <input matInput placeholder="Name" [(ngModel)]="vocabForm.name">
   </mat-form-field>
   <!--<mat-form-field class="example-full-width">
     <input matInput placeholder="Authors" value="">
   </mat-form-field>-->
-  <mat-form-field class="vobab-form-cell">
+  <mat-form-field class="vocab-form-cell">
     <textarea matInput placeholder="Description" [(ngModel)]="vocabForm.description"></textarea>
   </mat-form-field>
-  <mat-form-field class="vobab-form-cell">
+  <mat-form-field class="vocab-form-cell">
     <input matInput placeholder="URI" [(ngModel)]="vocabForm.uriPrefix">
   </mat-form-field>
-  <button mat-raised-button color="primary" (click)="addVocabulary()" class="vobab-form-cell">Add Vocabulary</button>
+  <button mat-raised-button color="primary" (click)="addVocabulary()" class="vocab-form-cell">Add Vocabulary</button>
 </mat-card>
 <div>
   <mat-table [dataSource]="dataSource">
