@@ -1,7 +1,7 @@
 <div *ngFor="let c of (classes | async)">
   <div class="attributes-container"><!-- TODO: add anchor for references -->
     <div class="attribute-container">
-      <div class="text"> <span class="label">Class:</span> {{c.name}}</div>
+      <div class="text"> <span class="label">Class:</span> <span class="name">{{c.name}}</span></div>
       <span class="uri"><a href="{{c.URI}}"> {{c.URI}} </a></span>
     </div>
     <!--<div class="attribute-container">
@@ -15,7 +15,7 @@
       <!--<span class="label"> Properties: </span>-->
       <div class="text">
         <div class="properties-container" *ngFor="let p of c.properties">
-          <div class="text"> <span class="label">Property:</span> {{p.name}}</div>
+          <div class="text"> <span class="label">Property:</span> <span class="name">{{p.name}}</span></div>
           <span class="uri"><a href="{{p.URI}}"> {{p.URI}} </a></span>
           <span class="property-range" *ngIf="p.range?.name"><span class="label">Range:</span> <a href="{{p.URI}}"> {{p.range?.name}} </a></span>
           <span class="property-range description" *ngIf="p.range?.description">{{p.range?.description}}</span>

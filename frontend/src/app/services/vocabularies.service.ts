@@ -174,7 +174,7 @@ export class VocabulariesService {
           c.properties.forEach((p, j) => {
             p.range = newClassesWithoutRangeFilledLater.find((cr) => cr._id === cs[i].properties[j].range);
             if (!p.range) {
-              //return null; // not all required classes returned yet
+              // return null; // not all required classes returned yet
               failed = true;
             }
           })
