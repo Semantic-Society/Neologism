@@ -17,7 +17,6 @@ interface IRestResponse {
 
 // Recommendation Meta Schema
 interface IRecommendationMetadata {
-    creator: string;
     list: IClassReccomendation[];
 }
 
@@ -51,16 +50,14 @@ export class RecommendationService {
         comment: string;
         label: string;
         uri: string;
-        creator: string;
     }>>;
 
-    private propsReq: Subject<{ url: IRI, creator: string }>;
+    private propsReq: Subject<{ url: IRI }>;
     private propsResp: Subject<Array<{
         comment: string;
         label: string;
         uri: string;
         range: string;
-        creator: string;
     }>>;
 
     private static strip(html: string) { return html.replace(/<(?:.|\n)*?>/gm, ''); }
@@ -107,7 +104,6 @@ export class RecommendationService {
                                     comment: RecommendationService.strip(rec.comments[0] && rec.comments[0].label || rec.labels[0].label),
                                     label: RecommendationService.strip(rec.labels[0].label),
                                     uri: rec.URI,
-                                    creator: resp.creator,
                                 };
                             })
                             : []
@@ -125,7 +121,7 @@ export class RecommendationService {
         this.propsResp = new BehaviorSubject([]);
         this.propsReq.pipe(
             debounceTime(100),
-            switchMap(({ url, creator }) => VocabulariesService.wrapFunkyObservables(
+            switchMap(({ url }) => VocabulariesService.wrapFunkyObservables(
                 this._http.get(url)
             ).pipe(
                 map((r) => r.json() as { properties: IPropertyRecommendation[] }),
@@ -138,7 +134,6 @@ export class RecommendationService {
                                 label: RecommendationService.strip(rec.labels[0].label),
                                 uri: rec.propertyIRI,
                                 range: rec.rangeClassIRI,
-                                creator
                             };
                         })
                         : []
@@ -178,13 +173,12 @@ export class RecommendationService {
         return this.classResp.asObservable();
     }
 
-    propertyRecommendation(classUri: IRI, creator: string) {
+    propertyRecommendation(classUri: IRI) {
         classUri = encodeURIComponent(classUri);
-        creator = encodeURIComponent(creator);
 
-        const url = `${RecommendationService.baseUrl}properties?class=${classUri}&creator=${creator}`;
+        const url = `${RecommendationService.baseUrl}properties?class=${classUri}`;
 
-        this.propsReq.next({ url, creator });
+        this.propsReq.next({ url });
         return this.propsResp.asObservable();
     }
 }

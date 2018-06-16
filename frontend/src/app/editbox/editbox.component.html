@@ -126,24 +126,24 @@
           </mat-expansion-panel>
 
           <!--Add properties from recommender-->
-          <!-- <mat-expansion-panel style="padding:0;margin:0;" [expanded]="false">
+          <mat-expansion-panel style="padding:0;margin:0;" [expanded]="false">
             <mat-expansion-panel-header class="mat-expansion-panel-custom-header" [collapsedHeight]="'30px'" [expandedHeight]="'30px'">
               <mat-panel-title class="mat-panel-custom-title">
                 Add Recommeded Properties
               </mat-panel-title>
             </mat-expansion-panel-header>
             <div class="add-properties-container" *ngIf="selectedClassID">
-              <mat-list-item *ngFor="let rec of propertyRecommendations" style="padding:0;margin:0;">
+              <mat-list-item *ngFor="let rec of propertyRecommendations | async" style="padding:0;margin:0;">
                 <p matLine *ngIf="rec.label" matTooltip="{{rec.label}}">Label: {{rec.label}}</p>
                 <p matLine *ngIf="rec.uri" matTooltip="{{rec.uri}}">URI: {{rec.uri}}</p>
                 <p matLine *ngIf="rec.comment" matTooltip="{{rec.comment}}">Comment: {{rec.comment}}</p>
                 <p matLine *ngIf="rec.range" matTooltip="{{rec.range}}">Range: {{rec.range}}</p>
-                <button mat-raised-button class="btn-green" (click)=addToGraph(rec)>Add</button>
+                <button mat-raised-button class="btn-green" (click)=addRecommendedProperyToGraph(rec)>Add</button>
                 <hr>
               </mat-list-item>
 
             </div>
-          </mat-expansion-panel> -->
+          </mat-expansion-panel>
         </div>
       </mat-list>
     </mat-card-content>

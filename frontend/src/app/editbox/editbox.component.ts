@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { Observable, of } from 'rxjs';
-import { map, startWith } from 'rxjs/operators';
+import { Observable, of, ReplaySubject } from 'rxjs';
+import { combineLatest, map, startWith, switchMap, filter, distinctUntilChanged } from 'rxjs/operators';
 
 // import { multicast } from 'rxjs/operators/multicast';
 // import { startWith } from 'rxjs/operators/startWith';
@@ -23,6 +23,7 @@ export class EditboxComponent implements OnInit, OnChanges {
   protected alreadyThere2: Observable<Array<{ comment: string; label: string; uri: string; range: string; }>>;
 
   // protected propertyRecommendations: Array<{ comment: string; label: string; uri: string; range: string; }> = [];
+  protected propertyRecommendations: Observable<Array<{ comment: string; label: string; uri: string; range: string; }>>;
 
   // TODO: as this is an observable, does it need @Input?
   @Input() selectedClassID: string;
@@ -67,7 +68,7 @@ export class EditboxComponent implements OnInit, OnChanges {
 
   protected classToUpdate: Observable<IClassWithProperties>;
   protected editToggle = false;
-  // protected classes;
+
   protected rangeOptions: Observable<Array<{ _id: string, name: string }>>;
 
   constructor(private recommender: RecommendationService, private vocabService: VocabulariesService) {
@@ -82,9 +83,6 @@ export class EditboxComponent implements OnInit, OnChanges {
 
     this.classToUpdate = this.vocabService.getClassWithProperties(this.vocabID, of(this.selectedClassID));
     console.log(this.classToUpdate);
-    // this.selectedClassID.subscribe((classID) => {
-    //   this.getProperties(classID);
-    // });
 
     // const theClassO = this.vocabService.getClassWithProperties(this.vocabID, this.selectedClassID.filter((id) => id !== null));
     // // we get several small pieces of info from the class. multicast is likely a good idea, but did not get it working.
@@ -113,7 +111,9 @@ export class EditboxComponent implements OnInit, OnChanges {
       return;
     }
 
-    const theClassO = this.vocabService.getClassWithProperties(this.vocabID, of(classID));
+    const theClassO: Observable<IClassWithProperties> = this.vocabService.getClassWithProperties(this.vocabID, of(classID)).pipe(
+      // multicast(new ReplaySubject()),
+    );
     // we get several small pieces of info from the class. multicast is likely a good idea, but did not get it working.
     this.classInfo = theClassO.pipe(
       map((theClass) => {
@@ -137,34 +137,77 @@ export class EditboxComponent implements OnInit, OnChanges {
       startWith([]),
     );
 
+    this.propertyRecommendations = theClassO.pipe(
+      switchMap((theclass) => {
+        return this.recommender.propertyRecommendation(theclass.URI).pipe(
+          combineLatest(this.alreadyThere2, (recommendations, alreadys) => {
+            const newReccommendations = [];
+            recommendations.forEach((recommendation) => {
+              //       // TODO is there a better way in JS?
+              if (!alreadys.some((already) => {
+                return already.uri === recommendation.uri;
+              })) {
+                // the property is not there yet
+                newReccommendations.push(recommendation);
+              }
+            });
+            return newReccommendations;
+          })
+        );
+      }),
+      startWith([]),
+    );
+
+    // this.recommender.propertyRecommendation(theClass.url)
+    //   .subscribe((allPropRecommendations) => {
+    //     // TODO: what if there is discrepancy between what is recommended and what is already there?
+    //     console.log('Received Property Recommendation', allPropRecommendations);
+    //     const newReccommendations = [];
+    //     allPropRecommendations.forEach((recommendation) => {
+    //       // TODO is there a better way in JS?
+    //       if (!this.alreadyThere.some((already) => {
+    //         return already.uri === recommendation.uri;
+    //       })) {
+    //         // the property is not there yet
+    //         newReccommendations.push(recommendation);
+    //       }
+    //     });
+    //     this.propertyRecommendations = newReccommendations;
+    //   });
   }
 
-  //  getProperties(classID: string) {
-  // this.alreadyThere = this.mx.getProperties(theClass.url);
-  // this.recommender.propertyRecommendation(theClass.url, theClass.creator)
-  //   .subscribe((allPropRecommendations) => {
-  //     // TODO: what if there is discrepancy between what is recommended and what is already there?
-  //     console.log('Received Property Recommendation', allPropRecommendations);
-  //     const newReccommendations = [];
-  //     allPropRecommendations.forEach((recommendation) => {
-  //       // TODO is there a better way in JS?
-  //       if (!this.alreadyThere.some((already) => {
-  //         return already.uri === recommendation.uri;
-  //       })) {
-  //         // the property is not there yet
-  //         newReccommendations.push(recommendation);
-  //       }
-  //     });
-  //     this.propertyRecommendations = newReccommendations;
-  //   });
-  // }
+  addRecommendedProperyToGraph(rec: { comment: string; label: string; uri: string; range: string }) {
+    console.log('editbox -> addToGraph:', this.selectedClassID, rec.uri, rec.label, rec.range);
 
-  // addToGraph(rec: { comment: string; label: string; uri: string; range: string; creator: string; }) {
-  // // console.log('editbox -> addToGraph:', this.selectedClass.url, rec.uri, rec.label, rec.range)
-  // this.mx.insertProperty(this.selectedClass.url, rec.uri, rec.label, rec.comment, rec.range);
-  // // TODO: it feals a bit like a hack to call this directly...
-  // this.getProperties(this.selectedClass);
-  // }
+    // this is currently rather weirdly working.
+    // When the rangeID is not found, the class is added, after which the rangeID is found and the property can be added.
+    // TODO: is this a good way to do this?
+    const subscription = this.vocabService.getClassIDFromVocabForURI(this.vocabID, rec.range).subscribe(
+      (rangeID) => {
+        if (rangeID) {
+          // ID found
+          this.vocabService.addProperty(this.selectedClassID, rec.label, rec.comment, rec.uri, rangeID);
+          subscription.unsubscribe();
+        } else {
+          // ID not found, add a new class first
+          let className = 'no name yet';
+          const parts = rec.range.split('#');
+          if (parts.length === 2 && parts[1].length > 0) {
+            className = parts[1];
+          } else {
+            const partsSlash = rec.range.split('/');
+            if (partsSlash.length > 2 && partsSlash[partsSlash.length - 1].length > 0) {
+              className = partsSlash[partsSlash.length - 1];
+            }
+          }
+          this.vocabService.addClass(this.vocabID, className, 'no description yet', rec.range);
+        }
+      }
+    );
+    // this.mx.insertProperty(this.selectedClass.url, rec.uri, rec.label, rec.comment, rec.range);
+    // TODO: it feals a bit like a hack to call this directly...
+    // this.getProperties(this.selectedClass);
+  }
 
   addClass() {
     console.log(this.newClass);
