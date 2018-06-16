@@ -85,7 +85,7 @@ export class MxgraphComponent implements OnInit, OnDestroy {
         // });
 
         this.mx.addDragListener((ids, dx, dy) => {
-            console.log(ids, dx, dy);
+            // console.log(ids, dx, dy);
             this.vocabService.translateClasses(ids, dx, dy);
         });
 

@@ -21,7 +21,7 @@
   background-color: #1f1f1f;
   color: #FFFFFF;
   padding: 1rem;
-  max-width: 25%;
+  max-width: 35%;
 }
 
 .mat-drawer button {
@@ -56,9 +56,4 @@
 }
 .pad-1 {
   padding: 1rem;
-}
-
-
-.global-buttons{
-  margin-top: 200px;
 }
