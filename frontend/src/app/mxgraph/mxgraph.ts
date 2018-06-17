@@ -22,6 +22,8 @@ export class MxgraphService {
     private transactionSelection;
     private selection$: Observable<string>;
 
+    private edgeSelection$: Observable<{ domainClazzID: string; edgeID: string }>;
+
     // private toolbar: m.mxToolbar;
     // public codec: N3Codec;
 
@@ -146,7 +148,7 @@ export class MxgraphService {
         //         this.zoomToFit();
         //     });
 
-        this.selection$ = new Observable((observer) => {
+        this.selection$ = new Observable<string>((observer) => {
             const handler = (selectionModel: m.mxGraphSelectionModel, evt: m.mxEventObject) => {
                 const values = selectionModel.cells
                     .filter((cell) => cell.vertex)
@@ -161,8 +163,41 @@ export class MxgraphService {
             };
             this.graph.getSelectionModel().addListener(MxgraphService.mx.mxEvent.CHANGE, handler);
             return () => this.graph.getSelectionModel().removeListener(handler);
-        }).pipe(distinctUntilChanged()) as any;
+        }).pipe(distinctUntilChanged());
 
+        this.edgeSelection$ = new Observable<{ domainClazzID: string; edgeID: string }>((observer) => {
+            const handler = (selectionModel: m.mxGraphSelectionModel, evt: m.mxEventObject) => {
+                const values = selectionModel.cells
+                    .filter((cell) => cell.edge)
+                    .map((cell) => cell.getId());
+                if (values.length === 1) {
+                    const edgeID: string = values[0];
+                    const edgeO = this.getEdgeWithId(edgeID);
+                    const sourceNode = edgeO.getTerminal(true);
+                    const domainClazzID: string = sourceNode.getId();
+                    observer.next({ domainClazzID, edgeID });
+                } else if (values.length === 0) {
+                    observer.next(null);
+                } else {
+                    throw new Error('Multiple items selected. Should not be possible');
+                }
+            };
+            this.graph.getSelectionModel().addListener(MxgraphService.mx.mxEvent.CHANGE, handler);
+            return () => this.graph.getSelectionModel().removeListener(handler);
+        }).pipe(distinctUntilChanged());
+    }
+
+    private getEdgeWithId(edgeID: string) {
+        // TODO in principle getCell should work, but upon inserting there is an issue and the cell gets assingned a new id 
+        for (const key in this.model.cells) {
+            if (this.model.cells.hasOwnProperty(key)) {
+                const candidate = this.model.cells[key];
+                if (candidate.edge && candidate.id === edgeID) {
+                    return candidate;
+                }
+            }
+        }
+        throw new Error('edge with id ' + edgeID + ' not found');
     }
 
     // private addToolbarItem(prototype: m.mxCell, image: string) {
@@ -229,7 +264,10 @@ export class MxgraphService {
         v1: m.mxCell,
         v2: m.mxCell,
     ) {
-        return this.graph.insertEdge(this.canvas, id, label, v1, v2);
+        const edge = this.graph.insertEdge(this.canvas, id, label, v1, v2);
+        // there seems to be a bug in mxgraph, such that the id is not set properly upon insertion
+        edge.setId(id);
+        return edge;
     }
 
     /** takes a number and rounds it to align with drawing grid */
@@ -298,7 +336,7 @@ export class MxgraphService {
             }
         }
 
-        this.graph.insertEdge(this.canvas, predicateID, predicateLabel, v1, v2);
+        this.addEdge(predicateID, predicateLabel, v1, v2);
     }
 
     // public insertSubclassRelation(
@@ -351,6 +389,10 @@ export class MxgraphService {
 
     public currentSelection(): Observable<string> {
         return this.selection$;
+    }
+
+    public currentEdgeSelection(): Observable<{ domainClazzID: string; edgeID: string }> {
+        return this.edgeSelection$;
     }
 
     // This has been rewritten with observables above.

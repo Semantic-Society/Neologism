@@ -2,7 +2,7 @@ import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@ang
 import { ActivatedRoute } from '@angular/router';
 import { mxgraph as m } from 'mxgraph';
 import { Observable, Subscription } from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
+import { debounceTime, map, merge, combineLatest, distinctUntilChanged } from 'rxjs/operators';
 
 import { IUserObject, MxgraphService } from './mxgraph';
 import { N3Codec } from './N3Codec';
@@ -62,7 +62,21 @@ export class MxgraphComponent implements OnInit, OnDestroy {
         // this.vocabService.addProperty('ikhjrcSqXJQQrgfC6', 'myprop', 'nice prop', 'example.org', 'c8YSBREPsKex4526d');
 
         // this.currentSelection = this.mx.currentSelection().publish(new BehaviorSubject<string>(null));
-        this.currentSelectionSub = this.mx.currentSelection().subscribe((selection) => {
+        this.currentSelectionSub = this.mx.currentSelection().pipe(
+            combineLatest(this.mx.currentEdgeSelection(),
+                (classSelection, edgeSelection) => {
+                    if (classSelection !== null) {
+                        return classSelection;
+                    } else if (edgeSelection !== null) {
+                        return edgeSelection.domainClazzID;
+                    } else {
+                        return null;
+                    }
+                }
+            ),
+            debounceTime(20),
+            distinctUntilChanged()
+        ).subscribe((selection) => {
             console.log('selectionChange:', selection);
             this.editMode = selection ? SideBarState.Edit : SideBarState.Default;
             this.currentSelection = selection;

@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Observable, of, ReplaySubject } from 'rxjs';
-import { combineLatest, map, startWith, switchMap, filter, distinctUntilChanged } from 'rxjs/operators';
+import { combineLatest, distinctUntilChanged, filter, map, startWith, switchMap } from 'rxjs/operators';
 
 // import { multicast } from 'rxjs/operators/multicast';
 // import { startWith } from 'rxjs/operators/startWith';
