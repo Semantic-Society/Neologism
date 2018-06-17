@@ -2,9 +2,9 @@ import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@ang
 import { ActivatedRoute } from '@angular/router';
 import { mxgraph as m } from 'mxgraph';
 import { Observable, Subscription } from 'rxjs';
-import { debounceTime, map, merge, combineLatest, distinctUntilChanged } from 'rxjs/operators';
+import { combineLatest, debounceTime, distinctUntilChanged, filter, map, merge } from 'rxjs/operators';
 
-import { IUserObject, MxgraphService } from './mxgraph';
+import { MxgraphService } from './mxgraph';
 import { N3Codec } from './N3Codec';
 
 import { Iclass, Ivocabulary, meteorID } from '../../../api/models';
@@ -82,6 +82,25 @@ export class MxgraphComponent implements OnInit, OnDestroy {
             this.currentSelection = selection;
         });
 
+        // TODO It looks like this currently leaks observables.
+        this.mx.deleteRequestObservable().pipe(
+            combineLatest(this.mx.currentEdgeSelection(), this.mx.currentSelection(),
+                (keyevent, edgeSel, nodeSel) => ({ key: keyevent, edge: edgeSel, node: nodeSel })
+            ),
+            filter((possibleDelReq) => possibleDelReq.key !== null && (possibleDelReq.edge !== null || possibleDelReq.node !== null))
+        ).subscribe(
+            (deleteRequest) => {
+                console.log('delete key presses seem to be not deatlh correctly atm. Pressing the del key multiple times and then clicking nodes, fires delete events still.');
+                if (deleteRequest.edge !== null) {
+                    // this.vocabService.deleteProperty();
+                    console.log('delete edge ', deleteRequest.edge);
+                }
+                if (deleteRequest.node !== null) {
+                    console.log('delete node', deleteRequest.node);
+                }
+            }
+        );
+
         this.vocabularySub = this.vocabService.getVocabulary(this.vocabID).subscribe(
             (v) => this.vocabulary = v,
             (e) => console.log(e),
@@ -138,30 +157,34 @@ export class MxgraphComponent implements OnInit, OnDestroy {
     mergeProperties(c: IClassWithProperties): IMergedPropertiesClass {
         // only takes the necessary parts
         const withMergedProps: IMergedPropertiesClass = { _id: c._id, properties: [], name: c.name };
-        // merge the properties and fill
+        // merge the properties and fill.
+        // TODO: is this better solved with a ES6 Map?
         const grouped = c.properties.reduce(
             (groups, x, ignored) => {
                 (groups[x.range._id] = groups[x.range._id] || []).push(x);
                 return groups;
-            }, {});
+            }, Object.create(null));
 
+        // We used Object.create(null) to make grouped. So, it does not have any non-own properties.
+        // in fact, it does not have hasOwnProperty
+        // tslint:disable-next-line:forin
         for (const key in grouped) {
-            if (grouped.hasOwnProperty(key)) {
-                const group: Array<{
-                    _id: string;
-                    name: string;
+            // if (grouped.hasOwnProperty(key)) {
+            const group: Array<{
+                _id: string;
+                name: string;
 
-                    range: IClassWithProperties;
-                }> = grouped[key];
-                // join names
-                const nameList: string[] = group.reduce<string[]>(
-                    (combinedNameAcc, prop, ignores) => {
-                        combinedNameAcc.push(prop.name);
-                        return combinedNameAcc;
-                    }, []);
-                const combinedName = nameList.join(' | ');
-                withMergedProps.properties.push({ _id: key, name: combinedName, rangeID: group[0].range._id });
-            }
+                range: IClassWithProperties;
+            }> = grouped[key];
+            // join names
+            const nameList: string[] = group.reduce<string[]>(
+                (combinedNameAcc, prop, ignores) => {
+                    combinedNameAcc.push(prop.name);
+                    return combinedNameAcc;
+                }, []);
+            const combinedName = nameList.join(' | ');
+            withMergedProps.properties.push({ _id: key, name: combinedName, rangeID: group[0].range._id });
+            // }
         }
         return withMergedProps;
     }

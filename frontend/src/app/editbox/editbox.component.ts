@@ -82,7 +82,7 @@ export class EditboxComponent implements OnInit, OnChanges {
     );
 
     this.classToUpdate = this.vocabService.getClassWithProperties(this.vocabID, of(this.selectedClassID));
-    console.log(this.classToUpdate);
+    // console.log(this.classToUpdate);
 
     // const theClassO = this.vocabService.getClassWithProperties(this.vocabID, this.selectedClassID.filter((id) => id !== null));
     // // we get several small pieces of info from the class. multicast is likely a good idea, but did not get it working.

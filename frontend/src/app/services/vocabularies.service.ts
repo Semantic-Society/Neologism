@@ -134,6 +134,7 @@ export class VocabulariesService {
     );
 
     return thevocabO.pipe(
+      debounceTime(10),
       switchMap((theVocab, ignored) => {
         if (theVocab.length > 1) {
           return throwError(new Error('More than 1 vocab returned for id'));

@@ -7,7 +7,6 @@ interface IClassRecommendation {
   uri: string;
   comment: string;
   label: string;
-  creator: string;
 }
 
 interface IPropertyRecommendation {
@@ -21,7 +20,6 @@ interface IClassRecommendation {
   uri: string;
   comment: string;
   label: string;
-  creator: string;
 }
 
 interface IPropertyRecommendation {
@@ -110,7 +108,7 @@ export class RecommenderComponent implements OnInit {
     this.enableSpinnerProp();
     this.selectedRecommendation = r;
     this.isSelectedRecommendationVisible = true;
-    this.recommendationService.propertyRecommendation(r.uri, r.creator)
+    this.recommendationService.propertyRecommendation(r.uri)
       .subscribe((res) => {
         this.propertyRecommendations = res;
         // console.log('Received Property Recommendation', res);

@@ -46,10 +46,10 @@
           <button mat-icon-button (click)="deleteVocab(dataSource._id); $event.stopPropagation()">
             <mat-icon>delete</mat-icon>
           </button>
-          <button mat-icon-button>
+          <!-- <button mat-icon-button>
             <mat-icon>call_split</mat-icon>
-          </button>
-          <button mat-icon-button>
+          </button> -->
+          <button mat-icon-button (click)="downloadVocab(dataSource._id, dataSource.name); $event.stopPropagation()">
             <mat-icon>share</mat-icon>
           </button>
         </mat-cell>

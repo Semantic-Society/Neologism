@@ -1,12 +1,12 @@
 import * as m from 'mxgraph';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { distinctUntilChanged } from 'rxjs/operators';
 
 import { enableDynamicGrid } from './dynamicGrid';
 // import { N3Codec } from './N3Codec';
 
 type Predicates = Map<string, Set<string>>;
-export interface IUserObject { url: string; label: string; creator: string; }
+// export interface IUserObject { url: string; label: string; creator: string; }
 
 export class MxgraphService {
 
@@ -26,6 +26,8 @@ export class MxgraphService {
 
     // private toolbar: m.mxToolbar;
     // public codec: N3Codec;
+
+    private deletePress: Subject<any>;
 
     constructor(
         private container: HTMLDivElement,
@@ -70,10 +72,23 @@ export class MxgraphService {
         edgeStyle[MxgraphService.mx.mxConstants.STYLE_FILLCOLOR] = '#FFFFFF';
         edgeStyle[MxgraphService.mx.mxConstants.STYLE_LABEL_BACKGROUNDCOLOR] = '#FFFFFF';
 
-        // const keyHandler = new MxgraphService.mx.mxKeyHandler(this.graph);
-        // keyHandler.bindKey(8, (evt) => this.graph.isEnabled() ? this.graph.removeCells() : null);   // backspace key removes cell
-        // keyHandler.bindKey(43, (evt) => this.graph.isEnabled() ? this.graph.removeCells() : null);  // mac delete key removes cell
-        // keyHandler.bindKey(127, (evt) => this.graph.isEnabled() ? this.graph.removeCells() : null);  // proper operating systems delete
+        this.deletePress = new Subject();
+        const keyHandler = new MxgraphService.mx.mxKeyHandler(this.graph);
+        keyHandler.bindKey(8, (evt) => {
+            if (this.graph.isEnabled()) {
+                this.deletePress.next(evt);
+            }
+        });   // backspace key removes cell
+        keyHandler.bindKey(43, (evt) => {
+            if (this.graph.isEnabled()) {
+                this.deletePress.next(evt);
+            }
+        });  // mac delete key removes cell
+        keyHandler.bindKey(127, (evt) => {
+            if (this.graph.isEnabled()) {
+                this.deletePress.next(evt);
+            }
+        });  // proper operating systems delete
 
         // Adds mouse wheel handling for zoom
         // see https://github.com/jgraph/mxgraph/blob/master/javascript/examples/grapheditor/www/js/EditorUi.js
@@ -188,7 +203,7 @@ export class MxgraphService {
     }
 
     private getEdgeWithId(edgeID: string) {
-        // TODO in principle getCell should work, but upon inserting there is an issue and the cell gets assingned a new id 
+        // TODO in principle getCell should work, but upon inserting there is an issue and the cell gets assingned a new id
         for (const key in this.model.cells) {
             if (this.model.cells.hasOwnProperty(key)) {
                 const candidate = this.model.cells[key];
@@ -393,6 +408,10 @@ export class MxgraphService {
 
     public currentEdgeSelection(): Observable<{ domainClazzID: string; edgeID: string }> {
         return this.edgeSelection$;
+    }
+
+    public deleteRequestObservable(): Observable<any> {
+        return this.deletePress;
     }
 
     // This has been rewritten with observables above.
