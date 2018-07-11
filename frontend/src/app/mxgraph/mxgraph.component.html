@@ -8,11 +8,12 @@
     </div>
     <div class="button-div">
       <div class="pad-1">
-        <button *ngSwitchCase="sideBarState.Default" mat-button (click)="showRecommender()">Search new class
+        <button *ngSwitchCase="sideBarState.Default" mat-button (click)="showEditBox()">Add new class
         </button>
       </div>
+
       <div class="pad-1">
-        <button *ngSwitchCase="sideBarState.Default" mat-button (click)="showEditBox()">Add new class
+        <button *ngSwitchCase="sideBarState.Default" mat-button (click)="showRecommender()">Search Existing class
         </button>
       </div>
     </div>
@@ -23,7 +24,9 @@
         <div class="mxgraph-container" #view></div>
       </mat-tab>
       <mat-tab label="List">
-        <app-standardview [classes] = "classes" > <!-- [properties] = "properties" [meta] = "meta" --> </app-standardview>
+        <app-standardview [classes]="classes">
+          <!-- [properties] = "properties" [meta] = "meta" -->
+        </app-standardview>
       </mat-tab>
     </mat-tab-group>
     <!-- <button type="button" mat-button (click)="navStart.toggle()">
