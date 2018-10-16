@@ -1,9 +1,8 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "baseUrl": ".",
+    "baseUrl": "./",
     "declaration": false,
-    "downlevelIteration": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "importHelpers": true,
@@ -25,15 +24,5 @@
       "es2015.iterable",
       "dom"
     ]
-  },
-  "include": [
-    "src/**/*.ts",
-    "typings/**/*",
-    "api/**/*.ts"
-  ],
-  "exclude": [
-    "node_modules",
-    "api/node_modules",
-    "api"
-  ]
+  }
 }

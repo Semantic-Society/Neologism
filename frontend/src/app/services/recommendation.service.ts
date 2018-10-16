@@ -1,5 +1,5 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
 import { BehaviorSubject, ConnectableObservable, Observable, range, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map, merge, mergeAll, multicast, scan, startWith, switchMap } from 'rxjs/operators';
 import { N3Codec } from '../mxgraph/N3Codec';
@@ -66,7 +66,7 @@ export class RecommendationService {
      * Neologism Reccomendation Service Adapter
      * via Angular's observable http service
      */
-    constructor(private _http: Http) {
+    constructor(private _http: HttpClient) {
         this.classReq = new Subject();
         this.classResp = new BehaviorSubject([]);
         this.classReq.pipe(
@@ -85,8 +85,7 @@ export class RecommendationService {
                     switchMap( // execute requests in parallel
                         (res) => range(1, res.expected - 1).pipe(
                             map(() => VocabulariesService.wrapFunkyObservables(
-                                this._http.get(`${RecommendationService.baseUrl}more?ID=${res.ID}`))
-                                .pipe(map((resp) => resp.json() as IRestResponse))
+                                this._http.get(`${RecommendationService.baseUrl}more?ID=${res.ID}`) as Observable<IRestResponse>)
                             )
                         )
                     ),
