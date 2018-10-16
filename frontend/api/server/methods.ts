@@ -1,3 +1,5 @@
+import { Meteor } from 'meteor/meteor';
+
 import { Classes, Properties, Vocabularies } from '../collections';
 import { meteorID } from '../models';
 
