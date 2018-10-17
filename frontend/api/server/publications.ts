@@ -1,4 +1,3 @@
-tatus
 import { Meteor } from 'meteor/meteor';
 import { Mongo } from 'meteor/mongo';
 // import { publishComposite } from 'meteor/reywood:publish-composite';
