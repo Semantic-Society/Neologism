@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {Component, ElementRef, HostListener, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { mxgraph as m } from 'mxgraph';
 import { Observable, Subscription } from 'rxjs';
@@ -44,7 +44,12 @@ export class MxgraphComponent implements OnInit, OnDestroy {
     protected vocabID: string;
     protected classes: Observable<IClassWithProperties[]>;
     protected vocabulary: Ivocabulary;
-
+    @HostListener('window:keydown', ['$event'])
+    onKeyDown(event) {
+      if (event.keyCode === 27) { // 27 is keycode for ESC
+        this.editMode = SideBarState.Default;
+      }
+    }
     constructor(private route: ActivatedRoute, private vocabService: VocabulariesService) {
         this.editMode = SideBarState.Default;
     }
