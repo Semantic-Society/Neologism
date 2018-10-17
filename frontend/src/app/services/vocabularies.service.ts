@@ -46,10 +46,24 @@ export class VocabulariesService {
   constructor() { }
 
   getVocabularies(): Observable<Ivocabulary[]> {
-    return VocabulariesService.wrapFunkyObservables(
+    // Ask Meteor Server to send a feed of accessible documents
+    const handle = Meteor.subscribe('vocabularies');
+
+    // Query from local minimongo
+    const localQuery = VocabulariesService.wrapFunkyObservables(
       Vocabularies.find()
         .pipe(zoneOperator())
     );
+
+    return Observable.create((observer: any) => {
+      const subscription = localQuery.subscribe(observer);
+
+      // Now let's return a tear-down/unsubscribe function
+      return () => {
+        subscription.unsubscribe();
+        handle.stop();
+      };
+    });
   }
 
   getVocabulary(id: string): Observable<Ivocabulary> { // TODO: Breaks upon deletion
@@ -61,13 +75,14 @@ export class VocabulariesService {
     );
   }
 
-  createVocabulary(name: string, authors: string[], description: string, uriPrefix: string) {
-    MeteorObservable.call('vocabulary.create', name, authors, description, uriPrefix)
+  createVocabulary(name: string, description: string, uriPrefix: string) {
+    MeteorObservable.call('vocabulary.create', name, description, uriPrefix)
       .pipe(zoneOperator())
       .subscribe((response) => {
         console.log(response);
         // Handle success and response from server!
       }, (err) => {
+        console.log(err);
         // Handle error
       });
   }
@@ -78,6 +93,7 @@ export class VocabulariesService {
       .subscribe((response) => {
         // Handle success and response from server!
       }, (err) => {
+        console.log(err);
         // Handle error
       });
   }
@@ -85,7 +101,7 @@ export class VocabulariesService {
   addClass(vocabularyId: string, name: string, description: string, URI: string) {
     MeteorObservable.call('class.create', vocabularyId, name, description, URI).subscribe((response) => {
       // Handle success and response from server!
-      console.log('addClass' , response);
+      console.log('addClass', response);
     }, (err) => {
       console.log(err);
     });
@@ -174,6 +190,9 @@ export class VocabulariesService {
    * @param vocabularyId
    */
   getClassesWithProperties(vocabularyId: string): Observable<IClassWithProperties[]> {
+    // Ask Meteor Server to send a feed of accessible documents
+    const handle = Meteor.subscribe('vocabDetails', vocabularyId);
+
     const classes = this.getClasses(vocabularyId)
       .pipe(
         switchMap((cs) =>
@@ -220,7 +239,16 @@ export class VocabulariesService {
       filter((x) => !!x),
     );
 
-    return filledClasses;
+    // automatic unsubscription handling
+    return Observable.create((observer: any) => {
+      const subscription = filledClasses.subscribe(observer);
+
+      // Now let's return a tear-down/unsubscribe function
+      return () => {
+        subscription.unsubscribe();
+        handle.stop();
+      };
+    });
   }
 
   /**

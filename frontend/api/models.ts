@@ -1,10 +1,16 @@
+import { Meteor } from 'meteor/meteor';
 /**
  * These types are only to be used for communication between server and client.
  *
  * NOT in the frontend application otherwise.
  */
 
+export interface Iuser extends Meteor.User {
+  profile?: any;
+}
+
 export type meteorID = string;
+export type userID = meteorID;
 
 export interface IpropertyMeta {
   name: string;
@@ -17,7 +23,7 @@ export interface Ivocabulary {
   _id?: meteorID; // Mongo generated ID
   name: string;
   description: string;
-  authors: string[];
+  authors: userID[];
   uriPrefix: string;
   // version: string;
   classes: meteorID[]; // List of all classes in the vocab
