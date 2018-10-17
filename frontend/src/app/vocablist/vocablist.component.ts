@@ -16,18 +16,15 @@ import { VocabulariesService } from '../services/vocabularies.service';
   styleUrls: ['./vocablist.component.css']
 })
 export class VocablistComponent implements OnInit {
-
   protected dataSource: Observable<Ivocabulary[]>; // new VocabularyDataSource();
 
   protected vocabForm = {
     name: '',
-    authors: ['You'],
     description: '',
     uriPrefix: '',
     // classes: []
   };
   displayedColumns = ['name', 'authors', 'description', 'uriPrefix', 'actions'];
-  // displayedColumns = ['name', 'authors', 'description', 'uriPrefix'];
 
   constructor(protected router: Router, private vocabService: VocabulariesService) { }
 
@@ -39,7 +36,6 @@ export class VocablistComponent implements OnInit {
   addVocabulary() {
     this.vocabService.createVocabulary(
       this.vocabForm.name,
-      this.vocabForm.authors,
       this.vocabForm.description,
       this.vocabForm.uriPrefix
     );

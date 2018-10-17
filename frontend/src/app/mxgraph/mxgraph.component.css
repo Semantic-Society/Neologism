@@ -1,6 +1,13 @@
-.mxgraph-container {
-  overflow: hidden;
-  width: 100%;
+/** 
+ * Make component space filling
+ * Note global ".mat-tab-group.mat-tab-fill-height .mat-tab-body-wrapper" definition in styles.css
+ */
+
+:host {
+  flex: 1;
+}
+
+mat-drawer-container, mat-drawer-content, mat-tab-group, .mxgraph-container  {
   height: 100%;
 }
 
@@ -10,13 +17,10 @@
   background-image: linear-gradient(to right, lightgrey 1px, transparent 1px), linear-gradient(to bottom, lightgrey 1px, transparent 1px);
 } */
 
-.mat-drawer-container {
-  width: 100%;
- /*height: 90vh;*/
- height: 100vh; 
-  /* TODO: Fix this layouting mess */
-}
 
+/**
+ * Sidebar Styling
+ */
 .mat-drawer {
   background-color: #1f1f1f;
   color: #FFFFFF;
@@ -54,6 +58,7 @@
 .button-div {
   padding: 1rem;
 }
+
 .pad-1 {
   padding: 1rem;
 }

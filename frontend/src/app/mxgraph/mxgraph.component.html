@@ -1,4 +1,4 @@
-<mat-drawer-container autosize>
+<mat-drawer-container>
   <mat-drawer [ngSwitch]="editMode" #navEnd class="mat-drawer nav-right" mode="side" position="end" [opened]="true" class="no-pad"
     disableClose>
     <app-metadata [vocabulary]="vocabulary" *ngSwitchCase="sideBarState.Default"></app-metadata>
@@ -19,7 +19,7 @@
     </div>
   </mat-drawer>
   <mat-drawer-content>
-    <mat-tab-group headerPosition="below">
+    <mat-tab-group headerPosition="below" class="mat-tab-fill-height">
       <mat-tab label="View &amp; Edit">
         <div class="mxgraph-container" #view></div>
       </mat-tab>

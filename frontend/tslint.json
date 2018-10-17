@@ -96,6 +96,7 @@
       true,
       "always"
     ],
+    "space-before-function-paren": false,
     "trailing-comma": false,
     "triple-equals": [
       true,

@@ -26,6 +26,8 @@ import {
   MatTooltipModule,
 } from '@angular/material';
 
+import { AccountsModule } from './angular2-material-meteor-accounts-ui/accounts-module';
+
 import { RoutingModule } from './routing.module';
 
 // App Services
@@ -54,9 +56,10 @@ import { TruncatedTextComponentComponent } from './truncated-text-component/trun
     RecommenderComponent,
     StandardViewComponent,
     TruncatedTextComponentComponent,
-    VocablistComponent
+    VocablistComponent,
   ],
   imports: [
+    AccountsModule,
     BrowserModule,
     FormsModule,
     HttpClientModule,

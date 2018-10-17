@@ -5,22 +5,10 @@ html, body {
     padding: 0;
 }
 
-.mat-tab-group {
-    height: 100%;
-}
-
-.mat-tab-body-wrapper {
-    flex-grow: 1 !important;
-    height: 100%;
-}
-
-.mat-tab-body {
-    display: flex !important;
-    flex-direction: column;
-}
-
-.mat-tab-body-content {
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
-}
+/*
+ Allow tab groups to fill the entire vertical space
+ Use via class-membership: mat-tab-fill-height
+*/
+.mat-tab-group.mat-tab-fill-height .mat-tab-body-wrapper {
+    flex: 1 1 100%;
+ }
