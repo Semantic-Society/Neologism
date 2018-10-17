@@ -1,6 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 import { Mongo } from 'meteor/mongo';
-// import { publishComposite } from 'meteor/reywood:publish-composite';
+
 
 import { Iclass, Iproperty, Iuser, Ivocabulary, meteorID } from 'models';
 import { Classes, Properties, Users, Vocabularies } from '../collections';
@@ -13,7 +13,6 @@ Meteor.publish('vocabularies', function (): Mongo.Cursor<Ivocabulary> {
     return Vocabularies.collection.find({ $or: [{ authors: this.userId }, { public: true }] });
 });
 
-// Documentation on publishComposite: https://github.com/englue/meteor-publish-composite
 (Meteor as any).publishComposite('vocabDetails', function (vocabularyID: meteorID): PublishCompositeConfig<Ivocabulary> {
     if (!this.userId) {
         return this.ready();
@@ -22,7 +21,8 @@ Meteor.publish('vocabularies', function (): Mongo.Cursor<Ivocabulary> {
     return {
         // Must return a cursor containing top level documents
         find: () => {
-            return Vocabularies.collection.find({ _id: vocabularyID }, { limit: 1 });
+            console.log("Received vocabDetails req. for id", vocabularyID)
+            return Vocabularies.collection.find({ _id: vocabularyID,  $or: [{ authors: this.userId }, { public: true }] }, { limit: 1 });
         },
 
         children: [

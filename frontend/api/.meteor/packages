@@ -23,3 +23,5 @@ accounts-base
 accounts-password
 npm-bcrypt
 reywood:publish-composite
+simple:rest
+simple:rest-accounts-password
