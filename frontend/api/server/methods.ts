@@ -3,6 +3,13 @@ import { Meteor } from 'meteor/meteor';
 import { Classes, Properties, Vocabularies } from '../collections';
 import { meteorID } from '../models';
 
+function assertUser() {
+  if (!Meteor.userId()) {
+    throw new Meteor.Error('unauthorized',
+      'User must be logged-in to invoke this method');
+  }
+}
+
 /**
  * Reminder: the arguments to call one of these methods on
  * MeteorObservable.call or similar, must have the exact same names as here.
@@ -10,17 +17,21 @@ import { meteorID } from '../models';
  */
 
 Meteor.methods({
-  'vocabulary.create'(name: string, authors: string[], description: string, uriPrefix: string) {
-    Vocabularies.insert({name, authors, description, uriPrefix, classes: []});
+  'vocabulary.create'(name: string, description: string, uriPrefix: string) {
+    assertUser();
+    Vocabularies.insert({ name, authors: [this.userId], description, uriPrefix, classes: [] });
   },
   /*'vocabulary.insertClass'({id, vClass}) {
     Vocabularies.update({_id:id}, { $push: {classes: vClass}});
   },*/
   'vocabulary.remove'(vocabId: string) {
+    assertUser();
     // TODO: Sanitize
-    Vocabularies.remove(vocabId);
+    // currently: pseudo permission check via only being able to remove documents where the current user is also an author
+    Vocabularies.remove({ _id: vocabId, authors: this.userId });
   },
   'class.create'(vocabId, name, description, URI) {
+    assertUser();
     // TODO: Sanitize
 
     // Note, these operations must occur in this order. Otherwise an observer of the vocabualry might
@@ -30,6 +41,7 @@ Meteor.methods({
     );
   },
   'class.update.name'(classID: string, name: string) {
+    assertUser();
     Classes.update(
       { _id: classID },
       { $set: { name } },
@@ -37,6 +49,7 @@ Meteor.methods({
     );
   },
   'class.update.description'(classID: string, description: string) {
+    assertUser();
     Classes.update(
       { _id: classID },
       { $set: { description } },
@@ -44,6 +57,7 @@ Meteor.methods({
     );
   },
   'class.update.URI'(classID: string, URI: string) {
+    assertUser();
     Classes.update(
       { _id: classID },
       { $set: { URI } },
@@ -51,6 +65,7 @@ Meteor.methods({
     );
   },
   'classes.translate'(classids: string[], dx: number, dy: number) {
+    assertUser();
     // TODO: Sanitize
     Classes.update(
       { _id: { $in: classids } },
@@ -59,6 +74,7 @@ Meteor.methods({
     );
   },
   'property.create'(classId, name, description, URI, range) {
+    assertUser();
     // TODO: Sanitize
     // Note, these operations must occur in this order. Otherwise an observer of the vocabualry might
     const propID = Properties.insert({ name, description, URI, range });
