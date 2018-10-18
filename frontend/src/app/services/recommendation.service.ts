@@ -76,7 +76,6 @@ export class RecommendationService {
                 const initialRequest = VocabulariesService.wrapFunkyObservables(
                     this._http.post(`${RecommendationService.baseUrl}startForNewClass?keyword=${queryTerm}`, queryGraph)
                 ).pipe(
-                    map((res) => res.json()),
                     multicast(new Subject<IRestResponse>()),
                 ) as ConnectableObservable<IRestResponse>;
 
@@ -121,9 +120,8 @@ export class RecommendationService {
         this.propsReq.pipe(
             debounceTime(100),
             switchMap(({ url }) => VocabulariesService.wrapFunkyObservables(
-                this._http.get(url)
+                this._http.get(url) as Observable<{ properties: IPropertyRecommendation[] }>
             ).pipe(
-                map((r) => r.json() as { properties: IPropertyRecommendation[] }),
                 map((r) =>
                     Array.isArray(r && r.properties)
                         ? r.properties.map((rec) => {
