@@ -13,6 +13,7 @@ import { IClassWithProperties, VocabulariesService } from '../services/vocabular
 enum SideBarState {
     Default,
     Edit,
+    Create,
     Recommend,
 }
 
@@ -196,6 +197,9 @@ export class MxgraphComponent implements OnInit, OnDestroy {
 
     showRecommender() {
         this.editMode = SideBarState.Recommend;
+    }
+    showNodeCreator() {
+      this.editMode = SideBarState.Create;
     }
 
     showEditBox() {
