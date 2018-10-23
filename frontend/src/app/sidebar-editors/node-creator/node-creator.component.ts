@@ -1,4 +1,5 @@
-import {Component, OnChanges, OnInit} from '@angular/core';
+import {Component, Input, OnChanges, OnInit} from '@angular/core';
+import {VocabulariesService} from '../../services/vocabularies.service';
 
 @Component({
   selector: 'app-node-creator',
@@ -6,6 +7,10 @@ import {Component, OnChanges, OnInit} from '@angular/core';
   styleUrls: ['./node-creator.css'],
 })
 export class NodeCreatorComponent {
+  @Input() vocabID: string;
+  constructor(private vocabService: VocabulariesService) {
+  }
+
   protected newClass = {
     name: '',
     URI: '',
@@ -17,4 +22,21 @@ export class NodeCreatorComponent {
       range: ''
     }
   };
+  protected emptyClass = {
+    name: '',
+    URI: '',
+    description: '',
+    property: {
+      name: '',
+      URI: '',
+      description: '',
+      range: ''
+    }
+  };
+
+  addClass() {
+    console.log(this.newClass);
+    this.vocabService.addClass(this.vocabID, this.newClass.name, this.newClass.description, this.newClass.URI);
+    this.newClass = this.emptyClass;
+  }
 }

@@ -4,7 +4,7 @@
     <app-metadata [vocabulary]="vocabulary" *ngSwitchCase="sideBarState.Default"></app-metadata>
     <div class="toolbar-container">
       <app-editbox *ngSwitchCase="sideBarState.Edit" [selectedClassID]="this.currentSelection" [vocabID]="this.vocabID"></app-editbox>
-      <app-node-creator *ngSwitchCase="sideBarState.Create"></app-node-creator>
+      <app-node-creator *ngSwitchCase="sideBarState.Create" [vocabID]="this.vocabID"></app-node-creator>
       <app-recommender *ngSwitchCase="sideBarState.Recommend" [vocabID]="this.vocabID"></app-recommender>
     </div>
     <div class="button-div">
