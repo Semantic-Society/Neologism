@@ -1,4 +1,5 @@
 .editbox-container {
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -10,7 +11,7 @@
 }
 
 .editbox-container .title {
-  padding: 0.5rem 0.5rem 0.5rem 1rem;
+  padding: 0.5rem 0rem 1rem 0rem;
   align-content: center;
   text-align: center;
   font-size: 1.5rem;
@@ -18,24 +19,38 @@
 .editbox-container .class-details {
   display:flex;
   flex-direction: column;
+  box-sizing: border-box;
+  padding: 1rem;
 }
-.class-details .name-container {
+.class-details .top {
   display:flex;
   flex-direction: row;
 }
-.name-container .img {
-
-}
-.name-container .name {
-
+.img img {
+  border-radius: 50%;
 }
 
+.full-width {
+  width: 100%;
+}
+
+.description {
+  height: 4rem;
+}
+
+.name-plus-uri .name {
+}
+.name-plus-uri .uri {
+}
 .button-full-width {
   padding: 1rem;
   width: calc(100% - 2rem);
 }
 
 .button-full-width button {
+  width: 100%;
+}
+.properties-section {
   width: 100%;
 }
 
