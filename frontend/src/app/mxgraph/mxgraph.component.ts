@@ -1,13 +1,12 @@
-import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { mxgraph as m } from 'mxgraph';
 import { Observable, Subscription } from 'rxjs';
-import { combineLatest, debounceTime, distinctUntilChanged, filter, map, merge } from 'rxjs/operators';
+import { combineLatest, debounceTime, distinctUntilChanged, filter} from 'rxjs/operators';
 
 import { MxgraphService } from './mxgraph';
-import { N3Codec } from './N3Codec';
 
-import { Iclass, Ivocabulary, meteorID } from '../../../api/models';
+import { Ivocabulary, meteorID } from '../../../api/models';
 import { IClassWithProperties, VocabulariesService } from '../services/vocabularies.service';
 
 enum SideBarState {
