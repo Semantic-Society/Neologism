@@ -2,6 +2,7 @@ import { Component, ElementRef, Input, OnInit, Output, ViewChild } from '@angula
 
 import { RecommendationService } from '../services/recommendation.service';
 import { VocabulariesService } from '../services/vocabularies.service';
+import { SideBarStateService } from '../services/state-services/sidebar-state.service';
 
 interface IClassRecommendation {
   uri: string;
@@ -43,7 +44,10 @@ export class RecommenderComponent implements OnInit {
 
   @Input() vocabID: string;
 
-  constructor(private recommendationService: RecommendationService, private vocabService: VocabulariesService) {
+  constructor(
+    private recommendationService: RecommendationService, 
+    private vocabService: VocabulariesService,
+    private sidebarService: SideBarStateService) {
   }
 
   @ViewChild('labelInput') labelInput: ElementRef;
@@ -146,5 +150,9 @@ export class RecommenderComponent implements OnInit {
 
   disableSpinnerProp() {
     this.showSpinnerProp = false;
+  }
+
+  resetSidebarState(){
+    this.sidebarService.changeSidebarToDefault()
   }
 }

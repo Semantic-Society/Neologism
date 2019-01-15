@@ -11,6 +11,7 @@ import { combineLatest, distinctUntilChanged, filter, map, startWith, switchMap 
 import { Classes, Vocabularies } from '../../../api/collections';
 import { RecommendationService } from '../services/recommendation.service';
 import { IClassWithProperties, VocabulariesService } from '../services/vocabularies.service';
+import { SideBarStateService } from '../services/state-services/sidebar-state.service';
 
 @Component({
   selector: 'app-editbox',
@@ -71,7 +72,11 @@ export class EditboxComponent implements OnInit, OnChanges {
 
   protected rangeOptions: Observable<Array<{ _id: string, name: string }>>;
 
-  constructor(private recommender: RecommendationService, private vocabService: VocabulariesService) {
+  constructor(
+    private recommender: RecommendationService, 
+    private vocabService: VocabulariesService, 
+    private sidebarService: SideBarStateService) {
+  
   }
 
   ngOnInit() {
@@ -250,6 +255,10 @@ export class EditboxComponent implements OnInit, OnChanges {
       this.vocabService.updateClassURI(this.selectedClassID, this.editedClass.URI);
     }
     this.cancelEdit();
+  }
+
+  resetSidebarState(){
+    this.sidebarService.changeSidebarToDefault()
   }
 
 }

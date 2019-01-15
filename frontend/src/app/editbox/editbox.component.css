@@ -30,6 +30,14 @@ mat-list-item {
 
 }
 
+.editor-toolbar-icon {
+  padding: 0 14px;
+}
+
+.editor-toolbar-spacer {
+  flex: 1 1 auto;
+}
+
 mat-expansion-panel{
   box-shadow: none !important;
   /*background-color: #1f1f1f;

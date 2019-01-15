@@ -28,6 +28,7 @@ import { VocablistComponent } from './vocablist/vocablist.component';
 import { TruncateModule } from '@yellowspot/ng-truncate';
 import { TruncatedTextComponentComponent } from './truncated-text-component/truncated-text-component.component';
 import { NeologismMaterialModule } from './app.material.module';
+import { StateServiceModule } from './services/state-services/state.services.module';
 
 @NgModule({
   declarations: [
@@ -50,6 +51,7 @@ import { NeologismMaterialModule } from './app.material.module';
     BrowserAnimationsModule,
     RoutingModule,
     TruncateModule,
+    StateServiceModule
   ],
   providers: [
     RecommendationService,
