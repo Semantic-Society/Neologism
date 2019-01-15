@@ -23,6 +23,7 @@ import { MxgraphComponent } from './mxgraph/mxgraph.component';
 import { StandardViewComponent } from './mxgraph/standardView/standardView.component';
 import { RecommenderComponent } from './recommender/recommender.component';
 import { VocablistComponent } from './vocablist/vocablist.component';
+import {NodeCreatorComponent} from './sidebar-editors/node-creator/node-creator.component'
 
 // Pipes
 import { TruncateModule } from '@yellowspot/ng-truncate';
@@ -40,6 +41,7 @@ import { StateServiceModule } from './services/state-services/state.services.mod
     StandardViewComponent,
     TruncatedTextComponentComponent,
     VocablistComponent,
+    NodeCreatorComponent
   ],
   imports: [
     AccountsModule,

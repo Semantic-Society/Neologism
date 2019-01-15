@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
-export type SidebarChange = 'default' | 'edit' | 'recommend'
+export type SidebarChange = 'default' | 'edit' | 'recommend' | 'create'
 
 @Injectable()
 export class SideBarStateService {
@@ -26,7 +26,7 @@ export class SideBarStateService {
     changeSidebarState(state){
        
         // validation check if parameter is in correct form
-        if(state.match(/^(default|edit|recommend)$/)){
+        if(state.match(/^(default|edit|recommend|create)$/)){
             this.emitState(state)
         } else {
             console.error('the given sidebar state is not knwon, please check if the value is: edit | recommend | default')

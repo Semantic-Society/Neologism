@@ -1,4 +1,5 @@
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+
+import {Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { mxgraph as m } from 'mxgraph';
 import { Observable, Subscription } from 'rxjs';
@@ -11,6 +12,7 @@ import { IClassWithProperties, VocabulariesService } from '../services/vocabular
 
 // import sidebar state dep.
 import { SideBarStateService, SidebarChange } from '../services/state-services/sidebar-state.service';
+
 
 interface IMergedPropertiesClass {
     _id: string; // Mongo generated ID
@@ -41,14 +43,21 @@ export class MxgraphComponent implements OnInit, OnDestroy {
     protected classes: Observable<IClassWithProperties[]>;
     protected vocabulary: Ivocabulary;
 
+    @HostListener('window:keydown', ['$event'])
+    onKeyDown(event) {
+      if (event.keyCode === 27) { // 27 is keycode for ESC
+        this.sideBarState.changeBySelection('default');
+      }
+    }
+
+
     constructor(
         private route: ActivatedRoute, 
         private vocabService: VocabulariesService,
         private sideBarState: SideBarStateService) {
             this.editMode = this.sideBarState.editMode;
-
-            const sub = this.editMode.subscribe(x => console.log(x, 'emitted state'))
     }
+
 
     ngOnInit() {
         this.vocabID = this.route.snapshot.paramMap.get('id');
@@ -192,6 +201,10 @@ export class MxgraphComponent implements OnInit, OnDestroy {
 
     showRecommender() {
         this.sideBarState.changeSidebarState('recommend');
+    }
+
+    showNodeCreator() {
+        this.sideBarState.changeSidebarState('create');
     }
 
     showEditBox() {

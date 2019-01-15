@@ -1,16 +1,17 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, } from '@angular/core';
-import { FormControl } from '@angular/forms';
-import { Observable, of, ReplaySubject } from 'rxjs';
-import { combineLatest, distinctUntilChanged, filter, map, startWith, switchMap } from 'rxjs/operators';
+import {Component, EventEmitter, HostListener, Input, OnChanges, OnInit, Output,} from '@angular/core';
+import {FormControl} from '@angular/forms';
+import {Observable, of, ReplaySubject} from 'rxjs';
+import {combineLatest, distinctUntilChanged, filter, map, startWith, switchMap} from 'rxjs/operators';
 
 // import { multicast } from 'rxjs/operators/multicast';
 // import { startWith } from 'rxjs/operators/startWith';
 
 // import { IUserObject, MxgraphService } from '../mxgraph/mxgraph';
 
-import { Classes, Vocabularies } from '../../../api/collections';
-import { RecommendationService } from '../services/recommendation.service';
-import { IClassWithProperties, VocabulariesService } from '../services/vocabularies.service';
+
+import {Classes, Vocabularies} from '../../../api/collections';
+import {RecommendationService} from '../services/recommendation.service';
+import {IClassWithProperties, VocabulariesService} from '../services/vocabularies.service';
 import { SideBarStateService } from '../services/state-services/sidebar-state.service';
 
 @Component({
@@ -82,7 +83,7 @@ export class EditboxComponent implements OnInit, OnChanges {
   ngOnInit() {
     this.rangeOptions = this.vocabService.getClasses(this.vocabID).pipe(
       map((classes) => {
-        return classes.map((aclass) => ({ _id: aclass._id, name: aclass.name }));
+        return classes.map((aclass) => ({_id: aclass._id, name: aclass.name}));
       })
     );
 
@@ -122,9 +123,9 @@ export class EditboxComponent implements OnInit, OnChanges {
     // we get several small pieces of info from the class. multicast is likely a good idea, but did not get it working.
     this.classInfo = theClassO.pipe(
       map((theClass) => {
-        return { label: theClass.name, description: theClass.description, url: theClass.URI };
+        return {label: theClass.name, description: theClass.description, url: theClass.URI};
       }),
-      startWith({ label: '', description: '', url: '' }),
+      startWith({label: '', description: '', url: ''}),
     );
 
     this.alreadyThere2 = theClassO.pipe(
