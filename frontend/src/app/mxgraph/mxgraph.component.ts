@@ -1,20 +1,16 @@
-import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { mxgraph as m } from 'mxgraph';
 import { Observable, Subscription } from 'rxjs';
-import { combineLatest, debounceTime, distinctUntilChanged, filter, map, merge } from 'rxjs/operators';
+import { combineLatest, debounceTime, distinctUntilChanged, filter} from 'rxjs/operators';
 
 import { MxgraphService } from './mxgraph';
-import { N3Codec } from './N3Codec';
 
-import { Iclass, Ivocabulary, meteorID } from '../../../api/models';
+import { Ivocabulary, meteorID } from '../../../api/models';
 import { IClassWithProperties, VocabulariesService } from '../services/vocabularies.service';
 
-enum SideBarState {
-    Default,
-    Edit,
-    Recommend,
-}
+// import sidebar state dep.
+import { SideBarStateService, SidebarChange } from '../services/state-services/sidebar-state.service';
 
 interface IMergedPropertiesClass {
     _id: string; // Mongo generated ID
@@ -33,9 +29,9 @@ interface IMergedPropertiesClass {
 })
 
 export class MxgraphComponent implements OnInit, OnDestroy {
-    editMode: SideBarState;
+
+    editMode: Observable<SidebarChange>; // type SidebarChange = 'default' | 'edit' | 'recommend'
     currentSelection: meteorID;
-    sideBarState = SideBarState;
     currentSelectionSub: Subscription;
     vocabularySub: Subscription;
 
@@ -45,8 +41,13 @@ export class MxgraphComponent implements OnInit, OnDestroy {
     protected classes: Observable<IClassWithProperties[]>;
     protected vocabulary: Ivocabulary;
 
-    constructor(private route: ActivatedRoute, private vocabService: VocabulariesService) {
-        this.editMode = SideBarState.Default;
+    constructor(
+        private route: ActivatedRoute, 
+        private vocabService: VocabulariesService,
+        private sideBarState: SideBarStateService) {
+            this.editMode = this.sideBarState.editMode;
+
+            const sub = this.editMode.subscribe(x => console.log(x, 'emitted state'))
     }
 
     ngOnInit() {
@@ -77,8 +78,8 @@ export class MxgraphComponent implements OnInit, OnDestroy {
             debounceTime(20),
             distinctUntilChanged()
         ).subscribe((selection) => {
-            console.log('selectionChange:', selection);
-            this.editMode = selection ? SideBarState.Edit : SideBarState.Default;
+
+            this.sideBarState.changeBySelection(selection);
             this.currentSelection = selection;
         });
 
@@ -190,12 +191,13 @@ export class MxgraphComponent implements OnInit, OnDestroy {
     }
 
     showRecommender() {
-        this.editMode = SideBarState.Recommend;
+        this.sideBarState.changeSidebarState('recommend');
     }
 
     showEditBox() {
+        console.log('show edit box')
         this.currentSelection = null;
-        this.editMode = SideBarState.Edit;
+        this.sideBarState.changeSidebarState('edit');
     }
 
     ngOnDestroy() {

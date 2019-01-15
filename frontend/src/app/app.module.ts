@@ -7,25 +7,6 @@ import { BrowserModule } from '@angular/platform-browser';
 // Angular Material
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import {
-  MatAutocompleteModule,
-  MatButtonModule,
-  MatCardModule,
-  MatExpansionModule,
-  MatFormFieldModule,
-  MatGridListModule,
-  MatIconModule,
-  MatInputModule,
-  MatListModule,
-  MatProgressSpinnerModule,
-  MatSelectModule,
-  MatSidenavModule,
-  MatTableModule,
-  MatTabsModule,
-  MatToolbarModule,
-  MatTooltipModule,
-} from '@angular/material';
-
 import { AccountsModule } from './angular2-material-meteor-accounts-ui/accounts-module';
 
 import { RoutingModule } from './routing.module';
@@ -46,6 +27,8 @@ import { VocablistComponent } from './vocablist/vocablist.component';
 // Pipes
 import { TruncateModule } from '@yellowspot/ng-truncate';
 import { TruncatedTextComponentComponent } from './truncated-text-component/truncated-text-component.component';
+import { NeologismMaterialModule } from './app.material.module';
+import { StateServiceModule } from './services/state-services/state.services.module';
 
 @NgModule({
   declarations: [
@@ -64,26 +47,11 @@ import { TruncatedTextComponentComponent } from './truncated-text-component/trun
     FormsModule,
     HttpClientModule,
     ReactiveFormsModule,
-    MatSidenavModule,
+    NeologismMaterialModule,
     BrowserAnimationsModule,
-    MatButtonModule,
-    MatExpansionModule,
-    MatListModule,
-    MatCardModule,
-    MatFormFieldModule,
-    MatIconModule,
-    MatInputModule,
-    MatSidenavModule,
-    MatGridListModule,
-    MatAutocompleteModule,
-    MatProgressSpinnerModule,
-    MatTableModule,
-    MatTabsModule,
-    MatSelectModule,
-    MatToolbarModule,
-    MatTooltipModule,
     RoutingModule,
     TruncateModule,
+    StateServiceModule
   ],
   providers: [
     RecommendationService,
