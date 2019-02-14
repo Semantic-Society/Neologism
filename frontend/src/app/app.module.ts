@@ -30,10 +30,27 @@ import { TruncateModule } from '@yellowspot/ng-truncate';
 import { TruncatedTextComponentComponent } from './truncated-text-component/truncated-text-component.component';
 import { NeologismMaterialModule } from './app.material.module';
 import { StateServiceModule } from './services/state-services/state.services.module';
+import { EditboxService } from './editbox/editbox.service';
+import { AccessManagement } from './services/access-management.service';
+import { AddUserModalComponent } from './vocablist/components/add-user-modal/add-user-modal.component';
+import { NgZorroAntdModule, NZ_I18N, en_US } from 'ng-zorro-antd';
+import { registerLocaleData } from '@angular/common';
+import en from '@angular/common/locales/en';
+
+import { HomeDashboardComponent } from './home-dashboard/home-dashboard.component';
+import { LoginPageComponent } from './login-page/login-page.component';
+import { AuthGuard } from './guards/auth.guard';
+import { LoginAuthGuard } from './guards/login.auth.guard';
+import { VocabularyListComponent } from './home-dashboard/vocabulary-list/vocabulary-list.component';
+
+registerLocaleData(en);
 
 @NgModule({
   declarations: [
     AppComponent,
+    HomeDashboardComponent,
+    LoginPageComponent,
+    VocabularyListComponent,
     MxgraphComponent,
     EditboxComponent,
     MetadataComponent,
@@ -41,6 +58,7 @@ import { StateServiceModule } from './services/state-services/state.services.mod
     StandardViewComponent,
     TruncatedTextComponentComponent,
     VocablistComponent,
+    AddUserModalComponent,
     NodeCreatorComponent
   ],
   imports: [
@@ -53,11 +71,20 @@ import { StateServiceModule } from './services/state-services/state.services.mod
     BrowserAnimationsModule,
     RoutingModule,
     TruncateModule,
-    StateServiceModule
+    StateServiceModule,
+    NgZorroAntdModule
+  ],
+  entryComponents: [
+    AddUserModalComponent
   ],
   providers: [
+    LoginAuthGuard,
+    AuthGuard,
     RecommendationService,
+    EditboxService,
     VocabulariesService,
+    AccessManagement,
+    { provide: NZ_I18N, useValue: en_US }
   ],
   bootstrap: [AppComponent],
 })

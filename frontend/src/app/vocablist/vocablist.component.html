@@ -49,6 +49,10 @@
           <button mat-icon-button (click)="downloadVocab(dataSource._id, dataSource.name); $event.stopPropagation()">
             <mat-icon>share</mat-icon>
           </button>
+
+          <button mat-icon-button (click)="addPersonToVocab(dataSource); $event.stopPropagation()">
+            <mat-icon>person_add</mat-icon>
+          </button>
         </mat-cell>
       </ng-container>
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>

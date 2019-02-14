@@ -5,6 +5,7 @@ import { Mongo } from 'meteor/mongo';
 import { Iclass, Iproperty, Iuser, Ivocabulary, meteorID } from 'models';
 import { Classes, Properties, Users, Vocabularies } from '../collections';
 
+
 Meteor.publish('vocabularies', function (): Mongo.Cursor<Ivocabulary> {
     // if (!this.userId) {
     //     return;
@@ -12,6 +13,14 @@ Meteor.publish('vocabularies', function (): Mongo.Cursor<Ivocabulary> {
 
     return Vocabularies.collection.find({ $or: [{ authors: this.userId }, { public: true }] });
 });
+
+/* Meteor.publish('users', function (email: string): Mongo.Cursor<Iuser> {
+    return Users.collection.find({
+        "emails.address": { $in : [email]},
+        // _id: { $not : this.userId }
+     },
+     {limit: 10})
+}); */
 
 (Meteor as any).publishComposite('vocabDetails', function (vocabularyID: meteorID): PublishCompositeConfig<Ivocabulary> {
     if (!this.userId) {

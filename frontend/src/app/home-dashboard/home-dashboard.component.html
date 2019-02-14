@@ -1,0 +1,41 @@
+<nz-layout class="home-db-lyt-ctnr">
+  <!-- SIDEBAR   -->
+  <nz-sider style="background: #fff; padding:0;" nzCollapsible [(nzCollapsed)]="isCollapsed" [nzTrigger]="triggerTemplate">
+
+    <img class="logo-fit" src="/assets/fraunhofer_logo.jpg"/>
+
+    <ul nz-menu [nzTheme]="'light'" [nzMode]="'inline'" [nzInlineCollapsed]="isCollapsed">
+      <li nz-submenu>
+        <span title><i nz-icon type="user"></i><span class="nav-text">User</span></span>
+        <ul>
+          <li nz-menu-item>Settings</li>
+          <li nz-menu-item>Logout</li>
+        </ul>
+      </li>
+    </ul>
+  </nz-sider>
+  <nz-layout>
+    <!-- HEADER -->
+    <nz-header style="background: #fff; padding:0;">
+      <i class="trigger" nz-icon [type]="isCollapsed?'menu-unfold':'menu-fold'" (click)="isCollapsed=!isCollapsed"></i>
+    </nz-header>
+
+    <!-- Main Content HEADER -->
+    <nz-content style=" margin:0 16px;">
+      <nz-breadcrumb style="margin:16px 0;">
+        <nz-breadcrumb-item>User</nz-breadcrumb-item>
+        <nz-breadcrumb-item>{{ user }}</nz-breadcrumb-item>
+      </nz-breadcrumb>
+
+      <!-- Main Content Content -->
+      <div style="padding:24px; background: #fff; min-height: 360px;">
+        <app-vocabulary-list></app-vocabulary-list>
+      </div>
+    </nz-content>
+    <nz-footer style="text-align: center;">Neologism2 - Fraunhofer FIT 2019</nz-footer>
+  </nz-layout>
+</nz-layout>
+
+<ng-template #trigger>
+  <i nz-icon type="up"></i>
+</ng-template>

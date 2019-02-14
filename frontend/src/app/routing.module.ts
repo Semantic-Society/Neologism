@@ -8,9 +8,15 @@ import { MxgraphComponent } from './mxgraph/mxgraph.component';
 import { StandardViewComponent } from './mxgraph/standardView/standardView.component';
 import { RecommenderComponent } from './recommender/recommender.component';
 import { VocablistComponent } from './vocablist/vocablist.component';
+import { HomeDashboardComponent } from './home-dashboard/home-dashboard.component';
+import { LoginPageComponent } from './login-page/login-page.component';
+import { AuthGuard } from './guards/auth.guard';
+import { LoginAuthGuard } from './guards/login.auth.guard';
 
 const routes: Routes = [
-  { path: '', redirectTo: '/vocabularies', pathMatch: 'full' },
+  { path: '', redirectTo: '/login', pathMatch: 'full' },
+  { path: 'dashboard', component: HomeDashboardComponent, canActivate: [AuthGuard] },
+  { path: 'login', component: LoginPageComponent, canActivate: [LoginAuthGuard] },
   { path: 'vocabularies', component: VocablistComponent },
   { path: 'v/:id', component: MxgraphComponent },
 ];

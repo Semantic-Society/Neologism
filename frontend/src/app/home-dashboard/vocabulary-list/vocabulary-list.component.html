@@ -1,0 +1,15 @@
+<nz-table #basicTable [nzData]="[1,2]">
+  <thead>
+    <th>Name</th>
+    <th>Contributers</th>
+    <th>id</th>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of dataSet | async">
+      
+      <td>{{data.name}}</td>
+      <td>{{data.authors}}</td>
+      <td>{{data._id}}</td>
+    </tr>
+  </tbody>
+</nz-table>

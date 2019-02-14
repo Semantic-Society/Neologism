@@ -4,11 +4,14 @@ import { Router } from '@angular/router';
 
 import { saveAs } from 'file-saver';
 import { Observable } from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
+import { debounceTime, tap } from 'rxjs/operators';
 
-import { Vocabularies } from '../../../api/collections';
+import { Vocabularies, Users } from '../../../api/collections';
 import { Ivocabulary } from '../../../api/models';
 import { VocabulariesService } from '../services/vocabularies.service';
+import { AccessManagement } from '../services/access-management.service';
+import { AddUserModalComponent } from './components/add-user-modal/add-user-modal.component';
+import { MatDialog } from '@angular/material';
 
 @Component({
   selector: 'app-vocablist',
@@ -26,10 +29,15 @@ export class VocablistComponent implements OnInit {
   };
   displayedColumns = ['name', 'authors', 'description', 'uriPrefix', 'actions'];
 
-  constructor(protected router: Router, private vocabService: VocabulariesService) { }
+  constructor(
+    protected router: Router,
+    private accessMngmt: AccessManagement, 
+    public dialog: MatDialog,
+    private vocabService: VocabulariesService) { }
 
   ngOnInit() {
     this.dataSource = this.vocabService.getVocabularies();
+    this.dataSource.subscribe(x => console.log(x))
   }
 
   // TODO: Move to VocabService #decouple
@@ -47,6 +55,14 @@ export class VocablistComponent implements OnInit {
 
   openVocab(id: string) {
     window.open('../v/' + id);
+  }
+
+  addPersonToVocab(dataSource){
+    let dialogRef = this.dialog.open(AddUserModalComponent, {
+      height: '400px',
+      width: '600px',
+      data: {vocabId: dataSource._id}
+    });
   }
 
   protected downloadVocab(id: string, name: string) {
