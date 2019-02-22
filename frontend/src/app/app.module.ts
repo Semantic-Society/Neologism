@@ -35,6 +35,8 @@ import { AccessManagement } from './services/access-management.service';
 import { AddUserModalComponent } from './vocablist/components/add-user-modal/add-user-modal.component';
 import { NgZorroAntdModule, NZ_I18N, en_US } from 'ng-zorro-antd';
 import { registerLocaleData } from '@angular/common';
+import { ParticlesModule } from 'angular-particle';
+
 import en from '@angular/common/locales/en';
 
 import { HomeDashboardComponent } from './home-dashboard/home-dashboard.component';
@@ -42,6 +44,13 @@ import { LoginPageComponent } from './login-page/login-page.component';
 import { AuthGuard } from './guards/auth.guard';
 import { LoginAuthGuard } from './guards/login.auth.guard';
 import { VocabularyListComponent } from './home-dashboard/vocabulary-list/vocabulary-list.component';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { CreateVocabModalComponent } from './home-dashboard/create-vocab-modal/create-vocab-modal.component';
+import { SearchVocabulariesAutocompleteComponent } from './search-vocabularies-autocomplete/search-vocabularies-autocomplete.component';
+import { VocabularyEditorComponent } from './vocabulary-editor/vocabulary-editor.component';
+import { MxGraphEditorComponent } from './vocabulary-editor/mx-graph-editor/mx-graph-editor.component';
+import { VocabularyEditorService } from './vocabulary-editor/vocabulary-editor.service';
+import { ListEditorComponent } from './vocabulary-editor/list-editor/list-editor.component';
 
 registerLocaleData(en);
 
@@ -59,7 +68,12 @@ registerLocaleData(en);
     TruncatedTextComponentComponent,
     VocablistComponent,
     AddUserModalComponent,
-    NodeCreatorComponent
+    NodeCreatorComponent,
+    CreateVocabModalComponent,
+    VocabularyEditorComponent,
+    SearchVocabulariesAutocompleteComponent,
+    MxGraphEditorComponent,
+    ListEditorComponent
   ],
   imports: [
     AccountsModule,
@@ -67,15 +81,18 @@ registerLocaleData(en);
     FormsModule,
     HttpClientModule,
     ReactiveFormsModule,
+    ParticlesModule,
     NeologismMaterialModule,
     BrowserAnimationsModule,
+    FlexLayoutModule,
     RoutingModule,
     TruncateModule,
     StateServiceModule,
     NgZorroAntdModule
   ],
   entryComponents: [
-    AddUserModalComponent
+    AddUserModalComponent,
+    CreateVocabModalComponent
   ],
   providers: [
     LoginAuthGuard,
@@ -83,6 +100,7 @@ registerLocaleData(en);
     RecommendationService,
     EditboxService,
     VocabulariesService,
+    VocabularyEditorService,
     AccessManagement,
     { provide: NZ_I18N, useValue: en_US }
   ],

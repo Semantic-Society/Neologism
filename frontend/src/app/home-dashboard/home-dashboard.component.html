@@ -4,31 +4,48 @@
 
     <img class="logo-fit" src="/assets/fraunhofer_logo.jpg"/>
 
-    <ul nz-menu [nzTheme]="'light'" [nzMode]="'inline'" [nzInlineCollapsed]="isCollapsed">
+    <ul nz-menu style="margin-top: 15px;" [nzTheme]="'light'" [nzMode]="'inline'" [nzInlineCollapsed]="isCollapsed">
       <li nz-submenu>
         <span title><i nz-icon type="user"></i><span class="nav-text">User</span></span>
         <ul>
           <li nz-menu-item>Settings</li>
-          <li nz-menu-item>Logout</li>
+          <li nz-menu-item (click)="onLogout()">Logout</li>
         </ul>
       </li>
     </ul>
   </nz-sider>
   <nz-layout>
     <!-- HEADER -->
-    <nz-header style="background: #fff; padding:0;">
-      <i class="trigger" nz-icon [type]="isCollapsed?'menu-unfold':'menu-fold'" (click)="isCollapsed=!isCollapsed"></i>
-    </nz-header>
+     <nz-header style="background: #fff; padding:0;">
+      <search-vocabularies-autocomplete [width]="'50vw'"></search-vocabularies-autocomplete>
+      
+      <ul nz-menu [nzMode]="'horizontal'" style="position: fixed; top: 2px; right: 15px; ">
+        <li nz-submenu>
+          <span title><i nz-icon type="setting"></i></span>
+          <ul>
+            <li nz-menu-group>
+              <span title>Item 1</span>
+              <ul>
+                <li nz-menu-item>Option 1</li>
+                <li nz-menu-item>Option 2</li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+      </ul>
+     <!-- <i class="trigger" nz-icon [type]="isCollapsed?'menu-unfold':'menu-fold'" (click)="isCollapsed=!isCollapsed"></i> -->
+    </nz-header> 
+    
 
     <!-- Main Content HEADER -->
-    <nz-content style=" margin:0 16px;">
+    <nz-content style=" margin:0 16px">
       <nz-breadcrumb style="margin:16px 0;">
         <nz-breadcrumb-item>User</nz-breadcrumb-item>
         <nz-breadcrumb-item>{{ user }}</nz-breadcrumb-item>
       </nz-breadcrumb>
 
       <!-- Main Content Content -->
-      <div style="padding:24px; background: #fff; min-height: 360px;">
+      <div style="padding:24px;">
         <app-vocabulary-list></app-vocabulary-list>
       </div>
     </nz-content>
@@ -36,6 +53,10 @@
   </nz-layout>
 </nz-layout>
 
-<ng-template #trigger>
-  <i nz-icon type="up"></i>
-</ng-template>
+<button 
+  class="add-vcblry-frm" 
+  nz-button nzType="primary" 
+  [nzSize]="'large'" 
+  (click)="createVocabulary()"
+  nzShape="circle"><i nz-icon type="plus"></i>
+</button>

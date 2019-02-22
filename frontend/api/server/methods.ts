@@ -33,9 +33,9 @@ Meteor.methods({
     assertUser();
     Vocabularies.update({ _id: vocabId }, { $push: { authors: {$each: authorIds} } })
   },
-  'vocabulary.create'(name: string, description: string, uriPrefix: string) {
+  'vocabulary.create'(name: string, description: string, uriPrefix: string, field_public: boolean = false) {
     assertUser();
-    Vocabularies.insert({ name, authors: [this.userId], description, uriPrefix, classes: [] });
+    Vocabularies.insert({ name, authors: [this.userId], description, uriPrefix, public: field_public, classes: []});
   },
   /*'vocabulary.insertClass'({id, vClass}) {
     Vocabularies.update({_id:id}, { $push: {classes: vClass}});

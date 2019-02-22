@@ -190,6 +190,7 @@ export class VocabulariesService {
    * @param vocabularyId
    */
   getClassesWithProperties(vocabularyId: string): Observable<IClassWithProperties[]> {
+    console.log('in vocab service ')
     // Ask Meteor Server to send a feed of accessible documents
     const handle = Meteor.subscribe('vocabDetails', vocabularyId);
 

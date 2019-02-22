@@ -12,11 +12,32 @@ import { HomeDashboardComponent } from './home-dashboard/home-dashboard.componen
 import { LoginPageComponent } from './login-page/login-page.component';
 import { AuthGuard } from './guards/auth.guard';
 import { LoginAuthGuard } from './guards/login.auth.guard';
+import { VocabularyEditorComponent } from './vocabulary-editor/vocabulary-editor.component';
+import { MxGraphEditorComponent } from './vocabulary-editor/mx-graph-editor/mx-graph-editor.component';
+import { ListEditorComponent } from './vocabulary-editor/list-editor/list-editor.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: 'dashboard', component: HomeDashboardComponent, canActivate: [AuthGuard] },
-  { path: 'login', component: LoginPageComponent, canActivate: [LoginAuthGuard] },
+  { path: 'vcblry-edit/:id', 
+    component: VocabularyEditorComponent,
+    children:[
+      {
+        path:'',
+        redirectTo: 'mxgraph',
+        pathMatch: 'full'
+      },
+      {
+        path: 'mxgraph',
+        component: MxGraphEditorComponent
+      },
+      {
+        path: 'list',
+        component: ListEditorComponent
+      }
+    ]
+  },
+  { path: 'login', component: LoginPageComponent},
   { path: 'vocabularies', component: VocablistComponent },
   { path: 'v/:id', component: MxgraphComponent },
 ];

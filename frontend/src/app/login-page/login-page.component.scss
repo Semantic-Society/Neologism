@@ -1,0 +1,17 @@
+.center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 25vh;
+    width: 50%;
+    filter: invert(100%);
+}
+
+.background {
+    background: #450b84; 
+    background: linear-gradient(to right, #2c0755 0%, #2575fc 100%);
+}
+
+.panel-background {
+    background: #20053d; 
+}

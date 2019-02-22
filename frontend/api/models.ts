@@ -25,6 +25,7 @@ export interface Ivocabulary {
   description: string;
   authors: userID[];
   uriPrefix: string;
+  public: boolean;
   // version: string;
   classes: meteorID[]; // List of all classes in the vocab
 }
