@@ -29,9 +29,15 @@
                 "glob": "**/*",
                 "input": "node_modules/mxgraph/javascript/src",
                 "output": "./mxgraph/"
+              },
+              {
+                "glob": "**/*",
+                "input": "./node_modules/@ant-design/icons-angular/src/inline-svg/",
+                "output": "/assets/"
               }
             ],
             "styles": [
+              "src/theme.less",
               "src/styles.css"
             ],
             "scripts": [

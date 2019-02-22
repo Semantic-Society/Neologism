@@ -1,6 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 
-import { Classes, Properties, Vocabularies } from '../collections';
+import { Classes, Properties, Vocabularies, Users } from '../collections';
 import { meteorID } from '../models';
 
 function assertUser() {
@@ -17,9 +17,25 @@ function assertUser() {
  */
 
 Meteor.methods({
-  'vocabulary.create'(name: string, description: string, uriPrefix: string) {
+  'users-without-self.get'(email: string) {
+    assertUser()
+    
+    const re = new RegExp(this.userId);
+    const users = Users.find({
+      'emails.address' : { $regex: email},
+      _id: { $not: re },
+     }, 
+     {limit: 10}).fetch()
+    
+    return users;
+  },
+  'vocabulary.addAuthors'(authorIds: Array<string>, vocabId: string) {
     assertUser();
-    Vocabularies.insert({ name, authors: [this.userId], description, uriPrefix, classes: [] });
+    Vocabularies.update({ _id: vocabId }, { $push: { authors: {$each: authorIds} } })
+  },
+  'vocabulary.create'(name: string, description: string, uriPrefix: string, field_public: boolean = false) {
+    assertUser();
+    Vocabularies.insert({ name, authors: [this.userId], description, uriPrefix, public: field_public, classes: []});
   },
   /*'vocabulary.insertClass'({id, vClass}) {
     Vocabularies.update({_id:id}, { $push: {classes: vClass}});

@@ -1,0 +1,90 @@
+<nz-table #basicTable [nzData]="[1,2]" *ngIf="(dataSet | async).length >= 1; else noVocabsListes ">
+  <thead>
+    <th>Name</th>
+    <th>Contributers</th>
+    <th>VocabularyID</th>
+
+  </thead>
+  <tbody>
+    <tr  style="background-color: #fff" class="vocabulary-row" *ngFor="let data of (dataSet | async)">
+      
+      <td>{{data.name}}</td>
+      <td>
+        <div style="max-width: 100px;">
+          <nz-avatar *ngFor="let author of data.authors" 
+            nzTitle="{{author}}" 
+            nzPlacement="top" 
+            nz-tooltip 
+            nzIcon="user" >
+          </nz-avatar>
+        </div>
+      </td>
+      <td>{{data._id}}</td>
+      <td>
+            <button 
+                class="actn-btn" 
+                nz-button 
+                nzTitle="Add User" 
+                nzPlacement="top" 
+                nz-tooltip 
+                nzType="default" 
+                (click)="addUserToVocabulary(data._id)"
+                nzShape="circle">
+              <i nz-icon type="user-add"></i>
+            </button>
+
+            <button 
+                class="actn-btn" 
+                nzTitle="Delete Vocabulary" 
+                nzPlacement="top" 
+                nz-tooltip nz-button 
+                nzType="default"
+                (click)="deleteVocabulary(data._id)"
+                nzShape="circle">
+
+              <i nz-icon style="color: red" type="delete"></i>
+            </button>
+            
+            <button 
+                class="actn-btn" 
+                nz-button 
+                nzType="default"
+                nzTitle="Edit Vocabulary" 
+                nzPlacement="top" 
+                nz-tooltip
+                (click)="editVocabulary(data._id)"
+                nzShape="circle">
+              <i nz-icon style="color: green" type="edit"></i>
+            </button>
+
+            <button 
+                class="actn-btn" 
+                nz-button 
+                nzType="default"
+                nzTitle="Edit Vocabulary" 
+                nzPlacement="top" 
+                nz-tooltip
+                (click)="downloadVocab(data._id, data.name)"
+                nzShape="circle">
+              <i nz-icon style="color: lightslategray" type="download"></i>
+            </button>
+
+            <button 
+                class="actn-btn" 
+                nz-button 
+                nzType="default" 
+                nzTitle="Open Editor" 
+                nzPlacement="top" 
+                nz-tooltip
+                (click)="openVocabulary(data._id)"
+                nzShape="circle">
+              <i nz-icon type="arrow-right"></i>
+            </button>
+      </td>
+    </tr>
+  </tbody>
+</nz-table>
+
+<ng-template #noVocabsListes>
+  
+</ng-template>

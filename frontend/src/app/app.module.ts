@@ -30,10 +30,36 @@ import { TruncateModule } from '@yellowspot/ng-truncate';
 import { TruncatedTextComponentComponent } from './truncated-text-component/truncated-text-component.component';
 import { NeologismMaterialModule } from './app.material.module';
 import { StateServiceModule } from './services/state-services/state.services.module';
+import { EditboxService } from './editbox/editbox.service';
+import { AccessManagement } from './services/access-management.service';
+import { AddUserModalComponent } from './vocablist/components/add-user-modal/add-user-modal.component';
+import { NgZorroAntdModule, NZ_I18N, en_US } from 'ng-zorro-antd';
+import { registerLocaleData } from '@angular/common';
+import { ParticlesModule } from 'angular-particle';
+
+import en from '@angular/common/locales/en';
+
+import { HomeDashboardComponent } from './home-dashboard/home-dashboard.component';
+import { LoginPageComponent } from './login-page/login-page.component';
+import { AuthGuard } from './guards/auth.guard';
+import { LoginAuthGuard } from './guards/login.auth.guard';
+import { VocabularyListComponent } from './home-dashboard/vocabulary-list/vocabulary-list.component';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { CreateVocabModalComponent } from './home-dashboard/create-vocab-modal/create-vocab-modal.component';
+import { SearchVocabulariesAutocompleteComponent } from './search-vocabularies-autocomplete/search-vocabularies-autocomplete.component';
+import { VocabularyEditorComponent } from './vocabulary-editor/vocabulary-editor.component';
+import { MxGraphEditorComponent } from './vocabulary-editor/mx-graph-editor/mx-graph-editor.component';
+import { VocabularyEditorService } from './vocabulary-editor/vocabulary-editor.service';
+import { ListEditorComponent } from './vocabulary-editor/list-editor/list-editor.component';
+
+registerLocaleData(en);
 
 @NgModule({
   declarations: [
     AppComponent,
+    HomeDashboardComponent,
+    LoginPageComponent,
+    VocabularyListComponent,
     MxgraphComponent,
     EditboxComponent,
     MetadataComponent,
@@ -41,7 +67,13 @@ import { StateServiceModule } from './services/state-services/state.services.mod
     StandardViewComponent,
     TruncatedTextComponentComponent,
     VocablistComponent,
-    NodeCreatorComponent
+    AddUserModalComponent,
+    NodeCreatorComponent,
+    CreateVocabModalComponent,
+    VocabularyEditorComponent,
+    SearchVocabulariesAutocompleteComponent,
+    MxGraphEditorComponent,
+    ListEditorComponent
   ],
   imports: [
     AccountsModule,
@@ -49,15 +81,28 @@ import { StateServiceModule } from './services/state-services/state.services.mod
     FormsModule,
     HttpClientModule,
     ReactiveFormsModule,
+    ParticlesModule,
     NeologismMaterialModule,
     BrowserAnimationsModule,
+    FlexLayoutModule,
     RoutingModule,
     TruncateModule,
-    StateServiceModule
+    StateServiceModule,
+    NgZorroAntdModule
+  ],
+  entryComponents: [
+    AddUserModalComponent,
+    CreateVocabModalComponent
   ],
   providers: [
+    LoginAuthGuard,
+    AuthGuard,
     RecommendationService,
+    EditboxService,
     VocabulariesService,
+    VocabularyEditorService,
+    AccessManagement,
+    { provide: NZ_I18N, useValue: en_US }
   ],
   bootstrap: [AppComponent],
 })

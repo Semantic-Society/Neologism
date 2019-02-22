@@ -1,0 +1,35 @@
+<nz-layout style="width: 100vw; height: 100vh;">
+<!-- HEADER -->
+  <nz-header style="background: #fff; padding:0;">
+    <div class="toolbar-vcb-editor">
+      <img class="logo-fit" [routerLink]="['/dashboard']" src="/assets/fraunhofer_logo.jpg"/>
+      <search-vocabularies-autocomplete [width]="'50vw'"></search-vocabularies-autocomplete>
+    <!-- <i class="trigger" nz-icon [type]="isCollapsed?'menu-unfold':'menu-fold'" (click)="isCollapsed=!isCollapsed"></i> -->
+    </div>
+    
+  </nz-header> 
+
+  <nz-content style="padding:0 50px;">
+    <div class="content-header">
+      <nz-breadcrumb style="margin:16px 0;">
+        <nz-breadcrumb-item>Vocabulary</nz-breadcrumb-item>
+        <nz-breadcrumb-item>ID - {{vocabID}}</nz-breadcrumb-item>
+      </nz-breadcrumb>
+  
+      <nz-select 
+          style="width: 200px;" 
+          nzShowSearch 
+          nzPlaceHolder="Select Display Method" 
+          [ngModel]="selectedViewMethod"
+          (ngModelChange)="changeViewMethod($event, selection)">
+        <nz-option nzCustomContent nzLabel="List View" nzValue="list-view"><i nz-icon type="ordered-list"></i> List View</nz-option>
+        <nz-option nzCustomContent nzLabel="Graph View" nzValue="mxgraph"><i nz-icon type="gateway"></i> Graph View</nz-option>
+      </nz-select>
+    </div>
+
+    <router-outlet class="mx-editor-ctn"></router-outlet>
+    
+  </nz-content>
+
+  <nz-footer style="text-align: center;">Fraunhofer ©2019</nz-footer>
+</nz-layout>

@@ -5,8 +5,8 @@
     "baseUrl": "./",
     "module": "es2015",
     "types": [
-    "meteor",
-    "meteor-publish-composite"
+      "meteor",
+      "meteor-publish-composite"
     ]
   },
   "exclude": [

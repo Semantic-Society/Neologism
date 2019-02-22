@@ -1,0 +1,13 @@
+
+<input style="margin-top: 7px;" nz-input placeholder="Enter the vocabulary name" [(ngModel)]="name">
+<input style="margin-top: 7px;" nz-input placeholder="Enter the vocabulary URI" [(ngModel)]="uri">
+<textarea nz-input 
+  style="margin-top: 7px;" 
+  placeholder="Describe the vocabulary set..." 
+  [(ngModel)]="desription" 
+  [nzAutosize]="{ minRows: 2, maxRows: 6 }">
+</textarea>
+<nz-select style="width: 100%; margin-top: 7px;" nzShowSearch nzAllowClear nzPlaceHolder="Select vocabulary access" [(ngModel)]="access">
+  <nz-option nzCustomContent nzLabel="Public" nzValue="public"><i nz-icon type="global"></i> Public</nz-option>
+  <nz-option nzCustomContent nzLabel="Private" nzValue="private"><i nz-icon type="lock"></i> Private</nz-option>
+</nz-select>

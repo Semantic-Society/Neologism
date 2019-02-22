@@ -1,0 +1,20 @@
+.shw-actns-hvr{
+    display: none;
+}
+
+.shw-actns-hvr:hover{
+    display: block;
+}
+
+.vocabulary-row:hover{
+    .actn-btn{
+        opacity: 1;
+    }
+}
+
+.vocabulary-row{
+
+    .actn-btn{
+        opacity: 0;
+    }
+}

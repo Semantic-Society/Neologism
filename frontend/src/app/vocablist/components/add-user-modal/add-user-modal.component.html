@@ -1,0 +1,20 @@
+<mat-form-field class="autocomp-full-width">
+  <input type="text" matInput [formControl]="myControl" placeholder="Search user with email..." [matAutocomplete]="auto" (keyup)="keyUp.next($event)">
+</mat-form-field>
+
+<mat-autocomplete class="autocomp-full-width" #auto="matAutocomplete">
+  <mat-option *ngFor="let user of (autoUsers | async)" (click)="addToAddGroup(user)">{{user.emails[0].address}}</mat-option>
+</mat-autocomplete>
+
+<mat-list>
+  <h3 mat-subheader>Users to add</h3>
+  <mat-list-item *ngFor="let user of (addGroup | async)">
+    <mat-icon (click)="removeUserAddGroup(user)" mat-list-icon style="color: #b0020b">remove_circle</mat-icon>
+    <h4 mat-line>{{user.emails[0].address}}</h4>
+  </mat-list-item>
+</mat-list>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Cancel</button>
+  <button mat-button [mat-dialog-close]="true" (click)="addUsers()" cdkFocusInitial>Add</button>
+</mat-dialog-actions>
