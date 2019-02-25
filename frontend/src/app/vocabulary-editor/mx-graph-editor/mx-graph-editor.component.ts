@@ -1,5 +1,5 @@
 import { Component, OnInit, ElementRef, ViewChild,  HostListener, OnDestroy,} from '@angular/core';
-import { meteorID, Ivocabulary } from 'api/models';
+import { meteorID, Ivocabulary } from '../../../../api/models';
 import { MxgraphService } from '../../mxgraph/mxgraph';
 import { IClassWithProperties, VocabulariesService } from '../../services/vocabularies.service';
 import { Observable, Subscription } from 'rxjs';
