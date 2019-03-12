@@ -51,6 +51,7 @@ import { VocabularyEditorComponent } from './vocabulary-editor/vocabulary-editor
 import { MxGraphEditorComponent } from './vocabulary-editor/mx-graph-editor/mx-graph-editor.component';
 import { VocabularyEditorService } from './vocabulary-editor/vocabulary-editor.service';
 import { ListEditorComponent } from './vocabulary-editor/list-editor/list-editor.component';
+import { NzDrawerService } from 'ng-zorro-antd';
 
 registerLocaleData(en);
 
@@ -102,6 +103,7 @@ registerLocaleData(en);
     VocabulariesService,
     VocabularyEditorService,
     AccessManagement,
+    NzDrawerService,
     { provide: NZ_I18N, useValue: en_US }
   ],
   bootstrap: [AppComponent],

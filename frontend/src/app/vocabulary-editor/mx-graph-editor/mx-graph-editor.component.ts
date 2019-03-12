@@ -1,11 +1,12 @@
 import { Component, OnInit, ElementRef, ViewChild,  HostListener, OnDestroy,} from '@angular/core';
-import { meteorID, Ivocabulary } from 'api/models';
+import { meteorID, Ivocabulary } from '../../../../api/models';
 import { MxgraphService } from '../../mxgraph/mxgraph';
 import { IClassWithProperties, VocabulariesService } from '../../services/vocabularies.service';
 import { Observable, Subscription } from 'rxjs';
 import { mxgraph as m } from 'mxgraph';
 import { combineLatest, debounceTime, distinctUntilChanged, filter} from 'rxjs/operators';
 import { VocabularyEditorService } from '../vocabulary-editor.service';
+
 // import sidebar state dep.
 
 
@@ -189,6 +190,7 @@ export class MxGraphEditorComponent implements OnInit {
 
   showNodeCreator() {
       // this.sideBarState.changeSidebarState('create');
+
   }
 
   showEditBox() {
