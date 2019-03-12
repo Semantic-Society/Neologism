@@ -1,13 +1,14 @@
-import {Component, Input, OnChanges, OnInit} from '@angular/core';
-import {VocabulariesService} from '../../services/vocabularies.service';
-import { SideBarStateService } from '../../services/state-services/sidebar-state.service';
+import { Component, Input } from '@angular/core';
+import { VocabulariesService } from '../../../app/services/vocabularies.service';
+import { SideBarStateService } from '../../../app/services/state-services/sidebar-state.service';
 
 @Component({
   selector: 'app-node-creator',
-  templateUrl: './node-creator.html',
-  styleUrls: ['./node-creator.css'],
+  templateUrl: './node-creator.component.html',
+  styleUrls: ['./node-creator.component.scss']
 })
 export class NodeCreatorComponent {
+
   @Input() vocabID: string;
   constructor(private vocabService: VocabulariesService, private sidebarService: SideBarStateService) {
   }
@@ -42,7 +43,4 @@ export class NodeCreatorComponent {
     this.newClass = this.emptyClass;
   }
 
-  resetSidebarState(){
-    this.sidebarService.changeSidebarToDefault()
-  }
 }
