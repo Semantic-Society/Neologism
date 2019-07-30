@@ -6,6 +6,7 @@ import { Observable, Subscription } from 'rxjs';
 import { mxgraph as m } from 'mxgraph';
 import { combineLatest, debounceTime, distinctUntilChanged, filter} from 'rxjs/operators';
 import { VocabularyEditorService } from '../vocabulary-editor.service';
+import { copyFile } from 'fs';
 
 // import sidebar state dep.
 
@@ -60,6 +61,7 @@ export class MxGraphEditorComponent implements OnInit {
       this.currentSelectionSub = this.mx.currentSelection().pipe(
           combineLatest(this.mx.currentEdgeSelection(),
               (classSelection, edgeSelection) => {
+                  console.log("current selection")
                   if (classSelection !== null) {
                       return classSelection;
                   } else if (edgeSelection !== null) {
@@ -72,9 +74,8 @@ export class MxGraphEditorComponent implements OnInit {
           debounceTime(20),
           distinctUntilChanged()
       ).subscribe((selection) => {
-
-          // this.sideBarState.changeBySelection(selection);
-          this.currentSelection = selection;
+        if(selection != null )
+            this.vocabEditorService.setEditorDrawer(true);
       });
 
       // TODO It looks like this currently leaks observables.

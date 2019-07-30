@@ -3,6 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import { Classes, Properties, Vocabularies, Users } from '../collections';
 import { meteorID } from '../models';
 
+// should be refactored as well. The checck is not sufficient
 function assertUser() {
   if (!Meteor.userId()) {
     throw new Meteor.Error('unauthorized',
@@ -17,6 +18,7 @@ function assertUser() {
  */
 
 Meteor.methods({
+  // get user by email, needed to add users by email, collaboration feature
   'users-without-self.get'(email: string) {
     assertUser()
     
@@ -31,11 +33,26 @@ Meteor.methods({
   },
   'vocabulary.addAuthors'(authorIds: Array<string>, vocabId: string) {
     assertUser();
-    Vocabularies.update({ _id: vocabId }, { $push: { authors: {$each: authorIds} } })
+    Vocabularies.update(
+      { _id: vocabId }, 
+      { $push: 
+        { authors: 
+          {$each: authorIds} 
+        } 
+      })
   },
   'vocabulary.create'(name: string, description: string, uriPrefix: string, field_public: boolean = false) {
     assertUser();
-    Vocabularies.insert({ name, authors: [this.userId], description, uriPrefix, public: field_public, classes: []});
+    // add user to array of users to enable multiple user access. Fixes should happen on a author/creator fiel as well 
+    Vocabularies.insert({ 
+      name, 
+      authors: [this.userId], 
+      description, 
+      uriPrefix, 
+      public: 
+      field_public, 
+      classes: []
+    });
   },
   /*'vocabulary.insertClass'({id, vClass}) {
     Vocabularies.update({_id:id}, { $push: {classes: vClass}});
@@ -53,7 +70,11 @@ Meteor.methods({
     // Note, these operations must occur in this order. Otherwise an observer of the vocabualry might
     const classIdO = Classes.insert({ name, description, URI, properties: [], position: { x: 0, y: 0 }, skos: { closeMatch: [], exactMatch: [] } });
     classIdO.subscribe((classID) =>
-      Vocabularies.update({ _id: vocabId }, { $push: { classes: classID } })
+      Vocabularies.update( 
+        { _id: vocabId }, 
+        { $push: 
+          { classes: classID }
+      })
     );
   },
   'class.update.name'(classID: string, name: string) {
@@ -93,9 +114,15 @@ Meteor.methods({
     assertUser();
     // TODO: Sanitize
     // Note, these operations must occur in this order. Otherwise an observer of the vocabualry might
-    const propID = Properties.insert({ name, description, URI, range });
+    const propID = Properties.insert(
+      { name, description, URI, range })
+    ;
     propID.subscribe((pID) =>
-      Classes.update({ _id: classId }, { $push: { properties: pID } })
+      Classes.update(
+        { _id: classId }, 
+        { $push: 
+          { properties: pID } 
+        })
     );
   },
 

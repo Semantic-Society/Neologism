@@ -52,6 +52,7 @@ import { MxGraphEditorComponent } from './vocabulary-editor/mx-graph-editor/mx-g
 import { VocabularyEditorService } from './vocabulary-editor/vocabulary-editor.service';
 import { ListEditorComponent } from './vocabulary-editor/list-editor/list-editor.component';
 import { NzDrawerService } from 'ng-zorro-antd';
+import { EditComponentService } from './vocabulary-editor/edit.component.service';
 
 registerLocaleData(en);
 
@@ -100,6 +101,7 @@ registerLocaleData(en);
     AuthGuard,
     RecommendationService,
     EditboxService,
+    EditComponentService,
     VocabulariesService,
     VocabularyEditorService,
     AccessManagement,

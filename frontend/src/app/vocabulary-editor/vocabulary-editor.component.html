@@ -14,8 +14,23 @@
       <nz-breadcrumb style="margin:16px 0;">
         <nz-breadcrumb-item>Vocabulary</nz-breadcrumb-item>
         <nz-breadcrumb-item>ID - {{vocabID}}</nz-breadcrumb-item>
+
+        <nz-breadcrumb-item>
+          <nz-switch nzSize="small" [(ngModel)]="vocabEditorService.allowEditing"></nz-switch>
+          <nz-dropdown style="border-right: 10px: margin-bottom: 10px;" [nzDisabled]="!vocabEditorService.allowEditing">
+              <a nz-dropdown> {{ !vocabEditorService.allowEditing ? "Arrange Mode" : "Editing"}} <i nz-icon type="down"></i> </a>
+              <ul nz-menu nzSelectable>
+                <li nz-menu-item (click)="openCreateClassModal()">
+                  <a>Add New Class</a>
+                </li>
+                <li nz-menu-item (click)="openSearchExistingClassModal()">
+                  <a>Search for Existing Class</a>
+                </li>
+              </ul>
+          </nz-dropdown>
+        </nz-breadcrumb-item>
       </nz-breadcrumb>
-  
+
       <nz-select 
           style="width: 200px;" 
           nzShowSearch 
@@ -25,6 +40,9 @@
         <nz-option nzCustomContent nzLabel="List View" nzValue="list-view"><i nz-icon type="ordered-list"></i> List View</nz-option>
         <nz-option nzCustomContent nzLabel="Graph View" nzValue="mxgraph"><i nz-icon type="gateway"></i> Graph View</nz-option>
       </nz-select>
+
+
+
     </div>
 
     <router-outlet class="mx-editor-ctn"></router-outlet>
@@ -33,3 +51,166 @@
 
   <nz-footer style="text-align: center;">Fraunhofer ©2019</nz-footer>
 </nz-layout>
+
+
+<!-- DRAWER CLASS CREATION -->
+<nz-drawer
+[nzBodyStyle]="{ height: 'calc(100% - 55px)', overflow: 'auto', 'padding-bottom': '53px' }"
+[nzMaskClosable]="false"
+[nzWidth]="480"
+[nzMask]="false"
+[nzVisible]="visibleAddClass | async"
+nzTitle="Create New Class"
+(nzOnClose)="close()"
+>
+<form nz-form>
+  <div nz-row nzGutter="8">
+    <div nz-col nzSpan="24">
+      <nz-form-item>
+        <nz-form-label>Class Name</nz-form-label>
+        <nz-form-control>
+          <input [(ngModel)]="newClass.name" name="_name" nz-input placeholder="please enter class name" />
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col nzSpan="24">
+      <nz-form-item>
+        <nz-form-label>Uri</nz-form-label>
+        <nz-form-control>
+          <nz-input-group nzAddOnBefore="http://" >
+            <input [(ngModel)]="newClass.uri" name="_uri" type="text"  nz-input placeholder="please enter uri" />
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+  </div>
+
+  <div nz-row nzGutter="8">
+    <div nz-col nzSpan="24">
+      <nz-form-item>
+        <nz-form-label>Description</nz-form-label>
+        <nz-form-control>
+          <textarea
+            nz-input
+            [(ngModel)]="newClass.description" name="_description"
+            placeholder="please enter url description"
+            [nzAutosize]="{ minRows: 4, maxRows: 4 }"
+          ></textarea>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+  </div>
+</form>
+<div class="footer">
+  <button type="button" (click)="close()" class="ant-btn" style="margin-right: 8px;"><span>Cancel</span></button>
+  <button type="button" (click)="addClass()" class="ant-btn ant-btn-primary"><span>Add Class</span></button>
+</div>
+</nz-drawer>
+
+<!-- DRAWER SEARCH EXISTING CLASS  -->
+<nz-drawer
+[nzBodyStyle]="{ height: 'calc(100% - 55px)', overflow: 'auto', 'padding-bottom': '53px' }"
+[nzMaskClosable]="false"
+[nzWidth]="480"
+[nzMask]="false"
+[nzVisible]="visibleSearch | async"
+nzTitle="Search Existing Class"
+(nzOnClose)="close()"
+>
+<form nz-form>
+  <div nz-row nzGutter="8">
+    <div nz-col nzSpan="24">
+      <nz-form-item>
+        <nz-form-label>Class Name</nz-form-label>
+        <nz-form-control>
+          <input nz-input placeholder="please enter user name" />
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col nzSpan="24">
+      <nz-form-item>
+        <nz-form-label>URI</nz-form-label>
+        <nz-form-control>
+          <nz-input-group nzAddOnBefore="http://" >
+            <input type="text" nz-input placeholder="please enter uri" />
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+  </div>
+
+  <div nz-row nzGutter="8">
+    <div nz-col nzSpan="24">
+      <nz-form-item>
+        <nz-form-label>Description</nz-form-label>
+        <nz-form-control>
+          <textarea
+            nz-input
+            placeholder="please enter url description"
+            [nzAutosize]="{ minRows: 4, maxRows: 4 }"
+          ></textarea>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+  </div>
+</form>
+
+<div class="footer">
+  <button type="button" (click)="close()" class="ant-btn" style="margin-right: 8px;"><span>Cancel</span></button>
+  <button type="button" (click)="close()" class="ant-btn ant-btn-primary"><span>Submit</span></button>
+</div>
+</nz-drawer>
+
+<!-- Edit Existing Class-->
+<nz-drawer
+[nzBodyStyle]="{ height: 'calc(100% - 55px)', overflow: 'auto', 'padding-bottom': '53px' }"
+[nzMaskClosable]="false"
+[nzWidth]="480"
+[nzMask]="false"
+[nzVisible]="visibleEditor | async"
+nzTitle="Edit Class"
+(nzOnClose)="close()"
+>
+<form nz-form>
+  <div nz-row nzGutter="8">
+    <div nz-col nzSpan="24">
+      <nz-form-item>
+        <nz-form-label>Class Name</nz-form-label>
+        <nz-form-control>
+          <input  nz-input placeholder="please enter user name" />
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col nzSpan="24">
+      <nz-form-item>
+        <nz-form-label>URI</nz-form-label>
+        <nz-form-control>
+          <nz-input-group nzAddOnBefore="http://" >
+            <input type="text" nz-input placeholder="please enter uri" />
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+  </div>
+
+  <div nz-row nzGutter="8">
+    <div nz-col nzSpan="24">
+      <nz-form-item>
+        <nz-form-label>Description</nz-form-label>
+        <nz-form-control>
+          <textarea
+            nz-input
+            placeholder="please enter url description"
+            [nzAutosize]="{ minRows: 4, maxRows: 4 }"
+          ></textarea>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+  </div>
+</form>
+
+<div class="footer">
+  <button type="button" (click)="close()" class="ant-btn" style="margin-right: 8px;"><span>Cancel</span></button>
+  <button type="button" (click)="close()" class="ant-btn ant-btn-primary"><span>Submit</span></button>
+</div>
+</nz-drawer>

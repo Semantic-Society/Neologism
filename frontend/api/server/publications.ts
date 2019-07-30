@@ -5,11 +5,9 @@ import { Mongo } from 'meteor/mongo';
 import { Iclass, Iproperty, Iuser, Ivocabulary, meteorID } from 'models';
 import { Classes, Properties, Users, Vocabularies } from '../collections';
 
-
+// There are no permission checks yet on  a lot of published data. The case of public data, example 
+// github punlic repos should be integrated in designing the access to the publisghed vocab data. 
 Meteor.publish('vocabularies', function (): Mongo.Cursor<Ivocabulary> {
-    // if (!this.userId) {
-    //     return;
-    // }
 
     return Vocabularies.collection.find({ $or: [{ authors: this.userId }, { public: true }] });
 });

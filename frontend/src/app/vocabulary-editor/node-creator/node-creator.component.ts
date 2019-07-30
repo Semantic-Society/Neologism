@@ -38,7 +38,7 @@ export class NodeCreatorComponent {
   };
 
   addClass() {
-    console.log(this.newClass);
+    console.log(this.newClass, this.vocabID);
     this.vocabService.addClass(this.vocabID, this.newClass.name, this.newClass.description, this.newClass.URI);
     this.newClass = this.emptyClass;
   }

@@ -6,7 +6,7 @@ import { of, Observable, BehaviorSubject } from 'rxjs';
 import { map, startWith, combineLatest, switchMap, tap, take, withLatestFrom, filter } from 'rxjs/operators';
 
 @Injectable()
-export class EditboxService {
+export class EditComponentService {
     private alreadyThere2: Observable<any>
     private property_recommendations: BehaviorSubject<Array<any>> = new BehaviorSubject([])
 
@@ -59,9 +59,7 @@ export class EditboxService {
                     map(reommendations => this.mergeOldandNewRecommendations(reommendations, existing_properties)),
                     take(1),
                     filter(Boolean),
-                    tap(recommendations => {
-                        return this.property_recommendations.next(recommendations);
-                    })
+                    tap(recommendations => this.property_recommendations.next(recommendations))
                 )
             
     }

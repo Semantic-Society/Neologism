@@ -28,7 +28,7 @@
                 nzPlacement="top" 
                 nz-tooltip 
                 nzType="default" 
-                (click)="addUserToVocabulary(data._id)"
+                (click)="addPersonToVocab(data._id)"
                 nzShape="circle">
               <i nz-icon type="user-add"></i>
             </button>
@@ -61,7 +61,7 @@
                 class="actn-btn" 
                 nz-button 
                 nzType="default"
-                nzTitle="Edit Vocabulary" 
+                nzTitle="Download Vocabulary" 
                 nzPlacement="top" 
                 nz-tooltip
                 (click)="downloadVocab(data._id, data.name)"

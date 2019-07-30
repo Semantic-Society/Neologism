@@ -18,6 +18,7 @@ import { MatDialog } from '@angular/material';
   templateUrl: './vocablist.component.html',
   styleUrls: ['./vocablist.component.css']
 })
+
 export class VocablistComponent implements OnInit {
   protected dataSource: Observable<Ivocabulary[]>; // new VocabularyDataSource();
 

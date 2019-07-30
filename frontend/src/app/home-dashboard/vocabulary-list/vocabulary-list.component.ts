@@ -3,6 +3,9 @@ import { VocabulariesService } from '../../../app/services/vocabularies.service'
 import { Observable } from 'rxjs';
 import { startWith, debounceTime, tap, take } from 'rxjs/operators';
 import { NzModalService } from 'ng-zorro-antd';
+import { MatDialog } from '@angular/material';
+import { AddUserModalComponent } from '../../../app/vocablist/components/add-user-modal/add-user-modal.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-vocabulary-list',
@@ -11,9 +14,12 @@ import { NzModalService } from 'ng-zorro-antd';
 })
 export class VocabularyListComponent implements OnInit {
   public dataSet: Observable<any>;
+
   constructor( 
+    private router: Router,
     private vocabService: VocabulariesService,
-    private modalService: NzModalService) {
+    private modalService: NzModalService,
+    public dialog: MatDialog,) {
     this.dataSet = this.vocabService.getVocabularies()
       .pipe(startWith([]));
 
@@ -53,12 +59,21 @@ export class VocabularyListComponent implements OnInit {
 
 
   openVocabulary(vocab_id: string) {
-    window.open('../v/' + vocab_id);
+    this.router.navigateByUrl('vcblry-edit/' + vocab_id );
   }
 
   addVocabulary(vocabForm: any) {
 
   }
+
+  addPersonToVocab(vocab_id: string){
+    let dialogRef = this.dialog.open(AddUserModalComponent, {
+      height: '400px',
+      width: '600px',
+      data: {vocabId: vocab_id}
+    });
+  }
+
 
   ngOnInit() {
   }

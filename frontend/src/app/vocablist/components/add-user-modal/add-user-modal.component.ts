@@ -41,7 +41,6 @@ export class AddUserModalComponent implements OnInit {
         distinctUntilChanged(),
         switchMap(search => 
           this.accessService.getUsers(search)),
-        tap(x => console.log(x, 'users')),
         startWith([])
       )
   }
