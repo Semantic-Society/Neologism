@@ -56,7 +56,6 @@
     "@types/jasminewd2": "~2.0.3",
     "@types/meteor": "^1.4.22",
     "@types/meteor-publish-composite": "0.0.35",
-    "@types/n3": "^0.0.3",
     "@types/node": "~8.9.4",
     "codelyzer": "~4.2.1",
     "jasmine-core": "~2.99.1",
