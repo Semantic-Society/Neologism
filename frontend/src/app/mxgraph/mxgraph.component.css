@@ -1,0 +1,64 @@
+/** 
+ * Make component space filling
+ * Note global ".mat-tab-group.mat-tab-fill-height .mat-tab-body-wrapper" definition in styles.css
+ */
+
+:host {
+  flex: 1;
+}
+
+mat-drawer-container, mat-drawer-content, mat-tab-group, .mxgraph-container  {
+  height: 100%;
+}
+
+/* .mxgraph-container > * {
+  background-size: .5cm .5cm;
+  background-position: top 1px left 1px;
+  background-image: linear-gradient(to right, lightgrey 1px, transparent 1px), linear-gradient(to bottom, lightgrey 1px, transparent 1px);
+} */
+
+
+/**
+ * Sidebar Styling
+ */
+.mat-drawer {
+  background-color: #1f1f1f;
+  color: #FFFFFF;
+  padding: 1rem;
+  max-width: 35%;
+}
+
+.mat-drawer button {
+  background-color: beige;
+  color: #000000 !important;
+  display: block;
+  margin: 0 auto;
+}
+
+.no-pad {
+  padding: 0;
+}
+
+.sidebar-header {
+  margin-top: 0.3em;
+  margin-bottom: 0.3em;
+  text-align: center;
+  padding: 0 0.5em 0 0.5em;
+}
+
+.mat-drawer-end {
+  overflow: visible;
+}
+
+.toolbar-container {
+  margin-top: 1.2em;
+  padding: 0.3em 0.3em 0.3em 0.3em;
+}
+
+.button-div {
+  padding: 1rem;
+}
+
+.pad-1 {
+  padding: 1rem;
+}

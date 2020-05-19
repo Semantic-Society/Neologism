@@ -1,0 +1,131 @@
+
+<mat-toolbar color="secondary">
+    <span>Add Class</span>
+    <span class="editor-toolbar-spacer"></span>
+  
+    <button (click)="resetSidebarState()" mat-icon-button color="primary">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+  </mat-toolbar>
+
+<div class="editbox-container no-pad">
+  <div class="class-details">
+    <div class="top">
+      <div class="img">
+        <img src="../../../assets/default_node_image.gif"/>
+      </div>
+      <div class="name-plus-uri">
+        <mat-form-field class="full-width name">
+          <input matInput placeholder="Class Name" value="" [(ngModel)]="newClass.name">
+        </mat-form-field>
+        <mat-form-field class="full-width uri">
+          <input matInput placeholder="uri" value="" [(ngModel)]="newClass.URI">
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="bottom">
+      <mat-form-field class="full-width">
+        <textarea matInput placeholder="Description" value="" class="description"
+                  [(ngModel)]="newClass.description"></textarea>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="button-full-width">
+    <button mat-raised-button color="primary" (click)="addClass()" *ngIf="!selectedClassID">Add Class</button>
+  </div>
+  <div class="properties-section">
+    <div class="title">Properties</div>
+    <div>
+      <!-- Applied Properties -->
+      <mat-expansion-panel style="padding:0;margin:0;" [expanded]="true">
+        <mat-expansion-panel-header class="mat-expansion-panel-custom-header" [collapsedHeight]="'30px'"
+                                    [expandedHeight]="'30px'">
+          <mat-panel-title class="mat-panel-custom-title">
+            Applied Properties
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <ng-container *ngIf="selectedClassID">
+          <div *ngIf="(alreadyThere2| async).length > 0" class="properties-outer-wrapper">
+            <mat-expansion-panel *ngFor="let rec of (alreadyThere2| async)" style="padding:0;margin:0;">
+              <mat-expansion-panel-header class="mat-expansion-panel-custom-header" *ngIf="rec.label"
+                                          [collapsedHeight]="'30px'" [expandedHeight]="'30px'">
+                <mat-panel-title class="mat-panel-custom-title">
+                  {{rec.label}}
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <!--div *ngIf="rec.label" ><p class="properties-label">Label:</p> <p class="properties-text">{{rec.label}}</p></div-->
+              <div class="properties-line" *ngIf="rec.uri">
+                <p class="properties-label ">URI:</p>
+                <a href="{{rec.uri}}" class="properties-text uri-link" target="_blank"> {{rec.uri}}</a>
+              </div>
+              <div class="properties-line" *ngIf="rec.range">
+                <p class="properties-label">Range:</p>
+                <a href="{{rec.range}}" class="properties-text uri-link inactive-uri-link"> {{rec.range}}</a>
+              </div>
+              <div class="properties-line" *ngIf="rec.comment">
+                <p class="properties-label ">Comment:</p>
+                <p class="properties-text"> {{rec.comment}}</div>
+            </mat-expansion-panel>
+          </div>
+          <mat-label *ngIf="(alreadyThere2| async).length == 0">No properties found (yet)</mat-label>
+        </ng-container>
+
+      </mat-expansion-panel>
+      <!--Adding properties manually-->
+      <mat-expansion-panel style="padding:0;margin:0;" [expanded]="false">
+        <mat-expansion-panel-header class="mat-expansion-panel-custom-header" [collapsedHeight]="'30px'"
+                                    [expandedHeight]="'30px'">
+          <mat-panel-title class="mat-panel-custom-title">
+            Add Properties
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="add-properties-container" *ngIf="selectedClassID">
+          <div class="button-full-width">
+            <mat-form-field class="prop-input">
+              <input matInput placeholder="Name" value="" [(ngModel)]="newClass.property.name">
+            </mat-form-field>
+            <mat-form-field class="prop-input">
+              <input matInput placeholder="URI" value="" [(ngModel)]="newClass.property.URI">
+            </mat-form-field>
+            <mat-form-field class="prop-input">
+              <textarea matInput value="" [(ngModel)]="newClass.property.description"></textarea>
+            </mat-form-field>
+            <mat-form-field class="class-dropdown">
+              <mat-select placeholder="Range" [(ngModel)]="newClass.property.range">
+                <ng-container *ngFor="let c of rangeOptions | async">
+                  <mat-option [value]="c._id" *ngIf="c._id != selectedClassID">
+                    {{ c.name }}
+                  </mat-option>
+                </ng-container>
+              </mat-select>
+            </mat-form-field>
+            <button mat-raised-button color="primary" (click)="addProperty()">Add Property</button>
+          </div>
+        </div>
+      </mat-expansion-panel>
+
+      <!--Add properties from recommender-->
+      <mat-expansion-panel style="padding:0;margin:0;" [expanded]="false">
+        <mat-expansion-panel-header class="mat-expansion-panel-custom-header" [collapsedHeight]="'30px'"
+                                    [expandedHeight]="'30px'">
+          <mat-panel-title class="mat-panel-custom-title">
+            Add Recommeded Properties
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        
+        <div class="add-properties-container" *ngIf="selectedClassID">
+          <mat-list-item *ngFor="let rec of propertyRecommendations | async" style="padding:0;margin:0;">
+            <p matLine *ngIf="rec.label" matTooltip="{{rec.label}}">Label: {{rec.label}}</p>
+            <p matLine *ngIf="rec.uri" matTooltip="{{rec.uri}}">URI: {{rec.uri}}</p>
+            <p matLine *ngIf="rec.comment" matTooltip="{{rec.comment}}">Comment: {{rec.comment}}</p>
+            <p matLine *ngIf="rec.range" matTooltip="{{rec.range}}">Range: {{rec.range}}</p>
+            <button mat-raised-button class="btn-green" (click)=addRecommendedProperyToGraph(rec)>Add</button>
+            <hr>
+          </mat-list-item>
+
+        </div>
+      </mat-expansion-panel>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,17 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../out-tsc/app",
+    "baseUrl": "./",
+    "module": "es2015",
+    "types": [
+      "meteor",
+      "meteor-publish-composite"
+    ]
+  },
+  "exclude": [
+    "test.ts",
+    "**/*.spec.ts",
+    "../api/node_modules"
+  ]
+}

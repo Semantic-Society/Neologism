@@ -1,0 +1,62 @@
+<!--<mat-list>
+  <mat-list-item *ngFor='let v of vocab | async'> {{v.name}} || {{v.authors}} || {{v.description}} || {{v.uriPrefix}}</mat-list-item>
+</mat-list>-->
+
+
+<mat-card class="add-vocab-container">
+  <h3>Add new Vocabulary</h3>
+  <mat-form-field class="vocab-form-cell">
+    <input matInput placeholder="Name" [(ngModel)]="vocabForm.name">
+  </mat-form-field>
+  <mat-form-field class="vocab-form-cell">
+    <textarea matInput placeholder="Description" [(ngModel)]="vocabForm.description"></textarea>
+  </mat-form-field>
+  <mat-form-field class="vocab-form-cell">
+    <input matInput placeholder="URI" [(ngModel)]="vocabForm.uriPrefix">
+  </mat-form-field>
+  <button mat-raised-button color="primary" (click)="addVocabulary()" class="vocab-form-cell">Add Vocabulary</button>
+</mat-card>
+<div>
+  <mat-table [dataSource]="dataSource">
+      <ng-container matColumnDef="name">
+        <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
+        <mat-cell *matCellDef="let dataSource"> {{dataSource.name}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="authors">
+        <mat-header-cell *matHeaderCellDef> Authors </mat-header-cell>
+        <mat-cell *matCellDef="let dataSource"> {{dataSource.authors}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="description">
+        <mat-header-cell *matHeaderCellDef> Description </mat-header-cell>
+        <mat-cell *matCellDef="let dataSource"> {{dataSource.description}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="uriPrefix">
+        <mat-header-cell *matHeaderCellDef> URI </mat-header-cell>
+        <mat-cell *matCellDef="let dataSource"> {{dataSource.uriPrefix}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="actions">
+        <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
+        <mat-cell *matCellDef="let dataSource">
+          <!-- <button mat-icon-button>
+            <mat-icon aria-label="Example icon-button with a heart icon">more_vert</mat-icon>
+        </button> -->
+          <button mat-icon-button (click)="deleteVocab(dataSource._id); $event.stopPropagation()">
+            <mat-icon>delete</mat-icon>
+          </button>
+          <!-- <button mat-icon-button>
+            <mat-icon>call_split</mat-icon>
+          </button> -->
+          <button mat-icon-button (click)="downloadVocab(dataSource._id, dataSource.name); $event.stopPropagation()">
+            <mat-icon>share</mat-icon>
+          </button>
+
+          <button mat-icon-button (click)="addPersonToVocab(dataSource); $event.stopPropagation()">
+            <mat-icon>person_add</mat-icon>
+          </button>
+        </mat-cell>
+      </ng-container>
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <!-- <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="this.router.navigateByUrl('/v/' + row._id)"></mat-row> -->
+    <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="this.openVocab(row._id)"></mat-row>
+  </mat-table>
+</div>

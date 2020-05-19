@@ -1,0 +1,33 @@
+:host ::ng-deep .trigger {
+    font-size: 18px;
+    line-height: 64px;
+    padding: 0 24px;
+    cursor: pointer;
+    transition: color .3s;
+  }
+
+  :host ::ng-deep .trigger:hover {
+    color: #1890ff;
+  }
+
+  :host ::ng-deep .logo {
+    height: 32px;
+    background: rgba(255, 255, 255, .2);
+    margin: 16px;
+}
+
+.home-db-lyt-ctnr{
+    width: 100vw;
+    height: 100vh;
+    background-color: #fff!important;
+}
+
+.logo-fit {
+    width: 200px;
+}
+
+.add-vcblry-frm{
+  position: fixed;
+  bottom: 45px;
+  right: 70px;
+}
