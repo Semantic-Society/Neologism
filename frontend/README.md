@@ -2,6 +2,8 @@
 
 ## Architecture overview
 [Neologism architecture diagram](https://app.diagrams.net/#G1kQOoR5Egi8TAk_P-l9mEZVdkiu2BeH0x)
+
+
 ![neologism architecture](NeologismArchitecture.png "Neologism architecture")
 
 ## Installation
