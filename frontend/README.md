@@ -10,8 +10,11 @@
 
 1. Clone the repository
 2. Install meteor using `curl https://install.meteor.com/ | sh`
-3. Run npm install in the `frontend` folder
-4. Run the meteor bundler (see below)
+3. Install mongo from https://docs.mongodb.com/manual/tutorial/install-mongodb-on-ubuntu/
+4. Install node version manager from https://github.com/nvm-sh/nvm
+5. Set node version to 10.15.0
+6. Run `npm install` in the `frontend` folder
+7. Run the meteor bundler (see below)
 
 ## Development server
 
