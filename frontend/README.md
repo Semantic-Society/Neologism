@@ -2,10 +2,18 @@
 
 ## Installation
 
+### Native Installation
+
 1. Clone the repository
 2. Install meteor using `curl https://install.meteor.com/ | sh`
 3. Run npm install in the `frontend` folder
 4. Run the meteor bundler (see below)
+
+### Docker Installation (from within the frontend folder)
+
+1. `docker-compose build`
+2. `docker-compose run`
+3. On host: `npm install`, `npm run meteor-client:bundle`, then `npm run start`
 
 ## Development server
 
