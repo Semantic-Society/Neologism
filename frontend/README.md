@@ -2,12 +2,16 @@
 
 ## Installation
 
+Install meteor from https://www.meteor.com/install. Currently, it is required for both native and docker installation.
+
+
 ### Native Installation
 
 1. Clone the repository
 2. Install meteor using `curl https://install.meteor.com/ | sh`
 3. Run npm install in the `frontend` folder
 4. Run the meteor bundler (see below)
+
 
 ### Docker Installation (from within the frontend folder)
 
