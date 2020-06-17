@@ -3,6 +3,7 @@
 ## Installation
 
 Install meteor from https://www.meteor.com/install. Currently, it is required for both native and docker installation.
+  - On Windows, it might be required to add meteor to the Powershell path via `$env:path +=";C:\Users\YOUR-ACCOUNT-NAME\AppData\Local\.meteor"`
 
 
 ### Native Installation
