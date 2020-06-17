@@ -12,8 +12,13 @@
 ### Docker Installation (from within the frontend folder)
 
 1. `docker-compose build`
-2. `docker-compose run`
+2. `docker-compose up`
 3. On host: `npm install`, `npm run meteor-client:bundle`, then `npm run start`
+  - If you get syntax error on Windows, follow these steps
+    - `npm install -g npm` to upgrade npm to enable support for python3 
+    - (Might be optional) `npm install --global windows-build-tools` in an admin cmd or powershell and try again (ATTENTION: THIS MIGHT TRIGGER A REBOOT)
+    - Follow the accepted answer at https://stackoverflow.com/questions/57879150/how-can-i-solve-error-gypgyp-errerr-find-vsfind-vs-msvs-version-not-set-from-c (takes about 10 min, restart is required)
+
 
 ## Development server
 
