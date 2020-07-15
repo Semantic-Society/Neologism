@@ -16,6 +16,7 @@ docker-build:
 
 
   before_script:
+    - docker info
     - echo $CI_BUILD_TOKEN | docker login -u "$CI_REGISTRY_USER" --password-stdin $CI_REGISTRY
   script:
     - cd frontend
