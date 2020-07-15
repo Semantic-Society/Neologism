@@ -2,19 +2,16 @@
 docker-build:
   # Official docker image.
   
-  image: docker:19.03.0-dind
+  image: docker:latest
   
   stage: build
   
   services:
-    - docker:19.03.0-dind
+    - docker:dind
 
   variables:
-    DOCKER_DRIVER: overlay2
-    DOCKER_HOST: tcp://localhost:2375
     DOCKER_TLS_CERTDIR: ""
-
-
+  
   before_script:
     - docker info
     - echo $CI_BUILD_TOKEN | docker login -u "$CI_REGISTRY_USER" --password-stdin $CI_REGISTRY
