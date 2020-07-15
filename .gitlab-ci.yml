@@ -35,7 +35,7 @@ before_script:
 build:
   stage: build
   script:
-    - docker build --pull -t $CONTAINER_TEST_IMAGE .
+    - docker build --pull -t $CONTAINER_TEST_IMAGE ./frontend
     - docker push $CONTAINER_TEST_IMAGE
 
 # test1:
