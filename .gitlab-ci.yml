@@ -1,10 +1,18 @@
 # This file is a template, and might need editing before it works on your project.
 docker-build:
   # Official docker image.
+  
   image: docker:latest
+  
   stage: build
+  
   services:
     - docker:dind
+
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+    DOCKER_DRIVER: overlay2
+
   before_script:
     - echo $CI_BUILD_TOKEN | docker login -u "$CI_REGISTRY_USER" --password-stdin $CI_REGISTRY
   script:
