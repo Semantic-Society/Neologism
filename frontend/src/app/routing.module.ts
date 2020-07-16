@@ -19,7 +19,7 @@ import { ListEditorComponent } from './vocabulary-editor/list-editor/list-editor
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: 'dashboard', component: HomeDashboardComponent, canActivate: [AuthGuard] },
-  { path: 'vcblry-edit/:id', 
+  { path: 'v/:id', 
     component: VocabularyEditorComponent,
     children:[
       {
@@ -39,7 +39,7 @@ const routes: Routes = [
   },
   { path: 'login', component: LoginPageComponent},
   { path: 'vocabularies', component: VocablistComponent },
-  { path: 'v/:id', component: MxgraphComponent },
+  { path: 'vcblry-edit/:id', component: MxgraphComponent },
 ];
 
 @NgModule({
