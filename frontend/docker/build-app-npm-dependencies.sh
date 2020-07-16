@@ -10,4 +10,4 @@ meteor npm ci || meteor npm install # The latter is for older versions of Meteor
 
 mkdir --parents $APP_SOURCE_FOLDER/api/node_modules
 
-cp -R node_modules/* api/node_modules
+cp -R node_modules/* $APP_SOURCE_FOLDER/api/node_modules
