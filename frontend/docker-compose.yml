@@ -1,14 +1,14 @@
 version: '3'
 
 services:
-  app:
+  neologism:
     container_name: server
     build:
       context: .
       dockerfile: Dockerfile
     ports:
       - '3000:3000'
-      - '8080:80'
+      - '80:80'
     depends_on:
       - mongo
     environment:
