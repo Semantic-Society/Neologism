@@ -9,7 +9,7 @@ variables:
   IMAGE_TAG: $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA
   LATEST_TAG: $CI_REGISTRY_IMAGE:latest
 
-docker_push:
+docker_build_and_push:
   image: docker:19.03
   stage: push
   services:
