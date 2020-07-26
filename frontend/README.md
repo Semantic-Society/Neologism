@@ -1,18 +1,27 @@
 # Frontend
 
+## Architecture overview
+[Neologism architecture diagram](https://app.diagrams.net/#G1kQOoR5Egi8TAk_P-l9mEZVdkiu2BeH0x)
+
+
+![neologism architecture](NeologismArchitecture.png "Neologism architecture")
+
 ## Installation
-
-Install meteor from https://www.meteor.com/install. Currently, it is required for both native and docker installation.
-  - On Windows, it might be required to add meteor to the Powershell path via `$env:path +=";C:\Users\YOUR-ACCOUNT-NAME\AppData\Local\.meteor"`
-
-
-### Native Installation
 
 1. Clone the repository
 2. Install meteor using `curl https://install.meteor.com/ | sh`
-3. Run npm install in the `frontend` folder
-4. Run the meteor bundler (see below)
+3. Install mongo from https://docs.mongodb.com/manual/tutorial/install-mongodb-on-ubuntu/
+4. Install node version manager from https://github.com/nvm-sh/nvm
+5. Set node version to 10.15.0
+6. Run `npm install` in the `frontend` folder
+7. Run the meteor bundler (see below)
 
+## Development server
+
+Initially & every time you make a change to the server code (which affects the client side code), rebundle the meteor client side code by running `npm run meteor-client:bundle`.
+
+Run `npm run api` to start a local meteor server (running on `http://localhost:3000/` with a connection to a local mongodb at port `3001`).
+Run `npm run start` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
 ### Docker Installation (from within the frontend folder)
 
@@ -23,33 +32,5 @@ Install meteor from https://www.meteor.com/install. Currently, it is required fo
     - `npm install -g npm` to upgrade npm to enable support for python3 
     - (Might be optional) `npm install --global windows-build-tools` in an admin cmd or powershell and try again (ATTENTION: THIS MIGHT TRIGGER A REBOOT)
     - Follow the accepted answer at https://stackoverflow.com/questions/57879150/how-can-i-solve-error-gypgyp-errerr-find-vsfind-vs-msvs-version-not-set-from-c (takes about 10 min, restart is actually not required)
-
-
-## Development server
-
-Initially & every time you make a change to the server code (which affects the client side code), rebundle the meteor client side code by running `npm run meteor-client:bundle`.
-
-Run `npm run api` to start a local meteor server (running on `http://localhost:3000/` with a connection to a local mongodb at port `3001`).
-Run `npm run start` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
-
-## Code scaffolding
-
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
-
-## Build
-
-Run `npm run build` to build the project. The build artifacts will be stored in the `dist/` directory. Use `npm run build-prod` for a production build with AOT.
-
-## Running unit tests
-
-Run `npm run test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `npm run e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
 
 Find detail for the Angular/Meteor integration here: https://github.com/Urigo/angular-meteor/tree/master/examples/AngularCLI
