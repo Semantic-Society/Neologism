@@ -4,7 +4,7 @@ import { BehaviorSubject, ConnectableObservable, Observable, range, Subject } fr
 import { debounceTime, distinctUntilChanged, map, merge, mergeAll, multicast, scan, startWith, switchMap } from 'rxjs/operators';
 import { N3Codec } from '../mxgraph/N3Codec';
 import { VocabulariesService } from './vocabularies.service';
-import { environment } from 'src/environments/environment';
+import { environment } from 'environments/environment';
 
 type IRI = string;
 
