@@ -4,6 +4,7 @@ import { BehaviorSubject, ConnectableObservable, Observable, range, Subject } fr
 import { debounceTime, distinctUntilChanged, map, merge, mergeAll, multicast, scan, startWith, switchMap } from 'rxjs/operators';
 import { N3Codec } from '../mxgraph/N3Codec';
 import { VocabulariesService } from './vocabularies.service';
+import { environment } from 'src/environments/environment';
 
 type IRI = string;
 
@@ -42,10 +43,7 @@ interface IDetails {
 export class RecommendationService {
 
     /** Neologism recommendation service endpoint base path */
-    // private static baseUrl = 'https://datalab.rwth-aachen.de/recommender/';
-    // private static baseUrl = 'http://localhost:8080/recommender/';
-        // private static baseUrl = 'http://localhost:8080/recommender/';
-    private static baseUrl = 'http://recommender:8080/recommender/';
+    private static baseUrl = `${environment.recommender.base}:${environment.recommender.port}/recommender/`;
 
     private classReq: Subject<{ queryGraph: string, queryTerm: string }>;
     private classResp: Subject<Array<{
