@@ -62,23 +62,25 @@ export class LoginPageComponent implements OnInit {
   }
 
   signUp(): void {
-    if (this.username !== '') {
+    // User registration disabled for live server
+    return;
+    
+    // if (this.username !== '') {
       
-      if(this.password === this.password2) {
-        Accounts.createUser({ email: this.username, password: this.password }, (error) => {
-            console.log(this);
-            if (error) {
-              this.createBasicErrorMessage('Sorry! User creation failed...')
-            } else {
-              this.createBasicErrorMessage('Success! Your account was successfully created', 'success')
-            }
-        });
-      } else {
-        this.createBasicErrorMessage('Your passwords are not identical')
-      }
-    } else {
-        this.createBasicErrorMessage('Please enter an email address!')
-    }
+    //   if(this.password === this.password2) {
+    //     Accounts.createUser({ email: this.username, password: this.password }, (error) => {
+    //         if (error) {
+    //           this.createBasicErrorMessage('Sorry! User creation failed...')
+    //         } else {
+    //           this.createBasicErrorMessage('Success! Your account was successfully created', 'success')
+    //         }
+    //     });
+    //   } else {
+    //     this.createBasicErrorMessage('Your passwords are not identical')
+    //   }
+    // } else {
+    //     this.createBasicErrorMessage('Please enter an email address!')
+    // }
   }
 
   constructor(private message: NzMessageService, private router: Router){
