@@ -86,10 +86,15 @@ export class VocabularyListComponent implements OnInit {
       const range = '<http://www.w3.org/2000/01/rdf-schema#range> ';
       const rdfsclass = '<http://www.w3.org/2000/01/rdf-schema#Class> ';
       const property = '<http://www.w3.org/2000/01/rdf-schema#Property> ';
+      const rdfsLabel = '<http://www.w3.org/2000/01/rdf-schema#label> ' ;
+      const rdfsDescription = '<http://www.w3.org/2000/01/rdf-schema#description> '
+      const xmlString = '<http://www.w3.org/2001/XMLSchema#string>'
       const allProps = Object.create(null);
       classes.forEach((clazz) => {
         const classURI = '<' + clazz.URI + '> ';
         rdf += classURI + a + rdfsclass + '.\n';
+        rdf += `${classURI} ${rdfsLabel} "${clazz.name}"^^${xmlString} .\n` ;
+        rdf += `${classURI} ${rdfsDescription} "${clazz.description}"^^${xmlString} .\n` ;
         clazz.properties.forEach((prop) => {
           const propURI = '<' + prop.URI + '> ';
           allProps[propURI] = propURI;
