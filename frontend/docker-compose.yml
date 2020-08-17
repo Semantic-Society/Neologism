@@ -6,13 +6,15 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        APP_ROOT_URL: ${APP_ROOT_URL:-http://localhost:3000}
     ports:
       - '3000:3000'
       - '80:80'
     depends_on:
       - mongo
     environment:
-      ROOT_URL: ${APP_ROOT_URL:-http://localhost}
+      ROOT_URL: ${ROOT_URL:-http://localhost}
       MONGO_URL: mongodb://mongo:27017/meteor
       PORT: 3000
 
