@@ -13,7 +13,7 @@
     "api2": "cd api && meteor",
     "api:reset": "cd api && meteor reset",
     "meteor-client:bundle": "meteor-client bundle -s api",
-    "meteor-client:bundle-server": "meteor-client bundle --url http://137.226.232.205:3000 -s api",
+    "meteor-client:bundle-server": "meteor-client bundle --url http://cloud33.dbis.rwth-aachen.de:3000 -s api",
     "meteor-client:bundle-server2": "meteor-client bundle --url ${npm_config_root_url:-http://localhost:3000} -s api"
   },
   "private": true,
