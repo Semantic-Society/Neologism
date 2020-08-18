@@ -4,6 +4,9 @@
 # - https://github.com/meteor/galaxy-images/blob/master/ubuntu/Dockerfile
 FROM ubuntu
 
+
+ARG APP_ROOT_URL=http://localhost:3000
+
 # Meteor version to build for; see ../build.sh
 ENV METEOR_VERSION 1.8
 
