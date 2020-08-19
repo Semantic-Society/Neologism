@@ -43,8 +43,8 @@ interface IDetails {
 export class RecommendationService {
 
     /** Neologism recommendation service endpoint base path */
-     static baseUrl = `${environment.recommender.base}:${environment.recommender.port}/recommender/`;
-
+     static baseUrl = `${environment.recommender.base}`+((environment.recommender.port=="")? "/recommender/" :`:${environment.recommender.port}/recommender/`);
+        
      classReq: Subject<{ queryGraph: string, queryTerm: string }>;
      classResp: Subject<Array<{
         comment: string;
@@ -73,6 +73,7 @@ export class RecommendationService {
             debounceTime(100),
             switchMap(({ queryGraph, queryTerm }) => {
                 // First request to recommendation service's -start- endpoint
+                console.log(RecommendationService.baseUrl);
                 const initialRequest = VocabulariesService.wrapFunkyObservables(
                     this._http.post(`${RecommendationService.baseUrl}startForNewClass?keyword=${queryTerm}`, queryGraph)
                 ).pipe(
