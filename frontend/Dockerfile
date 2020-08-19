@@ -5,7 +5,7 @@
 FROM ubuntu
 
 
-ARG APP_ROOT_URL=http://localhost:3000
+ARG APP_ROOT_URL=http://cloud33.dbis.rwth-aachen.de:3000
 
 # Meteor version to build for; see ../build.sh
 ENV METEOR_VERSION 1.8

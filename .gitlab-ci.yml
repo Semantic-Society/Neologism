@@ -21,5 +21,6 @@ docker_build_and_push:
     - docker push $IMAGE_TAG
     - docker tag $IMAGE_TAG $LATEST_TAG
     - docker push $LATEST_TAG
-#  only:
-#    - master
+  only:
+    - live/master
+    - master
