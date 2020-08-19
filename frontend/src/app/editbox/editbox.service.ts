@@ -7,8 +7,8 @@ import { map, startWith, combineLatest, switchMap, tap, take, withLatestFrom, fi
 
 @Injectable()
 export class EditboxService {
-    private alreadyThere2: Observable<any>
-    private property_recommendations: BehaviorSubject<Array<any>> = new BehaviorSubject([])
+     alreadyThere2: Observable<any>
+     property_recommendations: BehaviorSubject<Array<any>> = new BehaviorSubject([])
 
     constructor(
         private recommender: RecommendationService,

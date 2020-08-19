@@ -17,7 +17,7 @@
 
         <nz-breadcrumb-item>
           <nz-switch nzSize="small" [(ngModel)]="vocabEditorService.allowEditing"></nz-switch>
-          <nz-dropdown style="border-right: 10px: margin-bottom: 10px;" [nzDisabled]="!vocabEditorService.allowEditing">
+          <nz-dropdown style="border-right: 10px; margin-bottom: 10px;" [nzDisabled]="!vocabEditorService.allowEditing">
               <a nz-dropdown> {{ !vocabEditorService.allowEditing ? "Arrange Mode" : "Editing"}} <i nz-icon type="down"></i> </a>
               <ul nz-menu nzSelectable>
                 <li nz-menu-item (click)="openCreateClassModal()">
@@ -36,7 +36,7 @@
           nzShowSearch 
           nzPlaceHolder="Select Display Method" 
           [ngModel]="selectedViewMethod"
-          (ngModelChange)="changeViewMethod($event, selection)">
+          (ngModelChange)="changeViewMethod($event)">
         <nz-option nzCustomContent nzLabel="List View" nzValue="list-view"><i nz-icon type="ordered-list"></i> List View</nz-option>
         <nz-option nzCustomContent nzLabel="Graph View" nzValue="mxgraph"><i nz-icon type="gateway"></i> Graph View</nz-option>
       </nz-select>
@@ -78,7 +78,7 @@ nzTitle="Create New Class"
         <nz-form-label>Uri</nz-form-label>
         <nz-form-control>
           <nz-input-group nzAddOnBefore="http://" >
-            <input [(ngModel)]="newClass.uri" name="_uri" type="text"  nz-input placeholder="please enter uri" />
+            <input [(ngModel)]="newClass.URI" name="_uri" type="text"  nz-input placeholder="please enter uri" />
           </nz-input-group>
         </nz-form-control>
       </nz-form-item>

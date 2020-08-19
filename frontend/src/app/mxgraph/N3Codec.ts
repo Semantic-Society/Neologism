@@ -6,9 +6,9 @@ import { switchMap } from 'rxjs/operators';
 
 export class N3Codec {
     // See https://github.com/RubenVerborgh/N3.js
-    private absuluteURI = /^https?:\/\/|^\/\//i;
-    private n3parser = N3.Parser();
-    private store: N3.N3StoreWriter = N3.Store();
+     absuluteURI = /^https?:\/\/|^\/\//i;
+     n3parser = N3.Parser();
+     store: N3.N3StoreWriter = N3.Store();
 
     static neologismId(id: string) {
         return id ? new URL(id, 'neo://query/').toString() : null;
@@ -162,7 +162,7 @@ export class N3Codec {
     //     return this.store.addTriple(subject, predicate, object);
     // }
 
-    private getUrl(url: string) { // TODO: Not exactly foolproof
+     getUrl(url: string) { // TODO: Not exactly foolproof
         url = encodeURI(url);
         const conversionService = `http://rdf-translator.appspot.com/convert/detect/n3/${url}`;
         const toGet = this.absuluteURI.test(url) ? conversionService : url;

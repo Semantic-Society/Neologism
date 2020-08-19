@@ -5,13 +5,13 @@ import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 export class VocabularyEditorService {
 
     public allowEditing = false;
-    private selected_vocabularyId: BehaviorSubject<string> = new BehaviorSubject(null);
-    private _classes: BehaviorSubject<Observable<any>> = new BehaviorSubject(null);
-    private classSub: Subscription;
+     selected_vocabularyId: BehaviorSubject<string> = new BehaviorSubject(null);
+     _classes: BehaviorSubject<Observable<any>> = new BehaviorSubject(null);
+     classSub: Subscription;
 
-    private _visibleCreateDrawer: BehaviorSubject<Boolean> = new BehaviorSubject(false);
-    private _visibleEditDrawer: BehaviorSubject<Boolean> = new BehaviorSubject(false);
-    private _visibleSearchDrawer: BehaviorSubject<Boolean> = new BehaviorSubject(false);
+     _visibleCreateDrawer: BehaviorSubject<Boolean> = new BehaviorSubject(false);
+     _visibleEditDrawer: BehaviorSubject<Boolean> = new BehaviorSubject(false);
+     _visibleSearchDrawer: BehaviorSubject<Boolean> = new BehaviorSubject(false);
 
     constructor() {
     }

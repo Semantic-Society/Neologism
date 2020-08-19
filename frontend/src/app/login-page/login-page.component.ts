@@ -82,7 +82,7 @@ export class LoginPageComponent implements OnInit {
      }
   }
 
-  constructor(private message: NzMessageService, private router: Router){
+  constructor( private message: NzMessageService,  private router: Router){
 
   }
 

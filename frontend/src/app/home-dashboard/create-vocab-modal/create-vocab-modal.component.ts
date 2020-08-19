@@ -12,7 +12,7 @@ export class CreateVocabModalComponent implements OnInit {
   @Input() name: string;
   @Input() access: 'private' | 'public';
 
-  constructor(private modal: NzModalRef) { }
+  constructor( private modal: NzModalRef) { }
 
   ngOnInit() {
 

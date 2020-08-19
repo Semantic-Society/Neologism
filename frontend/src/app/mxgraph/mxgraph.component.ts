@@ -38,10 +38,10 @@ export class MxgraphComponent implements OnInit, OnDestroy {
     vocabularySub: Subscription;
 
     @ViewChild('view') mxGraphView: ElementRef;
-    protected mx: MxgraphService;
-    protected vocabID: string;
-    protected classes: Observable<IClassWithProperties[]>;
-    protected vocabulary: Ivocabulary;
+     mx: MxgraphService;
+     vocabID: string;
+     classes: Observable<IClassWithProperties[]>;
+     vocabulary: Ivocabulary;
 
     @HostListener('window:keydown', ['$event'])
     onKeyDown(event) {
@@ -52,9 +52,9 @@ export class MxgraphComponent implements OnInit, OnDestroy {
 
 
     constructor(
-        private route: ActivatedRoute, 
-        private vocabService: VocabulariesService,
-        private sideBarState: SideBarStateService) {
+         private route: ActivatedRoute, 
+         private vocabService: VocabulariesService,
+         private sideBarState: SideBarStateService) {
             this.editMode = this.sideBarState.editMode;
     }
 

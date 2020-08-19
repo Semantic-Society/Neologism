@@ -4,7 +4,7 @@ import { Meteor } from 'meteor/meteor';
 
 @Injectable()
 export class LoginAuthGuard implements CanActivate {
-  constructor(private router: Router) {}
+  constructor( private router: Router) {}
 
   canActivate(): boolean {
     //check if user currently is logged in

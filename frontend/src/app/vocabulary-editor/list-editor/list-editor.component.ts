@@ -9,7 +9,7 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class ListEditorComponent implements OnInit {
   vocabID: string;
-  constructor(private vocabEditorService: VocabularyEditorService) { }
+  constructor( private vocabEditorService: VocabularyEditorService) { }
 
   ngOnInit() {
     this.vocabID = this.vocabEditorService.vocabularyId;

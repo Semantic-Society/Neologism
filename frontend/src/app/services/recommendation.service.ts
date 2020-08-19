@@ -4,7 +4,7 @@ import { BehaviorSubject, ConnectableObservable, Observable, range, Subject } fr
 import { debounceTime, distinctUntilChanged, map, merge, mergeAll, multicast, scan, startWith, switchMap } from 'rxjs/operators';
 import { N3Codec } from '../mxgraph/N3Codec';
 import { VocabulariesService } from './vocabularies.service';
-import { environment } from 'environments/environment';
+import { environment } from '../../environments/environment';
 
 type IRI = string;
 
@@ -43,30 +43,30 @@ interface IDetails {
 export class RecommendationService {
 
     /** Neologism recommendation service endpoint base path */
-    private static baseUrl = `${environment.recommender.base}:${environment.recommender.port}/recommender/`;
+     static baseUrl = `${environment.recommender.base}:${environment.recommender.port}/recommender/`;
 
-    private classReq: Subject<{ queryGraph: string, queryTerm: string }>;
-    private classResp: Subject<Array<{
+     classReq: Subject<{ queryGraph: string, queryTerm: string }>;
+     classResp: Subject<Array<{
         comment: string;
         label: string;
         uri: string;
     }>>;
 
-    private propsReq: Subject<{ url: IRI }>;
-    private propsResp: Subject<Array<{
+     propsReq: Subject<{ url: IRI }>;
+     propsResp: Subject<Array<{
         comment: string;
         label: string;
         uri: string;
         range: string;
     }>>;
 
-    private static strip(html: string) { return html.replace(/<(?:.|\n)*?>/gm, ''); }
+     static strip(html: string) { return html.replace(/<(?:.|\n)*?>/gm, ''); }
 
     /**
      * Neologism Reccomendation Service Adapter
      * via Angular's observable http service
      */
-    constructor(private _http: HttpClient) {
+    constructor( private _http: HttpClient) {
         this.classReq = new Subject();
         this.classResp = new BehaviorSubject([]);
         this.classReq.pipe(

@@ -20,9 +20,9 @@ import { MatDialog } from '@angular/material';
 })
 
 export class VocablistComponent implements OnInit {
-  protected dataSource: Observable<Ivocabulary[]>; // new VocabularyDataSource();
+   dataSource: Observable<Ivocabulary[]>; // new VocabularyDataSource();
 
-  protected vocabForm = {
+   vocabForm = {
     name: '',
     description: '',
     uriPrefix: '',
@@ -31,10 +31,10 @@ export class VocablistComponent implements OnInit {
   displayedColumns = ['name', 'authors', 'description', 'uriPrefix', 'actions'];
 
   constructor(
-    protected router: Router,
-    private accessMngmt: AccessManagement, 
+     private router: Router,
+     private accessMngmt: AccessManagement, 
     public dialog: MatDialog,
-    private vocabService: VocabulariesService) { }
+     private vocabService: VocabulariesService) { }
 
   ngOnInit() {
     this.dataSource = this.vocabService.getVocabularies();
@@ -66,7 +66,7 @@ export class VocablistComponent implements OnInit {
     });
   }
 
-  protected downloadVocab(id: string, name: string) {
+   downloadVocab(id: string, name: string) {
     console.log('bla');
     const subscription = this.vocabService.getClassesWithProperties(id).pipe(
       // this delay is artifical to get the latest, final result and not an intermediary.

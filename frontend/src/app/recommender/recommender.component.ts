@@ -40,21 +40,21 @@ export class RecommenderComponent implements OnInit {
 
   // TODO MC: I don't know a better way to ensure that an old finishing request does not turn of the spinner OR fills the results.
   // TODO before it was be possible that an old, still pending request which returns turns off the spinner or fills the result list
-  private currentRequestNumber = 0;
+   currentRequestNumber = 0;
 
   @Input() vocabID: string;
 
   constructor(
-    private recommendationService: RecommendationService, 
-    private vocabService: VocabulariesService,
-    private sidebarService: SideBarStateService) {
+     private recommendationService: RecommendationService, 
+     private vocabService: VocabulariesService,
+     private sidebarService: SideBarStateService) {
   }
 
   @ViewChild('labelInput') labelInput: ElementRef;
 
   public showSpinner = false;
-  protected showSpinnerProp = false;
-  protected noPropertiesFound = false;
+   showSpinnerProp = false;
+   noPropertiesFound = false;
   recommendations: IClassRecommendation[] = [];
   selectedRecommendation: IClassRecommendation;
   isSelectedRecommendationVisible = false;

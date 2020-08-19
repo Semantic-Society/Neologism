@@ -28,7 +28,7 @@ export class LoginButtons {
   isLoggedIn: boolean;
   isSignup: boolean;
 
-  constructor(public dialog: MatDialog, private zone: NgZone) {
+  constructor(public dialog: MatDialog,  private zone: NgZone) {
     this._initAutorun();
     this.isSignup = false;
   }

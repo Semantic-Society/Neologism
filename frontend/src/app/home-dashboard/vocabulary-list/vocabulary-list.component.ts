@@ -79,7 +79,7 @@ export class VocabularyListComponent implements OnInit {
   }
 
   private saveClassesWithPropertiesAsFile(classes) {
-      console.error('Fails in vocabulary-list.component.ts, saveClassesWithPropertiesAsFile()')
+      //console.error('Fails in vocabulary-list.component.ts, saveClassesWithPropertiesAsFile()')
       let rdf = '';
       const a = '<http://www.w3.org/2000/01/rdf-schema#type> ';
       const domain = '<http://www.w3.org/2000/01/rdf-schema#domain> ';
