@@ -12,7 +12,7 @@ import { IClassWithProperties, VocabulariesService } from '../../services/vocabu
 
 export class StandardViewComponent implements OnInit, OnDestroy {
 
-  private subscription: Subscription;
+   subscription: Subscription;
   @Input() classes: Observable<IClassWithProperties[]>;
 
   constructor() { }

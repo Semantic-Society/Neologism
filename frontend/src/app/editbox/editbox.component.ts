@@ -64,7 +64,7 @@ export class EditboxComponent implements OnInit, OnChanges {
   };
 
   protected classToUpdate: Observable<IClassWithProperties>;
-  protected editToggle = false;
+  public editToggle = false;
 
   protected rangeOptions: Observable<Array<{ _id: string, name: string }>>;
 

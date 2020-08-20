@@ -10,28 +10,28 @@ type Predicates = Map<string, Set<string>>;
 
 export class MxgraphService {
 
-    private static mx: typeof m = require('mxgraph')({
+     static mx: typeof m = require('mxgraph')({
         mxImageBasePath: 'mxgraph/images',
         mxBasePath: 'mxgraph',
         mxLoadResources: false, // Disables synchronous loading of resources. Disables resource warnings for the moment.
     });
 
     graph: m.mxGraph;
-    private model: m.mxGraphModel;
-    private canvas: m.mxCell;
-    private transactionSelection;
-    private selection$: Observable<string>;
+     model: m.mxGraphModel;
+     canvas: m.mxCell;
+     transactionSelection;
+     selection$: Observable<string>;
 
-    private edgeSelection$: Observable<{ domainClazzID: string; edgeID: string }>;
+     edgeSelection$: Observable<{ domainClazzID: string; edgeID: string }>;
 
-    // private toolbar: m.mxToolbar;
+    //  toolbar: m.mxToolbar;
     // public codec: N3Codec;
 
-    private deletePress: Subject<any>;
+     deletePress: Subject<any>;
 
     constructor(
         private container: HTMLDivElement,
-        // private toolbarContainer: HTMLElement,
+        //  toolbarContainer: HTMLElement,
     ) {
         if (!MxgraphService.mx.mxClient.isBrowserSupported()) MxgraphService.mx.mxUtils.error('Browser is not supported!', 200, false);
 
@@ -202,7 +202,7 @@ export class MxgraphService {
         }).pipe(distinctUntilChanged());
     }
 
-    private getEdgeWithId(edgeID: string) {
+     getEdgeWithId(edgeID: string) {
         // TODO in principle getCell should work, but upon inserting there is an issue and the cell gets assingned a new id
         for (const key in this.model.cells) {
             if (this.model.cells.hasOwnProperty(key)) {
@@ -215,7 +215,7 @@ export class MxgraphService {
         throw new Error('edge with id ' + edgeID + ' not found');
     }
 
-    // private addToolbarItem(prototype: m.mxCell, image: string) {
+    //  addToolbarItem(prototype: m.mxCell, image: string) {
     //     // Function that is executed when the image is dropped on
     //     // the graph. The cell argument points to the cell under
     //     // the mousepointer if there is one.
@@ -241,7 +241,7 @@ export class MxgraphService {
     //     MxgraphService.mx.mxUtils.makeDraggable(img, this.graph, funct);
     //     return img;
     // }
-    // private addToolbarVertex(icon: string, w: number, h: number, style) {
+    //  addToolbarVertex(icon: string, w: number, h: number, style) {
     //     const vertex = new MxgraphService.mx.mxCell(null, new MxgraphService.mx.mxGeometry(0, 0, w, h), style);
     //     vertex.setVertex(true);
     //     const img = this.addToolbarItem(vertex, icon);
@@ -266,14 +266,14 @@ export class MxgraphService {
         this.graph.removeCells(this.graph.getChildCells(this.canvas, true, true)); // TODO: Assert this clear selection model
     }
 
-    private assertTransaction() {
+     assertTransaction() {
         if (this.model.updateLevel <= 0) {
             throw new Error('Start a transaction before making changes');
         }
     }
 
     /** Add edge as mxcell to actual graph */
-    private addEdge(
+     addEdge(
         id: string,
         label: string,
         v1: m.mxCell,
@@ -286,11 +286,11 @@ export class MxgraphService {
     }
 
     /** takes a number and rounds it to align with drawing grid */
-    private alignToGrid(x: number) {
+     alignToGrid(x: number) {
         return Math.round(x / this.graph.gridSize) * this.graph.gridSize;
     }
 
-    private viewCenter() {
+     viewCenter() {
         // -translate is the point at the top left of the screen
         let x: number = this.container.clientWidth / 2 / this.graph.view.scale - this.graph.view.translate.x;
 
@@ -398,7 +398,7 @@ export class MxgraphService {
     }
 
     /** Select an array of mxcells in the graph */
-    private selectCells(cells: m.mxCell[]) {
+     selectCells(cells: m.mxCell[]) {
         this.graph.setSelectionCells(cells);
     }
 

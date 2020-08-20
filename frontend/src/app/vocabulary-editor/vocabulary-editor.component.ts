@@ -65,11 +65,11 @@ export class VocabularyEditorComponent implements OnInit {
 
 
   // EDIT BOX DATA 
-    // protected alreadyThere: Array<{ comment: string; label: string; uri: string; range: string; }> = [];
-    protected alreadyThere2: Observable<Array<{ comment: string; label: string; uri: string; range: string; }>>;
+    //  alreadyThere: Array<{ comment: string; label: string; uri: string; range: string; }> = [];
+     alreadyThere2: Observable<Array<{ comment: string; label: string; uri: string; range: string; }>>;
 
-    // protected propertyRecommendations: Array<{ comment: string; label: string; uri: string; range: string; }> = [];
-    protected propertyRecommendations: Observable<Array<{ comment: string; label: string; uri: string; range: string; }>>
+    //  propertyRecommendations: Array<{ comment: string; label: string; uri: string; range: string; }> = [];
+     propertyRecommendations: Observable<Array<{ comment: string; label: string; uri: string; range: string; }>>
   
     // TODO: as this is an observable, does it need @Input?
     @Input() selectedClassID: string;
@@ -77,11 +77,11 @@ export class VocabularyEditorComponent implements OnInit {
     /**
      * If more classinfo is needed, it can be fetched in ngOnInit below.
      */
-    protected classInfo: Observable<{ label: string, description: string; url: string }>;
+     classInfo: Observable<{ label: string, description: string; url: string }>;
   
     // TODO: strictly speaking, this component does not need this as it only needs access to classes and properties.
     // However, more fine grained methods in the VocabulariesService are not yet implemented.
-    protected newClass = {
+     newClass = {
       name: '',
       URI: '',
       description: '',
@@ -93,13 +93,13 @@ export class VocabularyEditorComponent implements OnInit {
       }
     };
   
-    protected editedClass: {
+     editedClass: {
       name: string;
       URI: string;
       description: string;
     };
   
-    protected emptyClass = {
+     emptyClass = {
       name: '',
       URI: '',
       description: '',
@@ -111,21 +111,21 @@ export class VocabularyEditorComponent implements OnInit {
       }
     };
   
-    protected classToUpdate: Observable<IClassWithProperties>;
-    protected editToggle = false;
+     classToUpdate: Observable<IClassWithProperties>;
+     editToggle = false;
   
-    protected rangeOptions: Observable<Array<{ _id: string, name: string }>>;
+     rangeOptions: Observable<Array<{ _id: string, name: string }>>;
 
     // EDIT BOX DATA END 
 
 
   constructor(
-    private route: ActivatedRoute,
-    private router: Router, 
-    private vocabService: VocabulariesService,
-    private recommender: RecommendationService,
-    private editComponentService: EditComponentService,
-    private vocabEditorService: VocabularyEditorService) { }
+     private route: ActivatedRoute,
+     private router: Router, 
+     private vocabService: VocabulariesService,
+     private recommender: RecommendationService,
+     private editComponentService: EditComponentService,
+     public vocabEditorService: VocabularyEditorService) { }
 
 
   changeViewMethod(selection: string) {

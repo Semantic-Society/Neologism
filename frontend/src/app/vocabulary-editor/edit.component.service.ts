@@ -7,8 +7,8 @@ import { map, startWith, combineLatest, switchMap, tap, take, withLatestFrom, fi
 
 @Injectable()
 export class EditComponentService {
-    private alreadyThere2: Observable<any>
-    private property_recommendations: BehaviorSubject<Array<any>> = new BehaviorSubject([])
+     alreadyThere2: Observable<any>
+     property_recommendations: BehaviorSubject<Array<any>> = new BehaviorSubject([])
 
     constructor(
         private recommender: RecommendationService,
@@ -64,7 +64,7 @@ export class EditComponentService {
             
     }
 
-    private mergeOldandNewRecommendations(recommended_properties: Array<any>, existing_properties: Array<any>): Array<any>{
+     mergeOldandNewRecommendations(recommended_properties: Array<any>, existing_properties: Array<any>): Array<any>{
         console.log(recommended_properties, existing_properties, 'properties to check on')
         return recommended_properties
             .filter(property => {
@@ -89,7 +89,7 @@ export class EditComponentService {
 
       }
 
-    private handleRangeID(rec: IClassProperty, rangeID: string, selectedClassID:string, vocabID: string ) {
+     handleRangeID(rec: IClassProperty, rangeID: string, selectedClassID:string, vocabID: string ) {
 
 
         if(rangeID){
@@ -116,7 +116,7 @@ export class EditComponentService {
         }
     }
 
-    private extractClassProperties(theClass: IClassWithProperties) {
+     extractClassProperties(theClass: IClassWithProperties) {
         return theClass.properties
             .map(proberties => {
                 return {
@@ -128,7 +128,7 @@ export class EditComponentService {
             });
     }
 
-    private extractClassInfo(theClass: IClassWithProperties): IClassInfo {
+     extractClassInfo(theClass: IClassWithProperties): IClassInfo {
         return {
             label: theClass.name,
             description: theClass.description,

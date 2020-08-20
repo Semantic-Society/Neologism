@@ -1,7 +1,7 @@
 {
   "runtime": {
-    "DDP_DEFAULT_CONNECTION_URL": "http://localhost:3000",
-    "ROOT_URL": "http://localhost:3000",
+    "DDP_DEFAULT_CONNECTION_URL": "http://localhost/api",
+    "ROOT_URL": "http://localhost",
     "autoupdate": {
       "versions": {}
     }

@@ -144,7 +144,7 @@ export class VocabulariesService {
    * Gets the list of class IDs for the given vocabulary
    * @param vocabularyId
    */
-  private getClassIDsForVocabID(vocabularyId: string): Observable<meteorID[]> {
+   getClassIDsForVocabID(vocabularyId: string): Observable<meteorID[]> {
     const thevocabO: Observable<Array<{ classes: meteorID[] }>> = VocabulariesService.wrapFunkyObservables(
       Vocabularies.find({ _id: vocabularyId }, { fields: { classes: 1 }, limit: 1 })
     );

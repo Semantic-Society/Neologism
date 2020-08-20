@@ -7,12 +7,12 @@ import { SideBarStateService } from '../../services/state-services/sidebar-state
   templateUrl: './node-creator.html',
   styleUrls: ['./node-creator.css'],
 })
-export class NodeCreatorComponent {
+export class SideBarNodeCreatorComponent {
   @Input() vocabID: string;
-  constructor(private vocabService: VocabulariesService, private sidebarService: SideBarStateService) {
+  constructor( private vocabService: VocabulariesService, private sidebarService: SideBarStateService) {
   }
-
-  protected newClass = {
+  selectedClassID
+   newClass = {
     name: '',
     URI: '',
     description: '',
@@ -24,7 +24,7 @@ export class NodeCreatorComponent {
     }
   };
   
-  protected emptyClass = {
+   emptyClass = {
     name: '',
     URI: '',
     description: '',

@@ -23,8 +23,8 @@ import { MxgraphComponent } from './mxgraph/mxgraph.component';
 import { StandardViewComponent } from './mxgraph/standardView/standardView.component';
 import { RecommenderComponent } from './recommender/recommender.component';
 import { VocablistComponent } from './vocablist/vocablist.component';
-import {NodeCreatorComponent} from './sidebar-editors/node-creator/node-creator.component'
-
+import {SideBarNodeCreatorComponent} from './sidebar-editors/node-creator/node-creator.component'
+import {VocabNodeCreatorComponent} from './vocabulary-editor/node-creator/node-creator.component'
 // Pipes
 import { TruncateModule } from '@yellowspot/ng-truncate';
 import { TruncatedTextComponentComponent } from './truncated-text-component/truncated-text-component.component';
@@ -53,6 +53,7 @@ import { VocabularyEditorService } from './vocabulary-editor/vocabulary-editor.s
 import { ListEditorComponent } from './vocabulary-editor/list-editor/list-editor.component';
 import { NzDrawerService } from 'ng-zorro-antd';
 import { EditComponentService } from './vocabulary-editor/edit.component.service';
+import { from } from 'rxjs';
 
 registerLocaleData(en);
 
@@ -70,7 +71,8 @@ registerLocaleData(en);
     TruncatedTextComponentComponent,
     VocablistComponent,
     AddUserModalComponent,
-    NodeCreatorComponent,
+    SideBarNodeCreatorComponent,
+    VocabNodeCreatorComponent,
     CreateVocabModalComponent,
     VocabularyEditorComponent,
     SearchVocabulariesAutocompleteComponent,

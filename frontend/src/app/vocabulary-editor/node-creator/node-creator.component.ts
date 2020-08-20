@@ -3,17 +3,17 @@ import { VocabulariesService } from '../../../app/services/vocabularies.service'
 import { SideBarStateService } from '../../../app/services/state-services/sidebar-state.service';
 
 @Component({
-  selector: 'app-node-creator',
+  selector: 'vocab-app-node-creator',
   templateUrl: './node-creator.component.html',
   styleUrls: ['./node-creator.component.scss']
 })
-export class NodeCreatorComponent {
+export class VocabNodeCreatorComponent {
 
   @Input() vocabID: string;
-  constructor(private vocabService: VocabulariesService, private sidebarService: SideBarStateService) {
+  constructor( private vocabService: VocabulariesService,  private sidebarService: SideBarStateService) {
   }
 
-  protected newClass = {
+   newClass = {
     name: '',
     URI: '',
     description: '',
@@ -25,7 +25,7 @@ export class NodeCreatorComponent {
     }
   };
   
-  protected emptyClass = {
+   emptyClass = {
     name: '',
     URI: '',
     description: '',

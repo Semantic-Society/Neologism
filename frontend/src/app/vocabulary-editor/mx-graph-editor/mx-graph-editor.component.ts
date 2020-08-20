@@ -33,14 +33,14 @@ export class MxGraphEditorComponent implements OnInit {
   vocabularySub: Subscription;
 
   @ViewChild('view') mxGraphView: ElementRef;
-  protected mx: MxgraphService;
-  protected vocabID: string;
-  protected classes: Observable<IClassWithProperties[]>;
-  protected vocabulary: Ivocabulary;
+   mx: MxgraphService;
+   vocabID: string;
+   classes: Observable<IClassWithProperties[]>;
+   vocabulary: Ivocabulary;
 
   constructor(
-    private vocabService: VocabulariesService,
-    private vocabEditorService: VocabularyEditorService) { }
+     private vocabService: VocabulariesService,
+     private vocabEditorService: VocabularyEditorService) { }
 
 
     ngOnInit() {

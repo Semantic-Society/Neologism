@@ -7,7 +7,7 @@ export type SidebarChange = 'default' | 'edit' | 'recommend' | 'create'
 export class SideBarStateService {
 
     // it is necessarry to cast the string
-    private _editMode: BehaviorSubject<SidebarChange> = new BehaviorSubject(('default' as SidebarChange));
+     _editMode: BehaviorSubject<SidebarChange> = new BehaviorSubject(('default' as SidebarChange));
 
     constructor(){ }
 
@@ -51,7 +51,7 @@ export class SideBarStateService {
 
  */
 
-    private emitState(state: SidebarChange){
+     emitState(state: SidebarChange){
         this._editMode.next(state);
     }
 }

@@ -14,6 +14,6 @@ npm_config_root_url=$APP_ROOT_URL  meteor npm run meteor-client:bundle-server
 
 printf "\n[-] Building Angular bundle...\n\n"
 
-meteor npm run build
+meteor npm run prod
 
 cp -R dist/* $APP_BUNDLE_FOLDER/client

@@ -53,3 +53,4 @@ fabric.properties
 chromiumprofile
 .vscode
 /.project
+frontend/meteor-client.config.json
