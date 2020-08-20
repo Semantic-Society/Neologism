@@ -1,7 +1,7 @@
 export const environment = {
   production: true,
   recommender:{
-    base:"http://recommender",
-    port:"8080",
+    base:"http://cloud33.dbis.rwth-aachen.de",
+    port:"",
   } 
 };
