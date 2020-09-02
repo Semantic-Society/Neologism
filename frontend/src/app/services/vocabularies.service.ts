@@ -7,6 +7,13 @@ import { catchError, debounceTime, distinctUntilChanged, filter, flatMap, map, s
 import { Classes, Properties, Vocabularies } from '../../../api/collections';
 import { Iclass, Iproperty, Ivocabulary, meteorID } from '../../../api/models';
 
+const callWithPromise = (method, ...myParameters) => new Promise((resolve, reject) => {
+  Meteor.call(method, ...myParameters, (err, res) => {
+      if (err) reject(err);
+      resolve(res);
+  });
+});
+
 export interface IClassWithProperties {
   _id: string; // Mongo generated ID
   name: string;
@@ -314,6 +321,17 @@ export class VocabulariesService {
       distinctUntilChanged()
     );
     return res;
+  }
+
+  searchVocabByName(searchString: string, id: string): any {
+
+    return Vocabularies.find({
+      name: { '$regex': searchString, '$options': 'i' },
+      authors: id,
+    },
+      {
+        limit: 10
+      }).fetch()
   }
 
 }

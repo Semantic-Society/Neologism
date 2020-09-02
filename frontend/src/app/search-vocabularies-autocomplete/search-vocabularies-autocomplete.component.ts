@@ -1,5 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
-
+import { VocabulariesService } from '../services/vocabularies.service';
+import { Iclass, Iproperty, Ivocabulary, meteorID } from '../../../api/models';
+import { Meteor } from 'meteor/meteor';
 @Component({
   selector: 'search-vocabularies-autocomplete',
   templateUrl: './search-vocabularies-autocomplete.component.html',
@@ -8,24 +10,22 @@ import { Component, OnInit, Input } from '@angular/core';
 export class SearchVocabulariesAutocompleteComponent implements OnInit {
   @Input() width: string;
   inputValue: string;
-  options = [];
+  vocabs: any;
 
-  constructor() { }
+  constructor(private vocabService: VocabulariesService) { }
 
   ngOnInit() {
+    this.vocabs = [];
   }
 
-  onChange(value: string): void {
-    this.options = new Array(this.getRandomInt(15, 5)).join('.').split('.')
-    .map((item, idx) => ({
-      value,
-      category: `${value}${idx}`,
-      count: this.getRandomInt(200, 100),
-    }));
-  }
 
-   getRandomInt(max: number, min: number = 0): number {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
+  onChange($event: Event): void {
+    const value = ($event.target as HTMLInputElement).value;
+    if (!value) {
+      this.vocabs = [];
+    } else {
+      this.vocabs = this.vocabService.searchVocabByName(value, Meteor.userId())
+    }
   }
-
 }
+
