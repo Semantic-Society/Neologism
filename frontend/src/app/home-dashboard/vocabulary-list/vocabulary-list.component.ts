@@ -6,6 +6,8 @@ import { NzModalService } from 'ng-zorro-antd';
 import { MatDialog } from '@angular/material';
 import { AddUserModalComponent } from '../../../app/vocablist/components/add-user-modal/add-user-modal.component';
 import { Router } from '@angular/router';
+import {HTTP} from 'meteor/http'
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-vocabulary-list',
@@ -43,18 +45,14 @@ export class VocabularyListComponent implements OnInit {
 
   downloadVocab(id: string, name: string) {
     console.log('downloading vocabulary: ' + id + '...');
-
-    if (name === '' || name === undefined ) name = 'vocab-' + id;
-
-    this.vocabService.getClassesWithProperties(id).pipe(
-      // this delay is artifical to get the latest, final result and not an intermediary.
-      // Using 'last would be more natural, but does not seem to work (this is a query on a life collection).
-      tap(x => console.log(x)),
-      debounceTime(100),
-      take(1)
-      ).subscribe(
-        classes => this.saveClassesWithPropertiesAsFile(classes));
-
+    HTTP.get(`${environment.api.base}methods/downloadVocab/${id}`, {
+    }, function (err, res) {
+      console.log(res)
+      const blob = new Blob([res.content], { type: 'text/plain' });
+      saveAs(blob, name + '.rdf');
+      return;
+    });
+    
   }
 
 
@@ -76,41 +74,6 @@ export class VocabularyListComponent implements OnInit {
 
 
   ngOnInit() {
-  }
-
-  private saveClassesWithPropertiesAsFile(classes) {
-      //console.error('Fails in vocabulary-list.component.ts, saveClassesWithPropertiesAsFile()')
-      let rdf = '';
-      const a = '<http://www.w3.org/2000/01/rdf-schema#type> ';
-      const domain = '<http://www.w3.org/2000/01/rdf-schema#domain> ';
-      const range = '<http://www.w3.org/2000/01/rdf-schema#range> ';
-      const rdfsclass = '<http://www.w3.org/2000/01/rdf-schema#Class> ';
-      const property = '<http://www.w3.org/2000/01/rdf-schema#Property> ';
-      const rdfsLabel = '<http://www.w3.org/2000/01/rdf-schema#label> ' ;
-      const rdfsDescription = '<http://www.w3.org/2000/01/rdf-schema#description> '
-      const xmlString = '<http://www.w3.org/2001/XMLSchema#string>'
-      const allProps = Object.create(null);
-      classes.forEach((clazz) => {
-        const classURI = '<' + clazz.URI + '> ';
-        rdf += classURI + a + rdfsclass + '.\n';
-        rdf += `${classURI} ${rdfsLabel} "${clazz.name}"^^${xmlString} .\n` ;
-        rdf += `${classURI} ${rdfsDescription} "${clazz.description}"^^${xmlString} .\n` ;
-        clazz.properties.forEach((prop) => {
-          const propURI = '<' + prop.URI + '> ';
-          allProps[propURI] = propURI;
-          const rangeClassURI = '<' + prop.range.URI + '>';
-          rdf += propURI + domain + classURI + ' .\n';
-          rdf += propURI + range + rangeClassURI + ' .\n';
-        });
-      });
-      // allProps created with Object.create(null);
-      // tslint:disable-next-line:forin
-      for (const prop in allProps) {
-        rdf += prop + a + property + ' .\n';
-      }
-
-      const blob = new Blob([rdf], { type: 'text/plain' });
-      saveAs(blob, name + '.rdf');
   }
 
 }
