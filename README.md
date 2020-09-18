@@ -1,7 +1,7 @@
 # Frontend
 
 ## Architecture overview
-[Neologism architecture diagram](https://app.diagrams.net/#G1kQOoR5Egi8TAk_P-l9mEZVdkiu2BeH0x)
+[Neologism architecture diagram](https://drive.google.com/file/d/1kQOoR5Egi8TAk_P-l9mEZVdkiu2BeH0x/view?usp=sharing)
 
 
 ![neologism architecture](NeologismArchitecture.png "Neologism architecture")
