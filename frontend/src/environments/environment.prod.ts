@@ -3,5 +3,8 @@ export const environment = {
   recommender:{
     base:"http://cloud33.dbis.rwth-aachen.de",
     port:"",
-  } 
+  } ,
+  api:{
+    base:"api/",
+  }  
 };

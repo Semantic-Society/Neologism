@@ -25,3 +25,5 @@ npm-bcrypt
 reywood:publish-composite
 simple:rest
 simple:rest-accounts-password
+simple:json-routes
+http

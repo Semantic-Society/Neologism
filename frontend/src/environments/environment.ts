@@ -8,5 +8,8 @@ export const environment = {
   recommender:{
     base:"http://recommender",
     port:"8080",
-  } 
+  },
+  api:{
+    base:"api/",
+  }  
 };
