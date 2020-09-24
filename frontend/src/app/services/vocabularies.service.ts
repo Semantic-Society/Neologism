@@ -4,7 +4,7 @@ import { MeteorObservable, zoneOperator } from 'meteor-rxjs';
 import { combineLatest, empty, Observable, of, throwError } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, filter, flatMap, map, switchMap } from 'rxjs/operators';
 
-import { Classes, Properties, Vocabularies } from '../../../api/collections';
+import { Classes, Properties, Users, Vocabularies } from '../../../api/collections';
 import { Iclass, Iproperty, Ivocabulary, meteorID } from '../../../api/models';
 
 const callWithPromise = (method, ...myParameters) => new Promise((resolve, reject) => {
@@ -332,6 +332,13 @@ export class VocabulariesService {
       {
         limit: 10
       }).fetch()
+  }
+
+  // gets first email address for the user if any
+  getEmailAddress(userId:string){
+    const user= Users.findOne({_id:userId
+    })
+    return (user.emails)?user.emails[0].address:"";
   }
 
 }

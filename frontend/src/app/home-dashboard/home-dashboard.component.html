@@ -2,7 +2,7 @@
   <!-- SIDEBAR   -->
   <nz-sider style="background: #fff; padding:0;" nzCollapsible [(nzCollapsed)]="isCollapsed" [nzTrigger]="triggerTemplate">
 
-    <img class="logo-fit" src="/assets/fraunhofer_logo.jpg"/>
+    <img class="logo-fit" src="/assets/neologism.png"/>
 
     <ul nz-menu style="margin-top: 15px;" [nzTheme]="'light'" [nzMode]="'inline'" [nzInlineCollapsed]="isCollapsed">
       <li nz-submenu>
@@ -39,17 +39,18 @@
 
     <!-- Main Content HEADER -->
     <nz-content style=" margin:0 16px">
-      <nz-breadcrumb style="margin:16px 0;">
+        <!-- Temporarily breadcrumbs are disabled as found no need  -->
+      <!-- <nz-breadcrumb style="margin:16px 0;">
         <nz-breadcrumb-item>User</nz-breadcrumb-item>
         <nz-breadcrumb-item>{{ user }}</nz-breadcrumb-item>
-      </nz-breadcrumb>
+      </nz-breadcrumb> -->
 
       <!-- Main Content Content -->
       <div style="padding:24px;">
         <app-vocabulary-list></app-vocabulary-list>
       </div>
     </nz-content>
-    <nz-footer style="text-align: center;">Neologism2 - Fraunhofer FIT 2020</nz-footer>
+    <nz-footer style="text-align: center;">Neologism - 2020</nz-footer>
   </nz-layout>
 </nz-layout>
 
