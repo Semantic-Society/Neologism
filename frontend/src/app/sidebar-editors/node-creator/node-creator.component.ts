@@ -43,9 +43,9 @@ export class SideBarNodeCreatorComponent {
     this.newClass = this.emptyClass;
   }
 
-  updateURI($event){    
+  autoCompleteURI($event){    
     console.log($event);
-    this.newClass.URI=`${this.uriPrefix}#${$event.target.value}`
+    this.newClass.URI=`${this.uriPrefix}${$event.target.value}`
 
  }
 
