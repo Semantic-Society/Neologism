@@ -11,7 +11,7 @@
       <td>
         <div style="max-width: 100px;">
           <nz-avatar *ngFor="let author of data.authors" 
-            nzTitle="{{author}}" 
+            nzTitle={{this.vocabService.getEmailAddress(author)}}
             nzPlacement="top" 
             nz-tooltip 
             nzIcon="user" >

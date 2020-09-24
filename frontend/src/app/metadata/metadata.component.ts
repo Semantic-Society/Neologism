@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 
 import { Vocabularies } from '../../../api/collections';
-import { Ivocabulary } from '../../../api/models';
+import { IvocabularyExtended } from '../../../api/models';
 
 @Component({
   selector: 'app-metadata',
@@ -9,7 +9,7 @@ import { Ivocabulary } from '../../../api/models';
   styleUrls: ['./metadata.component.css']
 })
 export class MetadataComponent {
-  @Input() vocabulary: Ivocabulary;
+  @Input() vocabulary: IvocabularyExtended;
 
   constructor() { }
 

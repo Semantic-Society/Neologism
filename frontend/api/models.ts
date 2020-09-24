@@ -54,3 +54,8 @@ export interface Iproperty {
   URI: string;
   range: meteorID;
 }
+
+
+export interface IvocabularyExtended extends Ivocabulary{
+  authorsEmailAddress:string
+}
