@@ -9,7 +9,6 @@ import { SideBarStateService } from '../../services/state-services/sidebar-state
 })
 export class SideBarNodeCreatorComponent {
   @Input() vocabID: string;
-  @Input() uriPrefix: string;
   constructor( private vocabService: VocabulariesService, private sidebarService: SideBarStateService) {
   }
   selectedClassID
@@ -42,12 +41,6 @@ export class SideBarNodeCreatorComponent {
     this.vocabService.addClass(this.vocabID, this.newClass.name, this.newClass.description, this.newClass.URI);
     this.newClass = this.emptyClass;
   }
-
-  updateURI($event){    
-    console.log($event);
-    this.newClass.URI=`${this.uriPrefix}#${$event.target.value}`
-
- }
 
   resetSidebarState(){
     this.sidebarService.changeSidebarToDefault()

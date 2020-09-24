@@ -214,7 +214,6 @@ export class MxgraphComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
-        // console.log("destroy")
         this.mx.destroy();
         this.currentSelectionSub.unsubscribe();
         this.vocabularySub.unsubscribe();

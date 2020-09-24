@@ -16,11 +16,10 @@
       </div>
       <div class="name-plus-uri">
         <mat-form-field class="full-width name">
-          <input matInput placeholder="Class Name" value="" (change)="updateURI($event)" [(ngModel)]="newClass.name">
+          <input matInput placeholder="Class Name" value="" [(ngModel)]="newClass.name">
         </mat-form-field>
         <mat-form-field class="full-width uri">
-          
-          <input matInput placeholder="uri" [value]="newClass.URI" readonly>
+          <input matInput placeholder="uri" value="" [(ngModel)]="newClass.URI">
         </mat-form-field>
       </div>
     </div>
