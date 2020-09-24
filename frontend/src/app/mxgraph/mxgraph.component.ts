@@ -3,11 +3,11 @@ import {Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild} from 
 import { ActivatedRoute } from '@angular/router';
 import { mxgraph as m } from 'mxgraph';
 import { Observable, Subscription } from 'rxjs';
-import { combineLatest, debounceTime, distinctUntilChanged, filter} from 'rxjs/operators';
+import { combineLatest, debounceTime, distinctUntilChanged, filter, map} from 'rxjs/operators';
 
 import { MxgraphService } from './mxgraph';
 
-import { Ivocabulary, meteorID } from '../../../api/models';
+import { Ivocabulary, meteorID,IvocabularyExtended } from '../../../api/models';
 import { IClassWithProperties, VocabulariesService } from '../services/vocabularies.service';
 
 // import sidebar state dep.
@@ -41,7 +41,7 @@ export class MxgraphComponent implements OnInit, OnDestroy {
      mx: MxgraphService;
      vocabID: string;
      classes: Observable<IClassWithProperties[]>;
-     vocabulary: Ivocabulary;
+     vocabulary: IvocabularyExtended;
 
     @HostListener('window:keydown', ['$event'])
     onKeyDown(event) {
@@ -111,7 +111,20 @@ export class MxgraphComponent implements OnInit, OnDestroy {
             }
         );
 
-        this.vocabularySub = this.vocabService.getVocabulary(this.vocabID).subscribe(
+        this.vocabularySub = this.vocabService.getVocabulary(this.vocabID).pipe(map((vocab,index)=>{
+            let emailAddress=""
+            vocab.authors.forEach(author=>emailAddress+=this.vocabService.getEmailAddress(author)+" ")
+            let newVocab= <IvocabularyExtended>{}; 
+            newVocab._id=vocab._id;
+            newVocab.authorsEmailAddress=emailAddress;
+            newVocab.authors=vocab.authors;
+            newVocab.classes=vocab.classes;
+            newVocab.description=vocab.description;
+            newVocab.name=vocab.name;
+            newVocab.public=vocab.public;
+            newVocab.uriPrefix=vocab.uriPrefix;
+            return newVocab;
+        })).subscribe(
             (v) => this.vocabulary = v,
             (e) => console.log(e),
             () => this.vocabulary = null
