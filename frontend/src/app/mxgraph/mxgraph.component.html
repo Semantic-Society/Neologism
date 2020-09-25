@@ -6,7 +6,7 @@
     <ng-container>       
       <app-editbox *ngSwitchCase="'edit'" [selectedClassID]="this.currentSelection" [vocabID]="this.vocabID"></app-editbox>
       <app-recommender *ngSwitchCase="'recommend'" [vocabID]="this.vocabID"></app-recommender>
-      <app-node-creator *ngSwitchCase="'create'" [vocabID]="this.vocabID"></app-node-creator>
+      <app-node-creator *ngSwitchCase="'create'" [vocabID]="this.vocabID" [uriPrefix]="vocabulary.uriPrefix"></app-node-creator>
     </ng-container>
 
     <div class="button-div">
