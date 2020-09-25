@@ -8,6 +8,12 @@
 
 ## Installation
 
+__Easy usage via Docker:__
+1. Run `docker build` from within the `frontend` folder.
+2. `docker-compose build`
+3. `docker-compose up`
+
+__Custom setup:__
 1. Clone the repository
 2. Install meteor using `curl https://install.meteor.com/ | sh`
 3. Install mongo from https://docs.mongodb.com/manual/tutorial/install-mongodb-on-ubuntu/
@@ -15,26 +21,14 @@
 5. Set node version to 10.15.0
 6. Run `npm install` in the `frontend` folder
 7. Run the meteor bundler (see below)
+  - Initially & every time you make a change to the server code (which affects the client side code), rebundle the meteor client side code by running `npm run meteor-client:bundle`.
+  - Run `npm run api` to start a local meteor server (running on `http://localhost:3000/` with a connection to a local mongodb at port `3001`).
+  - Run `npm run start` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+  - Find detail for the Angular/Meteor integration here: https://github.com/Urigo/angular-meteor/tree/master/examples/AngularCLI
 
-## Development server
 
-Initially & every time you make a change to the server code (which affects the client side code), rebundle the meteor client side code by running `npm run meteor-client:bundle`.
-
-Run `npm run api` to start a local meteor server (running on `http://localhost:3000/` with a connection to a local mongodb at port `3001`).
-Run `npm run start` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
-
-### Docker Installation (from within the frontend folder)
-
-1. `docker-compose build`
-2. `docker-compose up`
-3. On host: `npm install`, `npm run meteor-client:bundle`, then `npm run start`
-  - If you get syntax error on Windows, follow these steps
-    - `npm install -g npm` to upgrade npm to enable support for python3 
-    - (Might be optional) `npm install --global windows-build-tools` in an admin cmd or powershell and try again (ATTENTION: THIS MIGHT TRIGGER A REBOOT)
-    - Follow the accepted answer at https://stackoverflow.com/questions/57879150/how-can-i-solve-error-gypgyp-errerr-find-vsfind-vs-msvs-version-not-set-from-c (takes about 10 min, restart is actually not required)
-
-Find detail for the Angular/Meteor integration here: https://github.com/Urigo/angular-meteor/tree/master/examples/AngularCLI
-
+## Usage
+After starting Neologism, navigate to `localhost` (or whatever server you are hosting it on), and follow the user interface.
 
 ## MongoDB Schema
 
