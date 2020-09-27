@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CreateVocabModalComponent } from './create-vocab-modal/create-vocab-modal.component';
 import { NzModalService } from 'ng-zorro-antd';
@@ -14,9 +14,9 @@ export class HomeDashboardComponent implements OnInit {
 
   isCollapsed = false;
   triggerTemplate = null;
-  user = Meteor.userId()
+  userId = Meteor.userId()
+  username:String;
   @ViewChild('trigger') customTrigger: TemplateRef<void>;
-
 
   constructor(
     private router: Router, 
@@ -31,8 +31,10 @@ export class HomeDashboardComponent implements OnInit {
   }
 
   ngOnInit(){
-    
+    // TODO: remove this after preventing data race condition with child component
+    setTimeout(()=> this.username = this.vocabService.getEmailAddress(this.userId),1000)
   }
+
 
   onLogout(): void {
     Meteor.logout();
