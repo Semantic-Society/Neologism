@@ -62,10 +62,6 @@ export class VocabulariesService {
         .pipe(zoneOperator())
     );
 
-       
-      // const userSubs=Users.find()
-      //   .pipe(zoneOperator())
-
     return Observable.create((observer: any) => {
       const subscription = localQuery.subscribe(observer);
   
