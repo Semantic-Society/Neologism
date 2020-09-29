@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 import { MeteorObservable, zoneOperator } from 'meteor-rxjs';
 import { combineLatest, empty, Observable, of, throwError } from 'rxjs';
-import { catchError, debounceTime, distinctUntilChanged, filter, flatMap, map, switchMap } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, filter, flatMap, map, switchMap } from 'rxjs/operators';
 
 import { Classes, Properties, Users, Vocabularies } from '../../../api/collections';
 import { Iclass, Iproperty, Ivocabulary, meteorID } from '../../../api/models';
@@ -64,7 +64,7 @@ export class VocabulariesService {
 
     return Observable.create((observer: any) => {
       const subscription = localQuery.subscribe(observer);
-
+  
       // Now let's return a tear-down/unsubscribe function
       return () => {
         subscription.unsubscribe();
@@ -336,9 +336,15 @@ export class VocabulariesService {
 
   // gets first email address for the user if any
   getEmailAddress(userId:string){
-    const user= Users.findOne({_id:userId
-    })
-    return (user.emails)?user.emails[0].address:"";
+    try {
+      const user= Users.findOne({_id:userId
+      })
+  
+      return  (user!.emails[0].address)? user.emails[0].address:"" ;
+    } catch (error) {
+      console.log(error)
+    }
+
   }
 
 }

@@ -7,18 +7,21 @@ import { Classes, Properties, Users, Vocabularies } from '../collections';
 
 // There are no permission checks yet on  a lot of published data. The case of public data, example 
 // github punlic repos should be integrated in designing the access to the publisghed vocab data. 
-Meteor.publish('vocabularies', function (): Mongo.Cursor<Ivocabulary> {
-
-    return Vocabularies.collection.find({ $or: [{ authors: this.userId }, { public: true }] });
+Meteor.publish('vocabularies', function (): any {
+    const authors=[]
+    Vocabularies.collection.find({ $or: [{ authors: this.userId }, { public: true }] }).forEach(vocab=>{
+        authors.push(...vocab.authors)
+    })
+    return [
+        Vocabularies.collection.find({ $or: [{ authors: this.userId }, { public: true }] }),
+        Users.collection.find({
+            _id: { $in : Array.from(new Set(authors))},
+            
+     },{
+        fields: { "emails.address": 1 }
+      })]
 });
 
-/* Meteor.publish('users', function (email: string): Mongo.Cursor<Iuser> {
-    return Users.collection.find({
-        "emails.address": { $in : [email]},
-        // _id: { $not : this.userId }
-     },
-     {limit: 10})
-}); */
 
 (Meteor as any).publishComposite('vocabDetails', function (vocabularyID: meteorID): PublishCompositeConfig<Ivocabulary> {
     if (!this.userId) {
@@ -38,7 +41,7 @@ Meteor.publish('vocabularies', function (): Mongo.Cursor<Ivocabulary> {
                 find: (vocab) => {
                     return Users.collection.find(
                         { _id: { $in: vocab.authors } },
-                        { fields: { profile: 1 } }
+                        { fields: { profile: 1 , "emails.address":1} }
                     );
                 }
             } as PublishCompositeConfig1<Ivocabulary, Iuser>,
