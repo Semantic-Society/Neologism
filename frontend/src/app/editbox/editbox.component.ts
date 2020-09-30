@@ -7,7 +7,7 @@ import {IClassWithProperties, VocabulariesService} from '../services/vocabularie
 import { SideBarStateService } from '../services/state-services/sidebar-state.service';
 import { EditboxService } from './editbox.service';
 import { IClassProperty } from '../models/editbox.model';
-
+import {FormBuilder, FormControl, FormGroup, FormGroupDirective, Validators} from '@angular/forms';
 @Component({
   selector: 'app-editbox',
   templateUrl: './editbox.component.html',
@@ -36,14 +36,10 @@ export class EditboxComponent implements OnInit, OnChanges {
   protected newClass = {
     name: '',
     URI: '',
-    description: '',
-    property: {
-      name: '',
-      URI: '',
-      description: '',
-      range: ''
-    }
+    description: ''
   };
+
+  formProp: FormGroup;
 
   protected editedClass: {
     name: string;
@@ -54,13 +50,7 @@ export class EditboxComponent implements OnInit, OnChanges {
   protected emptyClass = {
     name: '',
     URI: '',
-    description: '',
-    property: {
-      name: '',
-      URI: '',
-      description: '',
-      range: ''
-    }
+    description: ''
   };
 
   protected classToUpdate: Observable<IClassWithProperties>;
@@ -72,8 +62,16 @@ export class EditboxComponent implements OnInit, OnChanges {
     private vocabService: VocabulariesService,
     private recommender: RecommendationService,
     private sidebarService: SideBarStateService,
-    private editboxService: EditboxService) {
-  
+    private editboxService: EditboxService,
+    fb: FormBuilder) {
+      
+      this.formProp = fb.group({
+        name :['', Validators.required],
+        URI :['', Validators.required],
+        range :['', Validators.required],
+        description:[''],
+
+      });
   }
 
   ngOnInit() {
@@ -140,10 +138,11 @@ export class EditboxComponent implements OnInit, OnChanges {
     this.newClass = this.emptyClass;
   }
 
-  addProperty() {
-    if (this.selectedClassID !== this.newClass.property.range) {
-      this.vocabService.addProperty(this.selectedClassID, this.newClass.property.name, this.newClass.property.description, this.newClass.property.URI, this.newClass.property.range);
-      this.newClass = this.emptyClass;
+  addProperty(formDirective: FormGroupDirective) {
+    if (this.selectedClassID !== this.formProp.value.range) {
+      this.vocabService.addProperty(this.selectedClassID, this.formProp.value.name, this.formProp.value.description, this.formProp.value.URI, this.formProp.value.range);
+      formDirective.resetForm();
+      this.formProp.reset()
     }
   }
 

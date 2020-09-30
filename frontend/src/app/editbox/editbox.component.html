@@ -116,17 +116,18 @@
           </mat-expansion-panel-header>
           <div class="add-properties-container" *ngIf="selectedClassID">
             <div class="button-full-width">
+              <form [formGroup]="formProp" (ngSubmit)="addProperty(formDirective)" #formDirective="ngForm" >
               <mat-form-field class="prop-input">
-                <input matInput placeholder="Name" value="" [(ngModel)]="newClass.property.name">
+                <input matInput placeholder="Name" value="" formControlName="name" required>
               </mat-form-field>
               <mat-form-field class="prop-input">
-                <input matInput placeholder="URI" value="" [(ngModel)]="newClass.property.URI">
+                <input matInput placeholder="URI" value="" formControlName="URI" required>
               </mat-form-field>
               <mat-form-field class="prop-input">
-                <textarea matInput value="" [(ngModel)]="newClass.property.description"></textarea>
+                <textarea matInput value="" formControlName="description"></textarea>
               </mat-form-field>
               <mat-form-field class="class-dropdown">
-                <mat-select placeholder="Range" [(ngModel)]="newClass.property.range">
+                <mat-select placeholder="Range" formControlName="range" required>
                   <ng-container *ngFor="let c of rangeOptions | async">
                     <mat-option [value]="c._id" *ngIf="c._id != selectedClassID">
                       {{ c.name }}
@@ -134,7 +135,8 @@
                   </ng-container>
                 </mat-select>
               </mat-form-field>
-              <button mat-raised-button color="primary" (click)="addProperty()">Add Property</button>
+              <button mat-raised-button color="primary" type="submit" [disabled]="!formProp.valid">Add Property</button>
+            </form>
             </div>
           </div>
         </mat-expansion-panel>
