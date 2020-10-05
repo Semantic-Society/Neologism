@@ -129,7 +129,7 @@
               <mat-form-field class="class-dropdown">
                 <mat-select placeholder="Range" formControlName="range" required>
                   <ng-container *ngFor="let c of rangeOptions | async">
-                    <mat-option [value]="c._id" *ngIf="c._id != selectedClassID">
+                    <mat-option [value]="c._id" >
                       {{ c.name }}
                     </mat-option>
                   </ng-container>
