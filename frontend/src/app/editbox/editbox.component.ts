@@ -139,11 +139,9 @@ export class EditboxComponent implements OnInit, OnChanges {
   }
 
   addProperty(formDirective: FormGroupDirective) {
-    if (this.selectedClassID !== this.formProp.value.range) {
       this.vocabService.addProperty(this.selectedClassID, this.formProp.value.name, this.formProp.value.description, this.formProp.value.URI, this.formProp.value.range);
       formDirective.resetForm();
       this.formProp.reset()
-    }
   }
 
   toggleEdit() {
