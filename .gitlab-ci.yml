@@ -24,3 +24,4 @@ docker_build_and_push:
   only:
     - live/master
     - master
+    - issue/61
