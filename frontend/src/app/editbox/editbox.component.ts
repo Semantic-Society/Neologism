@@ -1,13 +1,13 @@
-import {Component, Input, OnChanges, OnInit} from '@angular/core';
-import {Observable, of} from 'rxjs';
-import {combineLatest, map, startWith, switchMap, tap} from 'rxjs/operators';
+import { Component, Input, OnChanges, OnInit } from '@angular/core';
+import { Observable, of } from 'rxjs';
+import { combineLatest, filter, map, startWith, switchMap, tap } from 'rxjs/operators';
 
-import {RecommendationService} from '../services/recommendation.service';
-import {IClassWithProperties, VocabulariesService} from '../services/vocabularies.service';
+import { RecommendationService } from '../services/recommendation.service';
+import { IClassWithProperties, VocabulariesService } from '../services/vocabularies.service';
 import { SideBarStateService } from '../services/state-services/sidebar-state.service';
 import { EditboxService } from './editbox.service';
-import { IClassProperty } from '../models/editbox.model';
-import {FormBuilder, FormControl, FormGroup, FormGroupDirective, Validators} from '@angular/forms';
+import { IClassProperties, IClassProperty } from '../models/editbox.model';
+import { FormArray, FormBuilder, FormControl, FormGroup, FormGroupDirective, Validators } from '@angular/forms';
 @Component({
   selector: 'app-editbox',
   templateUrl: './editbox.component.html',
@@ -17,7 +17,7 @@ import {FormBuilder, FormControl, FormGroup, FormGroupDirective, Validators} fro
 export class EditboxComponent implements OnInit, OnChanges {
 
   // protected alreadyThere: Array<{ comment: string; label: string; uri: string; range: string; }> = [];
-  protected alreadyThere2: Observable<Array<{ comment: string; label: string; uri: string; range: string; }>>;
+  protected alreadyThere$: Observable<Array<{ comment: string; label: string; uri: string; range: string; }>>;
 
   // protected propertyRecommendations: Array<{ comment: string; label: string; uri: string; range: string; }> = [];
   protected propertyRecommendations: Observable<Array<{ comment: string; label: string; uri: string; range: string; }>>
@@ -55,7 +55,6 @@ export class EditboxComponent implements OnInit, OnChanges {
 
   protected classToUpdate: Observable<IClassWithProperties>;
   public editToggle = false;
-
   protected rangeOptions: Observable<Array<{ _id: string, name: string }>>;
 
   constructor(
@@ -63,33 +62,51 @@ export class EditboxComponent implements OnInit, OnChanges {
     private recommender: RecommendationService,
     private sidebarService: SideBarStateService,
     private editboxService: EditboxService,
-    fb: FormBuilder) {
-      
-      this.formProp = fb.group({
-        name :['', Validators.required],
-        URI :['', Validators.required],
-        range :['', Validators.required],
-        description:[''],
+    private fb: FormBuilder) {
 
-      });
+    this.formProp = fb.group({
+      name: ['', Validators.required],
+      URI: ['', Validators.required],
+      range: ['', Validators.required],
+      description: [''],
+
+    });
+
   }
+  propsForm: FormGroup;
 
   ngOnInit() {
 
     this.rangeOptions = this.vocabService.getClasses(this.vocabID).pipe(
-      map((classes) => classes.map((aclass) => ({_id: aclass._id, name: aclass.name})))
+      map((classes) => classes.map((aclass) => ({ _id: aclass._id, name: aclass.name })))
     );
 
     this.classToUpdate = this.vocabService.getClassWithProperties(this.vocabID, of(this.selectedClassID));
 
   }
 
+  get props() {
+    return this.propsForm.get('props') as FormArray;
+  }
+
+  public buildForm(rec: IClassProperties, index = 0): FormGroup {
+    return this.fb.group({
+      id: [rec.id, Validators.required],
+      name: [rec.label, Validators.required],
+      uri: [rec.uri, Validators.required],
+      range: [rec.range, Validators.required],
+      rangeId: [rec.rangeId, Validators.required],
+      comment: [rec.comment],
+
+    });
+  }
+  oldClassID: string
   ngOnChanges(input) {
 
     this.editedClass = this.editboxService.getUndefinedClass()
 
     const classID: string = input.selectedClassID.currentValue;
-    
+
     if (!classID) {
       return;
     }
@@ -97,7 +114,28 @@ export class EditboxComponent implements OnInit, OnChanges {
     // we get several small pieces of info from the class. multicast is likely a good idea, but did not get it working.
     this.classInfo = this.editboxService.createClassInfoObj(this.vocabID, classID)
 
-    this.alreadyThere2 = this.editboxService.getClassProperties(this.vocabID, classID)
+    this.propsForm = this.fb.group({ props: new FormArray([]) })
+
+    this.alreadyThere$ = this.editboxService.getClassProperties(this.vocabID, classID).pipe(
+
+      map((rec) => {
+        console.log(rec)
+        rec.map((prop, index) => {
+          prop.isEditToggle = false;
+
+          const duplicateIndex = this.props.controls.findIndex((element) => (element.get("id").value === prop.id))
+          // Avoid duplication of properties due multiple subscriptions
+          if (duplicateIndex === -1) {
+            this.props.push(this.buildForm(prop, index))
+          } else {
+            this.props.controls[duplicateIndex].patchValue(prop)
+          }
+
+          return prop;
+        })
+        return rec;
+      }), tap(x => console.log(this.propsForm.value))
+    )
 
     // actually already refacored (in editbox service) but very hard to test as the 
     // recommender service always returns an empty array, bug ?
@@ -106,8 +144,8 @@ export class EditboxComponent implements OnInit, OnChanges {
         switchMap((theclass) => {
           console.log('asdasd')
           return this.recommender.propertyRecommendation(theclass.URI).pipe(
-            tap(as=> console.log(as, 'recommendations')),
-            combineLatest(this.alreadyThere2, (recommendations, alreadys) => {
+            tap(as => console.log(as, 'recommendations')),
+            combineLatest(this.alreadyThere$, (recommendations, alreadys) => {
               const newReccommendations = [];
               recommendations.forEach((recommendation) => {
                 //       // TODO is there a better way in JS?
@@ -123,12 +161,12 @@ export class EditboxComponent implements OnInit, OnChanges {
           );
         }),
         startWith([]),
-    );
+      );
 
 
   }
 
-  addRecommendedProperyToGraph(rec: IClassProperty){
+  addRecommendedProperyToGraph(rec: IClassProperty) {
     this.editboxService.addRecommendedProperyToGraph(rec, this.selectedClassID, this.vocabID)
   }
 
@@ -139,9 +177,9 @@ export class EditboxComponent implements OnInit, OnChanges {
   }
 
   addProperty(formDirective: FormGroupDirective) {
-      this.vocabService.addProperty(this.selectedClassID, this.formProp.value.name, this.formProp.value.description, this.formProp.value.URI, this.formProp.value.range);
-      formDirective.resetForm();
-      this.formProp.reset()
+    this.vocabService.addProperty(this.selectedClassID, this.formProp.value.name, this.formProp.value.description, this.formProp.value.URI, this.formProp.value.range);
+    formDirective.resetForm();
+    this.formProp.reset()
   }
 
   toggleEdit() {
@@ -174,8 +212,24 @@ export class EditboxComponent implements OnInit, OnChanges {
     this.cancelEdit();
   }
 
-  resetSidebarState(){
+  resetSidebarState() {
     this.sidebarService.changeSidebarToDefault()
+  }
+
+  propModify(rec) {
+    this.editboxService.updateProperty(rec)
+    this.propToggleView(rec)
+
+  }
+
+  propToggleView(rec) {
+    rec.isEditToggle = !rec.isEditToggle
+    return;
+  }
+
+  propReturn(index: number, rec) {
+    this.props.controls[index].patchValue(rec)
+    this.propToggleView(rec)
   }
 
 }

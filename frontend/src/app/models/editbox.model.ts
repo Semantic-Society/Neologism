@@ -8,7 +8,8 @@ export interface IClassProperties {
     comment: string,
     label: string,
     uri: string,
-    range: string
+    range: string,
+    [key: string]: any
 }
 
 export interface IClassProperty {
