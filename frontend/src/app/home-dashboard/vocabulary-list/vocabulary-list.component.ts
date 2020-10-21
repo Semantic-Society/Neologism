@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { VocabulariesService } from '../../../app/services/vocabularies.service';
-import { Observable } from 'rxjs';
-import { startWith, debounceTime, tap, take } from 'rxjs/operators';
+import { combineLatest, Observable } from 'rxjs';
+import { startWith, debounceTime, tap, take, map } from 'rxjs/operators';
 import { NzModalService } from 'ng-zorro-antd';
 import { MatDialog } from '@angular/material';
 import { AddUserModalComponent } from '../../../app/vocablist/components/add-user-modal/add-user-modal.component';
@@ -15,15 +15,14 @@ import { environment } from '../../../environments/environment';
   styleUrls: ['./vocabulary-list.component.scss']
 })
 export class VocabularyListComponent implements OnInit {
-  public dataSet: Observable<any>;
+  public context$: Observable<any>;
 
   constructor( 
     private router: Router,
     private vocabService: VocabulariesService,
     private modalService: NzModalService,
     public dialog: MatDialog,) {
-    this.dataSet = this.vocabService.getVocabularies()
-      .pipe(startWith([]));
+    
 
   }
 
@@ -74,6 +73,10 @@ export class VocabularyListComponent implements OnInit {
 
 
   ngOnInit() {
+
+    this.context$=this.vocabService.getVocabularies().pipe( map(vocabulary => {
+      return vocabulary;
+    }));
   }
 
 }

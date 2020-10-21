@@ -1,16 +1,19 @@
-<nz-table #basicTable [nzData]="[1,2]" *ngIf="(dataSet | async).length >= 1; else noVocabsListes ">
+
+<ng-container *ngIf="(context$ | async) as vocabularies">
+
+<nz-table #basicTable [nzData]="[1,2]" *ngIf="vocabularies.length > 0; else noVocabsListes ">
   <thead>
     <th>Name</th>
     <th>Contributers</th>
 
   </thead>
   <tbody>
-    <tr  style="background-color: #fff" class="vocabulary-row" *ngFor="let data of (dataSet | async)">
+    <tr  style="background-color: #fff" class="vocabulary-row" *ngFor="let vocab of vocabularies">
       
-      <td>{{data.name}}</td>
+      <td>{{vocab.name}}</td>
       <td>
         <div style="max-width: 100px;">
-          <nz-avatar *ngFor="let author of data.authors" 
+          <nz-avatar *ngFor="let author of vocab.authors" 
             nzTitle={{this.vocabService.getEmailAddress(author)}}
             nzPlacement="top" 
             nz-tooltip 
@@ -26,7 +29,7 @@
                 nzPlacement="top" 
                 nz-tooltip 
                 nzType="default" 
-                (click)="addPersonToVocab(data._id)"
+                (click)="addPersonToVocab(vocab._id)"
                 nzShape="circle">
               <i nz-icon type="user-add"></i>
             </button>
@@ -37,7 +40,7 @@
                 nzPlacement="top" 
                 nz-tooltip nz-button 
                 nzType="default"
-                (click)="deleteVocabulary(data._id)"
+                (click)="deleteVocabulary(vocab._id)"
                 nzShape="circle">
 
               <i nz-icon style="color: red" type="delete"></i>
@@ -50,7 +53,7 @@
                 nzTitle="Edit Vocabulary" 
                 nzPlacement="top" 
                 nz-tooltip
-                (click)="editVocabulary(data._id)"
+                (click)="editVocabulary(vocab._id)"
                 nzShape="circle">
               <i nz-icon style="color: green" type="edit"></i>
             </button>
@@ -62,7 +65,7 @@
                 nzTitle="Download Vocabulary" 
                 nzPlacement="top" 
                 nz-tooltip
-                (click)="downloadVocab(data._id, data.name)"
+                (click)="downloadVocab(vocab._id, vocab.name)"
                 nzShape="circle">
               <i nz-icon style="color: lightslategray" type="download"></i>
             </button>
@@ -74,7 +77,7 @@
                 nzTitle="Open Editor" 
                 nzPlacement="top" 
                 nz-tooltip
-                (click)="openVocabulary(data._id)"
+                (click)="openVocabulary(vocab._id)"
                 nzShape="circle">
               <i nz-icon type="arrow-right"></i>
             </button>
@@ -83,6 +86,8 @@
   </tbody>
 </nz-table>
 
-<ng-template #noVocabsListes>
+<!-- <ng-template #noVocabsListes>
   
-</ng-template>
+</ng-template> -->
+
+</ng-container>
