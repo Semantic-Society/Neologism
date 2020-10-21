@@ -126,12 +126,12 @@
 
                         <div *ngIf="rec.uri">
                           <p class="properties-label">URI:</p>
-                          <p class="properties-text">{{rec.uri}}</p>
+                          <a href="{{rec.uri}}" class="properties-text uri-link inactive-uri-link"> {{rec.uri}}</a>
                         </div>
 
                         <div *ngIf="rec.range">
                           <p class="properties-label">Range:</p>
-                          <a href="{{rec.range}}" class="properties-text uri-link inactive-uri-link"> {{rec.range}}</a>
+                          <p class="properties-text">{{rec.range}}</p>
                         </div>
 
                         <div *ngIf="rec.comment">
