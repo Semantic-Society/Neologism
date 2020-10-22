@@ -1,4 +1,3 @@
-
 <mat-toolbar color="secondary">
   <span>Editor</span>
   <span class="editor-toolbar-spacer"></span>
@@ -32,7 +31,7 @@
       <div class="uri-name">
         <p class="" *ngIf="selectedClassID">
           <a class="uri-link" href="{{(classInfo | async).url}}" target="_blank"
-             *ngIf="!editToggle">{{(classInfo | async).url}}</a>
+            *ngIf="!editToggle">{{(classInfo | async).url}}</a>
           <input *ngIf="editToggle" [(ngModel)]="editedClass.URI" value="{{(classInfo | async).url}}">
         </p>
         <mat-form-field *ngIf="!selectedClassID">
@@ -41,8 +40,7 @@
       </div>
     </mat-card-subtitle>
     <img mat-card-avatar
-         src="data:image/gif;base64,R0lGODlhOwBAAMQfAIWjzhpTo0h1tvH0+SpeqUh1tWeMwjlqr+Hp89Ld7cLR5rPG4RpSo8PS53aYyDhpr5Wv1FiBvO/z+KS62uDo8ileqWaMwXWXx7LF4KO62pSu1FeAu9Hc7P///wtHnf///yH5BAEAAB8ALAAAAAA7AEAAAAX/4CeOZGmeaJk4h+d6hLGkdG2rwssUxfMSjZtwKJq4GABKZ9mRZCouB3GaMno2EiYFwCtcCi4DdTxauCxMDvjFdgHI1EHAg9a2754EnAjwVLJMHXhtAntDcxmBHRSDbQiGNmYMihQ+jS9vkDR9G0sbl3iFmikRHgAdCqB4B6MpOacWqnitKK8dDLJtAbQnpWi5hLwmBH6CwC9iwmUvT8cuM8ofCHMuFRfOBNEfAy1slsAQ0QnEzm2syhPU5S8Bj7wIpetsBHo1AwsA+RBBKQMA6mwOAFjQwIGqCANqLMhxJ4ABdyNWAHQRAABEEQgMTERWAwHDajy+eTjgAEAEcncA/yREMQDljxoJqFXQAGiJBAC4QAm4iKLBnQk0Yrq4EEjBFx4AROoKJ6Tbi5UnWrpItEQBlFwH6gnp8+IcCq4aAmEAdgCqEJ8vREWdU0BRKlllx7DJdAKCCwWKxsrSOkUdXROlHrjNCSrZmI9/SxA7JUGpqsREEKdwgaGDhnKQh0hGcbeD48dwNp+4K2GdYSofI7gy9bYcT81pUxh80NqZ2iltUqDVa5pKgjZ8FXt4EEueALM27LKR0tPFGnkBoN1wCYOGQXltIrw2obxN5hEGsN95mKJ7SuQkwquqqKfBBI14ZKhwWgBABgUALOAKABTFAuptkGfCBE6xEUAE+VxHh7QSWiiAXxg0LGCASwI4sB0JDQDYBgN4LUGBfi9UYMlptECw0REcMMHbINK9U+ALlTFR2iUBoDcKN210oogqTCmD4wsMMnEZKNloM40LgnXAAQAYXCOLNiJcR5QEhOUC5QdonTLkMVdm2cFzwFw5gBvGOHPlB86VyeWVDM1o5pVWfOGMamJSc0GVqvBzZXd4XnIbm87UeOYIP8oSQHBnDvDRJfQMekI6lzhgo6NFRACQABCgFwIAOw=="
-    />
+      src="data:image/gif;base64,R0lGODlhOwBAAMQfAIWjzhpTo0h1tvH0+SpeqUh1tWeMwjlqr+Hp89Ld7cLR5rPG4RpSo8PS53aYyDhpr5Wv1FiBvO/z+KS62uDo8ileqWaMwXWXx7LF4KO62pSu1FeAu9Hc7P///wtHnf///yH5BAEAAB8ALAAAAAA7AEAAAAX/4CeOZGmeaJk4h+d6hLGkdG2rwssUxfMSjZtwKJq4GABKZ9mRZCouB3GaMno2EiYFwCtcCi4DdTxauCxMDvjFdgHI1EHAg9a2754EnAjwVLJMHXhtAntDcxmBHRSDbQiGNmYMihQ+jS9vkDR9G0sbl3iFmikRHgAdCqB4B6MpOacWqnitKK8dDLJtAbQnpWi5hLwmBH6CwC9iwmUvT8cuM8ofCHMuFRfOBNEfAy1slsAQ0QnEzm2syhPU5S8Bj7wIpetsBHo1AwsA+RBBKQMA6mwOAFjQwIGqCANqLMhxJ4ABdyNWAHQRAABEEQgMTERWAwHDajy+eTjgAEAEcncA/yREMQDljxoJqFXQAGiJBAC4QAm4iKLBnQk0Yrq4EEjBFx4AROoKJ6Tbi5UnWrpItEQBlFwH6gnp8+IcCq4aAmEAdgCqEJ8vREWdU0BRKlllx7DJdAKCCwWKxsrSOkUdXROlHrjNCSrZmI9/SxA7JUGpqsREEKdwgaGDhnKQh0hGcbeD48dwNp+4K2GdYSofI7gy9bYcT81pUxh80NqZ2iltUqDVa5pKgjZ8FXt4EEueALM27LKR0tPFGnkBoN1wCYOGQXltIrw2obxN5hEGsN95mKJ7SuQkwquqqKfBBI14ZKhwWgBABgUALOAKABTFAuptkGfCBE6xEUAE+VxHh7QSWiiAXxg0LGCASwI4sB0JDQDYBgN4LUGBfi9UYMlptECw0REcMMHbINK9U+ALlTFR2iUBoDcKN210oogqTCmD4wsMMnEZKNloM40LgnXAAQAYXCOLNiJcR5QEhOUC5QdonTLkMVdm2cFzwFw5gBvGOHPlB86VyeWVDM1o5pVWfOGMamJSc0GVqvBzZXd4XnIbm87UeOYIP8oSQHBnDvDRJfQMekI6lzhgo6NFRACQABCgFwIAOw==" />
   </mat-card-header>
 
   <mat-card-title></mat-card-title>
@@ -53,7 +51,7 @@
       </ng-container>
       <mat-form-field class="description" *ngIf="editToggle">
         <textarea matInput placeholder="Description" [(ngModel)]="editedClass.description"
-                  value="{{(classInfo | async).description}}"></textarea>
+          value="{{(classInfo | async).description}}"></textarea>
       </mat-form-field>
     </ng-container>
     <mat-form-field class="description" *ngIf="!selectedClassID">
@@ -74,69 +72,127 @@
         <!-- Applied Properties -->
         <mat-expansion-panel style="padding:0;margin:0;" [expanded]="true">
           <mat-expansion-panel-header class="mat-expansion-panel-custom-header" [collapsedHeight]="'30px'"
-                                      [expandedHeight]="'30px'">
+            [expandedHeight]="'30px'">
             <mat-panel-title class="mat-panel-custom-title">
               Applied Properties
             </mat-panel-title>
           </mat-expansion-panel-header>
           <ng-container *ngIf="selectedClassID">
-            <div *ngIf="(alreadyThere2| async).length > 0" class="properties-outer-wrapper">
-              <mat-expansion-panel *ngFor="let rec of (alreadyThere2| async)" style="padding:0;margin:0;">
-                <mat-expansion-panel-header class="mat-expansion-panel-custom-header" *ngIf="rec.label"
-                                            [collapsedHeight]="'30px'" [expandedHeight]="'30px'">
-                  <mat-panel-title class="mat-panel-custom-title">
-                    {{rec.label}}
-                  </mat-panel-title>
-                </mat-expansion-panel-header>
-                <!--div *ngIf="rec.label" ><p class="properties-label">Label:</p> <p class="properties-text">{{rec.label}}</p></div-->
-                <div class="properties-line" *ngIf="rec.uri">
-                  <p class="properties-label ">URI:</p>
-                  <a href="{{rec.uri}}" class="properties-text uri-link" target="_blank"> {{rec.uri}}</a>
-                </div>
-                <div class="properties-line" *ngIf="rec.range">
-                  <p class="properties-label">Range:</p>
-                  <a href="{{rec.range}}" class="properties-text uri-link inactive-uri-link"> {{rec.range}}</a>
-                </div>
-                <div class="properties-line" *ngIf="rec.comment">
-                  <p class="properties-label ">Comment:</p>
-                  <p class="properties-text"> {{rec.comment}}</div>
-              </mat-expansion-panel>
-            </div>
-            <mat-label *ngIf="(alreadyThere2| async).length == 0">No properties found (yet)</mat-label>
+            <ng-container *ngIf="alreadyThere$ | async as propsData">
+              <div *ngIf="propsData.length > 0" class="properties-outer-wrapper">
+                <form [formGroup]="propsForm">
+                  <div formArrayName="props">
+                    <mat-expansion-panel *ngFor="let rec of propsData; let prop of props.controls; index as i;"
+                      style="padding:0;margin:0;">
+                      <mat-expansion-panel-header class="mat-expansion-panel-custom-header" *ngIf="rec.label"
+                        [collapsedHeight]="'30px'" [expandedHeight]="'30px'">
+                        <mat-panel-title class="mat-panel-custom-title">
+                          {{rec.label}}
+                        </mat-panel-title>
+                      </mat-expansion-panel-header>
+                      <div *ngIf="rec.isEditToggle" formGroupName="{{i}}">
+
+                        <mat-form-field>
+                          <input matInput placeholder="Label" formControlName="name">
+                        </mat-form-field>
+
+                        <mat-form-field>
+
+                          <input matInput placeholder="URI" formControlName="uri">
+                        </mat-form-field>
+
+
+
+                        <mat-form-field class="class-dropdown">
+                          <mat-select formControlName="rangeId" placeholder="Range" required>
+
+                            <mat-option *ngFor="let c of rangeOptions | async" [value]="c._id">
+                              {{ c.name }}
+                            </mat-option>
+
+                          </mat-select>
+                        </mat-form-field>
+
+                        <mat-form-field>
+                          <input matInput placeholder="Comment" formControlName="comment">
+                        </mat-form-field>
+                      </div>
+
+                      <div *ngIf="!rec.isEditToggle">
+                        <div *ngIf="rec.label">
+                          <p class="properties-label">Label:</p>
+                          <p class="properties-text">{{rec.label}}</p>
+                        </div>
+
+                        <div *ngIf="rec.uri">
+                          <p class="properties-label">URI:</p>
+                          <a href="{{rec.uri}}" class="properties-text uri-link inactive-uri-link"> {{rec.uri}}</a>
+                        </div>
+
+                        <div *ngIf="rec.range">
+                          <p class="properties-label">Range:</p>
+                          <p class="properties-text">{{rec.range}}</p>
+                        </div>
+
+                        <div *ngIf="rec.comment">
+                          <p class="properties-label">Comment:</p>
+                          <p class="properties-text">{{rec.comment}}</p>
+                        </div>
+                      </div>
+
+
+                      <mat-action-row>
+                        <button *ngIf="!rec.isEditToggle" mat-button color="primary"
+                          (click)="propToggleView(rec)">Modify</button>
+                        <button *ngIf="rec.isEditToggle" mat-button color="primary"
+                          [disabled]="props.controls[i].invalid"
+                          (click)="propModify(props.controls[i].value)">Update</button>
+                        <button *ngIf="rec.isEditToggle" mat-button color="primary"
+                          (click)="propReturn(i,rec)">Cancel</button>
+                      </mat-action-row>
+                    </mat-expansion-panel>
+                  </div>
+                </form>
+              </div>
+              <mat-label *ngIf="propsData.length == 0">No properties found (yet)</mat-label>
+            </ng-container>
+
           </ng-container>
 
         </mat-expansion-panel>
         <!--Adding properties manually-->
         <mat-expansion-panel style="padding:0;margin:0;" [expanded]="false">
           <mat-expansion-panel-header class="mat-expansion-panel-custom-header" [collapsedHeight]="'30px'"
-                                      [expandedHeight]="'30px'">
+            [expandedHeight]="'30px'">
             <mat-panel-title class="mat-panel-custom-title">
               Add Properties
             </mat-panel-title>
           </mat-expansion-panel-header>
           <div class="add-properties-container" *ngIf="selectedClassID">
             <div class="button-full-width">
-              <form [formGroup]="formProp" (ngSubmit)="addProperty(formDirective)" #formDirective="ngForm" >
-              <mat-form-field class="prop-input">
-                <input matInput placeholder="Name" value="" formControlName="name" required>
-              </mat-form-field>
-              <mat-form-field class="prop-input">
-                <input matInput placeholder="URI" value="" formControlName="URI" required>
-              </mat-form-field>
-              <mat-form-field class="prop-input">
-                <textarea matInput value="" formControlName="description"></textarea>
-              </mat-form-field>
-              <mat-form-field class="class-dropdown">
-                <mat-select placeholder="Range" formControlName="range" required>
-                  <ng-container *ngFor="let c of rangeOptions | async">
-                    <mat-option [value]="c._id" >
-                      {{ c.name }}
-                    </mat-option>
-                  </ng-container>
-                </mat-select>
-              </mat-form-field>
-              <button mat-raised-button color="primary" type="submit" [disabled]="!formProp.valid">Add Property</button>
-            </form>
+              <form [formGroup]="formProp" (ngSubmit)="addProperty(formDirective)" #formDirective="ngForm">
+                <mat-form-field class="prop-input">
+                  <input matInput placeholder="Name" value="" formControlName="name" required>
+                </mat-form-field>
+                <mat-form-field class="prop-input">
+                  <input matInput placeholder="URI" value="" formControlName="URI" required>
+                </mat-form-field>
+                <mat-form-field class="prop-input">
+                  <textarea matInput placeholder="Comment or Description" value=""
+                    formControlName="description"></textarea>
+                </mat-form-field>
+                <mat-form-field class="class-dropdown">
+                  <mat-select placeholder="Range" formControlName="range" required>
+                    <ng-container *ngFor="let c of rangeOptions | async">
+                      <mat-option [value]="c._id">
+                        {{ c.name }}
+                      </mat-option>
+                    </ng-container>
+                  </mat-select>
+                </mat-form-field>
+                <button mat-raised-button color="primary" type="submit" [disabled]="!formProp.valid">Add
+                  Property</button>
+              </form>
             </div>
           </div>
         </mat-expansion-panel>
@@ -144,7 +200,7 @@
         <!--Add properties from recommender-->
         <mat-expansion-panel style="padding:0;margin:0;" [expanded]="false">
           <mat-expansion-panel-header class="mat-expansion-panel-custom-header" [collapsedHeight]="'30px'"
-                                      [expandedHeight]="'30px'">
+            [expandedHeight]="'30px'">
             <mat-panel-title class="mat-panel-custom-title">
               Add Recommeded Properties
             </mat-panel-title>

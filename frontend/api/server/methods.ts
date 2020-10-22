@@ -127,6 +127,14 @@ Meteor.methods({
           { properties: pID } 
         })
     );
+  },
+  'property.update'(id, name, description, URI, range) {
+    assertUser();
+    Properties.update(
+      { _id: id },
+      { $set: { name, description, URI, range } },
+      {}
+    )
   }
 });
 
