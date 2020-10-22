@@ -6,7 +6,7 @@
 
     <ul nz-menu style="margin-top: 15px;" [nzTheme]="'light'" [nzMode]="'inline'" [nzInlineCollapsed]="isCollapsed">
       <li nz-submenu>
-        <span title><i nz-icon type="user"></i><span class="nav-text">{{username}}</span></span>
+        <span title><i nz-icon type="user"></i><span class="nav-text">{{loggedInUser?.emails[0].address}}</span></span>
         <ul>
           <li nz-menu-item>Settings</li>
           <li nz-menu-item (click)="onLogout()">Logout</li>

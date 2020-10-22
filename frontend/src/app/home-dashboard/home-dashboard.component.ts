@@ -14,8 +14,7 @@ export class HomeDashboardComponent implements OnInit {
 
   isCollapsed = false;
   triggerTemplate = null;
-  userId = Meteor.userId()
-  username:String;
+  loggedInUser:Meteor.User
   @ViewChild('trigger') customTrigger: TemplateRef<void>;
 
   constructor(
@@ -31,10 +30,13 @@ export class HomeDashboardComponent implements OnInit {
   }
 
   ngOnInit(){
-    // TODO: remove this after preventing data race condition with child component
-    setTimeout(()=> this.username = this.vocabService.getEmailAddress(this.userId),1000)
-  }
+    Tracker.autorun(() => {
+        this.loggedInUser=Meteor.user()
+      
 
+  })
+    
+  }
 
   onLogout(): void {
     Meteor.logout();
