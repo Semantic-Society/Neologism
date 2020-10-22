@@ -22,7 +22,9 @@ export class VocabularyListComponent implements OnInit {
     private vocabService: VocabulariesService,
     private modalService: NzModalService,
     public dialog: MatDialog,) {
-    
+      this.context$=this.vocabService.getVocabularies().pipe( map(vocabulary => {
+        return vocabulary;
+      }));
 
   }
 
@@ -74,9 +76,7 @@ export class VocabularyListComponent implements OnInit {
 
   ngOnInit() {
 
-    this.context$=this.vocabService.getVocabularies().pipe( map(vocabulary => {
-      return vocabulary;
-    }));
+    
   }
 
 }
