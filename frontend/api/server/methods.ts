@@ -130,8 +130,6 @@ Meteor.methods({
   },
   'property.update'(id, name, description, URI, range) {
     assertUser();
-    // console.log(arguments)
-    // console.log({ id,name, description, URI, range })
     Properties.update(
       { _id: id },
       { $set: { name, description, URI, range } },
