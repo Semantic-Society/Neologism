@@ -48,7 +48,7 @@ export class HomeDashboardComponent implements OnInit {
       nzTitle: 'Create new Vocabulary',
       nzContent: CreateVocabModalComponent,
       nzComponentParams: {
-        description: 'title in component',
+        description: '',
         name: '',
         uri: '',
         access: undefined
@@ -63,6 +63,8 @@ export class HomeDashboardComponent implements OnInit {
 
     // Return a result when closed
     modal.afterClose.subscribe((result) => {
+      if(result.name===undefined)
+      return;
       this.vocabService.createVocabulary(
         result.name,
         result.description,

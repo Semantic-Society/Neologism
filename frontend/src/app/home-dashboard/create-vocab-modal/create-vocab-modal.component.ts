@@ -15,7 +15,7 @@ export class CreateVocabModalComponent implements OnInit {
   constructor( private modal: NzModalRef) { }
 
   ngOnInit() {
-
+      this.uri=`http://w3id.org/neologism/{vocabname-in-lowercase}#`
   }
 
   closeModal(): void {
@@ -27,4 +27,9 @@ export class CreateVocabModalComponent implements OnInit {
     });
   }
 
+  change(value:string){    
+    console.log(value);
+    this.uri=`http://w3id.org/neologism/${value.toLocaleLowerCase()}#`
+
+ }
 }
