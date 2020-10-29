@@ -1,5 +1,5 @@
 
-<input style="margin-top: 7px;" nz-input placeholder="Enter the vocabulary name" [(ngModel)]="name">
+<input #nameEle style="margin-top: 7px;" nz-input placeholder="Enter the vocabulary name" (keyup)="change(nameEle.value)"  [(ngModel)]="name">
 <input style="margin-top: 7px;" nz-input placeholder="Enter the vocabulary URI" [(ngModel)]="uri">
 <textarea nz-input 
   style="margin-top: 7px;" 
