@@ -1,9 +1,9 @@
 import { Meteor } from 'meteor/meteor';
 import {Iclass} from 'models'
-import {JsonRoutes} from 'meteor/simple:json-routes'
+
 import { Classes, Properties, Vocabularies, Users } from '../collections';
 import { meteorID } from '../models';
-
+const JsonRoutes= require('meteor/simple:json-routes').JsonRoutes
 // should be refactored as well. The checck is not sufficient
 function assertUser() {
   if (!Meteor.userId()) {
@@ -159,8 +159,9 @@ JsonRoutes.add("get", "/methods/downloadVocab/:id", (req, res) =>{
   res.end(buffer)
   } catch (error) {
     console.log(error)
+    res.end(null)
+    return;
   }
-
 });
 
 export interface IClassWithProperties {
