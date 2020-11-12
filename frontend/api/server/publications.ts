@@ -14,7 +14,7 @@ Meteor.publish('vocabularies', function (): any {
     })
     return [
         Vocabularies.collection
-        .find({ $or: [{ authors: this.userId }, { public: true }] }),
+        .find({ $or: [{creator:this.userId},{ authors: this.userId }, { public: true }] }),
         
         Users.collection
         .find({
