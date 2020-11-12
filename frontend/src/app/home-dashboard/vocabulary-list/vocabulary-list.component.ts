@@ -46,7 +46,7 @@ export class VocabularyListComponent implements OnInit {
 
   downloadVocab(id: string, name: string) {
     console.log('downloading vocabulary: ' + id + '...');
-    HTTP.get(`${environment.api.base}methods/downloadVocab/${id}`, {
+    HTTP.get(`${environment.api.base}vocabulary/${id}`, {
     }, function (err, res) {
       console.log(res)
       const blob = new Blob([res.content], { type: 'text/plain' });

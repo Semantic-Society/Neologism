@@ -23,6 +23,7 @@ export interface Ivocabulary {
   _id?: meteorID; // Mongo generated ID
   name: string;
   description: string;
+  creator: meteorID;
   authors: userID[];
   uriPrefix: string;
   public: boolean;

@@ -8,18 +8,21 @@ import { Classes, Properties, Users, Vocabularies } from '../collections';
 // There are no permission checks yet on  a lot of published data. The case of public data, example 
 // github punlic repos should be integrated in designing the access to the publisghed vocab data. 
 Meteor.publish('vocabularies', function (): any {
-    const authors=[]
-    Vocabularies.collection.find({ $or: [{ authors: this.userId }, { public: true }] }).forEach(vocab=>{
+    const authors = []
+    Vocabularies.collection.find({ $or: [{ authors: this.userId }, { public: true }] }).forEach(vocab => {
         authors.push(...vocab.authors)
     })
     return [
-        Vocabularies.collection.find({ $or: [{ authors: this.userId }, { public: true }] }),
-        Users.collection.find({
-            _id: { $in : Array.from(new Set(authors))},
-            
-     },{
-        fields: { "emails.address": 1 }
-      })]
+        Vocabularies.collection
+        .find({ $or: [{ authors: this.userId }, { public: true }] }),
+        
+        Users.collection
+        .find({
+            _id: { $in: Array.from(new Set(authors)) },
+
+        }, {
+            fields: { "emails.address": 1 }
+        })]
 });
 
 
@@ -32,7 +35,7 @@ Meteor.publish('vocabularies', function (): any {
         // Must return a cursor containing top level documents
         find: () => {
             console.log("Received vocabDetails req. for id", vocabularyID)
-            return Vocabularies.collection.find({ _id: vocabularyID,  $or: [{ authors: this.userId }, { public: true }] }, { limit: 1 });
+            return Vocabularies.collection.find({ _id: vocabularyID, $or: [{ authors: this.userId }, { public: true }] }, { limit: 1 });
         },
 
         children: [
@@ -41,7 +44,7 @@ Meteor.publish('vocabularies', function (): any {
                 find: (vocab) => {
                     return Users.collection.find(
                         { _id: { $in: vocab.authors } },
-                        { fields: { profile: 1 , "emails.address":1} }
+                        { fields: { profile: 1, "emails.address": 1 } }
                     );
                 }
             } as PublishCompositeConfig1<Ivocabulary, Iuser>,
