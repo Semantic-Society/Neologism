@@ -7,22 +7,25 @@ import { Classes, Properties, Users, Vocabularies } from '../collections';
 
 // There are no permission checks yet on  a lot of published data. The case of public data, example 
 // github punlic repos should be integrated in designing the access to the publisghed vocab data. 
-Meteor.publish('vocabularies', function (): any {
-    const authors = []
-    Vocabularies.collection.find({ $or: [{ authors: this.userId }, { public: true }] }).forEach(vocab => {
-        authors.push(...vocab.authors)
-    })
-    return [
-        Vocabularies.collection
-        .find({ $or: [{creator:this.userId},{ authors: this.userId }, { public: true }] }),
-        
-        Users.collection
-        .find({
-            _id: { $in: Array.from(new Set(authors)) },
+(Meteor as any).publishComposite('vocabularies', function (): any {
+    return {
+        find:()=>{
+            return Vocabularies.collection
+            .find({ $or: [{creator:this.userId},{ authors: this.userId }, { public: true }] })
+        },
+        children: [
+            // Get author details
+            {
+                find: (vocab) => {
+                    return Users.collection.find(
+                        { _id: { $in: vocab.authors } },
+                        { fields: { profile: 1, "emails.address": 1 } }
+                    );
+                }
+            } as PublishCompositeConfig1<Ivocabulary, Iuser>
+        ]
+    }
 
-        }, {
-            fields: { "emails.address": 1 }
-        })]
 });
 
 

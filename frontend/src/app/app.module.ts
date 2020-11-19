@@ -54,6 +54,7 @@ import { ListEditorComponent } from './vocabulary-editor/list-editor/list-editor
 import { NzDrawerService } from 'ng-zorro-antd';
 import { EditComponentService } from './vocabulary-editor/edit.component.service';
 import { from } from 'rxjs';
+import { RemoveUserModalComponent } from './vocablist/components/remove-user-modal/remove-user-modal.component';
 
 registerLocaleData(en);
 
@@ -77,7 +78,8 @@ registerLocaleData(en);
     VocabularyEditorComponent,
     SearchVocabulariesAutocompleteComponent,
     MxGraphEditorComponent,
-    ListEditorComponent
+    ListEditorComponent,
+    RemoveUserModalComponent
   ],
   imports: [
     AccountsModule,
@@ -96,7 +98,8 @@ registerLocaleData(en);
   ],
   entryComponents: [
     AddUserModalComponent,
-    CreateVocabModalComponent
+    CreateVocabModalComponent,
+    RemoveUserModalComponent
   ],
   providers: [
     LoginAuthGuard,

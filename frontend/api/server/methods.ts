@@ -34,29 +34,41 @@ Meteor.methods({
 
     return users;
   },
-  'vocabulary.addAuthors'(authorIds: Array<string>, vocabId: string) {
-    assertUser();
+  'vocabulary.assign-creator.self'(vocabId:string){
+    assertUser()
     Vocabularies.update(
       { _id: vocabId },
+      {
+        $set:{
+          creator:this.userId
+        }
+      }).subscribe(value=>console.log("assigned creator to vocabulary "+vocabId+" "+value))
+  },
+  'vocabulary.addAuthors'(authorIds: Array<string>, vocabId: string) {
+    assertUser();
+
+    Vocabularies.update(
+      { _id: vocabId ,creator:this.userId},
       {
         $addToSet:
         {
           authors:
             { $each: authorIds }
         }
-      })
+      }).subscribe(value=>console.log("added authors "+value))
   },
   'vocabulary.removeAuthors'(authorIds: Array<string>, vocabId: string) {
     assertUser();
+    console.log(authorIds + " ids")
     Vocabularies.update(
-      { _id: vocabId },
+      { _id: vocabId, creator:this.userId },
       {
         $pull:
         {
           authors:
-            { $each: authorIds }
+            { $in: authorIds }
         }
-      })
+      }).subscribe(value=>console.log("removed authors" + value))
   },
   'vocabulary.create'(name: string, description: string, uriPrefix: string, field_public: boolean = false) {
     assertUser();

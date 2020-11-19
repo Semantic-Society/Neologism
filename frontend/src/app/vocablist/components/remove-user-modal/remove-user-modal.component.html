@@ -1,0 +1,13 @@
+
+<mat-list>
+  <h3 mat-subheader>Users to Remove</h3>
+  <mat-list-item *ngFor="let user of (removeGroup | async)">
+    <mat-icon (click)="removeUserFromGroup(user)" mat-list-icon style="color: #b0020b">remove_circle</mat-icon>
+    <h4 mat-line>{{user.emails[0].address}}</h4>
+  </mat-list-item>
+</mat-list>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Cancel</button>
+  <button mat-button [mat-dialog-close]="true" (click)="removeUsers()" cdkFocusInitial>Remove</button>
+</mat-dialog-actions>
