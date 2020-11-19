@@ -9,8 +9,8 @@ import { Iclass, Iproperty, Ivocabulary, meteorID } from '../../../api/models';
 
 const callWithPromise = (method, ...myParameters) => new Promise((resolve, reject) => {
   Meteor.call(method, ...myParameters, (err, res) => {
-      if (err) reject(err);
-      resolve(res);
+    if (err) reject(err);
+    resolve(res);
   });
 });
 
@@ -64,7 +64,7 @@ export class VocabulariesService {
 
     return Observable.create((observer: any) => {
       const subscription = localQuery.subscribe(observer);
-  
+
       // Now let's return a tear-down/unsubscribe function
       return () => {
         subscription.unsubscribe();
@@ -82,9 +82,13 @@ export class VocabulariesService {
     );
   }
 
-  createVocabulary(_id:string, name: string, description: string, uriPrefix: string) {
+  createVocabulary(name: string, description: string, uriPrefix: string) {
+    const _id = new Mongo.ObjectID().toHexString()
     return MeteorObservable.call('vocabulary.create', _id, name, description, uriPrefix)
-      .pipe(zoneOperator())
+      .pipe(
+        zoneOperator(),
+        map(result => ({...result, vocabId:_id}))
+      )
   }
 
   deleteVocabulary(id: string) {
@@ -144,7 +148,7 @@ export class VocabulariesService {
    * Gets the list of class IDs for the given vocabulary
    * @param vocabularyId
    */
-   getClassIDsForVocabID(vocabularyId: string): Observable<meteorID[]> {
+  getClassIDsForVocabID(vocabularyId: string): Observable<meteorID[]> {
     const thevocabO: Observable<Array<{ classes: meteorID[] }>> = VocabulariesService.wrapFunkyObservables(
       Vocabularies.find({ _id: vocabularyId }, { fields: { classes: 1 }, limit: 1 })
     );
@@ -328,12 +332,13 @@ export class VocabulariesService {
   }
 
   // gets first email address for the user if any
-  getEmailAddress(userId:string){
+  getEmailAddress(userId: string) {
     try {
-      const user= Users.findOne({_id:userId
+      const user = Users.findOne({
+        _id: userId
       })
-  
-      return  (user!.emails[0].address)? user.emails[0].address:"" ;
+
+      return (user!.emails[0].address) ? user.emails[0].address : "";
     } catch (error) {
       console.log(error)
     }
