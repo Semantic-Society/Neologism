@@ -22,10 +22,10 @@
         </div>
       </td>
       <td>
-            <button 
+            <button *ngIf="loggedInUser._id===vocab.creator"
                 class="actn-btn" 
                 nz-button 
-                nzTitle="Add User" 
+                nzTitle="Add Contributor" 
                 nzPlacement="top" 
                 nz-tooltip 
                 nzType="default" 
@@ -34,7 +34,7 @@
               <i nz-icon type="user-add"></i>
             </button>
 
-            <button 
+            <button *ngIf="loggedInUser._id===vocab.creator"
                 class="actn-btn" 
                 nzTitle="Delete Vocabulary" 
                 nzPlacement="top" 
@@ -46,7 +46,7 @@
               <i nz-icon style="color: red" type="delete"></i>
             </button>
             
-            <button 
+            <button *ngIf="loggedInUser._id===vocab.creator"
                 class="actn-btn" 
                 nz-button 
                 nzType="default"
@@ -57,7 +57,17 @@
                 nzShape="circle">
               <i nz-icon style="color: green" type="edit"></i>
             </button>
-
+            <button  *ngIf="loggedInUser._id===vocab.creator"
+            class="actn-btn" 
+            nz-button 
+            nzType="default" 
+            nzTitle="Remove Contributor" 
+            nzPlacement="top" 
+            nz-tooltip
+            (click)="removePersonFromVocab(vocab._id)"
+            nzShape="circle">
+            <i nz-icon type="user-delete" nzTheme="outline"></i>
+        </button>
             <button 
                 class="actn-btn" 
                 nz-button 
@@ -81,6 +91,20 @@
                 nzShape="circle">
               <i nz-icon type="arrow-right"></i>
             </button>
+
+            <button  *ngIf="!vocab.creator"
+            class="actn-btn" 
+            nz-button 
+            nzType="default" 
+            nzTitle="Become a creator?" 
+            nzPlacement="top" 
+            nz-tooltip
+            (click)="becomeCreator(vocab._id)"
+            nzShape="circle">
+            <i nz-icon type="user" nzTheme="outline"></i>
+        </button>
+
+       
       </td>
     </tr>
   </tbody>

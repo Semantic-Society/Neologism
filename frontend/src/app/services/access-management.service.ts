@@ -23,9 +23,23 @@ export class AccessManagement {
         })
     }
 
+
     addUsersVocab(userIds: Array<string>, vocabId: string) {
         console.log('meteor-cal')
         MeteorObservable.call('vocabulary.addAuthors', userIds, vocabId)
+            .pipe(zoneOperator())
+            .subscribe((response) => {
+                console.log(response, 'response');
+                // Handle success and response from server!
+                }, (err) => {
+                console.log(err);
+                // Handle error
+            });
+    }
+
+    removeUsersVocab(userIds: Array<string>, vocabId: string) {
+        console.log('meteor-cal')
+        MeteorObservable.call('vocabulary.removeAuthors', userIds, vocabId)
             .pipe(zoneOperator())
             .subscribe((response) => {
                 console.log(response, 'response');

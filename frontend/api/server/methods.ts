@@ -1,9 +1,9 @@
 import { Meteor } from 'meteor/meteor';
-import {Iclass} from 'models'
+import { Iclass, Iuser, Ivocabulary } from 'models'
 
 import { Classes, Properties, Vocabularies, Users } from '../collections';
 import { meteorID } from '../models';
-const JsonRoutes= require('meteor/simple:json-routes').JsonRoutes
+const JsonRoutes = require('meteor/simple:json-routes').JsonRoutes
 // should be refactored as well. The checck is not sufficient
 function assertUser() {
   if (!Meteor.userId()) {
@@ -24,29 +24,56 @@ Meteor.methods({
   // get user by email, needed to add users by email, collaboration feature
   'users-without-self.get'(email: string) {
     assertUser()
-    
+
     const re = new RegExp(this.userId);
     const users = Users.find({
-      'emails.address' : { $regex: email},
+      'emails.address': { $regex: email },
       _id: { $not: re },
-     }, 
-     {limit: 10}).fetch()
-    
+    },
+      { limit: 10 }).fetch()
+
     return users;
+  },
+  'vocabulary.assign-creator.self'(vocabId:string){
+    assertUser()
+    Vocabularies.update(
+      { _id: vocabId },
+      {
+        $set:{
+          creator:this.userId
+        }
+      }).subscribe(value=>console.log("assigned creator to vocabulary "+vocabId+" "+value))
   },
   'vocabulary.addAuthors'(authorIds: Array<string>, vocabId: string) {
     assertUser();
+
     Vocabularies.update(
-      { _id: vocabId }, 
-      { $push: 
-        { authors: 
-          {$each: authorIds} 
-        } 
-      })
+      { _id: vocabId ,creator:this.userId},
+      {
+        $addToSet:
+        {
+          authors:
+            { $each: authorIds }
+        }
+      }).subscribe(value=>console.log("added authors "+value))
+  },
+  'vocabulary.removeAuthors'(authorIds: Array<string>, vocabId: string) {
+    assertUser();
+    console.log(authorIds + " ids")
+    Vocabularies.update(
+      { _id: vocabId, creator:this.userId },
+      {
+        $pull:
+        {
+          authors:
+            { $in: authorIds }
+        }
+      }).subscribe(value=>console.log("removed authors" + value))
   },
   'vocabulary.create'(_id:string ,name: string, description: string, uriPrefix: string, field_public: boolean = false) {
     assertUser();
     // add user to array of users to enable multiple user access. Fixes should happen on a author/creator fiel as well 
+
     return Vocabularies.insert({ 
       _id,
       name, 
@@ -54,7 +81,7 @@ Meteor.methods({
       description, 
       uriPrefix, 
       public: 
-      field_public, 
+      field_public,
       classes: []
     })
     
@@ -66,7 +93,7 @@ Meteor.methods({
     assertUser();
     // TODO: Sanitize
     // currently: pseudo permission check via only being able to remove documents where the current user is also an author
-    Vocabularies.remove({ _id: vocabId, authors: this.userId });
+    Vocabularies.remove({ _id: vocabId, creator: this.userId });
   },
   'class.create'(vocabId, name, description, URI) {
     assertUser();
@@ -75,11 +102,12 @@ Meteor.methods({
     // Note, these operations must occur in this order. Otherwise an observer of the vocabualry might
     const classIdO = Classes.insert({ name, description, URI, properties: [], position: { x: 0, y: 0 }, skos: { closeMatch: [], exactMatch: [] } });
     classIdO.subscribe((classID) =>
-      Vocabularies.update( 
-        { _id: vocabId }, 
-        { $push: 
-          { classes: classID }
-      })
+      Vocabularies.update(
+        { _id: vocabId },
+        {
+          $push:
+            { classes: classID }
+        })
     );
   },
   'class.update.name'(classID: string, name: string) {
@@ -121,12 +149,13 @@ Meteor.methods({
     // Note, these operations must occur in this order. Otherwise an observer of the vocabualry might
     const propID = Properties.insert(
       { name, description, URI, range })
-    ;
+      ;
     propID.subscribe((pID) =>
       Classes.update(
-        { _id: classId }, 
-        { $push: 
-          { properties: pID } 
+        { _id: classId },
+        {
+          $push:
+            { properties: pID }
         })
     );
   },
@@ -140,28 +169,33 @@ Meteor.methods({
   }
 });
 
-JsonRoutes.add("get", "/methods/downloadVocab/:id", (req, res) =>{
+JsonRoutes.add("get", "/vocabulary/:id", (req, res) => {
   try {
-  const vocabId = req.params.id
-  // console.log(vocabId)
-  let name = ""
-  const vocab =Vocabularies.findOne({ _id: vocabId})
-  const authorEmails = vocab.authors.map(author => {
-    const emails=Users.findOne({_id:author}).emails;
-    // console.log(emails)
-    if(!!emails)
-      return emails
-    return "email not found" 
-  } )
-   if (name === '' || name === undefined ) name = 'vocab-' + vocabId;
-   const buffer= saveClassesWithPropertiesAsFile(getClassesWithProperties(vocabId),vocab,authorEmails);
-  
-  res.setHeader('Content-type', 'text/plain');
-  // res.writeHead(200, {'Content-disposition': 'attachment; filename='+name+'.txt"'})
-  res.end(buffer)
+    const vocabId = req.params.id || null
+    let name = ""
+
+    const vocab = Vocabularies.findOne({ _id: vocabId }) || null
+    if (!vocab) {
+      throw new Meteor.Error(404,'Not Found')
+    }
+
+    const authorEmails = vocab.authors.map(author => {
+      const emails = Users.findOne({ _id: author }).emails;
+      if (!!emails)
+        return emails
+    })
+
+    if (name === '' || name === undefined) name = 'vocab-' + vocabId;
+
+    const buffer = saveClassesWithPropertiesAsFile(getClassesWithProperties(vocabId), vocab, authorEmails);
+
+    res.setHeader('Content-type', 'text/plain');
+
+    res.end(buffer)
+
   } catch (error) {
     console.log(error)
-    res.end(null)
+    res.end('Internal Server Error')
     return;
   }
 });
@@ -190,59 +224,68 @@ export interface IClassWithProperties {
 }
 
 
- function saveClassesWithPropertiesAsFile(classes,vocab,authorEmails) {
-  
+function saveClassesWithPropertiesAsFile(classes: IClassWithProperties[], vocab: Ivocabulary, authorEmails: (Meteor.UserEmail[])[]) {
+
   try {
     console.log('saveClassesWithPropertiesAsFile')
-  const vocabDetail = vocab
-  const namespace =`<${vocabDetail.uriPrefix}>` 
+    const vocabDetail = vocab
+    const namespace = `<${vocabDetail.uriPrefix}>`
+    const creator: Iuser = (vocab.creator) ? Users.findOne({ _id: vocab.creator }, { fields: { emails: 1 } }) : null
+    let rdf = ""
 
-  let rdf = ""
+    // Adding meta for documenation generator
+    rdf += `${namespace} a <http://www.w3.org/2002/07/owl#Ontology> .\r\n`;
+    if (creator) {
+      rdf += `${namespace} <http://purl.org/dc/terms/creator> "${creator.emails[0].address}" .\r\n`
+      authorEmails = authorEmails.filter(emails => emails[0].address != creator.emails[0].address)
+    }
 
-  // Adding meta for documenation generator
-  rdf+= `${namespace} a <http://www.w3.org/2002/07/owl#Ontology> .\r\n` ; 
-  authorEmails.forEach( emails => emails.forEach(email => {
-    rdf+= `${namespace} <http://purl.org/dc/terms/contributor> "${email.address}" .\r\n` })
-  );
+    authorEmails.forEach(emails => emails.forEach(email => {
+      rdf += `${namespace} <http://purl.org/dc/terms/contributor> "${email.address}" .\r\n`
+    })
+    );
 
-  rdf+= `${namespace} <http://purl.org/dc/terms/title> "${vocabDetail.name}" .\r\n` ;
-  rdf+= `${namespace} <http://purl.org/dc/terms/description> "${vocabDetail.description}" .\r\n` ;
+    rdf += `${namespace} <http://purl.org/dc/terms/title> "${vocabDetail.name}" .\r\n`;
+    rdf += `${namespace} <http://purl.org/dc/terms/description> "${vocabDetail.description}" .\r\n`;
 
-  
-  const a = '<http://www.w3.org/2000/01/rdf-schema#type>';
-  const domain = '<http://www.w3.org/2000/01/rdf-schema#domain>';
-  const range = '<http://www.w3.org/2000/01/rdf-schema#range>';
-  const rdfsclass = '<http://www.w3.org/2000/01/rdf-schema#Class>';
-  const property = '<http://www.w3.org/2000/01/rdf-schema#Property>';
-  const rdfsLabel = '<http://www.w3.org/2000/01/rdf-schema#label>' ;
-  const rdfsDescription = '<http://www.w3.org/2000/01/rdf-schema#description>'
-  const xmlString = '<http://www.w3.org/2001/XMLSchema#string>'
-  const allProps = Object.create(null);
-  classes.forEach((clazz) => {
-    const classURI = '<' + clazz.URI + '>';
-    rdf += `${classURI} ${a} ${rdfsclass} .\r\n`;
-    rdf += `${classURI} ${rdfsLabel} "${clazz.name}"^^${xmlString} .\r\n` ;
-    rdf += `${classURI} ${rdfsDescription} "${clazz.description}"^^${xmlString} .\r\n` ;
-    clazz.properties.forEach((prop) => {
-      const propURI = '<' + prop.URI + '> ';
-      allProps[propURI] = propURI;
-      const rangeClassURI = '<' + prop.range.URI + '>';
-      rdf += propURI + domain + classURI + ' .\r\n';
-      rdf += propURI + range + rangeClassURI + ' .\r\n';
+
+    const a = '<http://www.w3.org/2000/01/rdf-schema#type>';
+    const domain = '<http://www.w3.org/2000/01/rdf-schema#domain>';
+    const range = '<http://www.w3.org/2000/01/rdf-schema#range>';
+    const rdfsclass = '<http://www.w3.org/2000/01/rdf-schema#Class>';
+    const property = '<http://www.w3.org/2000/01/rdf-schema#Property>';
+    const rdfsLabel = '<http://www.w3.org/2000/01/rdf-schema#label>';
+    const rdfsDescription = '<http://www.w3.org/2000/01/rdf-schema#description>'
+    const xmlString = '<http://www.w3.org/2001/XMLSchema#string>'
+
+    const allProps = Object.create(null);
+
+    classes.forEach((clazz) => {
+      const classURI = '<' + clazz.URI + '>';
+      rdf += `${classURI} ${a} ${rdfsclass} .\r\n`;
+      rdf += `${classURI} ${rdfsLabel} "${clazz.name}"^^${xmlString} .\r\n`;
+      rdf += `${classURI} ${rdfsDescription} "${clazz.description}"^^${xmlString} .\r\n`;
+      clazz.properties.forEach((prop) => {
+        const propURI = '<' + prop.URI + '> ';
+        allProps[propURI] = propURI;
+        const rangeClassURI = '<' + prop.range.URI + '>';
+        rdf += propURI + domain + classURI + ' .\r\n';
+        rdf += propURI + range + rangeClassURI + ' .\r\n';
+      });
     });
-  });
-  // allProps created with Object.create(null);
-  // tslint:disable-next-line:forin
-  for (const prop in allProps) {
-    rdf += prop + a + property + ' .\n';
-  }
-  return rdf
-  // const blob = new Blob([rdf], { type: 'text/plain' });
-  // FileSaver.saveAs(blob, name + '.rdf');
+
+    // tslint:disable-next-line:forin
+    for (const prop in allProps) {
+      rdf += prop + a + property + ' .\n';
+    }
+
+    return rdf
+
   } catch (error) {
     console.log(error)
+    throw error
   }
-  
+
 }
 
 
@@ -250,52 +293,52 @@ export interface IClassWithProperties {
 
 function getClassesWithProperties(vocabularyId: string): IClassWithProperties[] {
 
-  let classes = getClasses(vocabularyId).map((c) =>  
-              {
-                const ps = Properties.find({ _id: { $in: c.properties } }).fetch()
-              return { ...c, properties: ps };
-            })
-          
+  let classes = getClasses(vocabularyId).map((c) => {
+    const ps = Properties.find({ _id: { $in: c.properties } }).fetch()
+    return { ...c, properties: ps };
+  })
+
   const classeswithoutrangefilter = classes.map((cs) => {
-          
-          const filledProps = cs.properties.map((p) => {
-          if (!p._id) throw new Error(p + 'is missing an ID!');
-          return { ...p, _id: p._id, range: null };
-        });
-        if (!cs._id) throw new Error(cs + 'is missing an ID!');
-        return { ...cs, _id: cs._id, properties: filledProps };
-      });
 
-        let failed = false;
+    const filledProps = cs.properties.map((p) => {
+      if (!p._id) throw new Meteor.Error(p + 'is missing an ID!');
+      return { ...p, _id: p._id, range: null };
+    });
+    if (!cs._id) throw new Meteor.Error(cs + 'is missing an ID!');
+    return { ...cs, _id: cs._id, properties: filledProps };
+  });
 
-        classeswithoutrangefilter.forEach((c, i) =>{
-          c.properties.forEach((p, j) => {
-            p.range = classeswithoutrangefilter.find((cr) => cr._id === classes[i].properties[j].range);
-            if (!p.range) {
-              failed = true;
-            }
-        
-      })})
-     
-      if (failed) {
-        return null;
+  let failed = false;
+
+  classeswithoutrangefilter.forEach((c, i) => {
+    c.properties.forEach((p, j) => {
+      p.range = classeswithoutrangefilter.find((cr) => cr._id === classes[i].properties[j].range);
+      if (!p.range) {
+        failed = true;
       }
-      return classeswithoutrangefilter
-    }
+
+    })
+  })
+
+  if (failed) {
+    return null;
+  }
+  return classeswithoutrangefilter
+}
 
 function getClassIDsForVocabID(vocabularyId: string): meteorID[] {
-  
-    return Vocabularies.findOne({ _id: vocabularyId }, { fields: { classes: 1 }}).classes
-      
+
+  return Vocabularies.findOne({ _id: vocabularyId }, { fields: { classes: 1 } }).classes
+
 }
 
 
 function getClasses(vocabularyId: string): Iclass[] {
   if (vocabularyId === undefined || vocabularyId === '') {
-    throw new Error('vocabularyID not correctly specified. Got "' + vocabularyId + '"');
+    throw new Meteor.Error('vocabularyID not correctly specified. Got "' + vocabularyId + '"');
   }
   const classIDs: meteorID[] = getClassIDsForVocabID(vocabularyId);
   const res: Iclass[] = Classes.find({ _id: { $in: classIDs } }).fetch()
-          
+
   return res;
 }
