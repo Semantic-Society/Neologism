@@ -44,10 +44,11 @@ Meteor.methods({
         } 
       })
   },
-  'vocabulary.create'(name: string, description: string, uriPrefix: string, field_public: boolean = false) {
+  'vocabulary.create'(_id:string ,name: string, description: string, uriPrefix: string, field_public: boolean = false) {
     assertUser();
     // add user to array of users to enable multiple user access. Fixes should happen on a author/creator fiel as well 
-    Vocabularies.insert({ 
+    return Vocabularies.insert({ 
+      _id,
       name, 
       authors: [this.userId], 
       description, 
@@ -55,7 +56,8 @@ Meteor.methods({
       public: 
       field_public, 
       classes: []
-    });
+    })
+    
   },
   /*'vocabulary.insertClass'({id, vClass}) {
     Vocabularies.update({_id:id}, { $push: {classes: vClass}});

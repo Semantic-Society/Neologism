@@ -82,16 +82,9 @@ export class VocabulariesService {
     );
   }
 
-  createVocabulary(name: string, description: string, uriPrefix: string) {
-    MeteorObservable.call('vocabulary.create', name, description, uriPrefix)
+  createVocabulary(_id:string, name: string, description: string, uriPrefix: string) {
+    return MeteorObservable.call('vocabulary.create', _id, name, description, uriPrefix)
       .pipe(zoneOperator())
-      .subscribe((response) => {
-        console.log(response);
-        // Handle success and response from server!
-      }, (err) => {
-        console.log(err);
-        // Handle error
-      });
   }
 
   deleteVocabulary(id: string) {
