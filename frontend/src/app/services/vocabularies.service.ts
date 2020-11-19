@@ -121,7 +121,7 @@ export class VocabulariesService {
 
   updateClassDescription(classID: string, description: string) {
     MeteorObservable.call('class.update.description', classID, description).subscribe((response) => {
-      // Handle sucess and response from server!
+      // Handle success and response from server!
     }, (err) => {
       console.log(err);
     });
