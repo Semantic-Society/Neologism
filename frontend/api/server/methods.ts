@@ -70,18 +70,21 @@ Meteor.methods({
         }
       }).subscribe(value=>console.log("removed authors" + value))
   },
-  'vocabulary.create'(name: string, description: string, uriPrefix: string, field_public: boolean = false) {
+  'vocabulary.create'(_id:string ,name: string, description: string, uriPrefix: string, field_public: boolean = false) {
     assertUser();
     // add user to array of users to enable multiple user access. Fixes should happen on a author/creator fiel as well 
-    Vocabularies.insert({
-      name,
-      creator: this.userId,
-      authors: [this.userId],
-      description,
-      uriPrefix,
-      public: field_public,
+
+    return Vocabularies.insert({ 
+      _id,
+      name, 
+      authors: [this.userId], 
+      description, 
+      uriPrefix, 
+      public: 
+      field_public,
       classes: []
-    });
+    })
+    
   },
   /*'vocabulary.insertClass'({id, vClass}) {
     Vocabularies.update({_id:id}, { $push: {classes: vClass}});

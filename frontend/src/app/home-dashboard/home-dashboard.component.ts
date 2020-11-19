@@ -65,11 +65,21 @@ export class HomeDashboardComponent implements OnInit {
     modal.afterClose.subscribe((result) => {
       if(result.name===undefined)
       return;
+        
+      const objectID=new Mongo.ObjectID().toHexString()
       this.vocabService.createVocabulary(
+        objectID,
         result.name,
         result.description,
         result.uri
-      );
+      ).subscribe((response) => {
+        console.log(response)
+      this.router.navigateByUrl('vcblry-edit/' + objectID );
+        // Handle success and response from server!
+      }, (err) => {
+        console.log(err);
+        // Handle error
+      });
     });
 
   }
