@@ -5,7 +5,7 @@ import { AccessManagement } from '../../../services/access-management.service';
 import { BehaviorSubject, Observable, Subject, of } from 'rxjs';
 import { map, debounceTime, distinctUntilChanged, flatMap, startWith, tap, switchMap } from 'rxjs/operators';
 import { Users, Vocabularies } from '../../../../../api/collections';
-import { Iuser } from 'api/models';
+import { Iuser } from '../../../../../api/models';
 
 @Component({
   selector: 'app-remove-user-modal',

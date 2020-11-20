@@ -8,7 +8,7 @@ import { AddUserModalComponent } from '../../../app/vocablist/components/add-use
 import { Router } from '@angular/router';
 import { HTTP } from 'meteor/http'
 import { environment } from '../../../environments/environment';
-import { Iuser } from 'api/models';
+import { Iuser } from '../../../../api/models';
 import { MeteorObservable, zoneOperator } from 'meteor-rxjs';
 import { RemoveUserModalComponent } from '../../../app/vocablist/components/remove-user-modal/remove-user-modal.component';
 
