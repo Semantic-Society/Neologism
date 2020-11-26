@@ -9,7 +9,7 @@
   <nz-autocomplete nzBackfill #auto>
     <nz-auto-option *ngFor="let vocab of vocabs" [nzValue]="vocab._id">
 
-      <a [routerLink]="['/vcblry-edit/'+ vocab._id]">
+      <a [routerLink]="['/edit/'+ vocab._id]">
         {{vocab.name}}
       </a>
     </nz-auto-option>

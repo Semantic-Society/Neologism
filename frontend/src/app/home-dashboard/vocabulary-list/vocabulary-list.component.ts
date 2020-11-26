@@ -61,7 +61,7 @@ export class VocabularyListComponent implements OnInit {
 
 
   openVocabulary(vocab_id: string) {
-    this.router.navigateByUrl('vcblry-edit/' + vocab_id);
+    this.router.navigateByUrl('edit/' + vocab_id);
   }
 
   addVocabulary(vocabForm: any) {
