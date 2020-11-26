@@ -73,7 +73,7 @@ export class HomeDashboardComponent implements OnInit {
         result.uri
       ).subscribe((response) => {
         console.log(response)
-      this.router.navigateByUrl('vcblry-edit/' + response.vocabId );
+      this.router.navigateByUrl('edit/' + response.vocabId );
         // Handle success and response from server!
       }, (err) => {
         console.log(err);

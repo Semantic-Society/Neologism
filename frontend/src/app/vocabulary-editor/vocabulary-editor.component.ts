@@ -130,10 +130,10 @@ export class VocabularyEditorComponent implements OnInit {
 
   changeViewMethod(selection: string) {
     if(selection === 'mxgraph')
-      this.router.navigateByUrl('vcblry-edit/' + this.vocabID + '/mxgraph');
+      this.router.navigateByUrl('edit/' + this.vocabID + '/mxgraph');
 
     if(selection === 'list-view')
-      this.router.navigateByUrl('vcblry-edit/' + this.vocabID + '/list');
+      this.router.navigateByUrl('edit/' + this.vocabID + '/list');
   }
 
   ngOnInit() {

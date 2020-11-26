@@ -39,7 +39,7 @@ const routes: Routes = [
   },
   { path: 'login', component: LoginPageComponent},
   { path: 'vocabularies', component: VocablistComponent },
-  { path: 'vcblry-edit/:id', component: MxgraphComponent },
+  { path: 'edit/:id', component: MxgraphComponent },
 ];
 
 @NgModule({
