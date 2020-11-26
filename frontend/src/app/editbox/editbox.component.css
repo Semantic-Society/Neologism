@@ -212,8 +212,9 @@ mat-form-field.description {
   width: calc(100% - 1rem);
 }
 
-mat-form-field.description textarea {
+mat-form-field.description input {
   min-height: 100px;
+  width: 100%;
 }
 
 .button-full-width {
