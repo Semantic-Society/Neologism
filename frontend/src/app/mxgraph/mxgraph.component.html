@@ -4,7 +4,7 @@
 
     <app-metadata [vocabulary]="vocabulary" *ngSwitchCase="'default'"></app-metadata>
     <ng-container>       
-      <app-editbox *ngSwitchCase="'edit'" [selectedClassID]="this.currentSelection" [vocabID]="this.vocabID"></app-editbox>
+      <app-editbox *ngSwitchCase="'edit'" [selectedClassID]="this.currentSelection" [uriPrefix]="vocabulary.uriPrefix" [vocabID]="this.vocabID"></app-editbox>
       <app-recommender *ngSwitchCase="'recommend'" [vocabID]="this.vocabID"></app-recommender>
       <app-node-creator *ngSwitchCase="'create'" [vocabID]="this.vocabID" [uriPrefix]="vocabulary.uriPrefix"></app-node-creator>
     </ng-container>

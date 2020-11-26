@@ -24,7 +24,7 @@ export class EditboxComponent implements OnInit, OnChanges {
 
   // TODO: as this is an observable, does it need @Input?
   @Input() selectedClassID: string;
-
+  @Input() uriPrefix: string;
   /**
    * If more classinfo is needed, it can be fetched in ngOnInit below.
    */
@@ -211,6 +211,11 @@ export class EditboxComponent implements OnInit, OnChanges {
     }
     this.cancelEdit();
   }
+
+  change(value:string){    
+    this.editedClass.URI=`${this.uriPrefix}#${value.toLocaleLowerCase()}`
+
+ }
 
   resetSidebarState() {
     this.sidebarService.changeSidebarToDefault()
