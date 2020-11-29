@@ -76,8 +76,9 @@ Meteor.methods({
 
     return Vocabularies.insert({ 
       _id,
+      creator:this.userId,
       name, 
-      authors: [this.userId], 
+      authors: [], 
       description, 
       uriPrefix, 
       public: 
@@ -98,6 +99,7 @@ Meteor.methods({
   'class.create'(vocabId, name, description, URI) {
     assertUser();
     // TODO: Sanitize
+    console.log(vocabId+name)
 
     // Note, these operations must occur in this order. Otherwise an observer of the vocabualry might
     const classIdO = Classes.insert({ name, description, URI, properties: [], position: { x: 0, y: 0 }, skos: { closeMatch: [], exactMatch: [] } });

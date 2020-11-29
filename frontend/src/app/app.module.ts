@@ -55,6 +55,7 @@ import { NzDrawerService } from 'ng-zorro-antd';
 import { EditComponentService } from './vocabulary-editor/edit.component.service';
 import { from } from 'rxjs';
 import { RemoveUserModalComponent } from './vocablist/components/remove-user-modal/remove-user-modal.component';
+import { MatSnackBarModule } from '@angular/material';
 
 registerLocaleData(en);
 
@@ -94,7 +95,8 @@ registerLocaleData(en);
     RoutingModule,
     TruncateModule,
     StateServiceModule,
-    NgZorroAntdModule
+    NgZorroAntdModule,
+    MatSnackBarModule
   ],
   entryComponents: [
     AddUserModalComponent,
