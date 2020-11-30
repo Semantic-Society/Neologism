@@ -1,38 +1,45 @@
-
 <mat-toolbar color="secondary">
-    <span>Add Class</span>
-    <span class="editor-toolbar-spacer"></span>
-  
-    <button (click)="resetSidebarState()" mat-icon-button color="primary">
-      <mat-icon>arrow_back</mat-icon>
-    </button>
-  </mat-toolbar>
+  <span>Add Class</span>
+  <span class="editor-toolbar-spacer"></span>
+
+  <button (click)="resetSidebarState()" mat-icon-button color="primary">
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+</mat-toolbar>
 
 <div class="editbox-container no-pad">
-  <div class="class-details">
-    <div class="top">
-      <div class="img">
-        <img src="../../../assets/default_node_image.gif"/>
-      </div>
-      <div class="name-plus-uri">
-        <mat-form-field class="full-width name">
-          <input matInput placeholder="Class Name" value="" (change)="autoCompleteURI($event)" [(ngModel)]="newClass.name" required>
-        </mat-form-field>
-        <mat-form-field class="full-width uri">
-          
-          <input matInput placeholder="uri" [value]="newClass.URI" readonly disabled>
-        </mat-form-field>
-      </div>
-    </div>
+  <form (ngSubmit)="onSubmit()" #addClassForm="ngForm">
+    <div class="class-details">
+      <div class="top">
+        <div class="img">
+          <img src="../../../assets/default_node_image.gif" />
+        </div>
+        <div class="name-plus-uri form-group">
+          <mat-form-field class="full-width name">
+            <input class="form-control" type="text" matInput placeholder="Class Name" value=""
+              (change)="autoCompleteURI($event)" [(ngModel)]="newClass.name" required id="name" name="name"
+              #name="ngModel">
+          </mat-form-field>
+          <div [hidden]="name.valid || name.pristine" class="alert alert-danger">
+            Class Name is required
+          </div>
+          <mat-form-field class="full-width uri form-group">
 
-    <div class="bottom">
-      <mat-form-field class="full-width">
-        <textarea matInput placeholder="Description" value="" class="description"
-                  [(ngModel)]="newClass.description"></textarea>
-      </mat-form-field>
+            <input matInput class="form-control" placeholder="uri" [value]="newClass.URI" readonly disabled>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="bottom">
+        <mat-form-field class="full-width form-group">
+          <textarea matInput placeholder="Description" value="" class="description form-control"
+            [(ngModel)]="newClass.description"></textarea>
+        </mat-form-field>
+      </div>
     </div>
-  </div>
-  <div class="button-full-width">
-    <button mat-raised-button color="primary" (click)="addClass()" *ngIf="!selectedClassID">Add Class</button>
-  </div>
+    <div class="button-full-width">
+      <button type="submit" mat-raised-button color="primary" (click)="addClass()" [disabled]="!addClassForm.form.valid"
+        *ngIf="!selectedClassID">Add Class</button>
+    </div>
+  </form>
 </div>
