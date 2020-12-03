@@ -87,7 +87,7 @@ export class VocabulariesService {
     return MeteorObservable.call('vocabulary.create', _id, name, description, uriPrefix)
       .pipe(
         zoneOperator(),
-        map(result => ({...result, vocabId:_id}))
+        map(result => ({ ...result, vocabId: _id }))
       )
   }
 
@@ -102,8 +102,8 @@ export class VocabulariesService {
       });
   }
 
-  addClass(vocabularyId: string, name: string, description: string, URI: string) {
-    MeteorObservable.call('class.create', vocabularyId, name, description, URI).subscribe((response) => {
+  addClass(vocabularyId: string, name: string, description: string, URI: string, position: { x: number, y: number } = { x: 0, y: 0 }) {
+    MeteorObservable.call('class.create', vocabularyId, name, description, URI, position).subscribe((response) => {
       // Handle success and response from server!
       console.log('addClass', response);
     }, (err) => {

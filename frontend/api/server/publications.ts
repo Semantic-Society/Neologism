@@ -38,7 +38,7 @@ import { Classes, Properties, Users, Vocabularies } from '../collections';
         // Must return a cursor containing top level documents
         find: () => {
             console.log("Received vocabDetails req. for id", vocabularyID)
-            return Vocabularies.collection.find({ _id: vocabularyID, $or: [{ authors: this.userId }, { public: true }] }, { limit: 1 });
+            return Vocabularies.collection.find({ _id: vocabularyID, $or: [{ creator: this.userId },{ authors: this.userId }, { public: true }] }, { limit: 1 });
         },
 
         children: [
