@@ -34,58 +34,58 @@ Meteor.methods({
 
     return users;
   },
-  'vocabulary.assign-creator.self'(vocabId:string){
+  'vocabulary.assign-creator.self'(vocabId: string) {
     assertUser()
     Vocabularies.update(
       { _id: vocabId },
       {
-        $set:{
-          creator:this.userId
+        $set: {
+          creator: this.userId
         }
-      }).subscribe(value=>console.log("assigned creator to vocabulary "+vocabId+" "+value))
+      }).subscribe(value => console.log("assigned creator to vocabulary " + vocabId + " " + value))
   },
   'vocabulary.addAuthors'(authorIds: Array<string>, vocabId: string) {
     assertUser();
 
     Vocabularies.update(
-      { _id: vocabId ,creator:this.userId},
+      { _id: vocabId, creator: this.userId },
       {
         $addToSet:
         {
           authors:
             { $each: authorIds }
         }
-      }).subscribe(value=>console.log("added authors "+value))
+      }).subscribe(value => console.log("added authors " + value))
   },
   'vocabulary.removeAuthors'(authorIds: Array<string>, vocabId: string) {
     assertUser();
     console.log(authorIds + " ids")
     Vocabularies.update(
-      { _id: vocabId, creator:this.userId },
+      { _id: vocabId, creator: this.userId },
       {
         $pull:
         {
           authors:
             { $in: authorIds }
         }
-      }).subscribe(value=>console.log("removed authors" + value))
+      }).subscribe(value => console.log("removed authors" + value))
   },
-  'vocabulary.create'(_id:string ,name: string, description: string, uriPrefix: string, field_public: boolean = false) {
+  'vocabulary.create'(_id: string, name: string, description: string, uriPrefix: string, field_public: boolean = false) {
     assertUser();
     // add user to array of users to enable multiple user access. Fixes should happen on a author/creator fiel as well 
 
-    return Vocabularies.insert({ 
+    return Vocabularies.insert({
       _id,
-      creator:this.userId,
-      name, 
-      authors: [], 
-      description, 
-      uriPrefix, 
-      public: 
-      field_public,
+      creator: this.userId,
+      name,
+      authors: [],
+      description,
+      uriPrefix,
+      public:
+        field_public,
       classes: []
     })
-    
+
   },
   /*'vocabulary.insertClass'({id, vClass}) {
     Vocabularies.update({_id:id}, { $push: {classes: vClass}});
@@ -96,13 +96,12 @@ Meteor.methods({
     // currently: pseudo permission check via only being able to remove documents where the current user is also an author
     Vocabularies.remove({ _id: vocabId, creator: this.userId });
   },
-  'class.create'(vocabId, name, description, URI) {
+  'class.create'(vocabId, name, description, URI, position) {
     assertUser();
     // TODO: Sanitize
-    console.log(vocabId+name)
 
     // Note, these operations must occur in this order. Otherwise an observer of the vocabualry might
-    const classIdO = Classes.insert({ name, description, URI, properties: [], position: { x: 0, y: 0 }, skos: { closeMatch: [], exactMatch: [] } });
+    const classIdO = Classes.insert({ name, description, URI, properties: [], position, skos: { closeMatch: [], exactMatch: [] } });
     classIdO.subscribe((classID) =>
       Vocabularies.update(
         { _id: vocabId },
@@ -178,7 +177,7 @@ JsonRoutes.add("get", "/vocabulary/:id", (req, res) => {
 
     const vocab = Vocabularies.findOne({ _id: vocabId }) || null
     if (!vocab) {
-      throw new Meteor.Error(404,'Not Found')
+      throw new Meteor.Error(404, 'Not Found')
     }
 
     const authorEmails = vocab.authors.map(author => {
