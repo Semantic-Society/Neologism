@@ -102,7 +102,7 @@ export class VocabulariesService {
       });
   }
 
-  addClass(vocabularyId: string, name: string, description: string, URI: string, position: { x: number, y: number }) {
+  addClass(vocabularyId: string, name: string, description: string, URI: string, position: { x: number, y: number } = { x: 0, y: 0 }) {
     MeteorObservable.call('class.create', vocabularyId, name, description, URI, position).subscribe((response) => {
       // Handle success and response from server!
       console.log('addClass', response);
