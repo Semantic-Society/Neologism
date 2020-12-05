@@ -8,7 +8,7 @@
 </mat-toolbar>
 
 <div class="editbox-container no-pad">
-  <form (ngSubmit)="onSubmit()" #addClassForm="ngForm">
+  <form (ngSubmit)="addClass()" #addClassForm="ngForm">
     <div class="class-details">
       <div class="top">
         <div class="img">
@@ -38,7 +38,7 @@
       </div>
     </div>
     <div class="button-full-width">
-      <button type="submit" mat-raised-button color="primary" (click)="addClass()" [disabled]="!addClassForm.form.valid"
+      <button type="submit" mat-raised-button color="primary"  [disabled]="!addClassForm.form.valid"
         *ngIf="!selectedClassID">Add Class</button>
     </div>
   </form>
