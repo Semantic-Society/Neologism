@@ -53,9 +53,9 @@ import { VocabularyEditorService } from './vocabulary-editor/vocabulary-editor.s
 import { ListEditorComponent } from './vocabulary-editor/list-editor/list-editor.component';
 import { NzDrawerService } from 'ng-zorro-antd';
 import { EditComponentService } from './vocabulary-editor/edit.component.service';
-import { from } from 'rxjs';
 import { RemoveUserModalComponent } from './vocablist/components/remove-user-modal/remove-user-modal.component';
 import { MatSnackBarModule } from '@angular/material';
+import { PropertyEditModal } from './mxgraph/property-model/property-edit.component';
 
 registerLocaleData(en);
 
@@ -80,7 +80,8 @@ registerLocaleData(en);
     SearchVocabulariesAutocompleteComponent,
     MxGraphEditorComponent,
     ListEditorComponent,
-    RemoveUserModalComponent
+    RemoveUserModalComponent,
+    PropertyEditModal
   ],
   imports: [
     AccountsModule,
@@ -101,7 +102,8 @@ registerLocaleData(en);
   entryComponents: [
     AddUserModalComponent,
     CreateVocabModalComponent,
-    RemoveUserModalComponent
+    RemoveUserModalComponent,
+    PropertyEditModal
   ],
   providers: [
     LoginAuthGuard,

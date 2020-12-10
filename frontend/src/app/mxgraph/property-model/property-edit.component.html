@@ -1,0 +1,13 @@
+
+<nz-select style="width: 100%; margin-top: 7px;" (ngModelChange)="propChange($event)" nzPlaceHolder="Select Prop to edit" [(ngModel)]="selectedProp">
+    <nz-option *ngFor="let c of propList" [nzValue]="c._id" [nzLabel]="c.name" > </nz-option>
+</nz-select>
+
+
+<input placeholder="Label" nz-input [(ngModel)]="prop.name">
+<input placeholder="URI" nz-input [(ngModel)]="prop.URI">
+<input placeholder="Comment" nz-input [(ngModel)]="prop.description">
+
+<nz-select style="width: 100%; margin-top: 7px;" nzShowSearch nzPlaceHolder="Select Range" [(ngModel)]="prop.range">
+    <nz-option *ngFor="let c of classes" [nzValue]="c._id" [nzLabel]="c.name"  >  {{ c.name }}</nz-option>
+</nz-select>
