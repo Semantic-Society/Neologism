@@ -18,7 +18,7 @@ export class SideBarStateService {
     changeBySelection(selection: any){
         
         // determine if selection is undefined, if undefined reset to default sidebar
-        const new_state = selection ? 'edit' : 'default';
+        const new_state = selection != null ? 'edit' : 'default';
         // it is necessarry to cast the string
         this.emitState((new_state as SidebarChange))
     }

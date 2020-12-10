@@ -1,17 +1,19 @@
 
-import {Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { mxgraph as m } from 'mxgraph';
 import { Observable, Subscription } from 'rxjs';
-import { combineLatest, debounceTime, distinctUntilChanged, filter, map} from 'rxjs/operators';
+import { combineLatest, debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
 
 import { MxgraphService } from './mxgraph';
 
-import { Ivocabulary, meteorID,IvocabularyExtended } from '../../../api/models';
+import { Ivocabulary, meteorID, IvocabularyExtended } from '../../../api/models';
 import { IClassWithProperties, VocabulariesService } from '../services/vocabularies.service';
 
 // import sidebar state dep.
 import { SideBarStateService, SidebarChange } from '../services/state-services/sidebar-state.service';
+import { NzModalService } from 'ng-zorro-antd';
+import { PropertyEditModal } from './property-model/property-edit.component';
 
 
 interface IMergedPropertiesClass {
@@ -35,27 +37,30 @@ export class MxgraphComponent implements OnInit, OnDestroy {
     editMode: Observable<SidebarChange>; // type SidebarChange = 'default' | 'edit' | 'recommend'
     currentSelection: meteorID;
     currentSelectionSub: Subscription;
+    currentEdgeSelectionSub: Subscription;
+
     vocabularySub: Subscription;
 
     @ViewChild('view') mxGraphView: ElementRef;
-     mx: MxgraphService;
-     vocabID: string;
-     classes: Observable<IClassWithProperties[]>;
-     vocabulary: IvocabularyExtended;
+    mx: MxgraphService;
+    vocabID: string;
+    classes: Observable<IClassWithProperties[]>;
+    vocabulary: IvocabularyExtended;
 
     @HostListener('window:keydown', ['$event'])
     onKeyDown(event) {
-      if (event.keyCode === 27) { // 27 is keycode for ESC
-        this.sideBarState.changeBySelection('default');
-      }
+        if (event.keyCode === 27) { // 27 is keycode for ESC
+            this.sideBarState.changeBySelection('default');
+        }
     }
 
 
     constructor(
-         private route: ActivatedRoute, 
-         private vocabService: VocabulariesService,
-         private sideBarState: SideBarStateService) {
-            this.editMode = this.sideBarState.editMode;
+        private route: ActivatedRoute,
+        private vocabService: VocabulariesService,
+        private sideBarState: SideBarStateService,
+        private modalService: NzModalService) {
+        this.editMode = this.sideBarState.editMode;
     }
 
 
@@ -66,19 +71,36 @@ export class MxgraphComponent implements OnInit, OnDestroy {
         this.classes = this.vocabService.getClassesWithProperties(this.vocabID);
         this.mx = new MxgraphService(this.mxGraphView.nativeElement);
 
-        // console.log('the is of the vocb is ' + this.id);
-
-        // this.vocabService.addClass(this.vocabID, 'ClassName', 'Iraklis did it', 'the URI');
-        // this.vocabService.addProperty('ikhjrcSqXJQQrgfC6', 'myprop', 'nice prop', 'example.org', 'c8YSBREPsKex4526d');
-
         // this.currentSelection = this.mx.currentSelection().publish(new BehaviorSubject<string>(null));
+
+        this.currentEdgeSelectionSub= this.mx.currentEdgeSelection().subscribe(edgeSelection => {
+            if (edgeSelection != null) {
+                const modal = this.modalService.create({
+                    nzTitle: 'Update Property',
+                    nzContent: PropertyEditModal,
+                    nzComponentParams: {
+                        propListString: edgeSelection.edgeID,
+                        propSourceNodeId: edgeSelection.domainClazzID
+                    },
+                    nzFooter: [{
+                        label: 'Update Property',
+                        onClick: (componentInstance) => {
+                            componentInstance.closeModal();
+                        }},{
+                        label: 'Delete Property',
+                        onClick: (componentInstance) => {
+                            componentInstance.deleteProp();
+                        }
+                    }]
+                });
+            }
+        })
+
         this.currentSelectionSub = this.mx.currentSelection().pipe(
-            combineLatest(this.mx.currentEdgeSelection(),
-                (classSelection, edgeSelection) => {
+            map(
+                (classSelection) => {
                     if (classSelection !== null) {
                         return classSelection;
-                    } else if (edgeSelection !== null) {
-                        return edgeSelection.domainClazzID;
                     } else {
                         return null;
                     }
@@ -87,7 +109,6 @@ export class MxgraphComponent implements OnInit, OnDestroy {
             debounceTime(20),
             distinctUntilChanged()
         ).subscribe((selection) => {
-
             this.sideBarState.changeBySelection(selection);
             this.currentSelection = selection;
         });
@@ -111,18 +132,18 @@ export class MxgraphComponent implements OnInit, OnDestroy {
             }
         );
 
-        this.vocabularySub = this.vocabService.getVocabulary(this.vocabID).pipe(map((vocab,index)=>{
-            let emailAddress=""
-            vocab.authors.forEach(author=>emailAddress+=this.vocabService.getEmailAddress(author)+" ")
-            let newVocab= <IvocabularyExtended>{}; 
-            newVocab._id=vocab._id;
-            newVocab.authorsEmailAddress=emailAddress;
-            newVocab.authors=vocab.authors;
-            newVocab.classes=vocab.classes;
-            newVocab.description=vocab.description;
-            newVocab.name=vocab.name;
-            newVocab.public=vocab.public;
-            newVocab.uriPrefix=vocab.uriPrefix;
+        this.vocabularySub = this.vocabService.getVocabulary(this.vocabID).pipe(map((vocab, index) => {
+            let emailAddress = ""
+            vocab.authors.forEach(author => emailAddress += this.vocabService.getEmailAddress(author) + " ")
+            let newVocab = <IvocabularyExtended>{};
+            newVocab._id = vocab._id;
+            newVocab.authorsEmailAddress = emailAddress;
+            newVocab.authors = vocab.authors;
+            newVocab.classes = vocab.classes;
+            newVocab.description = vocab.description;
+            newVocab.name = vocab.name;
+            newVocab.public = vocab.public;
+            newVocab.uriPrefix = vocab.uriPrefix;
             return newVocab;
         })).subscribe(
             (v) => this.vocabulary = v,
@@ -205,8 +226,14 @@ export class MxgraphComponent implements OnInit, OnDestroy {
                     combinedNameAcc.push(prop.name);
                     return combinedNameAcc;
                 }, []);
+            const keyList: string[] = group.reduce<string[]>(
+                (combinedNameAcc, prop, ignores) => {
+                    combinedNameAcc.push(prop._id);
+                    return combinedNameAcc;
+                }, []);
             const combinedName = nameList.join(' | ');
-            withMergedProps.properties.push({ _id: key, name: combinedName, rangeID: group[0].range._id });
+            const combinedKey = keyList.join(',');
+            withMergedProps.properties.push({ _id: combinedKey, name: combinedName, rangeID: group[0].range._id });
             // }
         }
         return withMergedProps;
@@ -231,5 +258,6 @@ export class MxgraphComponent implements OnInit, OnDestroy {
         this.mx.destroy();
         this.currentSelectionSub.unsubscribe();
         this.vocabularySub.unsubscribe();
+        this.currentEdgeSelectionSub.unsubscribe()
     }
 }

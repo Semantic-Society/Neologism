@@ -167,6 +167,18 @@ Meteor.methods({
       { $set: { name, description, URI, range } },
       {}
     )
+  },
+  'property.delete'(propId, sourceId) {
+    assertUser();
+    Classes.update(
+      { _id: sourceId },
+      { $pull: { properties:{ $in:[propId]} } },
+      {}
+    )
+
+    Properties.remove(
+      { _id: propId }
+    )
   }
 });
 
