@@ -1,5 +1,14 @@
-<h1 class="sidebar-header neologism-sidebar-header">Neologism </h1>
 <hr>
+
+  <div>
+    <a [routerLink]="['/dashboard']">
+      <mat-icon aria-hidden="false" class="v-align-middle" aria-label="Example home icon">home</mat-icon>
+      <span class="aligned-with-icon"><h1 class="sidebar-header neologism-sidebar-header" style="
+        display: inline;">Neologism </h1></span>
+    </a>
+  </div>
+
+  
 <hr>
 <div>
   <h3 class="sidebar-header">{{vocabulary?.name}}</h3>
