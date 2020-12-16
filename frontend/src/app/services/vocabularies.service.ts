@@ -94,7 +94,7 @@ export class VocabulariesService {
   deleteVocabulary(id: string) {
     MeteorObservable.call('vocabulary.remove', id)
       .pipe(zoneOperator())
-      .subscribe((response) => {
+      .subscribe((_response) => {
         // Handle success and response from server!
       }, (err) => {
         console.log(err);
@@ -112,7 +112,7 @@ export class VocabulariesService {
   }
 
   updateClassName(classID: string, name: string) {
-    MeteorObservable.call('class.update.name', classID, name).subscribe((response) => {
+    MeteorObservable.call('class.update.name', classID, name).subscribe((_response) => {
       // Handle success and response from server!
     }, (err) => {
       console.log(err);
@@ -120,7 +120,7 @@ export class VocabulariesService {
   }
 
   updateClassDescription(classID: string, description: string) {
-    MeteorObservable.call('class.update.description', classID, description).subscribe((response) => {
+    MeteorObservable.call('class.update.description', classID, description).subscribe((_response) => {
       // Handle success and response from server!
     }, (err) => {
       console.log(err);
@@ -128,7 +128,7 @@ export class VocabulariesService {
   }
 
   updateClassURI(classID: string, URI: string) {
-    MeteorObservable.call('class.update.URI', classID, URI).subscribe((response) => {
+    MeteorObservable.call('class.update.URI', classID, URI).subscribe((_response) => {
       // Handle success and response from server!
     }, (err) => {
       console.log(err);
@@ -137,7 +137,7 @@ export class VocabulariesService {
 
   addProperty(toClass: meteorID, name: string, description: string, URI: string, range: meteorID) {
     MeteorObservable.call('property.create', toClass, name, description, URI, range)
-      .subscribe((response) => {
+      .subscribe((_response) => {
         // Handle success and response from server!
       }, (err) => {
         console.log(err);
@@ -155,7 +155,7 @@ export class VocabulariesService {
 
     return thevocabO.pipe(
       debounceTime(10),
-      switchMap((theVocab, ignored) => {
+      switchMap((theVocab, _ignored) => {
         if (theVocab.length > 1) {
           return throwError(new Error('More than 1 vocab returned for id'));
         } else if (theVocab.length === 0) {
@@ -180,7 +180,7 @@ export class VocabulariesService {
 
   translateClasses(ids: meteorID[], dx: number, dy: number) {
     MeteorObservable.call('classes.translate', ids, dx, dy)
-      .subscribe((response) => {
+      .subscribe((_response) => {
         // Handle success and response from server!
       }, (err) => {
         console.log(err);
@@ -343,6 +343,14 @@ export class VocabulariesService {
       console.log(error)
     }
 
+  }
+
+  deleteClass(id: meteorID) {
+    MeteorObservable.call('classes.delete', id)
+      .subscribe((_response) => {
+      }, (err) => {
+        console.log(err);
+      });
   }
 
 }
