@@ -151,5 +151,9 @@ export class EditboxService {
             });
     }
 
+    deleteClass(id:string){
+        this.vocabService.deleteClass(id)
+    }
+
 
 }

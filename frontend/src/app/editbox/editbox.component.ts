@@ -8,6 +8,8 @@ import { SideBarStateService } from '../services/state-services/sidebar-state.se
 import { EditboxService } from './editbox.service';
 import { IClassProperties, IClassProperty } from '../models/editbox.model';
 import { FormArray, FormBuilder, FormControl, FormGroup, FormGroupDirective, Validators } from '@angular/forms';
+import { NzModalService } from 'ng-zorro-antd';
+
 @Component({
   selector: 'app-editbox',
   templateUrl: './editbox.component.html',
@@ -62,7 +64,8 @@ export class EditboxComponent implements OnInit, OnChanges {
     private recommender: RecommendationService,
     private sidebarService: SideBarStateService,
     private editboxService: EditboxService,
-    private fb: FormBuilder) {
+    private fb: FormBuilder,
+    private modal: NzModalService) {
 
     this.formProp = fb.group({
       name: ['', Validators.required],
@@ -235,6 +238,18 @@ export class EditboxComponent implements OnInit, OnChanges {
   propReturn(index: number, rec) {
     this.props.controls[index].patchValue(rec)
     this.propToggleView(rec)
+  }
+
+  showDeleteConfirm(): void {
+    console.log(this.selectedClassID)
+    this.modal.confirm({
+      nzTitle: 'Are you sure delete this class?',
+      nzOkText: 'Yes',
+      nzOkType: 'danger',
+      nzOnOk: () => this.editboxService.deleteClass(this.selectedClassID),
+      nzCancelText: 'No',
+      nzOnCancel: () => console.log('Cancel')
+    });
   }
 
 }

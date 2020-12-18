@@ -1,5 +1,8 @@
 import { Meteor } from 'meteor/meteor';
 import { Iclass, Iuser, Ivocabulary } from 'models'
+import { combineLatest } from 'rxjs';
+import { map, take, tap } from 'rxjs/operators';
+
 
 import { Classes, Properties, Vocabularies, Users } from '../collections';
 import { meteorID } from '../models';
@@ -115,7 +118,7 @@ Meteor.methods({
     assertUser();
     Classes.update(
       { _id: classID },
-      { $set: { name } },
+      -      { $set: { name } },
       {}
     );
   },
@@ -143,6 +146,25 @@ Meteor.methods({
       { $inc: { 'position.x': dx, 'position.y': dy } },
       { multi: true }
     );
+  },
+  'classes.delete'(classId: string) {
+    assertUser();
+    const $getClassProps = Classes.find({ _id: classId }, {limit:1}).pipe(map(classes => classes[0].properties))
+    const $getClassRangeProps = Properties.find({ range: classId }).pipe(map(props => props.map(prop => prop._id)))
+
+    combineLatest([$getClassProps,
+      $getClassRangeProps]
+    )
+    .pipe(
+      take(1),      
+        tap(([x, y]) => console.log(x.concat(y))),
+        map(([first, second]) => {
+          first.concat(second)
+          .forEach(propId=>Properties.remove(propId))
+          return true;
+        })
+      ).subscribe(_resp=>Classes.remove(classId));
+
   },
   'property.create'(classId, name, description, URI, range) {
     assertUser();
@@ -172,7 +194,7 @@ Meteor.methods({
     assertUser();
     Classes.update(
       { _id: sourceId },
-      { $pull: { properties:{ $in:[propId]} } },
+      { $pull: { properties: { $in: [propId] } } },
       {}
     )
 
