@@ -35,7 +35,7 @@ import { AccessManagement } from './services/access-management.service';
 import { AddUserModalComponent } from './vocablist/components/add-user-modal/add-user-modal.component';
 import { NgZorroAntdModule, NZ_I18N, en_US } from 'ng-zorro-antd';
 import { registerLocaleData } from '@angular/common';
-import { ParticlesModule } from 'angular-particle';
+// import { ParticlesModule } from 'angular-particle';
 
 import en from '@angular/common/locales/en';
 
@@ -54,8 +54,10 @@ import { ListEditorComponent } from './vocabulary-editor/list-editor/list-editor
 import { NzDrawerService } from 'ng-zorro-antd';
 import { EditComponentService } from './vocabulary-editor/edit.component.service';
 import { RemoveUserModalComponent } from './vocablist/components/remove-user-modal/remove-user-modal.component';
-import { MatSnackBarModule } from '@angular/material';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { PropertyEditModal } from './mxgraph/property-model/property-edit.component';
+
+import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 
 registerLocaleData(en);
 
@@ -89,7 +91,7 @@ registerLocaleData(en);
     FormsModule,
     HttpClientModule,
     ReactiveFormsModule,
-    ParticlesModule,
+    // ParticlesModule,
     NeologismMaterialModule,
     BrowserAnimationsModule,
     FlexLayoutModule,
@@ -97,7 +99,8 @@ registerLocaleData(en);
     TruncateModule,
     StateServiceModule,
     NgZorroAntdModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    NzDropDownModule
   ],
   entryComponents: [
     AddUserModalComponent,

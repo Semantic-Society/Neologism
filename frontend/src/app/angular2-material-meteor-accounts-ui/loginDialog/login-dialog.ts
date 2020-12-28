@@ -71,7 +71,7 @@ export class LoginDialog implements OnInit {
             // Also I don't know how call local function
             Meteor.loginWithPassword(this.loginForm.value.email, this.loginForm.value.password, (error) => {
                 if (error) {
-                    this.sendErrorMessage(error.reason || 'Unknown error');
+                    this.sendErrorMessage(error.message || 'Unknown error');
                 } else {
                     this.dialogRef.close();
                 }

@@ -1,0 +1,40 @@
+{
+    "name": "neologism",
+    "version": "0.0.0",
+    "license": "MIT",
+    "scripts": {
+        "ng": "ng",
+        "start": "ng serve --open",
+        "build": "ng build",
+        "prod": "ng build --prod",
+        "test": "ng test",
+        "lint": "ng lint",
+        "e2e": "ng e2e",
+        "api": "cd api && BIND_IP=0.0.0.0 meteor",
+        "api:reset": "cd api && meteor reset",
+        "debug": "cd api && meteor debug --inspect-brk=9229",
+        "meteor-client:bundle": "meteor-client bundle -s api",
+        "meteor-client:bundle-server": "meteor-client bundle --url ${npm_config_root_url:-http://localhost:3000} -s api"
+    },
+    "private": true,
+    "dependencies": {
+        "@babel/runtime": "^7.7.2",
+        "babel-runtime": "^6.26.0",
+        "bcryptjs": "^2.4.3",
+        "core-js": "^2.5.4",
+        "meteor-node-stubs": "^1.0.0",
+        "meteor-rxjs": "^0.4.14",
+        "rxjs": "^6.6.3",
+        "tslib": "^1.10.0"
+    },
+    "devDependencies": {
+        "@types/meteor": "1.4.64",
+        "@types/meteor-publish-composite": "0.0.35",
+        "@types/node": "^12.11.1",
+        "@types/underscore": "1.9.1",
+        "meteor-client-bundler": "^0.6.0",
+        "ts-node": "~5.0.1",
+        "tslint": "~5.9.1",
+        "typescript": "^3.7.5"
+    }
+}

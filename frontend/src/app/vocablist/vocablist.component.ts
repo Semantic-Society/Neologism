@@ -11,7 +11,7 @@ import { Ivocabulary } from '../../../api/models';
 import { VocabulariesService } from '../services/vocabularies.service';
 import { AccessManagement } from '../services/access-management.service';
 import { AddUserModalComponent } from './components/add-user-modal/add-user-modal.component';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-vocablist',

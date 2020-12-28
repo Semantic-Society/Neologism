@@ -41,7 +41,7 @@ export class MxgraphComponent implements OnInit, OnDestroy {
 
     vocabularySub: Subscription;
 
-    @ViewChild('view') mxGraphView: ElementRef;
+    @ViewChild('view', {static: true}) mxGraphView: ElementRef;
     mx: MxgraphService;
     vocabID: string;
     classes: Observable<IClassWithProperties[]>;

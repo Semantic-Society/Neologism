@@ -1,4 +1,4 @@
-import {TypeDecorator} from '@angular/core';
+import { TypeDecorator, Injectable } from '@angular/core';
 import {CanActivate} from '@angular/router';
 import {Meteor} from 'meteor/meteor';
 import {Tracker} from 'meteor/tracker';
@@ -53,6 +53,7 @@ export function InjectUser(propName?: string): (cls: any) => any {
  *
  */
 // tslint:disable-next-line:max-classes-per-file
+@Injectable()
 export class AuthGuard implements CanActivate {
   canActivate(): Observable<boolean> {
     return Observable.create((observer: Observer<boolean>) => {
