@@ -17,7 +17,7 @@
         <div class="name-plus-uri form-group">
           <mat-form-field class="full-width name">
             <input class="form-control" type="text" matInput placeholder="Class Name" value=""
-              (change)="autoCompleteURI($event)" [(ngModel)]="newClass.name" required id="name" name="name"
+            (keyup)="autoCompleteURI($event)" [(ngModel)]="newClass.name" required id="name" name="name"
               #name="ngModel">
           </mat-form-field>
           <div [hidden]="name.valid || name.pristine" class="alert alert-danger">
