@@ -73,25 +73,38 @@ export class MxgraphComponent implements OnInit, OnDestroy {
 
         // this.currentSelection = this.mx.currentSelection().publish(new BehaviorSubject<string>(null));
 
-        this.currentEdgeSelectionSub= this.mx.currentEdgeSelection().subscribe(edgeSelection => {
+        this.currentEdgeSelectionSub = this.mx.currentEdgeSelection().subscribe(edgeSelection => {
             if (edgeSelection != null) {
                 const modal = this.modalService.create({
-                    nzTitle: 'Update Property',
+                    nzTitle: 'Actions on Property',
                     nzContent: PropertyEditModal,
                     nzComponentParams: {
                         propListString: edgeSelection.edgeID,
                         propSourceNodeId: edgeSelection.domainClazzID
                     },
-                    nzFooter: [{
-                        label: 'Update Property',
-                        onClick: (componentInstance) => {
-                            componentInstance.closeModal();
-                        }},{
-                        label: 'Delete Property',
-                        onClick: (componentInstance) => {
-                            componentInstance.deleteProp();
+                    nzFooter: [
+                        {
+                            type: 'default',
+                            label: 'Cancel',
+                            onClick: (componentInstance) => {
+                                modal.destroy()
+                            }
                         }
-                    }]
+                        , {
+
+                            type: 'primary',
+                            label: 'Update',
+                            onClick: (componentInstance) => {
+                                componentInstance.closeModal();
+                            }
+                        }, {
+                            type: 'danger',
+                            label: 'Delete',
+                            onClick: (componentInstance) => {
+                                componentInstance.deleteProp();
+                            }
+                        }
+                    ]
                 });
             }
         })

@@ -1,4 +1,5 @@
 <mat-toolbar color="secondary">
+  
   <img mat-card-avatar
       src="data:image/gif;base64,R0lGODlhOwBAAMQfAIWjzhpTo0h1tvH0+SpeqUh1tWeMwjlqr+Hp89Ld7cLR5rPG4RpSo8PS53aYyDhpr5Wv1FiBvO/z+KS62uDo8ileqWaMwXWXx7LF4KO62pSu1FeAu9Hc7P///wtHnf///yH5BAEAAB8ALAAAAAA7AEAAAAX/4CeOZGmeaJk4h+d6hLGkdG2rwssUxfMSjZtwKJq4GABKZ9mRZCouB3GaMno2EiYFwCtcCi4DdTxauCxMDvjFdgHI1EHAg9a2754EnAjwVLJMHXhtAntDcxmBHRSDbQiGNmYMihQ+jS9vkDR9G0sbl3iFmikRHgAdCqB4B6MpOacWqnitKK8dDLJtAbQnpWi5hLwmBH6CwC9iwmUvT8cuM8ofCHMuFRfOBNEfAy1slsAQ0QnEzm2syhPU5S8Bj7wIpetsBHo1AwsA+RBBKQMA6mwOAFjQwIGqCANqLMhxJ4ABdyNWAHQRAABEEQgMTERWAwHDajy+eTjgAEAEcncA/yREMQDljxoJqFXQAGiJBAC4QAm4iKLBnQk0Yrq4EEjBFx4AROoKJ6Tbi5UnWrpItEQBlFwH6gnp8+IcCq4aAmEAdgCqEJ8vREWdU0BRKlllx7DJdAKCCwWKxsrSOkUdXROlHrjNCSrZmI9/SxA7JUGpqsREEKdwgaGDhnKQh0hGcbeD48dwNp+4K2GdYSofI7gy9bYcT81pUxh80NqZ2iltUqDVa5pKgjZ8FXt4EEueALM27LKR0tPFGnkBoN1wCYOGQXltIrw2obxN5hEGsN95mKJ7SuQkwquqqKfBBI14ZKhwWgBABgUALOAKABTFAuptkGfCBE6xEUAE+VxHh7QSWiiAXxg0LGCASwI4sB0JDQDYBgN4LUGBfi9UYMlptECw0REcMMHbINK9U+ALlTFR2iUBoDcKN210oogqTCmD4wsMMnEZKNloM40LgnXAAQAYXCOLNiJcR5QEhOUC5QdonTLkMVdm2cFzwFw5gBvGOHPlB86VyeWVDM1o5pVWfOGMamJSc0GVqvBzZXd4XnIbm87UeOYIP8oSQHBnDvDRJfQMekI6lzhgo6NFRACQABCgFwIAOw==" />
       
@@ -9,7 +10,7 @@
     <mat-icon>arrow_back</mat-icon>
   </button>
 
-  <button nz-button nzType="dashed" (click)="showDeleteConfirm()">Delete</button>
+
 </mat-toolbar>
 
 <mat-card class="editbox-card no-pad">
@@ -22,17 +23,17 @@
           </mat-icon>
         </div>
         <p  *ngIf="selectedClassID">
-          <mat-form-field *ngIf="!editToggle">
+          <mat-form-field class="full-width-field" *ngIf="!editToggle">
             <mat-label>Class Name</mat-label>
             <input disabled matInput value="{{(classInfo | async).label}}">
           </mat-form-field>
 
-          <mat-form-field *ngIf="editToggle">
+          <mat-form-field  class="full-width-field" *ngIf="editToggle">
             <mat-label>Class Name</mat-label>
             <input #editClassElem matInput [(ngModel)]="editedClass.name" (keyup)="change(editClassElem.value)" value="{{(classInfo | async).label}}">
           </mat-form-field>
         </p>
-        <mat-form-field *ngIf="!selectedClassID">
+        <mat-form-field  class="full-width-field" *ngIf="!selectedClassID">
           <input matInput placeholder="Class Name" value="" [(ngModel)]="newClass.name">
         </mat-form-field>
       </div>
@@ -42,17 +43,17 @@
         <div class="uri-name">
           <div *ngIf="selectedClassID">
     
-              <mat-form-field *ngIf="!editToggle">
+              <mat-form-field  class="full-width-field" *ngIf="!editToggle">
                 <mat-label>Class URI</mat-label>
                 <input matInput disabled value="{{(classInfo | async).url}}">
               </mat-form-field>
-            <mat-form-field *ngIf="editToggle">
+            <mat-form-field  class="full-width-field" *ngIf="editToggle">
               <mat-label>Class URI</mat-label>
               <input matInput [(ngModel)]="editedClass.URI" value="{{(classInfo | async).url}}">
             </mat-form-field>
           </div>
   
-          <mat-form-field *ngIf="!selectedClassID">
+          <mat-form-field  class="full-width-field" *ngIf="!selectedClassID">
             <input matInput placeholder="URI" value="" [(ngModel)]="newClass.URI">
           </mat-form-field>
         </div>
@@ -60,14 +61,14 @@
 
 
       <div *ngIf="selectedClassID" class="description">
-        <mat-form-field *ngIf="!editToggle" > 
+        <mat-form-field  class="full-width-field" *ngIf="!editToggle" > 
           <input disabled matInput value="{{(classInfo | async).description}}" >
           <mat-label>Description</mat-label>
 
         </mat-form-field>
   
   
-        <mat-form-field  *ngIf="editToggle">
+        <mat-form-field  class="full-width-field"  *ngIf="editToggle">
           <mat-label>Description</mat-label>
           <input matInput #message maxlength="256" value="{{(classInfo | async).description}}" [(ngModel)]="editedClass.description" placeholder="The class represents ...">
           <mat-hint align="start"><strong>Highly recommended</strong> </mat-hint>
@@ -85,12 +86,15 @@
   <mat-card-content>
     
 
-    <mat-form-field class="description" *ngIf="!selectedClassID">
+    <mat-form-field  class="full-width-field" class="description" *ngIf="!selectedClassID">
       <textarea matInput placeholder="Description" value="" [(ngModel)]="newClass.description"></textarea>
     </mat-form-field>
     <div class="button-group-edit" *ngIf="editToggle">
       <button mat-raised-button color="primary" (click)="updateEdit()">Update</button>
-      <button mat-raised-button color="primary" (click)="cancelEdit()">Cancel</button>
+      <button mat-stroked-button (click)="cancelEdit()">Cancel</button>
+    </div>
+    <div class="button-group-edit" >
+      <button mat-raised-button color="warn" (click)="showDeleteConfirm()">Delete</button>
     </div>
   </mat-card-content>
   <div class="button-full-width">
@@ -202,7 +206,7 @@
             <div class="button-full-width">
               <form [formGroup]="formProp" (ngSubmit)="addProperty(formDirective)" #formDirective="ngForm">
                 <mat-form-field class="prop-input">
-                  <input matInput placeholder="Name" value="" formControlName="name" required>
+                  <input matInput placeholder="Name" value="" (keyup)="completeNewPropURI($event)" formControlName="name" required>
                 </mat-form-field>
                 <mat-form-field class="prop-input">
                   <input matInput placeholder="URI" value="" formControlName="URI" required>

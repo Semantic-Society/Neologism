@@ -125,7 +125,6 @@ export class EditboxComponent implements OnInit, OnChanges {
         console.log(rec)
         rec.map((prop, index) => {
           prop.isEditToggle = false;
-
           const duplicateIndex = this.props.controls.findIndex((element) => (element.get("id").value === prop.id))
           // Avoid duplication of properties due multiple subscriptions
           if (duplicateIndex === -1) {
@@ -215,10 +214,9 @@ export class EditboxComponent implements OnInit, OnChanges {
     this.cancelEdit();
   }
 
-  change(value:string){    
-    this.editedClass.URI=`${this.uriPrefix}#${value.toLocaleLowerCase()}`
-
- }
+  change(value: string) {
+    this.editedClass.URI = `${this.uriPrefix}#${value.toLocaleLowerCase()}`
+  }
 
   resetSidebarState() {
     this.sidebarService.changeSidebarToDefault()
@@ -250,6 +248,11 @@ export class EditboxComponent implements OnInit, OnChanges {
       nzCancelText: 'No',
       nzOnCancel: () => console.log('Cancel')
     });
+  }
+
+  completeNewPropURI($event) {
+    this.formProp.controls['URI'].setValue(`${this.uriPrefix}#${$event.target.value.toLocaleLowerCase()}`)
+
   }
 
 }
