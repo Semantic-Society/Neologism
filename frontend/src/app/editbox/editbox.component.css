@@ -273,3 +273,17 @@ mat-card-header {
   margin:0.25rem;
   width: calc(50% - 1rem);
 }
+
+
+div .mat-card-header-text {
+  width: 100% !important;
+}
+
+.full-width-field {
+  width: 100%;
+}
+
+:host ::ng-deep .mat-card-header-text {
+  width: 100%;
+
+}
