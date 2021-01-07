@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NzModalRef } from 'ng-zorro-antd';
 
 @Component({
@@ -7,28 +8,38 @@ import { NzModalRef } from 'ng-zorro-antd';
   styleUrls: ['./create-vocab-modal.component.scss']
 })
 export class CreateVocabModalComponent implements OnInit {
-  @Input() description: string;
-  @Input() uri: string;
-  @Input() name: string;
-  @Input() access: 'private' | 'public';
 
-  constructor( private modal: NzModalRef) { }
+  validateForm: FormGroup;
 
-  ngOnInit() {
-      this.uri=`http://w3id.org/neologism/{vocabname-in-lowercase}#`
-  }
+  constructor( private modal: NzModalRef,private fb: FormBuilder) { }
 
-  closeModal(): void {
-    this.modal.destroy({ 
-      description: this.description,
-      uri: this.uri,
-      name: this.name,
-      access: this.access
+
+
+  ngOnInit(): void {
+    this.validateForm = this.fb.group({
+      description: [''],
+      uri: [`http://w3id.org/neologism/{vocabname-in-lowercase}#`, [Validators.required]],
+      name: [null, [Validators.required]],
+      access: ['public', [Validators.required]],
+    
     });
   }
 
+  closeModal(): void {
+    for (const i in this.validateForm.controls) {
+      this.validateForm.controls[i].markAsDirty();
+      this.validateForm.controls[i].updateValueAndValidity();
+    }
+
+    this.modal.destroy(this.validateForm.value);
+  }
+
+  cancelModal(e: MouseEvent){
+    e.preventDefault();
+    this.modal.destroy(null)
+  }
   change(value:string){    
-    this.uri=`http://w3id.org/neologism/${value.toLocaleLowerCase()}#`
+    this.validateForm.controls['uri'].setValue(`http://w3id.org/neologism/${value.toLocaleLowerCase()}#`)
 
  }
 }

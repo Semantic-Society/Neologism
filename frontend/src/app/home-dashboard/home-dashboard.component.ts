@@ -14,13 +14,13 @@ export class HomeDashboardComponent implements OnInit {
 
   isCollapsed = false;
   triggerTemplate = null;
-  loggedInUser:Meteor.User
+  loggedInUser: Meteor.User
   @ViewChild('trigger') customTrigger: TemplateRef<void>;
 
   constructor(
-    private router: Router, 
-    private vocabService: VocabulariesService, 
-    private modalService: NzModalService){
+    private router: Router,
+    private vocabService: VocabulariesService,
+    private modalService: NzModalService) {
 
   }
 
@@ -29,13 +29,13 @@ export class HomeDashboardComponent implements OnInit {
     this.triggerTemplate = this.customTrigger;
   }
 
-  ngOnInit(){
+  ngOnInit() {
     Tracker.autorun(() => {
-        this.loggedInUser=Meteor.user()
-      
+      this.loggedInUser = Meteor.user()
 
-  })
-    
+
+    })
+
   }
 
   onLogout(): void {
@@ -45,35 +45,26 @@ export class HomeDashboardComponent implements OnInit {
 
   createVocabulary(): void {
     const modal = this.modalService.create({
-      nzTitle: 'Create new Vocabulary',
+      nzTitle: 'Create new vocabulary',
       nzContent: CreateVocabModalComponent,
-      nzComponentParams: {
-        description: '',
-        name: '',
-        uri: '',
-        access: undefined
-      },
-      nzFooter: [{
-        label: 'Save vocabulary',
-        onClick: (componentInstance) => {
-          componentInstance.closeModal();
-        }
-      }]
+      
+      nzFooter: null
     });
 
     // Return a result when closed
     modal.afterClose.subscribe((result) => {
-      if(result.name===undefined)
-      return;
-        
-      
+
+      if (!result || result.name === undefined)
+        return;
+
+
       this.vocabService.createVocabulary(
         result.name,
         result.description,
         result.uri
       ).subscribe((response) => {
         console.log(response)
-      this.router.navigateByUrl('edit/' + response.vocabId );
+        this.router.navigateByUrl('edit/' + response.vocabId);
         // Handle success and response from server!
       }, (err) => {
         console.log(err);
