@@ -15,7 +15,7 @@ export class HomeDashboardComponent implements OnInit {
   isCollapsed = false;
   triggerTemplate = null;
   loggedInUser: Meteor.User
-  @ViewChild('trigger') customTrigger: TemplateRef<void>;
+  @ViewChild('trigger',{static: true}) customTrigger: TemplateRef<void>;
 
   constructor(
     private router: Router,

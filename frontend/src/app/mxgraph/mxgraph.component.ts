@@ -3,7 +3,7 @@ import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } fro
 import { ActivatedRoute } from '@angular/router';
 import { mxgraph as m } from 'mxgraph';
 import { Observable, Subscription } from 'rxjs';
-import { combineLatest, debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
+import { combineLatest, debounceTime, distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
 
 import { MxgraphService } from './mxgraph';
 
@@ -41,7 +41,7 @@ export class MxgraphComponent implements OnInit, OnDestroy {
 
     vocabularySub: Subscription;
 
-    @ViewChild('view') mxGraphView: ElementRef;
+    @ViewChild('view',{static: true}) mxGraphView: ElementRef;
     mx: MxgraphService;
     vocabID: string;
     classes: Observable<IClassWithProperties[]>;

@@ -59,7 +59,7 @@ export class EditComponentService {
                     map(reommendations => this.mergeOldandNewRecommendations(reommendations, existing_properties)),
                     take(1),
                     filter(Boolean),
-                    tap(recommendations => this.property_recommendations.next(recommendations))
+                    // tap(recommendations => this.property_recommendations.next(recommendations))
                 )
             
     }
