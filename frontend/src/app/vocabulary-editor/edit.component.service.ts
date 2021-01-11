@@ -51,6 +51,7 @@ export class EditComponentService {
 
     getPropertyRecommendations(vocabID: string, classID:string) {
         let existing_properties = [];
+        return null;
         return this.getClass$(vocabID, classID)
                 .pipe(
                     tap(theClass => {existing_properties = this.extractClassProperties(theClass)}),
