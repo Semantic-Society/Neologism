@@ -3,7 +3,7 @@ import { VocabulariesService } from '../../../app/services/vocabularies.service'
 import { combineLatest, Observable } from 'rxjs';
 import { startWith, debounceTime, tap, take, map } from 'rxjs/operators';
 import { NzModalService } from 'ng-zorro-antd';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { AddUserModalComponent } from '../../../app/vocablist/components/add-user-modal/add-user-modal.component';
 import { Router } from '@angular/router';
 import { HTTP } from 'meteor/http'

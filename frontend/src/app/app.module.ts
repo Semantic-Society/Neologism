@@ -54,7 +54,7 @@ import { ListEditorComponent } from './vocabulary-editor/list-editor/list-editor
 import { NzDrawerService } from 'ng-zorro-antd';
 import { EditComponentService } from './vocabulary-editor/edit.component.service';
 import { RemoveUserModalComponent } from './vocablist/components/remove-user-modal/remove-user-modal.component';
-import { MatSnackBarModule } from '@angular/material';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { PropertyEditModal } from './mxgraph/property-model/property-edit.component';
 
 registerLocaleData(en);
