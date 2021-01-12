@@ -2,9 +2,10 @@
   <!-- SIDEBAR   -->
   <nz-sider style="background: #fff; padding:0;" nzCollapsible [(nzCollapsed)]="isCollapsed" [nzTrigger]="triggerTemplate">
 
-    <img class="logo-fit" src="/assets/neologism.png"/>
+      <img class="logo-fit" src="/assets/neologism.png"/>
 
-    <ul nz-menu style="margin-top: 15px;" [nzTheme]="'light'" [nzMode]="'inline'" [nzInlineCollapsed]="isCollapsed">
+
+    <ul nz-menu style="margin-top: 15px;" nzTheme="light" nzMode="inline" [nzInlineCollapsed]="isCollapsed">
       <li nz-submenu>
         <span title><i nz-icon  nzType="user"></i><span class="nav-text">{{loggedInUser?.emails[0].address}}</span></span>
         <ul>
@@ -17,7 +18,7 @@
   <nz-layout>
     <!-- HEADER -->
      <nz-header style="background: #fff; padding:0;">
-      <search-vocabularies-autocomplete [width]="'50vw'"></search-vocabularies-autocomplete>
+      <search-vocabularies-autocomplete [width]="'50vw'" class="div-search"></search-vocabularies-autocomplete>
       
       <ul nz-menu nzMode="horizontal" style="position: fixed; top: 2px; right: 15px; ">
         <li nz-submenu nzIcon="setting">

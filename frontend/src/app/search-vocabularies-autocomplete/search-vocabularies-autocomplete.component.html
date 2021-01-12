@@ -1,17 +1,21 @@
-<div [ngStyle]="{'width': width}">
+<div [ngStyle]="{'width': width}" >
   <nz-input-group nzSearch nzSize="large" [nzAddOnAfter]="suffixIconButton">
     <input placeholder="Search vocabulary by name" nz-input [(ngModel)]="inputValue" (input)="onChange($event)"
       [nzAutocomplete]="auto" />
   </nz-input-group>
   <ng-template #suffixIconButton>
-    <button nz-button nzType="primary" nzSize="large" nzSearch><i nz-icon  nzType="search" theme="outline"></i></button>
+    <button nz-button nzType="primary" nzSize="large" nzSearch>
+      <i nz-icon  nzType="search" nzTheme="outline">        
+      </i>
+    </button>
   </ng-template>
-  <nz-autocomplete nzBackfill #auto>
-    <nz-auto-option *ngFor="let vocab of vocabs" [nzValue]="vocab._id">
+  <nz-autocomplete #auto>
+    <nz-auto-option *ngFor="let vocab of vocabs" [nzValue]="vocab.name">
 
-      <a [routerLink]="['/edit/'+ vocab._id]">
+      <a [routerLink]="['/edit', vocab._id]">
         {{vocab.name}}
       </a>
+      <span class="global-search-item-count">{{ vocabs.length }} results</span>
     </nz-auto-option>
   </nz-autocomplete>
 </div>
