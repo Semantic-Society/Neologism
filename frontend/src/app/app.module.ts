@@ -38,7 +38,7 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NZ_I18N, en_US } from 'ng-zorro-antd/i18n';
 import { NzDrawerService } from 'ng-zorro-antd/drawer';
 import { registerLocaleData } from '@angular/common';
-import { NgParticlesModule } from 'ng-particles';
+// import { NgParticlesModule } from 'ng-particles';
 
 import en from '@angular/common/locales/en';
 
@@ -91,7 +91,7 @@ registerLocaleData(en);
     FormsModule,
     HttpClientModule,
     ReactiveFormsModule,
-    NgParticlesModule,
+    // NgParticlesModule,
     NeologismMaterialModule,
     BrowserAnimationsModule,
     FlexLayoutModule,
