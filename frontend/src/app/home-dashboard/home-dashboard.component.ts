@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, TemplateRef, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CreateVocabModalComponent } from './create-vocab-modal/create-vocab-modal.component';
-import { NzModalService } from 'ng-zorro-antd';
+import { NzModalService } from 'ng-zorro-antd/modal';
 import { VocabulariesService } from '../services/vocabularies.service';
 
 @Component({

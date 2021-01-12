@@ -1,0 +1,8 @@
+{
+    "rulesDirectory": [
+      "node_modules/nz-tslint-rules"
+    ],
+    "rules": {
+      "nz-secondary-entry-imports": true
+    }
+  }

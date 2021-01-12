@@ -1,25 +1,77 @@
-import { Component, OnInit } from '@angular/core';
-import { NzMessageService } from 'ng-zorro-antd';
+import { Component, OnInit, NgZone } from '@angular/core';
+import { NzMessageService } from 'ng-zorro-antd/message';
 import { Router } from '@angular/router';
-
 @Component({
   selector: 'app-login-page',
   templateUrl: './login-page.component.html',
   styleUrls: ['./login-page.component.scss']
 })
 export class LoginPageComponent implements OnInit {
-  
+  id="particles-container";
+
+  particlesOptions = {
+    background: {
+      color: {
+        value: "#0d47a1"
+      }
+    },
+    fpsLimit: 60,
+    interactivity: {
+      detectsOn: "canvas",
+    },
+    particles: {
+      color: {
+        value: "#ffffff"
+      },
+      links: {
+        color: "#ffffff",
+        distance: 150,
+        enable: true,
+        opacity: 0.5,
+        width: 1
+      },
+      collisions: {
+        enable: true
+      },
+      move: {
+        direction: "none",
+        enable: true,
+        outMode: "bounce",
+        random: false,
+        speed: 6,
+        straight: false
+      },
+      number: {
+        density: {
+          enable: true,
+          value_area: 800
+        },
+        value: 120
+      },
+      opacity: {
+        value: 0.5
+      },
+      shape: {
+        type: "polydon"
+      },
+      size: {
+        random: true,
+        value: 5
+      }
+    },
+    detectRetina: true
+  };
+
+
   myStyle: object = {};
 	myParams: object = {};
-	width: number = 100;
-  height: number = 100;
+
   
   public username: string;
   public password: string;
   public password2: string;
 
   ngOnInit() {
-
     this.myStyle = {
         'position': 'fixed',
         'width': '100%',
@@ -53,11 +105,14 @@ export class LoginPageComponent implements OnInit {
 
   login(){
     Meteor.loginWithPassword(this.username, this.password, (error) => {
-      if (error) {
+      this.zone.run(() => {
+        if (error) {
           this.createBasicErrorMessage('Login Failed! Please check your credentials');
       } else {
           this.router.navigateByUrl('/dashboard')
       }
+      })
+
     });
   }
 
@@ -82,7 +137,7 @@ export class LoginPageComponent implements OnInit {
      }
   }
 
-  constructor( private message: NzMessageService,  private router: Router){
+  constructor( private message: NzMessageService,  private router: Router,private zone: NgZone){
 
   }
 

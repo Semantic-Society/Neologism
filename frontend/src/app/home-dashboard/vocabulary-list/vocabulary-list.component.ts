@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { VocabulariesService } from '../../../app/services/vocabularies.service';
 import { combineLatest, Observable } from 'rxjs';
 import { startWith, debounceTime, tap, take, map } from 'rxjs/operators';
-import { NzModalService } from 'ng-zorro-antd';
+import { NzModalService } from 'ng-zorro-antd/modal';
 import { MatDialog } from '@angular/material/dialog';
 import { AddUserModalComponent } from '../../../app/vocablist/components/add-user-modal/add-user-modal.component';
 import { Router } from '@angular/router';

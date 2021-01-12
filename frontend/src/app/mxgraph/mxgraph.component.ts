@@ -12,7 +12,7 @@ import { IClassWithProperties, VocabulariesService } from '../services/vocabular
 
 // import sidebar state dep.
 import { SideBarStateService, SidebarChange } from '../services/state-services/sidebar-state.service';
-import { NzModalService } from 'ng-zorro-antd';
+import { NzModalService } from 'ng-zorro-antd/modal';
 import { PropertyEditModal } from './property-model/property-edit.component';
 
 
