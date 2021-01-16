@@ -20,6 +20,24 @@
         </button>
       </div>
     </div>
+
+    <div class="button-div">
+      
+      <div style="text-align: center;">
+        <h3  style="color: white; border-style: dashed;">
+          How to edit Property / Class
+        </h3>
+      </div>
+        <br>
+        <em>
+          On the graph:
+        </em>
+        <br>
+        <ul>
+          <li>Click on the arc/arrow for Property form</li>
+          <li>Click on the class/node for Class form</li>
+        </ul>
+    </div>
   </mat-drawer>
   <mat-drawer-content>
     <mat-tab-group headerPosition="below" class="mat-tab-fill-height">
@@ -28,15 +46,8 @@
       </mat-tab>
       <mat-tab label="List">
         <app-standardview [classes]="classes">
-          <!-- [properties] = "properties" [meta] = "meta" -->
         </app-standardview>
       </mat-tab>
     </mat-tab-group>
-    <!-- <button type="button" mat-button (click)="navStart.toggle()">
-        Toggle left nav
-    </button>
-    <button type="button" mat-button (click)="navEnd.toggle()">
-      Toggle right nav
-    </button> -->
   </mat-drawer-content>
 </mat-drawer-container>
