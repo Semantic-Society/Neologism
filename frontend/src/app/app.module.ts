@@ -23,8 +23,7 @@ import { MxgraphComponent } from './mxgraph/mxgraph.component';
 import { StandardViewComponent } from './mxgraph/standardView/standardView.component';
 import { RecommenderComponent } from './recommender/recommender.component';
 import { VocablistComponent } from './vocablist/vocablist.component';
-import {SideBarNodeCreatorComponent} from './sidebar-editors/node-creator/node-creator.component'
-import {VocabNodeCreatorComponent} from './vocabulary-editor/node-creator/node-creator.component'
+import {SideBarNodeCreatorComponent} from './core/node-creator.component'
 // Pipes
 import { TruncateModule } from '@yellowspot/ng-truncate';
 import { TruncatedTextComponentComponent } from './truncated-text-component/truncated-text-component.component';
@@ -74,7 +73,6 @@ registerLocaleData(en);
     VocablistComponent,
     AddUserModalComponent,
     SideBarNodeCreatorComponent,
-    VocabNodeCreatorComponent,
     CreateVocabModalComponent,
     VocabularyEditorComponent,
     SearchVocabulariesAutocompleteComponent,

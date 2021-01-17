@@ -1,8 +1,8 @@
-import { Component, Input, OnChanges, OnInit } from '@angular/core';
-import { VocabulariesService } from '../../services/vocabularies.service';
-import { SideBarStateService } from '../../services/state-services/sidebar-state.service';
+import { Component, Input } from '@angular/core';
+import { VocabulariesService } from '../services/vocabularies.service';
+import { SideBarStateService } from '../services/state-services/sidebar-state.service';
 import { MatSnackBar } from '@angular/material/snack-bar'
-import { MxgraphService } from '../../mxgraph/mxgraph';
+import { MxgraphService } from '../mxgraph/mxgraph';
 @Component({
   selector: 'app-node-creator',
   templateUrl: './node-creator.html',
