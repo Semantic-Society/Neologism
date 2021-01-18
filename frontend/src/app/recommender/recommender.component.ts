@@ -50,7 +50,7 @@ export class RecommenderComponent implements OnInit {
      private sidebarService: SideBarStateService) {
   }
 
-  @ViewChild('labelInput') labelInput: ElementRef;
+  @ViewChild('labelInput',{static: true}) labelInput: ElementRef;
 
   public showSpinner = false;
    showSpinnerProp = false;

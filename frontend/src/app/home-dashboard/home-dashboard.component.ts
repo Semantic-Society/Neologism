@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, TemplateRef, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CreateVocabModalComponent } from './create-vocab-modal/create-vocab-modal.component';
-import { NzModalService } from 'ng-zorro-antd';
+import { NzModalService } from 'ng-zorro-antd/modal';
 import { VocabulariesService } from '../services/vocabularies.service';
 
 @Component({
@@ -15,7 +15,7 @@ export class HomeDashboardComponent implements OnInit {
   isCollapsed = false;
   triggerTemplate = null;
   loggedInUser: Meteor.User
-  @ViewChild('trigger') customTrigger: TemplateRef<void>;
+  @ViewChild('trigger',{static: true}) customTrigger: TemplateRef<void>;
 
   constructor(
     private router: Router,

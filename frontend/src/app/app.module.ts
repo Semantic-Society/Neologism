@@ -33,9 +33,12 @@ import { StateServiceModule } from './services/state-services/state.services.mod
 import { EditboxService } from './editbox/editbox.service';
 import { AccessManagement } from './services/access-management.service';
 import { AddUserModalComponent } from './vocablist/components/add-user-modal/add-user-modal.component';
-import { NgZorroAntdModule, NZ_I18N, en_US } from 'ng-zorro-antd';
+import { NgZorroAntdModule } from 'ng-zorro-antd';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NZ_I18N, en_US } from 'ng-zorro-antd/i18n';
+import { NzDrawerService } from 'ng-zorro-antd/drawer';
 import { registerLocaleData } from '@angular/common';
-import { ParticlesModule } from 'angular-particle';
+// import { NgParticlesModule } from 'ng-particles';
 
 import en from '@angular/common/locales/en';
 
@@ -51,10 +54,9 @@ import { VocabularyEditorComponent } from './vocabulary-editor/vocabulary-editor
 import { MxGraphEditorComponent } from './vocabulary-editor/mx-graph-editor/mx-graph-editor.component';
 import { VocabularyEditorService } from './vocabulary-editor/vocabulary-editor.service';
 import { ListEditorComponent } from './vocabulary-editor/list-editor/list-editor.component';
-import { NzDrawerService } from 'ng-zorro-antd';
 import { EditComponentService } from './vocabulary-editor/edit.component.service';
 import { RemoveUserModalComponent } from './vocablist/components/remove-user-modal/remove-user-modal.component';
-import { MatSnackBarModule } from '@angular/material';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { PropertyEditModal } from './mxgraph/property-model/property-edit.component';
 
 registerLocaleData(en);
@@ -81,7 +83,7 @@ registerLocaleData(en);
     MxGraphEditorComponent,
     ListEditorComponent,
     RemoveUserModalComponent,
-    PropertyEditModal
+    PropertyEditModal,
   ],
   imports: [
     AccountsModule,
@@ -89,7 +91,7 @@ registerLocaleData(en);
     FormsModule,
     HttpClientModule,
     ReactiveFormsModule,
-    ParticlesModule,
+    // NgParticlesModule,
     NeologismMaterialModule,
     BrowserAnimationsModule,
     FlexLayoutModule,
@@ -97,6 +99,7 @@ registerLocaleData(en);
     TruncateModule,
     StateServiceModule,
     NgZorroAntdModule,
+    NzButtonModule,
     MatSnackBarModule
   ],
   entryComponents: [

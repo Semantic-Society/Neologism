@@ -61,7 +61,7 @@ export class EditboxService {
                 take(1),
                 filter(Boolean),
                 tap(recommendations => {
-                    return this.property_recommendations.next(recommendations);
+                    return this.property_recommendations.next([recommendations]);
                 })
             )
 

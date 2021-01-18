@@ -51,6 +51,7 @@ export class EditComponentService {
 
     getPropertyRecommendations(vocabID: string, classID:string) {
         let existing_properties = [];
+        return null;
         return this.getClass$(vocabID, classID)
                 .pipe(
                     tap(theClass => {existing_properties = this.extractClassProperties(theClass)}),
@@ -59,7 +60,7 @@ export class EditComponentService {
                     map(reommendations => this.mergeOldandNewRecommendations(reommendations, existing_properties)),
                     take(1),
                     filter(Boolean),
-                    tap(recommendations => this.property_recommendations.next(recommendations))
+                    // tap(recommendations => this.property_recommendations.next(recommendations))
                 )
             
     }
