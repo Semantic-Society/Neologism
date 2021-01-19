@@ -116,7 +116,7 @@ registerLocaleData(en);
     VocabularyEditorService,
     AccessManagement,
     NzDrawerService,
-    { provide: NZ_I18N, useValue: en_US }
+    { provide: NZ_I18N, useValue: en_US },
   ],
   bootstrap: [AppComponent],
 })

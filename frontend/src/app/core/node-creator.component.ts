@@ -4,7 +4,6 @@ import { SideBarStateService } from '../services/state-services/sidebar-state.se
 import { MatSnackBar } from '@angular/material/snack-bar'
 import { MxgraphService } from '../mxgraph/mxgraph';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { duplicateURIValidator } from '../shared/forbidden-URI.directive';
 @Component({
   selector: 'app-node-creator',
   templateUrl: './node-creator.html',
@@ -14,26 +13,32 @@ export class SideBarNodeCreatorComponent {
   @Input() vocabID: string;
   @Input() uriPrefix: string;
   @Input() graphService: MxgraphService;
-  public createClassForm: FormGroup;
+  selectedClassID
+  static CLASS_ADD_MESSAGE = 'A new class has been added!'
+  createClassForm: FormGroup
 
   constructor(private vocabService: VocabulariesService,
     private sidebarService: SideBarStateService,
     private _snackBar: MatSnackBar,
     private formBuilder: FormBuilder,
   ) {
-  }
 
-  ngOninit(
-  ) {
+  }
+  ngOnInit() {
     this.createClassForm = this.formBuilder.group({
-      name: ['',[Validators.required]],
-      URI: ['',[Validators.required,duplicateURIValidator]],
-      description:['',[]],
+      name: ['', [Validators.required]],
+      URI: [
+        `${this.uriPrefix}#`,
+        {
+          asyncValidators: [this.vocabService.uriValidator()],
+        }
+      ],
+      description: ['', []],
     }
     );
+
   }
-  selectedClassID
-  static CLASS_ADD_MESSAGE = 'A new class has been added!'
+
 
   addClass() {
     // centering new class position on creation
@@ -47,7 +52,7 @@ export class SideBarNodeCreatorComponent {
   }
 
   autoCompleteURI($event) {
-    this.createClassForm.controls['URI'].setValue(`${this.uriPrefix}${$event.target.value}`) 
+    this.createClassForm.controls['URI'].setValue(`${this.uriPrefix}#${$event.target.value}`)
   }
 
   resetSidebarState() {

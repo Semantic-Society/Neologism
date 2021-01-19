@@ -69,7 +69,10 @@ export class EditboxComponent implements OnInit, OnChanges {
 
     this.formProp = fb.group({
       name: ['', Validators.required],
-      URI: ['', Validators.required],
+      URI: [ `${this.uriPrefix}#`,
+      {
+        asyncValidators: [this.vocabService.uriPropValidator()],
+      }],
       range: ['', Validators.required],
       description: [''],
 

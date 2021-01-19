@@ -8,7 +8,7 @@
 </mat-toolbar>
 
 <div class="editbox-container no-pad">
-  <div [formGroup]="createClassForm" (ngSubmit)="addClass()" >
+  <form [formGroup]="createClassForm" (ngSubmit)="addClass()" >
     <div class="class-details">
       <div class="top">
         <div class="img">
@@ -18,19 +18,18 @@
           <mat-form-field class="full-width name">
             <input class="form-control" type="text" matInput placeholder="Class Name"
             (keyup)="autoCompleteURI($event)" formControlName="name" #name  >
+            <mat-error *ngIf="createClassForm.get('name').hasError('required')">
+              Class Name is required
+            </mat-error>
           </mat-form-field>
-          <div [hidden]="name.valid || name.pristine" class="alert alert-danger">
-            Class Name is required
-          </div>
-          <mat-form-field class="full-width uri ">
+          <mat-form-field class="full-width uri">
             <input matInput class="form-control" placeholder="uri" formControlName="URI" readonly disabled>
-            <mat-error *ngIf="URI.hasError('invalidAsync')">
+            <mat-error *ngIf="createClassForm.get('URI').hasError('invalidURI')">
               URI is already in <strong>USE</strong>
             </mat-error>
           </mat-form-field>
         </div>
       </div>
-
       <div class="bottom">
         <mat-form-field class="full-width">
           <textarea matInput placeholder="Description" class="description form-control"
@@ -42,7 +41,7 @@
       <button type="submit" mat-raised-button color="primary"  [disabled]="!createClassForm.valid"
       >Add Class</button>
     </div>
-  </div>
+  </form>
 </div>
 
 <ng-template #loading>

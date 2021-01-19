@@ -112,14 +112,17 @@
             <div class="button-full-width">
               <form [formGroup]="formProp" (ngSubmit)="addProperty(formDirective)" #formDirective="ngForm">
                 <mat-form-field class="prop-input">
-                  <input matInput placeholder="Name" value="" (keyup)="completeNewPropURI($event)"
+                  <input matInput placeholder="Name"  (keyup)="completeNewPropURI($event)"
                     formControlName="name" required>
                 </mat-form-field>
                 <mat-form-field class="prop-input">
-                  <input matInput placeholder="URI" value="" formControlName="URI" required>
+                  <input matInput placeholder="URI"  formControlName="URI" required>
+                  <mat-error *ngIf="formProp.get('URI').hasError('invalidURI')">
+                    URI is already in <strong>USE</strong>
+                  </mat-error>
                 </mat-form-field>
                 <mat-form-field class="prop-input">
-                  <textarea matInput placeholder="Comment or Description" value=""
+                  <textarea matInput placeholder="Comment or Description" 
                     formControlName="description"></textarea>
                 </mat-form-field>
                 <mat-form-field class="class-dropdown">
