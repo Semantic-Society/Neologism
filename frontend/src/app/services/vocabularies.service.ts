@@ -345,6 +345,19 @@ export class VocabulariesService {
 
   }
 
+  isURITaken(URI: string, type: "class" | "property") {
+    try {
+      if (type === "class") {
+        return of((Classes.findOne({ URI: URI }) != null))
+      } else {
+        return of((Properties.findOne({ URI: URI }) != null))
+      }
+    } catch (error) {
+      console.log(error)
+    }
+    return of(null)
+  }
+
   deleteClass(id: meteorID) {
     MeteorObservable.call('classes.delete', id)
       .subscribe((_response) => {

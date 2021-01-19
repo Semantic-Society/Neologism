@@ -8,38 +8,43 @@
 </mat-toolbar>
 
 <div class="editbox-container no-pad">
-  <form (ngSubmit)="addClass()" #addClassForm="ngForm">
+  <div [formGroup]="createClassForm" (ngSubmit)="addClass()" >
     <div class="class-details">
       <div class="top">
         <div class="img">
           <img src="../../../assets/default_node_image.gif" />
         </div>
-        <div class="name-plus-uri form-group">
+        <div class="name-plus-uri ">
           <mat-form-field class="full-width name">
-            <input class="form-control" type="text" matInput placeholder="Class Name" value=""
-            (keyup)="autoCompleteURI($event)" [(ngModel)]="newClass.name" required id="name" name="name"
-              #name="ngModel">
+            <input class="form-control" type="text" matInput placeholder="Class Name"
+            (keyup)="autoCompleteURI($event)" formControlName="name" #name  >
           </mat-form-field>
           <div [hidden]="name.valid || name.pristine" class="alert alert-danger">
             Class Name is required
           </div>
-          <mat-form-field class="full-width uri form-group">
-
-            <input matInput class="form-control" placeholder="uri" [value]="newClass.URI" readonly disabled>
+          <mat-form-field class="full-width uri ">
+            <input matInput class="form-control" placeholder="uri" formControlName="URI" readonly disabled>
+            <mat-error *ngIf="URI.hasError('invalidAsync')">
+              URI is already in <strong>USE</strong>
+            </mat-error>
           </mat-form-field>
         </div>
       </div>
 
       <div class="bottom">
-        <mat-form-field class="full-width form-group">
-          <textarea matInput placeholder="Description" value="" class="description form-control"
-            [(ngModel)]="newClass.description"></textarea>
+        <mat-form-field class="full-width">
+          <textarea matInput placeholder="Description" class="description form-control"
+          formControlName="description"></textarea>
         </mat-form-field>
       </div>
     </div>
     <div class="button-full-width">
-      <button type="submit" mat-raised-button color="primary"  [disabled]="!addClassForm.form.valid"
-        *ngIf="!selectedClassID">Add Class</button>
+      <button type="submit" mat-raised-button color="primary"  [disabled]="!createClassForm.valid"
+      >Add Class</button>
     </div>
-  </form>
+  </div>
 </div>
+
+<ng-template #loading>
+  <mat-spinner></mat-spinner>
+</ng-template>
