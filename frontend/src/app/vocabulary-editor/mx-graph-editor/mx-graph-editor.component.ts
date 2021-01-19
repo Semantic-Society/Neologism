@@ -32,7 +32,7 @@ export class MxGraphEditorComponent implements OnInit {
   currentSelectionSub: Subscription;
   vocabularySub: Subscription;
 
-  @ViewChild('view') mxGraphView: ElementRef;
+  @ViewChild('view',{static: true}) mxGraphView: ElementRef;
    mx: MxgraphService;
    vocabID: string;
    classes: Observable<IClassWithProperties[]>;

@@ -3,7 +3,7 @@ import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } fro
 import { ActivatedRoute } from '@angular/router';
 import { mxgraph as m } from 'mxgraph';
 import { Observable, Subscription } from 'rxjs';
-import { combineLatest, debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
+import { combineLatest, debounceTime, distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
 
 import { MxgraphService } from './mxgraph';
 
@@ -12,7 +12,7 @@ import { IClassWithProperties, VocabulariesService } from '../services/vocabular
 
 // import sidebar state dep.
 import { SideBarStateService, SidebarChange } from '../services/state-services/sidebar-state.service';
-import { NzModalService } from 'ng-zorro-antd';
+import { NzModalService } from 'ng-zorro-antd/modal';
 import { PropertyEditModal } from './property-model/property-edit.component';
 
 
@@ -41,7 +41,7 @@ export class MxgraphComponent implements OnInit, OnDestroy {
 
     vocabularySub: Subscription;
 
-    @ViewChild('view') mxGraphView: ElementRef;
+    @ViewChild('view',{static: true}) mxGraphView: ElementRef;
     mx: MxgraphService;
     vocabID: string;
     classes: Observable<IClassWithProperties[]>;

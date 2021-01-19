@@ -1,4 +1,4 @@
-import 'hammerjs';
+
 import { enableProdMode } from '@angular/core';
 import 'meteor-client';
 
