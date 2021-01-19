@@ -17,8 +17,9 @@
 
         <nz-breadcrumb-item>
           <nz-switch nzSize="small" [(ngModel)]="vocabEditorService.allowEditing"></nz-switch>
-          <nz-dropdown style="border-right: 10px; margin-bottom: 10px;" [nzDisabled]="!vocabEditorService.allowEditing">
-              <a nz-dropdown> {{ !vocabEditorService.allowEditing ? "Arrange Mode" : "Editing"}} <i nz-icon type="down"></i> </a>
+
+          <a nz-dropdown style="border-right: 10px; margin-bottom: 10px;" [nzDisabled]="!vocabEditorService.allowEditing"  [nzDropdownMenu]="menu">{{ !vocabEditorService.allowEditing ? "Arrange Mode" : "Editing"}} <i nz-icon  nzType="down"></i> </a>
+          <nz-dropdown-menu #menu="nzDropdownMenu">
               <ul nz-menu nzSelectable>
                 <li nz-menu-item (click)="openCreateClassModal()">
                   <a>Add New Class</a>
@@ -26,8 +27,9 @@
                 <li nz-menu-item (click)="openSearchExistingClassModal()">
                   <a>Search for Existing Class</a>
                 </li>
-              </ul>
-          </nz-dropdown>
+            </ul>
+          </nz-dropdown-menu>
+        
         </nz-breadcrumb-item>
       </nz-breadcrumb>
 
@@ -37,8 +39,8 @@
           nzPlaceHolder="Select Display Method" 
           [ngModel]="selectedViewMethod"
           (ngModelChange)="changeViewMethod($event)">
-        <nz-option nzCustomContent nzLabel="List View" nzValue="list-view"><i nz-icon type="ordered-list"></i> List View</nz-option>
-        <nz-option nzCustomContent nzLabel="Graph View" nzValue="mxgraph"><i nz-icon type="gateway"></i> Graph View</nz-option>
+        <nz-option nzCustomContent nzLabel="List View" nzValue="list-view"><i nz-icon  nzType="ordered-list"></i> List View</nz-option>
+        <nz-option nzCustomContent nzLabel="Graph View" nzValue="mxgraph"><i nz-icon  nzType="gateway"></i> Graph View</nz-option>
       </nz-select>
 
 
@@ -60,7 +62,7 @@
 [nzWidth]="480"
 [nzMask]="false"
 [nzVisible]="visibleAddClass | async"
-nzTitle="Create New Class"
+nzTooltipTitle="Create New Class"
 (nzOnClose)="close()"
 >
 <form nz-form>
@@ -114,7 +116,7 @@ nzTitle="Create New Class"
 [nzWidth]="480"
 [nzMask]="false"
 [nzVisible]="visibleSearch | async"
-nzTitle="Search Existing Class"
+nzTooltipTitle="Search Existing Class"
 (nzOnClose)="close()"
 >
 <form nz-form>
@@ -168,7 +170,7 @@ nzTitle="Search Existing Class"
 [nzWidth]="480"
 [nzMask]="false"
 [nzVisible]="visibleEditor | async"
-nzTitle="Edit Class"
+nzTooltipTitle="Edit Class"
 (nzOnClose)="close()"
 >
 <form nz-form>

@@ -5,10 +5,10 @@
 FROM ubuntu
 
 
-ARG APP_ROOT_URL=http://cloud33.dbis.rwth-aachen.de:3000
+ARG METEOR_CLIENT_CONN_URL
 
 # Meteor version to build for; see ../build.sh
-ENV METEOR_VERSION 1.8
+ENV METEOR_VERSION 1.12
 
 ENV SCRIPTS_FOLDER /docker
 ENV APP_SOURCE_FOLDER /opt/src
@@ -61,7 +61,7 @@ RUN bash $SCRIPTS_FOLDER/build-meteor-bundle.sh
 RUN bash $SCRIPTS_FOLDER/build-angular-bundle.sh
 
 # Use the specific version of Node expected by your Meteor release, per https://docs.meteor.com/changelog.html; this is expected for Meteor 1.10.2
-FROM node:8.11.4-alpine
+FROM node:12.20.0-alpine
 
 ENV APP_BUNDLE_FOLDER /opt/bundle
 ENV SCRIPTS_FOLDER /docker
@@ -86,7 +86,7 @@ RUN bash $SCRIPTS_FOLDER/build-meteor-npm-dependencies.sh --build-from-source
 
 # Start another Docker stage, so that the final image doesn’t contain the layer with the build dependencies
 # See previous FROM line; this must match
-FROM node:8.11.4-alpine
+FROM node:12.20.0-alpine
 
 ENV APP_BUNDLE_FOLDER /opt/bundle
 ENV SCRIPTS_FOLDER /docker

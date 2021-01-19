@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Properties, Classes } from '../../../../api/collections';
 import { Iclass, Iproperty } from '../../../../api/models';
-import { NzModalRef } from 'ng-zorro-antd';
+import { NzModalRef } from 'ng-zorro-antd/modal';
 import { MeteorObservable } from 'meteor-rxjs';
 
 @Component({

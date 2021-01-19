@@ -1,8 +1,9 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
 import { VocabulariesService } from '../services/vocabularies.service';
 import { Iclass, Iproperty, Ivocabulary, meteorID } from '../../../api/models';
 import { Meteor } from 'meteor/meteor';
 @Component({
+  encapsulation: ViewEncapsulation.None,
   selector: 'search-vocabularies-autocomplete',
   templateUrl: './search-vocabularies-autocomplete.component.html',
   styleUrls: ['./search-vocabularies-autocomplete.component.scss']

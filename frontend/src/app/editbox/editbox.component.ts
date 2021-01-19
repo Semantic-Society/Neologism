@@ -8,7 +8,7 @@ import { SideBarStateService } from '../services/state-services/sidebar-state.se
 import { EditboxService } from './editbox.service';
 import { IClassProperties, IClassProperty } from '../models/editbox.model';
 import { FormArray, FormBuilder, FormControl, FormGroup, FormGroupDirective, Validators } from '@angular/forms';
-import { NzModalService } from 'ng-zorro-antd';
+import { NzModalService } from 'ng-zorro-antd/modal';
 
 @Component({
   selector: 'app-editbox',

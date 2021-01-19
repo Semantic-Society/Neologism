@@ -45,9 +45,9 @@ Meteor.methods({
         $set: {
           creator: this.userId
         }
-      }).subscribe(value => console.log("assigned creator to vocabulary " + vocabId + " " + value))
+      }).subscribe((value) => console.log("assigned creator to vocabulary " + vocabId + " " + value))
   },
-  'vocabulary.addAuthors'(authorIds: Array<string>, vocabId: string) {
+  'vocabulary.addAuthors'(authorIds: string[], vocabId: string) {
     assertUser();
 
     Vocabularies.update(
@@ -58,9 +58,9 @@ Meteor.methods({
           authors:
             { $each: authorIds }
         }
-      }).subscribe(value => console.log("added authors " + value))
+      }).subscribe((value) => console.log("added authors " + value))
   },
-  'vocabulary.removeAuthors'(authorIds: Array<string>, vocabId: string) {
+  'vocabulary.removeAuthors'(authorIds: string[], vocabId: string) {
     assertUser();
     console.log(authorIds + " ids")
     Vocabularies.update(
@@ -71,7 +71,7 @@ Meteor.methods({
           authors:
             { $in: authorIds }
         }
-      }).subscribe(value => console.log("removed authors" + value))
+      }).subscribe((value) => console.log("removed authors" + value))
   },
   'vocabulary.create'(_id: string, name: string, description: string, uriPrefix: string, field_public: boolean = false) {
     assertUser();
@@ -149,8 +149,8 @@ Meteor.methods({
   },
   'classes.delete'(classId: string) {
     assertUser();
-    const $getClassProps = Classes.find({ _id: classId }, {limit:1}).pipe(map(classes => classes[0].properties))
-    const $getClassRangeProps = Properties.find({ range: classId }).pipe(map(props => props.map(prop => prop._id)))
+    const $getClassProps = Classes.find({ _id: classId }, {limit:1}).pipe(map((classes) => classes[0].properties))
+    const $getClassRangeProps = Properties.find({ range: classId }).pipe(map((props) => props.map((prop) => prop._id)))
 
     combineLatest([$getClassProps,
       $getClassRangeProps]
@@ -160,10 +160,10 @@ Meteor.methods({
         tap(([x, y]) => console.log(x.concat(y))),
         map(([first, second]) => {
           first.concat(second)
-          .forEach(propId=>Properties.remove(propId))
+          .forEach((propId)=>Properties.remove(propId))
           return true;
         })
-      ).subscribe(_resp=>Classes.remove(classId));
+      ).subscribe((_resp)=>Classes.remove(classId));
 
   },
   'property.create'(classId, name, description, URI, range) {
@@ -214,7 +214,7 @@ JsonRoutes.add("get", "/vocabulary/:id", (req, res) => {
       throw new Meteor.Error(404, 'Not Found')
     }
 
-    const authorEmails = vocab.authors.map(author => {
+    const authorEmails = vocab.authors.map((author) => {
       const emails = Users.findOne({ _id: author }).emails;
       if (!!emails)
         return emails
@@ -259,7 +259,7 @@ export interface IClassWithProperties {
 }
 
 
-function saveClassesWithPropertiesAsFile(classes: IClassWithProperties[], vocab: Ivocabulary, authorEmails: (Meteor.UserEmail[])[]) {
+function saveClassesWithPropertiesAsFile(classes: IClassWithProperties[], vocab: Ivocabulary, authorEmails: Array<Meteor.UserEmail[]>) {
 
   try {
     console.log('saveClassesWithPropertiesAsFile')
@@ -272,10 +272,10 @@ function saveClassesWithPropertiesAsFile(classes: IClassWithProperties[], vocab:
     rdf += `${namespace} a <http://www.w3.org/2002/07/owl#Ontology> .\r\n`;
     if (creator) {
       rdf += `${namespace} <http://purl.org/dc/terms/creator> "${creator.emails[0].address}" .\r\n`
-      authorEmails = authorEmails.filter(emails => emails[0].address != creator.emails[0].address)
+      authorEmails = authorEmails.filter((emails) => emails[0].address != creator.emails[0].address)
     }
 
-    authorEmails.forEach(emails => emails.forEach(email => {
+    authorEmails.forEach((emails) => emails.forEach((email) => {
       rdf += `${namespace} <http://purl.org/dc/terms/contributor> "${email.address}" .\r\n`
     })
     );
