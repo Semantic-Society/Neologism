@@ -18,8 +18,8 @@ __Local setup:__
 2. Install meteor using curl https://install.meteor.com/ | sh
 3. Install node version to 12.20.1 with compatible npm
 4. Run `npm i` in the frontend subfolder
-5. Run `npm run meteor-client:bundle` in the frontend subfolder
-6. Run `npm i` in frontend/api
+5. Run `npm i` in frontend/api
+6. Run `npm run meteor-client:bundle` in the frontend subfolder
 7. Navigate to frontend
 8. Run `npm run api` to start a local meteor server (running on http://localhost:3000/ with a connection to a local mongodb at port 3001).
 9. Run `npm run start` for a dev server. Navigate to http://localhost:4200/. The app will automatically reload if you change any of the source files.
