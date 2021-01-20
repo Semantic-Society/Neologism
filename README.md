@@ -9,23 +9,38 @@
 ## Installation
 
 __Easy usage via Docker:__
-1. Run `docker build` from within the `frontend` folder.
+1.  Navigate to frontend/
 2. `docker-compose build`
 3. `docker-compose up`
 
-__Custom setup:__
+__Local setup:__
 1. Clone the repository
-2. Install meteor using `curl https://install.meteor.com/ | sh`
-3. Install mongo from https://docs.mongodb.com/manual/tutorial/install-mongodb-on-ubuntu/
-4. Install node version manager from https://github.com/nvm-sh/nvm
-5. Set node version to 10.15.0
-6. Run `npm install` in the `frontend` folder
-7. Run the meteor bundler (see below)
-  - Initially & every time you make a change to the server code (which affects the client side code), rebundle the meteor client side code by running `npm run meteor-client:bundle`.
-  - Run `npm run api` to start a local meteor server (running on `http://localhost:3000/` with a connection to a local mongodb at port `3001`).
-  - Run `npm run start` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
-  - Find detail for the Angular/Meteor integration here: https://github.com/Urigo/angular-meteor/tree/master/examples/AngularCLI
+2. Install meteor using curl https://install.meteor.com/ | sh
+3. Install node version to 12.20.1 with compatible npm
+4. Run `npm i` in the frontend subfolder
+5. Run `npm i` in frontend/api
+6. Run `npm run meteor-client:bundle` in the frontend subfolder
+7. Navigate to frontend
+8. Run `npm run api` to start a local meteor server (running on http://localhost:3000/ with a connection to a local mongodb at port 3001).
+9. Run `npm run start` for a dev server. Navigate to http://localhost:4200/. The app will automatically reload if you change any of the source files.
 
+
+__DISCLAIMER:__
+Steps above are valid to run in Ubuntu focal
+
+__NOTE:__
+- Initially & every time you make a change to the server code (which affects the client side code), rebundle the meteor client side code by running `npm run meteor-client:bundle`.
+- Find more details for the Angular/Meteor integration here: https://github.com/Urigo/angular-meteor/tree/master/examples/AngularCLI
+
+
+__Major Versions:__
+- Angular 9
+- Meteor 1.12
+- Node 12.20.0
+
+__Troubleshooting:__
+- check if node version compatibility for front and api
+- run `meteor npm -v` or `meteor node -v`
 
 ## Usage
 After starting Neologism, navigate to `localhost` (or whatever server you are hosting it on), and follow the user interface.

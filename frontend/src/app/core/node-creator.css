@@ -82,3 +82,12 @@ mat-panel-title {
 .mat-expansion-panel-custom-header:hover {
   background-color: #f5f5f5 !important;
 }
+
+
+
+.error-message {
+  margin: 20px 0px;
+  padding: 5px;
+  border: solid 2px #ff5722;
+  color: #ff5722;
+}

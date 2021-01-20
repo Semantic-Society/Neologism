@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
+import { AbstractControl, AsyncValidatorFn, ValidationErrors } from '@angular/forms';
 
 import { MeteorObservable, zoneOperator } from 'meteor-rxjs';
-import { combineLatest, empty, Observable, of, throwError } from 'rxjs';
-import { debounceTime, distinctUntilChanged, filter, flatMap, map, switchMap } from 'rxjs/operators';
+import { combineLatest, empty, Observable, of, throwError, timer } from 'rxjs';
+import { catchError, debounceTime, distinctUntilChanged, filter, flatMap, map, switchMap, take } from 'rxjs/operators';
 
 import { Classes, Properties, Users, Vocabularies } from '../../../api/collections';
 import { Iclass, Iproperty, Ivocabulary, meteorID } from '../../../api/models';
@@ -345,6 +346,18 @@ export class VocabulariesService {
 
   }
 
+  isURITaken(URI: string, type: "class" | "property") {
+    try {
+      if (type === "class") {
+        return of((Classes.findOne({ URI: URI }) != null))
+      } else {
+        return of((Properties.findOne({ URI: URI }) != null))
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   deleteClass(id: meteorID) {
     MeteorObservable.call('classes.delete', id)
       .subscribe((_response) => {
@@ -353,4 +366,26 @@ export class VocabulariesService {
       });
   }
 
+  uriValidator(): AsyncValidatorFn {
+    return (control: AbstractControl): Promise<ValidationErrors | null> | Observable<ValidationErrors | null> => {
+      return timer(500).pipe(
+        switchMap(_ => this.isURITaken(control.value, "class")),
+        map(isTaken => (isTaken ? { invalidURI: true } : null)),
+        catchError(() => of(null)))
+    }
+
+  }
+
+  uriPropValidator(): AsyncValidatorFn {
+    return (control: AbstractControl): Promise<ValidationErrors | null> | Observable<ValidationErrors | null> => {
+      return timer(500).pipe(
+        switchMap(_ => this.isURITaken(control.value, "property")),
+        map(isTaken => (isTaken ? { invalidURI: true } : null)),
+        catchError(() => of(null)))
+    }
+
+  }
+
+
 }
+

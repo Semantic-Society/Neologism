@@ -57,7 +57,7 @@ import { EditComponentService } from './vocabulary-editor/edit.component.service
 import { RemoveUserModalComponent } from './vocablist/components/remove-user-modal/remove-user-modal.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { PropertyEditModal } from './mxgraph/property-model/property-edit.component';
-
+import {DupURIValidator } from './shared/DupURIValidator'
 registerLocaleData(en);
 
 @NgModule({
@@ -82,6 +82,7 @@ registerLocaleData(en);
     ListEditorComponent,
     RemoveUserModalComponent,
     PropertyEditModal,
+    DupURIValidator
   ],
   imports: [
     AccountsModule,
@@ -116,7 +117,7 @@ registerLocaleData(en);
     VocabularyEditorService,
     AccessManagement,
     NzDrawerService,
-    { provide: NZ_I18N, useValue: en_US }
+    { provide: NZ_I18N, useValue: en_US },
   ],
   bootstrap: [AppComponent],
 })
