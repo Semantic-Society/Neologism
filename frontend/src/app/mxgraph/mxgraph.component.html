@@ -51,3 +51,16 @@
     </mat-tab-group>
   </mat-drawer-content>
 </mat-drawer-container>
+
+
+<dialog #dEmptyGraph class="modal">
+<p>
+  Your graph seems empty! want to create a new class
+
+</p>
+  <menu>
+    <button (click)="dEmptyGraph.close();">Skip!, I will explore</button>
+
+    <button id="confirmBtn" (click)="showNodeCreator()" value="default">Take me</button>
+  </menu>
+</dialog>

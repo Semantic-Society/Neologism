@@ -3,7 +3,7 @@ import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } fro
 import { ActivatedRoute } from '@angular/router';
 import { mxgraph as m } from 'mxgraph';
 import { Observable, Subscription } from 'rxjs';
-import { combineLatest, debounceTime, distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
+import { auditTime, combineLatest, debounceTime, defaultIfEmpty, distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
 
 import { MxgraphService } from './mxgraph';
 
@@ -42,6 +42,8 @@ export class MxgraphComponent implements OnInit, OnDestroy {
     vocabularySub: Subscription;
 
     @ViewChild('view',{static: true}) mxGraphView: ElementRef;
+    @ViewChild('dEmptyGraph',{static: true}) showDialogForEmptyGraph: ElementRef;
+    
     mx: MxgraphService;
     vocabID: string;
     classes: Observable<IClassWithProperties[]>;
@@ -180,8 +182,12 @@ export class MxgraphComponent implements OnInit, OnDestroy {
         });
 
         this.classes.pipe(
-            debounceTime(80),
+            auditTime(80)  
         ).subscribe((cs) => {
+            console.log(cs)
+            if(!cs.length){
+                this.showDialogForEmptyGraph.nativeElement.showModal()
+            }
             this.mx.startTransaction();
 
             this.mx.clearModel();

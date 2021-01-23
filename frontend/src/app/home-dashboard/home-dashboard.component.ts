@@ -63,7 +63,6 @@ export class HomeDashboardComponent implements OnInit {
         result.description,
         result.uri
       ).subscribe((response) => {
-        console.log(response)
         this.router.navigateByUrl('edit/' + response.vocabId);
         // Handle success and response from server!
       }, (err) => {
