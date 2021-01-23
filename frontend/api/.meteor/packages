@@ -28,3 +28,4 @@ simple:rest-accounts-password
 simple:json-routes
 http@1.4.2
 jquery
+webapp
