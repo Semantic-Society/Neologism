@@ -52,7 +52,7 @@ export class SideBarNodeCreatorComponent {
   }
 
   autoCompleteURI($event) {
-    this.createClassForm.controls['URI'].setValue(`${this.uriPrefix}#${$event.target.value}`)
+    this.createClassForm.controls['URI'].setValue(`${this.uriPrefix}${$event.target.value}`)
   }
 
   resetSidebarState() {
