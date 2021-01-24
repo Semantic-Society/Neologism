@@ -1,9 +1,9 @@
 
-import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { mxgraph as m } from 'mxgraph';
-import { Observable, Subscription } from 'rxjs';
-import { auditTime, combineLatest, debounceTime, defaultIfEmpty, distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
+import { from, Observable, of, Subscription } from 'rxjs';
+import { auditTime, catchError, combineLatest, debounceTime, defaultIfEmpty, distinctUntilChanged, filter, map, startWith, take, tap, timeout, timeoutWith } from 'rxjs/operators';
 
 import { MxgraphService } from './mxgraph';
 
@@ -14,6 +14,7 @@ import { IClassWithProperties, VocabulariesService } from '../services/vocabular
 import { SideBarStateService, SidebarChange } from '../services/state-services/sidebar-state.service';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { PropertyEditModal } from './property-model/property-edit.component';
+import { Classes } from '../../../api/collections';
 
 
 interface IMergedPropertiesClass {
@@ -72,8 +73,7 @@ export class MxgraphComponent implements OnInit, OnDestroy {
         // This did, however, not work.
         this.classes = this.vocabService.getClassesWithProperties(this.vocabID);
         this.mx = new MxgraphService(this.mxGraphView.nativeElement);
-
-        // this.currentSelection = this.mx.currentSelection().publish(new BehaviorSubject<string>(null));
+        this.sideBarState.changeSidebarToDefault()
 
         this.currentEdgeSelectionSub = this.mx.currentEdgeSelection().subscribe(edgeSelection => {
             if (edgeSelection != null) {
@@ -166,27 +166,17 @@ export class MxgraphComponent implements OnInit, OnDestroy {
             () => this.vocabulary = null
         );
 
-        // this.mx.addSelectionListener((id: meteorID) => {
-        //     if (id) {
-        //         this.currentSelection = id;
-        //         this.editMode = SideBarState.Edit;
-        //     } else {
-        //         this.currentSelection = null;
-        //         this.editMode = SideBarState.Default;
-        //     }
-        // });
-
         this.mx.addDragListener((ids, dx, dy) => {
-            // console.log(ids, dx, dy);
             this.vocabService.translateClasses(ids, dx, dy);
         });
 
         this.classes.pipe(
-            auditTime(80)  
+            startWith([]),
+            debounceTime(1000),
         ).subscribe((cs) => {
-            console.log(cs)
             if(!cs.length){
                 this.showDialogForEmptyGraph.nativeElement.showModal()
+                return;
             }
             this.mx.startTransaction();
 
@@ -210,13 +200,8 @@ export class MxgraphComponent implements OnInit, OnDestroy {
 
             this.mx.endTransaction();
         });
-
-        // this.mx = new MxgraphService(
-        //     this.mxGraphView.nativeElement,
-        //     document.getElementById('mx-toolbar'),
-        //     'http://xmlns.com/foaf/spec/index.rdf');
+        
     }// end ngOnInit
-
     mergeProperties(c: IClassWithProperties): IMergedPropertiesClass {
         // only takes the necessary parts
         const withMergedProps: IMergedPropertiesClass = { _id: c._id, properties: [], name: c.name };
@@ -273,7 +258,6 @@ export class MxgraphComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
-        // console.log("destroy")
         this.mx.destroy();
         this.currentSelectionSub.unsubscribe();
         this.vocabularySub.unsubscribe();

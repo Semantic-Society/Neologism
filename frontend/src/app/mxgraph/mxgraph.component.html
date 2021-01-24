@@ -61,6 +61,6 @@
   <menu>
     <button (click)="dEmptyGraph.close();">Skip!, I will explore</button>
 
-    <button id="confirmBtn" (click)="showNodeCreator()" value="default">Take me</button>
+    <button id="confirmBtn" (click)="showNodeCreator();dEmptyGraph.close()" value="default">Take me</button>
   </menu>
 </dialog>

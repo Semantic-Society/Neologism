@@ -254,7 +254,7 @@ export class EditboxComponent implements OnInit, OnChanges {
   }
 
   completeNewPropURI($event) {
-    this.formProp.controls['URI'].setValue(`${this.uriPrefix}#${$event.target.value.toLocaleLowerCase()}`)
+    this.formProp.controls['URI'].setValue(`${this.uriPrefix}${$event.target.value.toLocaleLowerCase()}`)
 
   }
 
