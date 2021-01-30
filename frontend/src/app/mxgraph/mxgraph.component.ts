@@ -15,6 +15,7 @@ import { SideBarStateService, SidebarChange } from '../services/state-services/s
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { PropertyEditModal } from './property-model/property-edit.component';
 import { Classes } from '../../../api/collections';
+import { RecommendationService } from '../services/recommendation.service';
 
 
 interface IMergedPropertiesClass {
@@ -61,6 +62,7 @@ export class MxgraphComponent implements OnInit, OnDestroy {
     constructor(
         private route: ActivatedRoute,
         private vocabService: VocabulariesService,
+        private recommenderService: RecommendationService,
         private sideBarState: SideBarStateService,
         private modalService: NzModalService) {
         this.editMode = this.sideBarState.editMode;
@@ -249,6 +251,34 @@ export class MxgraphComponent implements OnInit, OnDestroy {
 
     showNodeCreator() {
         this.sideBarState.changeSidebarState('create');
+    }
+
+    async getBatchRecommendation() {
+
+
+        const response = await fetch(
+            new Request(
+                RecommendationService.batchBaseUrl,
+                
+                    
+             
+              {
+                method: "post",
+                headers: {
+                    "Content-Type":"application/json"},
+                body: JSON.stringify({
+                    properties:["test"],
+                    domain:"ok",
+                    keywords:["alright"]
+                })
+              }
+            )
+          );
+          console.log(await response.json())
+
+
+        console.log("test")
+        console.log(this.recommenderService.batchRecommendationsForClasses({keywords:[],properties:[],domain:""}))
     }
 
     showEditBox() {
