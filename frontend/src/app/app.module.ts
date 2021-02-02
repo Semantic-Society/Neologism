@@ -58,6 +58,7 @@ import { RemoveUserModalComponent } from './vocablist/components/remove-user-mod
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { PropertyEditModal } from './mxgraph/property-model/property-edit.component';
 import {DupURIValidator } from './shared/DupURIValidator'
+import { BatchRecommenderComponent } from './batchRecommender/batchRecommender.component';
 registerLocaleData(en);
 
 @NgModule({
@@ -71,6 +72,7 @@ registerLocaleData(en);
     MetadataComponent,
     RecommenderComponent,
     StandardViewComponent,
+    BatchRecommenderComponent,
     TruncatedTextComponentComponent,
     VocablistComponent,
     AddUserModalComponent,
