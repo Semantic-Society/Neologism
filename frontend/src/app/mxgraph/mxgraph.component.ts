@@ -1,5 +1,5 @@
 
-import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostListener, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { mxgraph as m } from 'mxgraph';
 import { from, Observable, of, Subscription } from 'rxjs';
@@ -16,6 +16,8 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { PropertyEditModal } from './property-model/property-edit.component';
 import { Classes } from '../../../api/collections';
 import { RecommendationService } from '../services/recommendation.service';
+import { BatchRecommenderComponent } from '../batchRecommender/batchRecommender.component';
+import { BatchRecommendations } from '../services/BatchRecommendations';
 
 
 interface IMergedPropertiesClass {
@@ -40,6 +42,8 @@ export class MxgraphComponent implements OnInit, OnDestroy {
     currentSelection: meteorID;
     currentSelectionSub: Subscription;
     currentEdgeSelectionSub: Subscription;
+    public test:boolean = true;
+    recommendations: Observable<BatchRecommendations>;
 
     vocabularySub: Subscription;
 
@@ -50,6 +54,8 @@ export class MxgraphComponent implements OnInit, OnDestroy {
     vocabID: string;
     classes: Observable<IClassWithProperties[]>;
     vocabulary: IvocabularyExtended;
+    classNames: string[];
+    propertyNames: string[];
 
     @HostListener('window:keydown', ['$event'])
     onKeyDown(event) {
@@ -71,6 +77,8 @@ export class MxgraphComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.vocabID = this.route.snapshot.paramMap.get('id');
+        this.classNames = []
+        this. propertyNames =[]
         // TODO: Currently creates a new instance with each subscription. Use something like this instead: .multicast(new BehaviorSubject([]));
         // This did, however, not work.
         this.classes = this.vocabService.getClassesWithProperties(this.vocabID);
@@ -177,7 +185,7 @@ export class MxgraphComponent implements OnInit, OnDestroy {
             debounceTime(1000),
         ).subscribe((cs) => {
             if(!cs.length){
-                this.showDialogForEmptyGraph.nativeElement.showModal()
+                //this.showDialogForEmptyGraph.nativeElement.showModal()
                 return;
             }
             this.mx.startTransaction();
@@ -185,18 +193,20 @@ export class MxgraphComponent implements OnInit, OnDestroy {
             this.mx.clearModel();
 
             // insert classes
-            cs.forEach((c) =>
+            cs.forEach((c) => {
                 this.mx.insertClass(c._id, c.name, c.position.x, c.position.y)
+                this.classNames.push(c.name)}
             );
 
             // insert properties
             cs.forEach((c) => {
                 // grouping the properties by their target
                 const merged = this.mergeProperties(c);
-                merged.properties.forEach((p) =>
+                merged.properties.forEach((p) =>{
                     this.mx.insertProperty(c._id,
                         p._id, p.name,
                         p.rangeID)
+                        this.propertyNames.push(p.name) }
                 );
             });
 
@@ -253,34 +263,15 @@ export class MxgraphComponent implements OnInit, OnDestroy {
         this.sideBarState.changeSidebarState('create');
     }
 
+
     async getBatchRecommendation() {
 
+        this.recommendations = this.recommenderService.batchRecommendationsForClasses({keywords:this.classNames,properties:this.propertyNames,domain:"test"})
+            this.test= !this.test;
+        }
 
-        const response = await fetch(
-            new Request(
-                RecommendationService.batchBaseUrl,
-                
-                    
-             
-              {
-                method: "post",
-                headers: {
-                    "Content-Type":"application/json"},
-                body: JSON.stringify({
-                    properties:["test"],
-                    domain:"ok",
-                    keywords:["alright"]
-                })
-              }
-            )
-          );
-          console.log(await response.json())
-
-
-        console.log("test")
-        console.log(this.recommenderService.batchRecommendationsForClasses({keywords:[],properties:[],domain:""}))
-    }
-
+    
+    
     showEditBox() {
         console.log('show edit box')
         this.currentSelection = null;

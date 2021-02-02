@@ -41,13 +41,13 @@
 
     <div class="button-div">
       <div class="pad-1">
-        <button *ngSwitchCase="'default'" mat-button (click)="getBatchRecommendation()">Get BatchRecommendations
+        <button *ngSwitchCase="'default'" mat-button (click)="getBatchRecommendation()">Get BatchRecommendation
         </button>
       </div>
       </div>
   </mat-drawer>
   <mat-drawer-content>
-    <mat-tab-group headerPosition="below" class="mat-tab-fill-height">
+    <mat-tab-group  headerPosition="below" class="mat-tab-fill-height" [hidden]="!test">
       <mat-tab label="View &amp; Edit">
         <div class="mxgraph-container" #view></div>
       </mat-tab>
@@ -56,18 +56,10 @@
         </app-standardview>
       </mat-tab>
     </mat-tab-group>
+
+      <app-batchRecommender [classes]="recommendations" [hidden]="test" >
+
+      </app-batchRecommender>
   </mat-drawer-content>
+
 </mat-drawer-container>
-
-
-<dialog #dEmptyGraph class="modal">
-<p>
-  Your graph seems empty! want to create a new class
-
-</p>
-  <menu>
-    <button (click)="dEmptyGraph.close();">Skip!, I will explore</button>
-
-    <button id="confirmBtn" (click)="showNodeCreator();dEmptyGraph.close()" value="default">Take me</button>
-  </menu>
-</dialog>
