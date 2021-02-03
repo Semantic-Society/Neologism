@@ -49,6 +49,7 @@ export class MxgraphComponent implements OnInit, OnDestroy {
 
     @ViewChild('view',{static: true}) mxGraphView: ElementRef;
     @ViewChild('dEmptyGraph',{static: true}) showDialogForEmptyGraph: ElementRef;
+    @ViewChild('batchrec',{static: true}) BatchRecommenderComponent: ElementRef;
     
     mx: MxgraphService;
     vocabID: string;

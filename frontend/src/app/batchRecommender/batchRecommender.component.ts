@@ -1,5 +1,6 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
+import { debounceTime, startWith } from 'rxjs/operators';
 import { BatchRecommendations } from '../services/BatchRecommendations';
 import { RecommendationService } from '../services/recommendation.service';
 import { IClassWithProperties } from '../services/vocabularies.service';
@@ -16,7 +17,7 @@ export class BatchRecommenderComponent implements OnInit, OnDestroy {
    subscription: Subscription;
    radioSelected: Array<any>;
   @Input() recommendations: BatchRecommendations[];
-  @Input() classes: IClassWithProperties[];
+  @Input() classes: Observable<IClassWithProperties[]>;
 
   constructor() { }
 
@@ -34,7 +35,17 @@ export class BatchRecommenderComponent implements OnInit, OnDestroy {
   }
 
   test(){
-    console.log("test")
+    this.classes.pipe(
+      startWith([]),
+      debounceTime(1000),
+  ).subscribe((cs) => {
+    cs.forEach((c) => {
+      this.recommendations.forEach(rec =>{
+        if(rec.keyword === c.name){
+console.log(c.name , rec.keyword);
+        }
+      })
+    });
+  })
   }
-
 }
