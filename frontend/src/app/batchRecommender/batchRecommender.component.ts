@@ -15,7 +15,8 @@ export class BatchRecommenderComponent implements OnInit, OnDestroy {
 
    subscription: Subscription;
    radioSelected: Array<any>;
-  @Input() classes: BatchRecommendations[];
+  @Input() recommendations: BatchRecommendations[];
+  @Input() classes: IClassWithProperties[];
 
   constructor() { }
 
@@ -29,6 +30,11 @@ export class BatchRecommenderComponent implements OnInit, OnDestroy {
 
   radioFun() {
     console.log(this.radioSelected);
+    console.log(this.classes)
+  }
+
+  test(){
+    console.log("test")
   }
 
 }

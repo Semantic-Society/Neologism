@@ -267,9 +267,19 @@ export class MxgraphComponent implements OnInit, OnDestroy {
     async getBatchRecommendation() {
 
         this.recommendations = this.recommenderService.batchRecommendationsForClasses({keywords:this.classNames,properties:this.propertyNames,domain:"test"})
-            this.test= !this.test;
+            this.test= false;
         }
 
+    
+    liftOntology(){
+        
+           // this.vocabService.updateClassName(this.selectedClassID, this.editedClass.name);
+         
+            //this.vocabService.updateClassDescription(this.selectedClassID, this.editedClass.description);
+         
+            //this.vocabService.updateClassURI(this.selectedClassID, this.editedClass.URI);
+        this.test= true;
+    }
     
     
     showEditBox() {

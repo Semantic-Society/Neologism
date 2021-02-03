@@ -1,11 +1,11 @@
-<div *ngFor="let c of (classes | async);let i = index;">
+<div *ngFor="let r of (recommendations | async);let i = index;">
  
   <div class="attributes-container"><!-- TODO: add anchor for references -->
     <div class="attribute-container">
-      <div class="text"> <span class="label">Class:</span> <span class="name">{{c.keyword}}</span></div>
+      <div class="text"> <span class="label">Class:</span> <span class="name">{{r.keyword}}</span></div>
       
       
-      <div *ngFor="let rec of c.list">
+      <div *ngFor="let rec of r.list">
           <input id="{{rec.URI}}" [checked]="radioSelected[i]" [value]='rec.URI' type="radio" name="{{rec.URI}}" [(ngModel)]="radioSelected[i]">
           {{rec.URI}} {{rec.labels}} {{rec.comments}}
       <span class="uri"><a href="{{rec.ontology}}"> {{rec.ontology}} </a></span>
