@@ -269,6 +269,8 @@ export class MxgraphComponent implements OnInit, OnDestroy {
 
         this.recommendations = this.recommenderService.batchRecommendationsForClasses({keywords:this.classNames,properties:this.propertyNames,domain:"test"})
             this.test= false;
+
+            this.BatchRecommenderComponent.nativeElement.showModal()
         }
 
     

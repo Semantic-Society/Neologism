@@ -64,9 +64,20 @@
       </mat-tab>
     </mat-tab-group>
 
-      <app-batchRecommender  [classes]="classes" [recommendations]="recommendations" [hidden]="test" #batchrec >
+      <app-batchRecommender  [classes]="classes" [recommendations]="recommendations" [hidden]="test" >
 
       </app-batchRecommender>
   </mat-drawer-content>
 
 </mat-drawer-container>
+
+<dialog #batchrec class="modal">
+  <app-batchRecommender  [classes]="classes" [recommendations]="recommendations" #batchrec2>
+
+  </app-batchRecommender>
+    <menu>
+      <button (click)="batchrec2.test();">Lift</button>
+  
+      <button id="confirmBtn" (click)="modal.close()" value="default">Close</button>
+    </menu>
+  </dialog>
