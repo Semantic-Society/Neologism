@@ -1,6 +1,6 @@
 export interface Recommendation{
-    labels:[]
-    comments:[]
+    labels:string[]
+    comments:string[]
     URI:string
     ontology:string
 }

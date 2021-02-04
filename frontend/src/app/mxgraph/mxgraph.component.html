@@ -48,7 +48,7 @@
 
       <div class="button-div">
         <div class="pad-1">
-          <button *ngSwitchCase="'default'" [hidden]="test" mat-button (click)="batchrec.test()">Lift Ontology
+          <button *ngSwitchCase="'default'" [hidden]="test" mat-button (click)="batchrec2.test(); liftOntology()">Lift Ontology
           </button>
         </div>
         </div>
@@ -64,20 +64,20 @@
       </mat-tab>
     </mat-tab-group>
 
-      <app-batchRecommender  [classes]="classes" [recommendations]="recommendations" [hidden]="test" >
+      <app-batchRecommender  [classes]="classes" [recommendations]="recommendations" [hidden]="test" #batchrec2>
 
       </app-batchRecommender>
   </mat-drawer-content>
 
 </mat-drawer-container>
 
-<dialog #batchrec class="modal">
+<!--<dialog #batchrec class="modal">
   <app-batchRecommender  [classes]="classes" [recommendations]="recommendations" #batchrec2>
 
   </app-batchRecommender>
     <menu>
       <button (click)="batchrec2.test();">Lift</button>
   
-      <button id="confirmBtn" (click)="modal.close()" value="default">Close</button>
+      <button id="confirmBtn" (click)="batchrec.close()" value="default">Close</button>
     </menu>
-  </dialog>
+  </dialog>-->
