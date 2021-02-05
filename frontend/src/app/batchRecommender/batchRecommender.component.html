@@ -7,7 +7,7 @@
       
       <div *ngFor="let rec of r.list">
           <input id="{{rec.URI}}" [checked]="radioSelected[i]" [value]='rec.URI' type="radio" name="{{rec.URI}}" [(ngModel)]="radioSelected[i]">
-          {{rec.URI}} {{rec.labels}} {{rec.comments}}
+          <b>URI:</b> {{rec.URI}}, <b>Label:</b> {{rec.labels[0]?rec.labels[0].label:""}}, <b>Comment:</b> {{rec.comments[0]?rec.comments[0].label:""}}
       <span class="uri"><a href="{{rec.ontology}}"> {{rec.ontology}} </a></span>
   <hr class="divider">
 </div>

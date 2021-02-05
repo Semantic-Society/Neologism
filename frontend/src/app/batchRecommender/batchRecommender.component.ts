@@ -1,8 +1,7 @@
 import { Component, Input, OnDestroy, OnInit } from "@angular/core";
+import { MeteorObservable } from "meteor-rxjs";
 import { Observable, Subscription } from "rxjs";
-import { debounceTime, startWith } from "rxjs/operators";
 import { BatchRecommendations } from "../services/BatchRecommendations";
-import { RecommendationService } from "../services/recommendation.service";
 import {
   IClassWithProperties,
   VocabulariesService,
@@ -43,30 +42,52 @@ export class BatchRecommenderComponent implements OnInit, OnDestroy {
               let element = rec.list.find(
                 (r) => r.URI === this.radioSelected[i]
               );
+              console.log(element);
               if (element) {
-                this.vocabService.updateClassName(c._id, element.labels[0]);
+                console.log("ok", element);
+
+                element.labels[0]
+                  ? this.vocabService.updateClassName(
+                      c._id,
+                      element.labels[0].label
+                    )
+                  : null;
 
                 element.comments[0]
                   ? this.vocabService.updateClassDescription(
                       c._id,
-                      element.comments[0]
+                      element.comments[0].label
                     )
                   : null;
 
                 this.vocabService.updateClassURI(c._id, element.URI);
               }
-              console.log("Class", c._id, rec.keyword, this.radioSelected[i]);
             }
 
-            //TODO Update property and check comment provided - show something for no recommendation results
+            //TODO Show something for no recommendation results & cancel Button
             c.properties.forEach((p) => {
               if (rec.keyword === p.name) {
-                console.log(
-                  "Property",
-                  rec.keyword,
-                  this.radioSelected[i],
-                  p._id
+                let element = rec.list.find(
+                  (r) => r.URI === this.radioSelected[i]
                 );
+                if (element) {
+                  MeteorObservable.call(
+                    "property.update",
+                    p._id,
+                    element.labels[0] ? element.labels[0].label : rec.keyword,
+                    element.comments[0] ? element.comments[0].label : "",
+                    element.URI,
+                    p.range
+                  ).subscribe(
+                    (response) => {
+                      // Handle success and response from server!
+                      console.log("updated");
+                    },
+                    (err) => {
+                      console.log(err);
+                    }
+                  );
+                }
               }
             });
           });
