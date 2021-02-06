@@ -41,20 +41,26 @@
 
     <div class="button-div">
       <div class="pad-1">
-        <button *ngSwitchCase="'default'" [hidden]="!test" mat-button (click)="getBatchRecommendation()">Get BatchRecommendation
+        <button *ngSwitchCase="'default'" [hidden]="!batchPhase" mat-button (click)="getBatchRecommendation()">Get BatchRecommendation
         </button>
       </div>
       </div>
 
       <div class="button-div">
         <div class="pad-1">
-          <button *ngSwitchCase="'default'" [hidden]="test" mat-button (click)="batchrec2.test(); liftOntology()">Lift Ontology
+          <button *ngSwitchCase="'default'" [hidden]="batchPhase" mat-button (click)="batchrec.liftOntology(); hideBatch()">Lift Ontology
           </button>
         </div>
         </div>
+        <div class="button-div">
+          <div class="pad-1">
+            <button *ngSwitchCase="'default'" [hidden]="batchPhase" mat-button (click)="hideBatch()">Return
+            </button>
+          </div>
+          </div>
   </mat-drawer>
   <mat-drawer-content>
-    <mat-tab-group  headerPosition="below" class="mat-tab-fill-height" [hidden]="!test">
+    <mat-tab-group  headerPosition="below" class="mat-tab-fill-height" [hidden]="!batchPhase">
       <mat-tab label="View &amp; Edit">
         <div class="mxgraph-container" #view></div>
       </mat-tab>
@@ -64,7 +70,7 @@
       </mat-tab>
     </mat-tab-group>
 
-      <app-batchRecommender  [classes]="classes" [recommendations]="recommendations" [hidden]="test" #batchrec2>
+      <app-batchRecommender  [classes]="classes" [recommendations]="recommendations" [hidden]="batchPhase" #batchrec>
 
       </app-batchRecommender>
   </mat-drawer-content>

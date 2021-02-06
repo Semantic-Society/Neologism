@@ -33,7 +33,7 @@ export class BatchRecommenderComponent implements OnInit, OnDestroy {
     console.log(this.classes);
   }
 
-  test() {
+  liftOntology() {
     this.classes.forEach((cs) => {
       this.recommendations.forEach((recs) => {
         recs.forEach((rec, i) => {

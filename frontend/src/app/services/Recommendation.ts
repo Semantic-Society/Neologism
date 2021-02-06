@@ -3,6 +3,7 @@ export interface Recommendation{
     comments:comment[]
     URI:string
     ontology:string
+    score:number
 }
 
 export interface comment{

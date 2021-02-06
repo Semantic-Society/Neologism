@@ -71,7 +71,7 @@ export class MxgraphComponent implements OnInit, OnDestroy {
   currentSelection: meteorID;
   currentSelectionSub: Subscription;
   currentEdgeSelectionSub: Subscription;
-  public test: boolean = true;
+  public batchPhase: boolean = true;
   recommendations: Observable<BatchRecommendations>;
 
   vocabularySub: Subscription;
@@ -79,8 +79,6 @@ export class MxgraphComponent implements OnInit, OnDestroy {
   @ViewChild("view", { static: true }) mxGraphView: ElementRef;
   @ViewChild("dEmptyGraph", { static: true })
   showDialogForEmptyGraph: ElementRef;
-  @ViewChild("batchrec", { static: true })
-  BatchRecommenderComponent: ElementRef;
 
   mx: MxgraphService;
   vocabID: string;
@@ -332,18 +330,13 @@ export class MxgraphComponent implements OnInit, OnDestroy {
         domain: "test",
       }
     );
-    this.test = false;
+    this.batchPhase = false;
 
-    //this.BatchRecommenderComponent.nativeElement.showModal()
   }
 
-  liftOntology() {
-    // this.vocabService.updateClassName(this.selectedClassID, this.editedClass.name);
-
-    //this.vocabService.updateClassDescription(this.selectedClassID, this.editedClass.description);
-
-    //this.vocabService.updateClassURI(this.selectedClassID, this.editedClass.URI);
-    this.test = true;
+  hideBatch() {
+    this.batchPhase = true;
+    
   }
 
   showEditBox() {
