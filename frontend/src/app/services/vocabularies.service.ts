@@ -112,6 +112,14 @@ export class VocabulariesService {
     });
   }
 
+  updateClass(classID: string, URI:string, name:string, description: string) {
+    MeteorObservable.call('class.update', classID, URI,description,name).subscribe((_response) => {
+      // Handle success and response from server!
+    }, (err) => {
+      console.log(err);
+    });
+  }
+
   updateClassName(classID: string, name: string) {
     MeteorObservable.call('class.update.name', classID, name).subscribe((_response) => {
       // Handle success and response from server!

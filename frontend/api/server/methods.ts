@@ -138,6 +138,14 @@ Meteor.methods({
       {}
     );
   },
+  'class.update'(classID: string, URI: string, description: string, name:string) {
+    assertUser();
+    Classes.update(
+      { _id: classID },
+      { $set: { URI, description, name } },
+      {}
+    );
+  },
   'classes.translate'(classids: string[], dx: number, dy: number) {
     assertUser();
     // TODO: Sanitize
