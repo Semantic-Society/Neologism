@@ -1,0 +1,47 @@
+map $http_upgrade $connection_upgrade {
+        default upgrade;
+        ''      close;
+}
+
+server {
+  listen 80;
+  server_name localhost;
+  root   /home/ali/Devel/Neologism/neologism2/frontend/dist/frontend;
+  index  index.html;
+
+  # asset matching
+  # https://router.vuejs.org/en/essentials/history-mode.html
+  location / {
+    try_files $uri $uri/ /index.html;
+  }
+
+  # Vue router matching
+  # If no asset matches, send it to your javascript app. Hopefully it's a route in the app!
+  location @rewrites {
+    rewrite ^(.+)$ /index.html last;
+  }
+
+  # TODO improve cache config
+  location ~* \.(?:ico|css|js|gif|jpe?g|png|svg|ttf)$ {
+    # Some basic cache-control for static files to be sent to the browser
+    expires max;
+    add_header Pragma public;
+    add_header Cache-Control "public, must-revalidate, proxy-revalidate";
+  }
+
+    location /api {
+            proxy_pass http://127.0.0.1:3000/;
+            proxy_http_version 1.1;
+            proxy_set_header Upgrade $http_upgrade; #for websockets
+            proxy_set_header Connection $connection_upgrade;
+            proxy_set_header X-Forwarded-For $remote_addr;
+            proxy_set_header Host $host;
+  }
+     location /recommender {
+            proxy_pass http://127.0.0.1:8080/;
+            proxy_http_version 1.1;
+            proxy_set_header X-Forwarded-For $remote_addr;
+            proxy_set_header Host $host;
+  }
+}
+
