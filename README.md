@@ -17,14 +17,17 @@ __Local setup:__
 1. Clone the repository
 2. Install meteor using curl https://install.meteor.com/ | sh
 3. Install node version to 12.20.1 with compatible npm
-4. Install /Download nginx for CORS (Linux: sudo apt-get install nginx ; Arch: sudo pacman -S nginx ; Windows: http://nginx.org/en/docs/windows.html) (On Windows move the folder to C:)
-5. Create a "sites-enabled" folder inside the nginx folder (Linux: /etc/nginx/sites-enabled).
-6. Put the "neologism.com" file inside this folder.
-7. Edit the "nginx.conf" file by including the path of the sites-enabled folder. (For Windows the path to the .com file: http {
+4. Install /Download nginx for CORS (Linux: `sudo apt-get install nginx` ; Arch: `sudo pacman -S nginx` ; Windows: http://nginx.org/en/docs/windows.html) (On Windows move the folder to C:)
+5. Create a `sites-enabled` folder inside the nginx folder (Linux: /etc/nginx/sites-enabled).
+6. Put the `neologism.com` file inside this folder.
+7. Edit the `nginx.conf` file by including the path of the sites-enabled folder. (For Windows the path to the .com file: 
+```
+http {
     include       mime.types;
     default_type  application/octet-stream;
 	include 	"C:/nginx-1.19.6/sites-enabled/neologism.com";
 	...
+	```
 	)
 8. Run `npm i` in the frontend subfolder
 9. Run `npm i` in frontend/api
@@ -32,7 +35,7 @@ __Local setup:__
 11. Navigate to frontend
 12. Run `npm run api` to start a local meteor server (running on http://localhost:3000/ with a connection to a local mongodb at port 3001).
 13. Run `npm run start` for a dev server. Navigate to http://localhost:4200/. The app will automatically reload if you change any of the source files.
-(14.) If you need to run the recommender, install an AddOn for your browser to allow CORS, as configurations need to be done
+14. Optional: If you need to run the recommender, install an AddOn for your browser to allow CORS, as configurations need to be done
 
 
 __DISCLAIMER:__
