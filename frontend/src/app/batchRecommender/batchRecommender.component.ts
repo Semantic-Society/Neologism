@@ -1,5 +1,4 @@
 import { Component, Input, OnDestroy, OnInit } from "@angular/core";
-import { Iproperty } from "api/models";
 import { MeteorObservable } from "meteor-rxjs";
 import { Observable, Subscription } from "rxjs";
 import { debounceTime, startWith } from "rxjs/operators";

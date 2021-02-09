@@ -33,6 +33,7 @@
     "@yellowspot/ng-truncate": "^1.4.0",
     "angular-particle": "^1.0.4",
     "babel-runtime": "^6.26.0",
+    "bcrypt": "^5.0.0",
     "bcryptjs": "^2.4.3",
     "core-js": "^2.5.4",
     "cross-blob": "^2.0.0",
