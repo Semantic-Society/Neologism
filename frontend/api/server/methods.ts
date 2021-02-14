@@ -1,4 +1,6 @@
 import { Meteor } from 'meteor/meteor';
+import {JsonRoutes} from 'meteor/simple:json-routes'
+
 import { Iclass, Iuser, Ivocabulary } from 'models'
 import { combineLatest } from 'rxjs';
 import { map, take, tap } from 'rxjs/operators';
@@ -6,7 +8,7 @@ import { map, take, tap } from 'rxjs/operators';
 
 import { Classes, Properties, Vocabularies, Users } from '../collections';
 import { meteorID } from '../models';
-const JsonRoutes = require('meteor/simple:json-routes').JsonRoutes
+
 // should be refactored as well. The checck is not sufficient
 function assertUser() {
   if (!Meteor.userId()) {
@@ -118,7 +120,7 @@ Meteor.methods({
     assertUser();
     Classes.update(
       { _id: classID },
-      -      { $set: { name } },
+      { $set: { name } },
       {}
     );
   },
