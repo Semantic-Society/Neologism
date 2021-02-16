@@ -325,7 +325,7 @@ export class MxgraphComponent implements OnInit, OnDestroy {
   async getBatchRecommendation() {
     this.recommendations = this.recommenderService.batchRecommendationsForClasses(
       {
-        keywords: this.classNames,
+        classes: this.classNames,
         properties: this.propertyNames,
         domain: "test",
       }

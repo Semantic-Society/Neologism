@@ -1,6 +1,6 @@
 export interface BatchQuery{
      domain:string
-     keywords: string[]
+     classes: string[]
      properties: string[]
      limit?:number
 }
