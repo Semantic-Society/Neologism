@@ -58,7 +58,7 @@ export class EditboxComponent implements OnInit, OnChanges {
   protected classToUpdate: Observable<IClassWithProperties>;
   public editToggle = false;
   protected rangeOptions: Observable<Array<{ _id: string, name: string }>>;
-
+ 
   constructor(
     private vocabService: VocabulariesService,
     private recommender: RecommendationService,
@@ -66,8 +66,11 @@ export class EditboxComponent implements OnInit, OnChanges {
     private editboxService: EditboxService,
     private fb: FormBuilder,
     private modal: NzModalService) {
+  }
 
-    this.formProp = fb.group({
+  ngOnInit() {
+
+    this.formProp = this.fb.group({
       name: ['', Validators.required],
       URI: [ `${this.uriPrefix}#`,
       {
@@ -78,11 +81,6 @@ export class EditboxComponent implements OnInit, OnChanges {
 
     });
 
-  }
-  propsForm: FormGroup;
-
-  ngOnInit() {
-
     this.rangeOptions = this.vocabService.getClasses(this.vocabID).pipe(
       map((classes) => classes.map((aclass) => ({ _id: aclass._id, name: aclass.name })))
     );
@@ -91,11 +89,7 @@ export class EditboxComponent implements OnInit, OnChanges {
 
   }
 
-  get props() {
-    return this.propsForm.get('props') as FormArray;
-  }
-
-  public buildForm(rec: IClassProperties, index = 0): FormGroup {
+  public buildForm(rec: IClassProperties): FormGroup {
     return this.fb.group({
       id: [rec.id, Validators.required],
       name: [rec.label, Validators.required],
@@ -120,34 +114,11 @@ export class EditboxComponent implements OnInit, OnChanges {
     // we get several small pieces of info from the class. multicast is likely a good idea, but did not get it working.
     this.classInfo = this.editboxService.createClassInfoObj(this.vocabID, classID)
 
-    this.propsForm = this.fb.group({ props: new FormArray([]) })
-
-    this.alreadyThere$ = this.editboxService.getClassProperties(this.vocabID, classID).pipe(
-
-      map((rec) => {
-        console.log(rec)
-        rec.map((prop, index) => {
-          prop.isEditToggle = false;
-          const duplicateIndex = this.props.controls.findIndex((element) => (element.get("id").value === prop.id))
-          // Avoid duplication of properties due multiple subscriptions
-          if (duplicateIndex === -1) {
-            this.props.push(this.buildForm(prop, index))
-          } else {
-            this.props.controls[duplicateIndex].patchValue(prop)
-          }
-
-          return prop;
-        })
-        return rec;
-      }), tap(x => console.log(this.propsForm.value))
-    )
-
     // actually already refacored (in editbox service) but very hard to test as the 
     // recommender service always returns an empty array, bug ?
     this.propertyRecommendations = this.editboxService.getClass$(this.vocabID, classID)
       .pipe(
         switchMap((theclass) => {
-          console.log('asdasd')
           return this.recommender.propertyRecommendation(theclass.URI).pipe(
             tap(as => console.log(as, 'recommendations')),
             combineLatest(this.alreadyThere$, (recommendations, alreadys) => {
@@ -176,35 +147,24 @@ export class EditboxComponent implements OnInit, OnChanges {
   }
 
   addClass() {
-    console.log(this.newClass);
     this.vocabService.addClass(this.vocabID, this.newClass.name, this.newClass.description, this.newClass.URI);
     this.newClass = this.emptyClass;
   }
 
   addProperty(formDirective: FormGroupDirective) {
-    this.vocabService.addProperty(this.selectedClassID, this.formProp.value.name, this.formProp.value.description, this.formProp.value.URI, this.formProp.value.range);
+    this.vocabService.addProperty(this.selectedClassID, this.formProp.value.name,
+       this.formProp.value.description, this.formProp.value.URI, this.formProp.value.range);
+
     formDirective.resetForm();
     this.formProp.reset()
   }
 
-  toggleEdit() {
-    this.editToggle = !this.editToggle;
-  }
-
   cancelEdit() {
     this.editToggle = false;
-    this.editedClass = {
-      name: undefined,
-      URI: undefined,
-      description: undefined,
-    };
+    this.editedClass = this.editboxService.getUndefinedClass()
   }
 
   updateEdit() {
-    // console.log(this.)
-    // TODO: Call the updateClass (needs to be implemented) of vocabService and call toggleEdit() afterwards
-    // this.vocabService.updateClass(this.newClass.name);
-    console.log(this.editedClass);
     if (this.editedClass.name) {
       this.vocabService.updateClassName(this.selectedClassID, this.editedClass.name);
     }
@@ -215,30 +175,6 @@ export class EditboxComponent implements OnInit, OnChanges {
       this.vocabService.updateClassURI(this.selectedClassID, this.editedClass.URI);
     }
     this.cancelEdit();
-  }
-
-  change(value: string) {
-    this.editedClass.URI = `${this.uriPrefix}#${value.toLocaleLowerCase()}`
-  }
-
-  resetSidebarState() {
-    this.sidebarService.changeSidebarToDefault()
-  }
-
-  propModify(rec) {
-    this.editboxService.updateProperty(rec)
-    this.propToggleView(rec)
-
-  }
-
-  propToggleView(rec) {
-    rec.isEditToggle = !rec.isEditToggle
-    return;
-  }
-
-  propReturn(index: number, rec) {
-    this.props.controls[index].patchValue(rec)
-    this.propToggleView(rec)
   }
 
   showDeleteConfirm(): void {
@@ -253,9 +189,20 @@ export class EditboxComponent implements OnInit, OnChanges {
     });
   }
 
-  completeNewPropURI($event) {
+  listenerPropNameChange($event) {
     this.formProp.controls['URI'].setValue(`${this.uriPrefix}${$event.target.value.toLocaleLowerCase()}`)
 
   }
 
+  listenerClassNameChange(value: string) {
+    this.editedClass.URI = `${this.uriPrefix}#${value.toLocaleLowerCase()}`
+  }
+
+  resetSidebarState() {
+    this.sidebarService.changeSidebarToDefault()
+  }
+
+  toggleEdit() {
+    this.editToggle = !this.editToggle;
+  }
 }
