@@ -6,7 +6,7 @@ import { BatchRecommendations } from "../services/BatchRecommendations";
 import { Recommendation } from "../services/Recommendation";
 import {
   IClassWithProperties,
-  VocabulariesService,
+  VocabulariesService
 } from "../services/vocabularies.service";
 
 @Component({
@@ -26,13 +26,19 @@ export class BatchRecommenderComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.radioSelected = new Array();
+    
   }
 
   ngOnDestroy() {}
 
-  radioFun() {
+  show(){
     console.log(this.radioSelected);
-    console.log(this.classes);
+  }
+
+  preselect(URI:string, index:number){
+    if(!this.radioSelected[index]){
+this.radioSelected[index] = URI;
+    }          
   }
 
   liftOntology() {
