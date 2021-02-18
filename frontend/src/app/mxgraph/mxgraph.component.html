@@ -1,5 +1,5 @@
 <mat-drawer-container>
-  <mat-drawer [ngSwitch]="editMode | async" #navEnd class="mat-drawer nav-right" mode="side" position="end" [opened]="true" class="no-pad"
+  <mat-drawer [ngSwitch]="editMode | async" #navEnd class="mat-drawer nav-right" mode="side" position="start" [opened]="true" class="no-pad"
     disableClose>
 
     <app-metadata [vocabulary]="vocabulary" *ngSwitchCase="'default'"></app-metadata>
@@ -53,14 +53,15 @@
 </mat-drawer-container>
 
 
-<dialog #dEmptyGraph class="modal">
+<dialog #dEmptyGraph class="modal" >
 <p>
   Your graph seems empty! want to create a new class
 
 </p>
   <menu>
+    <button id="confirmBtn" (click)="showNodeCreator();dEmptyGraph.close()" value="default">Take me</button>
     <button (click)="dEmptyGraph.close();">Skip!, I will explore</button>
 
-    <button id="confirmBtn" (click)="showNodeCreator();dEmptyGraph.close()" value="default">Take me</button>
+    
   </menu>
 </dialog>
