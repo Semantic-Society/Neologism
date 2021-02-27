@@ -73,7 +73,18 @@ Meteor.methods({
         }
       }).subscribe((value) => console.log("removed authors" + value))
   },
-  'vocabulary.create'(_id: string, name: string, description: string, uriPrefix: string, field_public: boolean = false) {
+  'vocabulary.addDomain'(domain: string, vocabId: string) {
+    assertUser();
+
+    Vocabularies.update(
+      { _id: vocabId, creator: this.userId },
+      {
+        $set:{
+          domain: domain
+        }
+      }).subscribe((value) => console.log("added domain " + domain + " for" + value))
+  },
+  'vocabulary.create'(_id: string, name: string, description: string, uriPrefix: string, field_public: boolean = false, domain: string = "test") {
     assertUser();
     // add user to array of users to enable multiple user access. Fixes should happen on a author/creator fiel as well 
 
@@ -86,7 +97,8 @@ Meteor.methods({
       uriPrefix,
       public:
         field_public,
-      classes: []
+      classes: [],
+      domain: domain
     })
 
   },

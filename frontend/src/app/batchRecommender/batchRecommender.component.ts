@@ -25,15 +25,10 @@ export class BatchRecommenderComponent implements OnInit, OnDestroy {
   constructor(private vocabService: VocabulariesService) {}
 
   ngOnInit() {
-    this.radioSelected = new Array();
-    
+    this.radioSelected = new Array();    
   }
 
   ngOnDestroy() {}
-
-  show(){
-    console.log(this.radioSelected);
-  }
 
   preselect(URI:string, index:number){
     if(!this.radioSelected[index]){

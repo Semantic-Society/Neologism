@@ -40,6 +40,13 @@
     </div>
 
     <div class="button-div">
+      <span (dblclick)="startEdit()" >Domain: </span>
+      <div [hidden]="editing"> {{vocabulary? vocabulary.domain: "Specify Domain"}}</div>
+      <form style="color:black" (ngSubmit)="editDomain()" [hidden]="!editing">
+        <input class="editable" [(ngModel)]="domain" name="domain">
+    </form>     
+    </div>
+    <div class="button-div">
       <div class="pad-1">
         <button *ngSwitchCase="'default'" [hidden]="!batchPhase" mat-button (click)="getBatchRecommendation()">Get BatchRecommendation
         </button>

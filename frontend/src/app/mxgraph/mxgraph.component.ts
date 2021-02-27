@@ -50,6 +50,7 @@ import { Classes } from "../../../api/collections";
 import { RecommendationService } from "../services/recommendation.service";
 import { BatchRecommenderComponent } from "../batchRecommender/batchRecommender.component";
 import { BatchRecommendations } from "../services/BatchRecommendations";
+import { MeteorObservable, zoneOperator } from "meteor-rxjs";
 
 interface IMergedPropertiesClass {
   _id: string; // Mongo generated ID
@@ -73,6 +74,8 @@ export class MxgraphComponent implements OnInit, OnDestroy {
   currentEdgeSelectionSub: Subscription;
   public batchPhase: boolean = true;
   recommendations: Observable<BatchRecommendations>;
+  domain: string;
+  public editing:boolean = false;
 
   vocabularySub: Subscription;
 
@@ -327,9 +330,13 @@ export class MxgraphComponent implements OnInit, OnDestroy {
       {
         classes: this.classNames,
         properties: this.propertyNames,
-        domain: "test",
+        domain: this.domain,
       }
     );
+
+    this.recommendations.forEach(r => console.log(r))
+
+  
     this.batchPhase = false;
 
   }
@@ -337,6 +344,23 @@ export class MxgraphComponent implements OnInit, OnDestroy {
   hideBatch() {
     this.batchPhase = true;
     
+  }
+
+  startEdit(){
+    this.editing=!this.editing;
+  }
+
+  editDomain(){
+    MeteorObservable.call("vocabulary.addDomain",this.domain,this.vocabulary._id).pipe(zoneOperator())
+    .subscribe((_response) => {
+      // Handle success and response from server!
+    }, (err) => {
+      console.log(err);
+      // Handle error
+    });;
+    console.log(this.vocabService.getVocabulary(this.vocabulary._id))
+      this.editing = false
+      console.log(this.vocabulary)
   }
 
   showEditBox() {

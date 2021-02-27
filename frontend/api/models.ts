@@ -29,6 +29,7 @@ export interface Ivocabulary {
   public: boolean;
   // version: string;
   classes: meteorID[]; // List of all classes in the vocab
+  domain: string;
 }
 
 export interface Iclass {
