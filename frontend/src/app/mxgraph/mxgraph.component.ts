@@ -221,6 +221,7 @@ export class MxgraphComponent implements OnInit, OnDestroy {
           newVocab.authors = vocab.authors;
           newVocab.classes = vocab.classes;
           newVocab.description = vocab.description;
+          newVocab.domain = vocab.domain;
           newVocab.name = vocab.name;
           newVocab.public = vocab.public;
           newVocab.uriPrefix = vocab.uriPrefix;
@@ -332,7 +333,7 @@ export class MxgraphComponent implements OnInit, OnDestroy {
       {
         classes: this.classNames,
         properties: this.propertyNames,
-        domain: this.domain,
+        domain: this.vocabulary.domain,
       }
     );
     this.batchPhase = false;

@@ -80,11 +80,11 @@ Meteor.methods({
       { _id: vocabId, creator: this.userId },
       {
         $set:{
-          domain: domain
+          domain
         }
       }).subscribe((value) => console.log("added domain " + domain + " for" + value))
   },
-  'vocabulary.create'(_id: string, name: string, description: string, uriPrefix: string, field_public: boolean = false, domain: string = "test") {
+  'vocabulary.create'(_id: string, name: string, description: string, uriPrefix: string, field_public: boolean = false, domain: string) {
     assertUser();
     // add user to array of users to enable multiple user access. Fixes should happen on a author/creator fiel as well 
 
@@ -98,7 +98,7 @@ Meteor.methods({
       public:
         field_public,
       classes: [],
-      domain: domain
+      domain
     })
 
   },

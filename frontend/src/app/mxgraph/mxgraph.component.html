@@ -39,12 +39,12 @@
         </ul>
     </div>
 
-    <div class="button-div">
-      <span (dblclick)="startEdit()" >Domain: </span>
+    <div class="button-div"  (dblclick)="startEdit()" style="display:flex">
+      <span style="padding-right: 1rem">Domain:  </span> 
       <div [hidden]="editing"> {{vocabulary? vocabulary.domain: "Specify Domain"}}</div>
       <form style="color:black" (ngSubmit)="editDomain()" [hidden]="!editing">
         <input class="editable" [(ngModel)]="domain" name="domain">
-    </form>     
+    </form>   
     </div>
     <div class="button-div">
       <div class="pad-1">
