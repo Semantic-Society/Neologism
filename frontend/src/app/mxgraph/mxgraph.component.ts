@@ -249,7 +249,7 @@ export class MxgraphComponent implements OnInit, OnDestroy {
       // insert classes
       cs.forEach((c) => {
         this.mx.insertClass(c._id, c.name, c.position.x, c.position.y);
-        this.classNames.push(c.name);
+        !this.classNames.includes(c.name)?this.classNames.push(c.name):null;
       });
 
       // insert properties
@@ -258,7 +258,7 @@ export class MxgraphComponent implements OnInit, OnDestroy {
         const merged = this.mergeProperties(c);
         merged.properties.forEach((p) => {
           this.mx.insertProperty(c._id, p._id, p.name, p.rangeID);
-          this.propertyNames.push(p.name);
+          !this.propertyNames.includes(c.name)?this.propertyNames.push(p.name):null;
         });
       });
 
@@ -325,7 +325,9 @@ export class MxgraphComponent implements OnInit, OnDestroy {
     this.sideBarState.changeSidebarState("create");
   }
 
-  async getBatchRecommendation() {
+  getBatchRecommendation() {
+
+    
     this.recommendations = this.recommenderService.batchRecommendationsForClasses(
       {
         classes: this.classNames,
@@ -333,10 +335,6 @@ export class MxgraphComponent implements OnInit, OnDestroy {
         domain: this.domain,
       }
     );
-
-    this.recommendations.forEach(r => console.log(r))
-
-  
     this.batchPhase = false;
 
   }
