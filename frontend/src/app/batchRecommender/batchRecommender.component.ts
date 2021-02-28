@@ -1,6 +1,6 @@
 import { Component, Input, OnDestroy, OnInit } from "@angular/core";
 import { MeteorObservable } from "meteor-rxjs";
-import { Observable, Subscription } from "rxjs";
+import { Observable } from "rxjs";
 import { debounceTime, startWith } from "rxjs/operators";
 import { BatchRecommendations } from "../services/BatchRecommendations";
 import { Recommendation } from "../services/Recommendation";
@@ -15,7 +15,6 @@ import {
   styleUrls: ["./batchRecommender.component.css"],
 })
 export class BatchRecommenderComponent implements OnInit, OnDestroy {
-  subscription: Subscription;
   radioSelected: Array<any>;
   @Input() recommendations: Observable<BatchRecommendations[]>;
   @Input() classes: Observable<IClassWithProperties[]>;

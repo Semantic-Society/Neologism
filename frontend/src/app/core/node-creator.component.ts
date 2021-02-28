@@ -4,10 +4,14 @@ import { SideBarStateService } from '../services/state-services/sidebar-state.se
 import { MatSnackBar } from '@angular/material/snack-bar'
 import { MxgraphService } from '../mxgraph/mxgraph';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
+import { SpellCheckerService } from 'ngx-spellchecker';
+import { Observable } from 'rxjs';
 @Component({
   selector: 'app-node-creator',
   templateUrl: './node-creator.html',
   styleUrls: ['./node-creator.css'],
+  providers: [SpellCheckerService]
 })
 export class SideBarNodeCreatorComponent {
   @Input() vocabID: string;
@@ -16,15 +20,21 @@ export class SideBarNodeCreatorComponent {
   selectedClassID
   static CLASS_ADD_MESSAGE = 'A new class has been added!'
   createClassForm: FormGroup
+  contextmenu:boolean = false
+  public suggestions:string[]
+  
+  fileURL = "https://raw.githubusercontent.com/JacobSamro/ngx-spellchecker/master/dict/normalized_en-US.dic"
 
   constructor(private vocabService: VocabulariesService,
     private sidebarService: SideBarStateService,
     private _snackBar: MatSnackBar,
     private formBuilder: FormBuilder,
-  ) {
+    private spellCheckerService: SpellCheckerService,
+    private httpClient: HttpClient) {
+    }
 
-  }
-  ngOnInit() {
+
+  ngOnInit() {  
     this.createClassForm = this.formBuilder.group({
       name: ['', [Validators.required]],
       URI: [
@@ -37,8 +47,21 @@ export class SideBarNodeCreatorComponent {
     }
     );
 
-  }
 
+}
+
+
+checkWord(word:string){
+   
+  this.httpClient.get(this.fileURL, { responseType: 'text' }).subscribe((res: any) => {
+    let dictionary = this.spellCheckerService.getDictionary(res)
+    
+   this.suggestions =  dictionary.getSuggestions(word)
+  console.log(this.suggestions)  })
+ 
+ 
+    this.contextmenu = true
+}
 
   addClass() {
     // centering new class position on creation
