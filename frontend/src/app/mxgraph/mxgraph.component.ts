@@ -263,4 +263,17 @@ export class MxgraphComponent implements OnInit, OnDestroy {
         this.vocabularySub.unsubscribe();
         this.currentEdgeSelectionSub.unsubscribe()
     }
+
+    zoomout(){
+        this.mx.graph.zoomOut()
+    }
+    
+    zoomin(){
+        this.mx.graph.zoomIn()
+    }
+
+    zoomreset(){
+        this.mx.graph.zoomTo(1)
+    }
+    
 }
