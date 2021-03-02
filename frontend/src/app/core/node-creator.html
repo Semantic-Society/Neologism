@@ -16,20 +16,13 @@
         </div>
         <div class="name-plus-uri ">
           <mat-form-field class="full-width name">
-            <input class="form-control" type="text" matInput placeholder="Class Name"
-            (keyup)="autoCompleteURI($event)" formControlName="name" (contextmenu)="checkWord(createClassForm.get('name').value)" #name >
-            <div *ngIf="contextmenu">
-              <div *ngFor="let s of (suggestions)">
-                <div>{{s}}</div>
-              </div>
-              <context-menu>
-                <div *ngFor="let s of (suggestions)">
-                <ng-template contextMenuItem>
-                 {{s}}
-                </ng-template>
-              </div>
-              </context-menu>
-          </div>
+            <input class="form-control" type="text" matInput [matAutocomplete]='auto' placeholder="Class Name"
+            (keyup)="autoCompleteURI($event); checkWord(createClassForm.get('name').value)" formControlName="name" #name >
+            <mat-autocomplete #auto="matAutocomplete">
+              <mat-option *ngFor="let s of suggestions" [value]="s">
+                {{s}}
+              </mat-option>
+            </mat-autocomplete>
             <mat-error *ngIf="createClassForm.get('name').hasError('required')">
               Class Name is required
             </mat-error>
