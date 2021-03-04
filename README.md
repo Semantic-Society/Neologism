@@ -4,7 +4,7 @@
 [Neologism architecture diagram](https://drive.google.com/file/d/1kQOoR5Egi8TAk_P-l9mEZVdkiu2BeH0x/view?usp=sharing)
 
 
-![neologism architecture](NeologismArchitecture.png "Neologism architecture")
+![neologism architecture](assets/NeologismArchitecture.png "Neologism architecture")
 
 ## Installation
 

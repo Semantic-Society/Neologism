@@ -1,15 +1,13 @@
 version: '3'
 
 services:
+  
   neologism:
-    container_name: neologism_nginx_front_server
+    container_name: neologism_app
     ports:
       - '3000:3000'
-      - '80:80'
-    environment:
-      ROOT_URL: ${ROOT_URL:-http://cloud33.dbis.rwth-aachen.de}
-      MONGO_URL: mongodb://mongo:27017/meteor
-      PORT: 3000  
+      - '4200:80'
+      - '3001:3001'
   
   mongo:
     container_name: neologism_db

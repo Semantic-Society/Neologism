@@ -48,7 +48,7 @@ RUN cd $SCRIPTS_FOLDER && \
 
 # Copy app package.json and package-lock.json into container
 
-COPY ./package*.json $APP_SOURCE_FOLDER/
+COPY ./client/package*.json $APP_SOURCE_FOLDER/
 
 
 RUN bash $SCRIPTS_FOLDER/build-app-npm-dependencies.sh
