@@ -1,6 +1,8 @@
 import { Component, OnInit, NgZone } from '@angular/core';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { Router } from '@angular/router';
+import { environment } from './../../environments/environment';
+
 @Component({
   selector: 'app-login-page',
   templateUrl: './login-page.component.html',
@@ -105,6 +107,19 @@ export class LoginPageComponent implements OnInit {
 
   login(){
     Meteor.loginWithPassword(this.username, this.password, (error) => {
+      this.zone.run(() => {
+        if (error) {
+          this.createBasicErrorMessage('Login Failed! Please check your credentials');
+      } else {
+          this.router.navigateByUrl('/dashboard')
+      }
+      })
+
+    });
+  }
+
+  guestLogin(){
+    Meteor.loginWithPassword(environment.guestUserName, environment.guestPassword, (error) => {
       this.zone.run(() => {
         if (error) {
           this.createBasicErrorMessage('Login Failed! Please check your credentials');

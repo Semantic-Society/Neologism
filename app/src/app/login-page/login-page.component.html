@@ -35,33 +35,9 @@
                 <!-- LOGIN BUTTON -->                
                 <button nz-button nzType="primary" (click)="login()" nzBlock>Login</button>
             </nz-tab>
-            <nz-tab nzTitle="Sign Up">
-
-              <!-- EMAIL INPUT SIGN UP -->
-              <nz-input-group [nzSuffix]="suffixTemplate" [nzPrefix]="prefixTemplate">
-                <input type="text" nz-input placeholder="Enter your email" [(ngModel)]="username">
-              </nz-input-group>
-              <ng-template #prefixTemplate><i nz-icon nzType="user"></i></ng-template>
-              <ng-template #suffixTemplate><i nz-icon nzType="close-circle" (click)="username=null" *ngIf="username"></i></ng-template>
-              
-              <!-- PASSWORD INPUT SIGN UP -->
-              <nz-input-group style="margin-top: 5px" [nzSuffix]="suffixTemplatePW" [nzPrefix]="prefixTemplatePW">
-                  <input type="password" nz-input placeholder="Enter your password" [(ngModel)]="password">
-              </nz-input-group>
-              <ng-template #prefixTemplatePW><i nz-icon nzType="setting"></i></ng-template>
-              <ng-template #suffixTemplatePW><i nz-icon nzType="close-circle" (click)="password = null" *ngIf="password"></i></ng-template>
-
-              <nz-input-group style="margin-top: 5px" [nzSuffix]="suffixTemplatePW2" [nzPrefix]="prefixTemplatePW2">
-                  <input type="password" nz-input placeholder="Enter your password again" [(ngModel)]="password2">
-              </nz-input-group>
-
-
-              <ng-template #prefixTemplatePW2><i nz-icon nzType="setting"></i></ng-template>
-              <ng-template #suffixTemplatePW2><i nz-icon nzType="close-circle" (click)="password2 = null" *ngIf="password2"></i></ng-template>
-              <nz-divider></nz-divider>
-
+            <nz-tab nzTitle="Use as guest">
               <!-- SIGN UP BUTTON -->
-              <button (click)="signUp()" nz-button nzType="primary" nzBlock>Sign Up</button>
+              <button (click)="guestLogin()" nz-button nzType="primary" nzBlock>Login</button>
 
             </nz-tab>
           </nz-tabset>

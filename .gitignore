@@ -61,3 +61,4 @@ chromiumprofile
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+app/src/assets/env.js
