@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { VocabulariesService } from '../../../app/services/vocabularies.service';
 import { combineLatest, Observable } from 'rxjs';
 import { startWith, debounceTime, tap, take, map } from 'rxjs/operators';
@@ -20,6 +20,7 @@ import { RemoveUserModalComponent } from '../../../app/vocablist/components/remo
 export class VocabularyListComponent implements OnInit {
   public context$: Observable<any>;
   public loggedInUser: Iuser;
+  @Output() totalVocab = new EventEmitter<number>();
 
   constructor(
     private router: Router,
@@ -28,7 +29,7 @@ export class VocabularyListComponent implements OnInit {
     public dialog: MatDialog,) {
     this.context$ = this.vocabService.getVocabularies().pipe(map(vocabulary => {
       return vocabulary;
-    }));
+    }),tap(vocabularies=>this.totalVocab.emit(vocabularies.length)));
 
   }
 
