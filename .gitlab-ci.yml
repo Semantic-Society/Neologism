@@ -16,7 +16,7 @@ docker_build_and_push:
     - docker:dind
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - cd frontend
+    - envsubst < app/src/assets/env.template.js > app/src/assets/env.js
     - docker build --build-arg METEOR_CLIENT_CONN_URL=$CLIENT_CONN_URL -t $IMAGE_TAG .
     - docker push $IMAGE_TAG
     - docker tag $IMAGE_TAG $LATEST_TAG

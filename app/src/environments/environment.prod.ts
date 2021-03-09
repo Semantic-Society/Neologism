@@ -6,5 +6,8 @@ export const environment = {
   } ,
   api:{
     base:"api/",
-  }  
+  },
+  guestUserName: window["env"]["guser"] || "guest",
+  guestPassword: window["env"]["gpass"] || "12345",
+  gMaxVocab: window["env"]["gMaxlength"] || "5"
 };

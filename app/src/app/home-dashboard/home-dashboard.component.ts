@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { CreateVocabModalComponent } from './create-vocab-modal/create-vocab-modal.component';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { VocabulariesService } from '../services/vocabularies.service';
+import { environment } from './../../environments/environment';
 
 @Component({
   selector: 'app-home-dashboard',
@@ -15,8 +16,8 @@ export class HomeDashboardComponent implements OnInit {
   isCollapsed = false;
   triggerTemplate = null;
   loggedInUser: Meteor.User
-  @ViewChild('trigger',{static: true}) customTrigger: TemplateRef<void>;
-
+  @ViewChild('trigger', { static: true }) customTrigger: TemplateRef<void>;
+  private vocabCount: Number = 0
   constructor(
     private router: Router,
     private vocabService: VocabulariesService,
@@ -44,10 +45,15 @@ export class HomeDashboardComponent implements OnInit {
   }
 
   createVocabulary(): void {
+    let GRestriction = Meteor.user().emails[0].address === environment.guestUserName && this.vocabCount > environment.gMaxVocab;
+
+    if (GRestriction)
+      return;
+
     const modal = this.modalService.create({
       nzTitle: 'Create new vocabulary',
       nzContent: CreateVocabModalComponent,
-      
+
       nzFooter: null
     });
 
@@ -70,6 +76,11 @@ export class HomeDashboardComponent implements OnInit {
         // Handle error
       });
     });
+
+  }
+
+  updateListLength(count: number) {
+    this.vocabCount = count
 
   }
 

@@ -46,7 +46,7 @@
 
       <!-- Main Content Content -->
       <div style="padding:24px;">
-        <app-vocabulary-list></app-vocabulary-list>
+        <app-vocabulary-list (totalVocab)="updateListLength($event)"></app-vocabulary-list>
       </div>
     </nz-content>
     <nz-footer style="text-align: center;">Neologism - 2020</nz-footer>

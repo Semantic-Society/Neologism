@@ -1,0 +1,48 @@
+<nz-layout style="height:100vh; width: 100vw">
+  <nz-header class="toolbar">
+    <search-vocabularies-autocomplete [width]="'50vw'"></search-vocabularies-autocomplete>
+  </nz-header>
+  <nz-layout>
+      <nz-content class="background" style="padding: 0;">
+        <!-- <Particles [id]="id" [options]="particlesOptions" [style]="myStyle" (particlesLoaded)="particlesLoaded($event)">
+        </Particles> -->
+      </nz-content>
+
+    <nz-sider [nzWidth]="400" style=" padding:15px; z-index: 110;" class="panel-background">
+      <img class="logo-fit" src="../../assets/neologism.png" style="
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+  " alt="">
+      <nz-card style="margin-top: 20vh;">
+        <nz-tabset>
+            <nz-tab nzTitle="Login">
+
+              <!-- EMAIL INPUT LOGIN -->
+                <nz-input-group [nzSuffix]="suffixTemplate" [nzPrefix]="prefixTemplate">
+                  <input type="text" nz-input placeholder="Enter your email" [(ngModel)]="username">
+                </nz-input-group>
+                <ng-template #prefixTemplate><i nz-icon nzType="user"></i></ng-template>
+                <ng-template #suffixTemplate><i nz-icon nzType="close-circle" (click)="username=null" *ngIf="username"></i></ng-template>
+              
+                <!-- PASSWORD INPUT LOGIN -->                
+                <nz-input-group style="margin-top: 5px" [nzSuffix]="suffixTemplatePW" [nzPrefix]="prefixTemplatePW">
+                    <input type="password" nz-input placeholder="Enter your password" [(ngModel)]="password">
+                </nz-input-group>
+                <ng-template #prefixTemplatePW><i nz-icon nzType="setting"></i></ng-template>
+                <ng-template #suffixTemplatePW><i nz-icon nzType="close-circle" (click)="password" *ngIf="username"></i></ng-template>
+                <nz-divider></nz-divider>
+                <!-- LOGIN BUTTON -->                
+                <button nz-button nzType="primary" (click)="login()" nzBlock>Login</button>
+            </nz-tab>
+            <nz-tab nzTitle="Use as guest">
+              <!-- SIGN UP BUTTON -->
+              <button (click)="guestLogin()" nz-button nzType="primary" nzBlock>Login</button>
+
+            </nz-tab>
+          </nz-tabset>
+      </nz-card>
+
+    </nz-sider>
+</nz-layout>
+</nz-layout>
