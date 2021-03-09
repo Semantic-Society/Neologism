@@ -15,8 +15,8 @@ docker_build_and_push:
   services:
     - docker:dind
   script:
-    - apt-get update
-    - apt-get -y install gettext-base # required for envsubst below
+    - apk update
+    - apk add gettext-base # required for envsubst below
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - envsubst < app/src/assets/env.template.js > app/src/assets/env.js
     - docker build --build-arg METEOR_CLIENT_CONN_URL=$CLIENT_CONN_URL -t $IMAGE_TAG .
