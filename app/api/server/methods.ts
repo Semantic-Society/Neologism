@@ -286,7 +286,7 @@ function saveClassesWithPropertiesAsFile(classes: IClassWithProperties[], vocab:
     rdf += `${namespace} <http://purl.org/dc/terms/description> "${vocabDetail.description}" .\r\n`;
 
 
-    const a = '<http://www.w3.org/2000/01/rdf-schema#type>';
+    const a = '<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>';
     const domain = '<http://www.w3.org/2000/01/rdf-schema#domain>';
     const range = '<http://www.w3.org/2000/01/rdf-schema#range>';
     const rdfsclass = '<http://www.w3.org/2000/01/rdf-schema#Class>';
