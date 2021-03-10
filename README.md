@@ -1,8 +1,37 @@
-# Frontend
+# Neologism 2.0
 
-## Architecture overview
-[Neologism architecture diagram](https://drive.google.com/file/d/1kQOoR5Egi8TAk_P-l9mEZVdkiu2BeH0x/view?usp=sharing)
+Neologism 2.0 is an open-source tool for quick vocabulary creation through domain experts.
+Its guided vocabulary creation and its collaborative graph editor enable the quick creation of proper vocabularies, even for non-experts, and dramatically reduces the time and effort to draft vocabularies collaboratively.
+An RDF export allows quick bootstrapping of any other Semantic Web tool.
 
+
+## Usage (Live Demo)
+
+We provide a [live demo version](http://cloud33.dbis.rwth-aachen.de/dashboard) of Neologism 2.0, which can be used as a guest without registration.
+
+![img.png](screenshot01.png)
+
+The dashboard shows all created vocabularies and allows creating, editing, deleting, and exporting vocabularies.
+Please note that the guest account can only create 10 vocabularies to reduce database load.
+
+![img.png](screenshot02.png)
+
+A graphical editor helps users creating vocabularies visually in an interactive mode.
+Note that all ontology URIs (identifiers) are automatically created for simplicity and user convenience.
+
+![img.png](screenshot03.png)
+
+Clicking on nodes (classes) allows creating properties between classes.
+
+![img.png](screenshot04.png)
+
+An RDF (turtle) export allows quick bootstrapping of any other Semantic Web tool.
+We suggest using Neologism 2.0 for creating early vocabulary drafts and importing its RDF export into Protégé for subsequent refinements by Semantic Web experts, which can finally yield fully-featured ontologies.
+
+## Architecture Overview
+
+Neologism 2.0’s frontend communicates with a backend to persist information,
+and might interact with a recommender to improve the quality of drafted vocabularies.
 
 ![neologism architecture](assets/NeologismArchitecture.png "Neologism architecture")
 
@@ -58,7 +87,7 @@ __Troubleshooting:__
 - check if node version compatibility for front and api
 - run `meteor npm -v` or `meteor node -v`
 
-## Usage
+## Technical Workflow
 After starting Neologism, navigate to `localhost` (or whatever server you are hosting it on), and follow the user interface.
 
 ## MongoDB Schema
@@ -161,4 +190,4 @@ After starting Neologism, navigate to `localhost` (or whatever server you are ho
 
 # How to cite
 
-We are currently preparing a scientific paper for a peer-reviewed publication. Please refer to [references.bib](references.bib) for BibTex references, which we will continuously update. 
+We are currently preparing a scientific paper for a peer-reviewed publication. Please refer to [references.bib](references.bib) for BibTex references, which we will update continuously.
