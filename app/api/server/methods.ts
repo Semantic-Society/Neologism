@@ -291,7 +291,7 @@ function saveClassesWithPropertiesAsFile(classes: IClassWithProperties[], vocab:
     const range = '<http://www.w3.org/2000/01/rdf-schema#range>';
     const rdfsclass = '<http://www.w3.org/2000/01/rdf-schema#Class>';
     const owlclass = '<http://www.w3.org/2002/07/owl#Class>';
-    const property = '<http://www.w3.org/2000/01/rdf-schema#Property>';
+    const objectproperty = '<http://www.w3.org/2002/07/owl#ObjectProperty>';
     const rdfsLabel = '<http://www.w3.org/2000/01/rdf-schema#label>';
     const rdfsDescription = '<http://www.w3.org/2000/01/rdf-schema#description>'
     const xmlString = '<http://www.w3.org/2001/XMLSchema#string>'
@@ -315,7 +315,7 @@ function saveClassesWithPropertiesAsFile(classes: IClassWithProperties[], vocab:
 
     // tslint:disable-next-line:forin
     for (const prop in allProps) {
-      rdf += prop + a + property + ' .\n';
+      rdf += prop + a + objectproperty + ' .\n';
     }
 
     return rdf
