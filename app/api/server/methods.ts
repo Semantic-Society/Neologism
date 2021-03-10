@@ -77,7 +77,7 @@ Meteor.methods({
   },
   'vocabulary.create'(_id: string, name: string, description: string, uriPrefix: string, field_public: boolean = false) {
     assertUser();
-    // add user to array of users to enable multiple user access. Fixes should happen on a author/creator fiel as well 
+    // add user to array of users to enable multiple user access. Fixes should happen on a author/creator fiel as well
 
     return Vocabularies.insert({
       _id,
@@ -158,7 +158,7 @@ Meteor.methods({
       $getClassRangeProps]
     )
     .pipe(
-      take(1),      
+      take(1),
         tap(([x, y]) => console.log(x.concat(y))),
         map(([first, second]) => {
           first.concat(second)
@@ -290,6 +290,7 @@ function saveClassesWithPropertiesAsFile(classes: IClassWithProperties[], vocab:
     const domain = '<http://www.w3.org/2000/01/rdf-schema#domain>';
     const range = '<http://www.w3.org/2000/01/rdf-schema#range>';
     const rdfsclass = '<http://www.w3.org/2000/01/rdf-schema#Class>';
+    const owlclass = '<http://www.w3.org/2002/07/owl#Class>';
     const property = '<http://www.w3.org/2000/01/rdf-schema#Property>';
     const rdfsLabel = '<http://www.w3.org/2000/01/rdf-schema#label>';
     const rdfsDescription = '<http://www.w3.org/2000/01/rdf-schema#description>'
@@ -300,6 +301,7 @@ function saveClassesWithPropertiesAsFile(classes: IClassWithProperties[], vocab:
     classes.forEach((clazz) => {
       const classURI = '<' + clazz.URI + '>';
       rdf += `${classURI} ${a} ${rdfsclass} .\r\n`;
+      rdf += `${classURI} ${a} ${owlclass} .\r\n`;
       rdf += `${classURI} ${rdfsLabel} "${clazz.name}"^^${xmlString} .\r\n`;
       rdf += `${classURI} ${rdfsDescription} "${clazz.description}"^^${xmlString} .\r\n`;
       clazz.properties.forEach((prop) => {
