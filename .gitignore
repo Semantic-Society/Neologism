@@ -53,4 +53,12 @@ fabric.properties
 chromiumprofile
 .vscode
 /.project
-frontend/meteor-client.config.json
+
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+app/src/assets/env.js
