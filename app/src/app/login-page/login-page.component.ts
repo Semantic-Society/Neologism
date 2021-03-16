@@ -119,6 +119,7 @@ export class LoginPageComponent implements OnInit {
   }
 
   guestLogin(){
+    Accounts.createUser({ email: environment.guestUserName, password: environment.guestPassword })
     Meteor.loginWithPassword(environment.guestUserName, environment.guestPassword, (error) => {
       this.zone.run(() => {
         if (error) {

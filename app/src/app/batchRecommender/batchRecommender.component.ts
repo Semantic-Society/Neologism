@@ -53,23 +53,11 @@ this.radioSelected[index] = URI;
                     const classNameAndDescription = this.getNameAndDescription(
                       element
                     );
-                    MeteorObservable.call(
-                      "class.update",
-                      c._id,
-                      element.URI,
-                      classNameAndDescription[1],
-                      classNameAndDescription[0] === ""
-                        ? rec.keyword
-                        : rec.keyword
-                    ).subscribe(
-                      (response) => {
-                        // Handle success and response from server!
-                        console.log("classes lifted");
-                      },
-                      (err) => {
-                        console.log(err);
-                      }
-                    );
+
+                    this.vocabService.updateClassDescription(c._id, classNameAndDescription[1]);
+      this.vocabService.updateClassName(c._id,classNameAndDescription[0]===""?rec.keyword:classNameAndDescription[0]);
+      this.vocabService.updateClassURI(c._id,element.URI );
+                    
                   }
                 }
 
