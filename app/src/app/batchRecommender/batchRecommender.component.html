@@ -1,5 +1,5 @@
 <div *ngFor="let r of (recommendations | async);let i = index;">
-  {{preselect(r.list[0].URI,i)}}
+  {{r.list.length>0?preselect(r.list[0].URI,i):preselectNone(i)}}
   <div class="attributes-container"><!-- TODO: add anchor for references -->
     <div class="attribute-container">
       <div class="text"> <span class="label">Keyword:</span> <span class="name">{{r.keyword}}</span></div>
@@ -12,7 +12,7 @@
   <hr class="divider">
       </div>
       <div>
-      <input id="None_{{i}}" [checked]="radioSelected[i]" value='None' type="radio" name="None_{{i}}" [(ngModel)]="radioSelected[i]">
+      <input id="None_{{i}}" [checked]="radioSelected[i]" value='None_{{i}}' type="radio" name="None_{{i}}" [(ngModel)]="radioSelected[i]">
         <b> Keep current node or property.</b>
         </div>
       <hr class="divider">
