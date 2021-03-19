@@ -21,18 +21,21 @@ export class BatchRecommenderComponent implements OnInit, OnDestroy {
   chosen: string[];
   propertyNames: string[];
 
-  constructor(private vocabService: VocabulariesService) {}
+  constructor(private vocabService: VocabulariesService) { }
 
   ngOnInit() {
-    this.radioSelected = new Array();    
+    this.radioSelected = new Array();
   }
 
-  ngOnDestroy() {}
+  ngOnDestroy() { }
 
-  preselect(URI:string, index:number){
+  preselect(URI: string, index: number) {
     if(!this.radioSelected[index]){
-this.radioSelected[index] = URI;
-    }          
+      this.radioSelected[index] = URI;
+  }
+  }
+  preselectNone(index:number){
+      this.radioSelected[index] = "None_"+index;
   }
 
   liftOntology() {
@@ -55,9 +58,9 @@ this.radioSelected[index] = URI;
                     );
 
                     this.vocabService.updateClassDescription(c._id, classNameAndDescription[1]);
-      this.vocabService.updateClassName(c._id,classNameAndDescription[0]===""?rec.keyword:classNameAndDescription[0]);
-      this.vocabService.updateClassURI(c._id,element.URI );
-                    
+                    this.vocabService.updateClassName(c._id, classNameAndDescription[0] === "" ? rec.keyword : classNameAndDescription[0]);
+                    this.vocabService.updateClassURI(c._id, element.URI);
+
                   }
                 }
 

@@ -335,6 +335,7 @@ export class MxgraphComponent implements OnInit, OnDestroy {
         domain: this.vocabulary.domain,
       }
     );
+
     this.batchPhase = false;
 
   }
