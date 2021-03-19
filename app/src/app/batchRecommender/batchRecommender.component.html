@@ -8,12 +8,12 @@
       <div *ngFor="let rec of r.list">
        
           <input id="{{rec.URI}}" [checked]="radioSelected[i]" [value]='rec.URI' type="radio" name="{{rec.URI}}" [(ngModel)]="radioSelected[i]">
-          <b> URI: </b> <span class="uri"><a href="{{rec.URI}}"> {{rec.URI}} </a></span> <b> Label: </b><span [innerHTML]="rec.labels[0]?rec.labels[0].label:None"></span> <b> Comment: </b>  <span [innerHTML]="rec.comments[0]?rec.comments[0].label:None"></span> <b> Score: </b> {{rec.score}}
+          <b> URI: </b> <span class="uri"><a href="{{rec.URI}}"> {{rec.URI}} </a></span> <b> Label: </b><span [innerHTML]="rec.labels[0]?rec.labels[0].label:None"></span> <b> Comment: </b>  <span [innerHTML]="rec.comments[0]?rec.comments[0].label:None"></span> <b> Score: </b> {{rec.score.toFixed(2)}}
   <hr class="divider">
       </div>
       <div>
       <input id="None_{{i}}" [checked]="radioSelected[i]" value='None' type="radio" name="None_{{i}}" [(ngModel)]="radioSelected[i]">
-        <b> Keep current node or property.</b>
+        <b> Keep current node or relation.</b>
         </div>
       <hr class="divider">
   <div *ngIf="!r.list.length">
