@@ -30,8 +30,13 @@
 
           <mat-form-field class="full-width-field" *ngIf="editToggle">
             <mat-label>Class Name</mat-label>
-            <input #editClassElem matInput [(ngModel)]="editedClass.name" (keyup)="listenerClassNameChange(editClassElem.value)"
+            <input #editClassElem matInput [matAutocomplete]='auto_class' [(ngModel)]="editedClass.name" (keyup)="listenerClassNameChange(editClassElem.value);checkWordClass(editClassElem.value)"
               value="{{(classInfo | async).label}}">
+            <mat-autocomplete #auto_class="matAutocomplete">
+              <mat-option *ngFor="let s of suggestions_class" [value]="s">
+                {{s}}
+              </mat-option>
+            </mat-autocomplete>
           </mat-form-field>
         </p>
         <mat-form-field class="full-width-field" *ngIf="!selectedClassID">
@@ -112,8 +117,13 @@
             <div class="button-full-width">
               <form [formGroup]="formProp" (ngSubmit)="addProperty(formDirective)" #formDirective="ngForm">
                 <mat-form-field class="prop-input">
-                  <input matInput placeholder="Name"  (keyup)="listenerPropNameChange($event)"
+                    <input matInput placeholder="Name" [matAutocomplete]='auto_prop' (keyup)="listenerPropNameChange($event);checkWordProperty(formProp.get('name').value)"
                     formControlName="name" required>
+            <mat-autocomplete #auto_prop="matAutocomplete">
+              <mat-option *ngFor="let p of suggestions_property" [value]="p">
+                {{p}}
+              </mat-option>
+            </mat-autocomplete>
                 </mat-form-field>
                 <mat-form-field class="prop-input">
                   <input matInput placeholder="URI"  formControlName="URI" required>

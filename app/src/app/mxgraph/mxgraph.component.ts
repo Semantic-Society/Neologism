@@ -109,8 +109,6 @@ export class MxgraphComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.vocabID = this.route.snapshot.paramMap.get("id");
-    this.classNames = [];
-    this.propertyNames = [];
     // TODO: Currently creates a new instance with each subscription. Use something like this instead: .multicast(new BehaviorSubject([]));
     // This did, however, not work.
     this.classes = this.vocabService.getClassesWithProperties(this.vocabID);
@@ -247,18 +245,20 @@ export class MxgraphComponent implements OnInit, OnDestroy {
       this.mx.clearModel();
 
       // insert classes
+     this.classNames = [];
       cs.forEach((c) => {
         this.mx.insertClass(c._id, c.name, c.position.x, c.position.y);
         !this.classNames.includes(c.name)?this.classNames.push(c.name):null;
       });
 
       // insert properties
+    this.propertyNames = [];
       cs.forEach((c) => {
         // grouping the properties by their target
         const merged = this.mergeProperties(c);
         merged.properties.forEach((p) => {
           this.mx.insertProperty(c._id, p._id, p.name, p.rangeID);
-          !this.propertyNames.includes(c.name)?this.propertyNames.push(p.name):null;
+          !this.propertyNames.includes(p.name)?this.propertyNames.push(p.name):null;
         });
       });
 
