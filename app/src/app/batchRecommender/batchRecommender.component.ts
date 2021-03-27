@@ -80,7 +80,7 @@ export class BatchRecommenderComponent implements OnInit, OnDestroy {
                         p._id,
                         classNameAndDescription[0] === ""
                           ? rec.keyword
-                          : rec.keyword,
+                          : classNameAndDescription[0],
                         classNameAndDescription[1],
                         element.URI,
                         p.range._id
@@ -103,11 +103,12 @@ export class BatchRecommenderComponent implements OnInit, OnDestroy {
   }
 
   private getNameAndDescription(element: Recommendation) {
+    var regexBold = new RegExp("/<\/?b>","g")
     const name = element.labels[0]
-      ? element.labels[0].label.replace("<b>", "").replace("</b>", "")
+      ? element.labels[0].label.replace(regexBold, "")
       : "";
     const description = element.comments[0]
-      ? element.comments[0].label.replace("<b>", "").replace("</b>", "")
+      ? element.comments[0].label.replace(regexBold,"")
       : "";
 
     return [name, description];
