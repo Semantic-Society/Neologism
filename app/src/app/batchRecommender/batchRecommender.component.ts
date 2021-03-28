@@ -103,7 +103,7 @@ export class BatchRecommenderComponent implements OnInit, OnDestroy {
   }
 
   private getNameAndDescription(element: Recommendation) {
-    var regexBold = new RegExp("/<\/?b>","g")
+    var regexBold = new RegExp("<\/?b>","g")
     const name = element.labels[0]
       ? element.labels[0].label.replace(regexBold, "")
       : "";
