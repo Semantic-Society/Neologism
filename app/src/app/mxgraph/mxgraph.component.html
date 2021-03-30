@@ -39,12 +39,20 @@
         </ul>
     </div>
 
-    <div class="button-div"  (dblclick)="startEdit()" style="display:flex">
-      <span style="padding-right: 1rem">Domain:  </span> 
-      <div [hidden]="editing"> {{vocabulary? vocabulary.domain: "Specify Domain"}}</div>
+    
+    <div class="button-div" style="display:flex">
+      <span style="padding-right: 1rem">Domain:  </span>      
+      
+      <div [hidden]="editing"> {{vocabulary? vocabulary.domain: ""}}</div>
+
       <form style="color:black" (ngSubmit)="editDomain()" [hidden]="!editing">
         <input class="editable" [(ngModel)]="domain" name="domain">
-    </form>   
+    </form> 
+    <div class="edit-icon-wrapper" (click)="startEdit()" *ngIf="!editing">
+      <mat-icon class="edit-icon">
+        create
+      </mat-icon>
+    </div>  
     </div>
     <div class="button-div">
       <div class="pad-1">

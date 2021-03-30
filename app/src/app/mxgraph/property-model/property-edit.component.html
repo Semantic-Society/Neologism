@@ -7,8 +7,8 @@
     </nz-form-item>
     <nz-form-item>
         <nz-form-label>Name</nz-form-label>
-<input placeholder="Label" nz-input [(ngModel)]="prop.name">
-
+<input placeholder="Label" nz-input [(ngModel)]="prop.name"  [nzAutocomplete]="auto" (ngModelChange)="checkWord($event)">
+      <nz-autocomplete [nzDataSource]="suggestions" #auto></nz-autocomplete>
     </nz-form-item>
     <nz-form-item>
         <nz-form-label>URI</nz-form-label>
