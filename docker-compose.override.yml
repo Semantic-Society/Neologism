@@ -17,8 +17,8 @@ services:
     volumes:
       - data:/data/db
 
-#   recommender:
-#     container_name: neologism_recommender
-#     image: registry.git.rwth-aachen.de/neologism/recommender:latest
-#     ports:
-#       - '8080:8080'
+  recommender:
+    container_name: neologism_recommender
+    image: registry.git.rwth-aachen.de/neologism/recommender:latest
+    ports:
+     - '8080:8080'
