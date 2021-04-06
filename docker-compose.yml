@@ -4,7 +4,7 @@ services:
   
   neologism:
     container_name: neologism_app
-    image: registry.git.rwth-aachen.de/neologism/neologism2:<enter-tag-here>
+    image: registry.git.rwth-aachen.de/neologism/neologism2:lov
     build:
       context: .
       dockerfile: Dockerfile

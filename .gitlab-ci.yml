@@ -8,6 +8,7 @@ stages:
 variables:
   IMAGE_TAG: $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA
   LATEST_TAG: $CI_REGISTRY_IMAGE:latest
+  LOV_TAG : $CI_REGISTRY_IMAGE:lov
 
 docker_build_and_push:
   image: docker:19.03
@@ -38,6 +39,6 @@ docker_build_and_push_lov:
     - envsubst < app/src/assets/env.template.js > app/src/assets/env.js
     - docker build --build-arg METEOR_CLIENT_CONN_URL=$CLIENT_CONN_URL -t $IMAGE_TAG .
     - docker push $IMAGE_TAG
-    - docker tag $IMAGE_TAG
+    - docker tag $IMAGE_TAG $LOV_TAG
   only:
     - merge_test
