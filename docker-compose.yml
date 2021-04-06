@@ -4,7 +4,7 @@ services:
   
   neologism:
     container_name: neologism_app
-    image: registry.git.rwth-aachen.de/neologism/neologism2:latest
+    image: registry.git.rwth-aachen.de/neologism/neologism2:<enter-tag-here>
     build:
       context: .
       dockerfile: Dockerfile
@@ -23,9 +23,9 @@ services:
     command:
       - --storageEngine=wiredTiger
 
-#   recommender:
-#     container_name: neologism_recommender
-#     image: registry.git.rwth-aachen.de/neologism/recommender:latest
+  recommender:
+    container_name: neologism_recommender
+    image: registry.git.rwth-aachen.de/neologism/recommender:latest
 
 volumes:
   data:
