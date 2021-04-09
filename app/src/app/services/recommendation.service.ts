@@ -46,7 +46,7 @@ export class RecommendationService {
 
     /** Neologism recommendation service endpoint base path */
      static baseUrl = `${environment.recommender.base}`+((environment.recommender.port=="")? "/recommender/" :`:${environment.recommender.port}/recommender/`);     
-     static batchBaseUrl= "http://recommender:8080/recommender/batchRecommender"
+     static batchBaseUrl= "http://recommender/recommender/batchRecommender"
 
      //static batchBaseUrl = "http://localhost:8080/recommender/batchRecommender";
         

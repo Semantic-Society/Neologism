@@ -11,10 +11,11 @@ services:
       args:
         # This is variable is use to configure meteor-client bundle 
         METEOR_CLIENT_CONN_URL: ${METEOR_CLIENT_CONN_URL:-http://localhost:3000}
+      
     depends_on:
       - mongo
     environment:
-      ROOT_URL: ${ROOT_URL:-http://localhost}
+      ROOT_URL: ${ROOT_URL:-http://localhost:4200}
       MONGO_URL: mongodb://mongo:27017/meteor
       PORT: 3000
   
@@ -23,6 +24,14 @@ services:
     image: mongo:latest
     command:
       - --storageEngine=wiredTiger
+    volumes:
+      - data:/data/db
+    ports:
+      - '27017:27017'
 
+  recommender:
+     container_name: neologism_recommender
+     image: registry.git.rwth-aachen.de/neologism/recommender:latest
+     
 volumes:
   data:
