@@ -19,7 +19,7 @@
     <!-- HEADER -->
      <nz-header style="background: #fff; padding:0;">
       <search-vocabularies-autocomplete [width]="'50vw'" class="div-search"></search-vocabularies-autocomplete>
-      
+
       <ul nz-menu nzMode="horizontal" style="position: fixed; top: 2px; right: 15px; ">
         <li nz-submenu nzIcon="setting">
           <ul>
@@ -33,8 +33,8 @@
         </li>
       </ul>
      <!-- <i class="trigger" nz-icon [type]="isCollapsed?'menu-unfold':'menu-fold'" (click)="isCollapsed=!isCollapsed"></i> -->
-    </nz-header> 
-    
+    </nz-header>
+
 
     <!-- Main Content HEADER -->
     <nz-content style=" margin:0 16px">
@@ -49,14 +49,14 @@
         <app-vocabulary-list (totalVocab)="updateListLength($event)"></app-vocabulary-list>
       </div>
     </nz-content>
-    <nz-footer style="text-align: center;">Neologism - 2020</nz-footer>
+    <nz-footer style="text-align: center;">Neologism - 2020-2021</nz-footer>
   </nz-layout>
 </nz-layout>
 
-<button 
-  class="add-vocabulary-frm" 
-  nz-button nzType="primary" 
-  [nzSize]="'large'" 
+<button
+  class="add-vocabulary-frm"
+  nz-button nzType="primary"
+  [nzSize]="'large'"
   (click)="createVocabulary()"
   nzShape="circle"><i nz-icon  nzType="plus"></i>
 </button>
