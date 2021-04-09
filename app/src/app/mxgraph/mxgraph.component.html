@@ -1,78 +1,10 @@
-<!-- <mat-drawer-container>
-  <mat-drawer [ngSwitch]="editMode | async" #navEnd class="mat-drawer nav-right" mode="side" position="start" [opened]="true" class="no-pad"
-    disableClose>
-
-    <app-metadata [vocabulary]="vocabulary" *ngSwitchCase="'default'"></app-metadata>
-    <ng-container>       
-      <app-editbox *ngSwitchCase="'edit'" [selectedClassID]="this.currentSelection" [uriPrefix]="vocabulary.uriPrefix" [vocabID]="this.vocabID"></app-editbox>
-      <app-recommender *ngSwitchCase="'recommend'" [vocabID]="this.vocabID"></app-recommender>
-      <app-node-creator *ngSwitchCase="'create'" [vocabID]="this.vocabID" [uriPrefix]="vocabulary.uriPrefix" [graphService]="mx"></app-node-creator>
-    </ng-container>
-
-    <div class="button-div">
-      <div class="pad-1">
-        <button *ngSwitchCase="'default'" mat-button (click)="showNodeCreator()">Add new class
-        </button>
-      </div>
-
-      <div class="pad-1">
-        <button *ngSwitchCase="'hidden'" mat-button (click)="showRecommender()">Search Existing class
-        </button>
-      </div>
-    </div>
-
-    <div class="button-div">
-      
-      <div style="text-align: center;">
-        <h3  style="color: white; border-style: dashed;">
-          How to edit Property / Class
-        </h3>
-      </div>
-        <br>
-        <em>
-          On the graph:
-        </em>
-        <br>
-        <ul>
-          <li>Click on the arc/arrow for Property form</li>
-          <li>Click on the class/node for Class form</li>
-        </ul>
-    </div>
-    <div id="ctrl-zoom">
-      <div class="pad-1">
-        <button mat-button (click)="zoomin()"> Zoom In</button>
-        
-      </div>
-      <div class="pad-1">
-        <button  mat-button (click)="zoomout()"> Zoom Out</button>
-      </div>
-      <div class="pad-1">
-        <button  mat-button (click)="zoomreset()"> Reset</button>
-      </div>
-    </div>
-   
-  </mat-drawer>
-  <mat-drawer-content>
-    <mat-tab-group headerPosition="below" class="mat-tab-fill-height">
-      <mat-tab label="View &amp; Edit">
-        <div class="mxgraph-container" #view></div>
-      </mat-tab>
-      <mat-tab label="List">
-        <app-standardview [classes]="classes">
-        </app-standardview>
-      </mat-tab>
-    </mat-tab-group>
-  </mat-drawer-content>
-</mat-drawer-container> -->
 
 <nz-layout>
   <nz-sider [ngSwitch]="editMode | async" [nzWidth]="350" style="height: 100vh;" class="mat-drawer">
     <app-metadata [vocabulary]="vocabulary" *ngSwitchCase="'default'"></app-metadata>
-    <ng-container>       
       <app-editbox *ngSwitchCase="'edit'" [selectedClassID]="this.currentSelection" [uriPrefix]="vocabulary.uriPrefix" [vocabID]="this.vocabID"></app-editbox>
       <app-recommender *ngSwitchCase="'recommend'" [vocabID]="this.vocabID"></app-recommender>
       <app-node-creator *ngSwitchCase="'create'" [vocabID]="this.vocabID" [uriPrefix]="vocabulary.uriPrefix" [graphService]="mx"></app-node-creator>
-    </ng-container>
     <div *ngSwitchCase="'default'">
     <div class="button-div">
       <div class="pad-1">

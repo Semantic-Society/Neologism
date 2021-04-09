@@ -30,16 +30,11 @@ export class EditboxComponent implements OnInit, OnChanges {
   /**
    * If more classinfo is needed, it can be fetched in ngOnInit below.
    */
-  protected classInfo: Observable<{ label: string, description: string; url: string }>;
+  classInfo$: Observable<{ label: string, description: string; url: string }>;
 
   // TODO: strictly speaking, this component does not need this as it only needs access to classes and properties.
   // However, more fine grained methods in the VocabulariesService are not yet implemented.
   @Input() vocabID: string;
-  protected newClass = {
-    name: '',
-    URI: '',
-    description: ''
-  };
 
   formProp: FormGroup;
 
@@ -58,7 +53,7 @@ export class EditboxComponent implements OnInit, OnChanges {
   protected classToUpdate: Observable<IClassWithProperties>;
   public editToggle = false;
   protected rangeOptions: Observable<Array<{ _id: string, name: string }>>;
- 
+
   constructor(
     private vocabService: VocabulariesService,
     private recommender: RecommendationService,
@@ -72,7 +67,7 @@ export class EditboxComponent implements OnInit, OnChanges {
 
     this.formProp = this.fb.group({
       name: ['', Validators.required],
-      URI: [ `${this.uriPrefix}#`,
+      URI: [`${this.uriPrefix}#`,
       {
         asyncValidators: [this.vocabService.uriPropValidator()],
       }],
@@ -112,7 +107,7 @@ export class EditboxComponent implements OnInit, OnChanges {
     }
 
     // we get several small pieces of info from the class. multicast is likely a good idea, but did not get it working.
-    this.classInfo = this.editboxService.createClassInfoObj(this.vocabID, classID)
+    this.classInfo$ = this.editboxService.createClassInfoObj(this.vocabID, classID)
 
     // actually already refacored (in editbox service) but very hard to test as the 
     // recommender service always returns an empty array, bug ?
@@ -146,14 +141,10 @@ export class EditboxComponent implements OnInit, OnChanges {
     this.editboxService.addRecommendedProperyToGraph(rec, this.selectedClassID, this.vocabID)
   }
 
-  addClass() {
-    this.vocabService.addClass(this.vocabID, this.newClass.name, this.newClass.description, this.newClass.URI);
-    this.newClass = this.emptyClass;
-  }
 
   addProperty(formDirective: FormGroupDirective) {
     this.vocabService.addProperty(this.selectedClassID, this.formProp.value.name,
-       this.formProp.value.description, this.formProp.value.URI, this.formProp.value.range);
+      this.formProp.value.description, this.formProp.value.URI, this.formProp.value.range);
 
     formDirective.resetForm();
     this.formProp.reset()
@@ -165,6 +156,8 @@ export class EditboxComponent implements OnInit, OnChanges {
   }
 
   updateEdit() {
+
+    console.log(this.editedClass)
     if (this.editedClass.name) {
       this.vocabService.updateClassName(this.selectedClassID, this.editedClass.name);
     }

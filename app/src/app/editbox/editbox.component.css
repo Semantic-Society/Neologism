@@ -1,8 +1,5 @@
 
 
-
-
-
 .editbox-card {
   display: flex;
   flex-direction: column;
@@ -45,16 +42,6 @@ mat-list-item {
 
 .editor-toolbar-spacer {
   flex: 1 1 auto;
-}
-
-mat-expansion-panel{
-  box-shadow: none !important;
-  /*background-color: #1f1f1f;
-  color: #FFFFFF;*/
-}
-
-mat-panel-title {
-  font-weight: bold;
 }
 
 .spinner-text{
@@ -180,20 +167,6 @@ mat-panel-title {
   width:auto;
   margin-bottom: 0.5rem;
 }
-.mat-panel-custom-title {
-  font-size: 0.8rem !important;
-  font-weight: bolder !important;
-}
-
-.mat-expansion-panel-custom-header {
-  background-color: #f5f5f5;
-}
-.mat-expansion-panel-custom-header:focus {
-  background-color: #f5f5f5 !important;
-}
-.mat-expansion-panel-custom-header:hover {
-  background-color: #f5f5f5 !important;
-}
 
 .recommender-description-title {
   padding-left: 0.2rem;
@@ -229,24 +202,16 @@ mat-form-field.description input {
 .add-properties-container {
   padding: 0rem .5rem;
   display: flex;
-  flex-direction: row;
   flex-wrap: wrap;
   justify-content: center;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height:100%;
+  overflow-y: auto;
+  border-radius: 3px;
 }
 
-.add-properties-container .prop-input {
-  width: calc(100% - .5rem);
-}
-
-.add-properties-container .class-dropdown {
-  width: calc(100% - .5rem);
-}
-
-
-/*.prop-button button {
-  max-width: calc(10% - 1rem) !important;
-  min-width: calc(10% - 1rem) !important;
-}*/
 
 .edit-icon-wrapper{
 
@@ -255,10 +220,6 @@ mat-form-field.description input {
   right: 10px;
   color: #343434;
   cursor: pointer;
-}
-
-mat-card-header {
-  position: relative;
 }
 
 .button-group-edit {
@@ -274,16 +235,14 @@ mat-card-header {
   width: calc(50% - 1rem);
 }
 
-
-div .mat-card-header-text {
-  width: 100% !important;
-}
-
 .full-width-field {
   width: 100%;
 }
 
-:host ::ng-deep .mat-card-header-text {
-  width: 100%;
+.neologism-sidebar-header{
+  color: rgb(103, 174, 255);
+}
 
+:host ::ng-deep .ant-form-item-label > label {
+  color:white !important;
 }
