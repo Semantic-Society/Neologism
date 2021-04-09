@@ -57,7 +57,7 @@ checkWord(word:string){
     let dictionary = this.spellCheckerService.getDictionary(res)
     
    this.suggestions =  dictionary.getSuggestions(word)
-  console.log(this.suggestions)  })
+   })
  
  
     this.contextmenu = true
