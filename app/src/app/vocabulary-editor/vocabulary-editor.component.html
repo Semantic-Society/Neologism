@@ -6,8 +6,8 @@
       <search-vocabularies-autocomplete [width]="'50vw'"></search-vocabularies-autocomplete>
     <!-- <i class="trigger" nz-icon [type]="isCollapsed?'menu-unfold':'menu-fold'" (click)="isCollapsed=!isCollapsed"></i> -->
     </div>
-    
-  </nz-header> 
+
+  </nz-header>
 
   <nz-content style="padding:0 50px;">
     <div class="content-header">
@@ -29,14 +29,14 @@
                 </li>
             </ul>
           </nz-dropdown-menu>
-        
+
         </nz-breadcrumb-item>
       </nz-breadcrumb>
 
-      <nz-select 
-          style="width: 200px;" 
-          nzShowSearch 
-          nzPlaceHolder="Select Display Method" 
+      <nz-select
+          style="width: 200px;"
+          nzShowSearch
+          nzPlaceHolder="Select Display Method"
           [ngModel]="selectedViewMethod"
           (ngModelChange)="changeViewMethod($event)">
         <nz-option nzCustomContent nzLabel="List View" nzValue="list-view"><i nz-icon  nzType="ordered-list"></i> List View</nz-option>
@@ -48,10 +48,10 @@
     </div>
 
     <router-outlet class="mx-editor-ctn"></router-outlet>
-    
+
   </nz-content>
 
-  <nz-footer style="text-align: center;">Neologism - 2020</nz-footer>
+  <nz-footer style="text-align: center;">Neologism - 2020-2021</nz-footer>
 </nz-layout>
 
 
