@@ -32,18 +32,11 @@
           </ul>
         </li>
       </ul>
-     <!-- <i class="trigger" nz-icon [type]="isCollapsed?'menu-unfold':'menu-fold'" (click)="isCollapsed=!isCollapsed"></i> -->
     </nz-header> 
     
 
     <!-- Main Content HEADER -->
     <nz-content style=" margin:0 16px">
-        <!-- Temporarily breadcrumbs are disabled as found no need  -->
-      <!-- <nz-breadcrumb style="margin:16px 0;">
-        <nz-breadcrumb-item>User</nz-breadcrumb-item>
-        <nz-breadcrumb-item>{{ user }}</nz-breadcrumb-item>
-      </nz-breadcrumb> -->
-
       <!-- Main Content Content -->
       <div style="padding:24px;">
         <app-vocabulary-list (totalVocab)="updateListLength($event)"></app-vocabulary-list>
