@@ -6,14 +6,19 @@
     <mat-icon>arrow_back</mat-icon>
   </button>
 </mat-toolbar> -->
+
 <div class="mat-drawer1">
-  <nz-page-header  (nzBack)="resetSidebarState()" nzBackIcon>
-       <!-- <div class="img">
-            <img src="../../../assets/default_node_image.gif" />
-          </div> -->
-    <nz-page-header-title>
-      Add Your Class
-    </nz-page-header-title>
+    <nz-page-header (nzBack)="resetSidebarState()" style="padding: 0!important;" nzBackIcon>
+
+      <nz-avatar nz-page-header-avatar    nzSrc="../../../assets/default_node_image.gif">
+      </nz-avatar>
+      <nz-page-header-title> 
+        <h3 class="sidebar-header neologism-sidebar-header" style="
+        display: inline; white-space:pre-wrap;">
+          Add Your Class
+        </h3>
+      </nz-page-header-title>
+    
   </nz-page-header>
   <div class="editbox-container">
     <form nz-form [formGroup]="createClassForm" (ngSubmit)="addClass()" >
@@ -22,7 +27,7 @@
        
           <div class="name-plus-uri ">
               <nz-form-item class="full-width name">
-                <nz-form-label  nzFor="name">Class Name:</nz-form-label>
+                <nz-form-label  nzFor="name">Class Name</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
               <input class="form-control" type="text" nz-input nzRequired placeholder="Class Name"
               (keyup)="autoCompleteURI($event)" formControlName="name" #name  >
@@ -33,7 +38,7 @@
           </nz-form-item>
     
               <nz-form-item class="full-width uri">
-                <nz-form-label nzFor="uri">Class URI:</nz-form-label>
+                <nz-form-label nzFor="uri">Class URI</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24">
               <input nz-input class="form-control" placeholder="uri" nzRequired formControlName="URI" readonly disabled>
               <nz-form-explain *ngIf="createClassForm.get('URI').hasError('invalidURI')">
@@ -45,7 +50,7 @@
         </div>
         <div class="bottom">
           <nz-form-item class="full-width">
-            <nz-form-label nzFor="description">Description:</nz-form-label>
+            <nz-form-label nzFor="description">Description</nz-form-label>
             <nz-form-control>
               <textarea placeholder="Description" nz-input rows="2" class="description form-control"
               formControlName="description"></textarea>

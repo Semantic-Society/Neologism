@@ -246,3 +246,11 @@ mat-form-field.description input {
 :host ::ng-deep .ant-form-item-label > label {
   color:white !important;
 }
+
+:host ::ng-deep .ant-page-header-back-button{
+  color: #1890ff;
+}
+
+:host ::ng-deep nz-form-explain {
+  color: rgb(103, 174, 255);
+}

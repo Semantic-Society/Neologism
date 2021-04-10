@@ -157,7 +157,6 @@ export class EditboxComponent implements OnInit, OnChanges {
 
   updateEdit() {
 
-    console.log(this.editedClass)
     if (this.editedClass.name) {
       this.vocabService.updateClassName(this.selectedClassID, this.editedClass.name);
     }
@@ -171,7 +170,6 @@ export class EditboxComponent implements OnInit, OnChanges {
   }
 
   showDeleteConfirm(): void {
-    console.log(this.selectedClassID)
     this.modal.confirm({
       nzTitle: 'Are you sure delete this class?',
       nzOkText: 'Yes',

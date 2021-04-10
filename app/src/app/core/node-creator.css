@@ -112,3 +112,21 @@ nz-page-header-title {
 .turn-label-to   {
   color: #f5f5f5 !important
 }
+
+:host ::ng-deep .ant-form-item-label > label {
+  color:white !important;
+
+}
+
+.neologism-sidebar-header{
+  color: rgb(103, 174, 255);
+}
+
+
+:host ::ng-deep .ant-page-header-back-button{
+  color: #1890ff;
+}
+
+:host ::ng-deep nz-form-explain {
+  color: rgb(103, 174, 255);
+}
