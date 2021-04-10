@@ -27,8 +27,8 @@
        
           <div class="name-plus-uri ">
               <nz-form-item class="full-width name">
-                <nz-form-label  nzFor="name">Class Name</nz-form-label>
-                <nz-form-control [nzSm]="14" [nzXs]="24">
+                <nz-form-label  nzFor="name">Class Name</nz-form-label><br>
+                <nz-form-control >
               <input class="form-control" type="text" nz-input nzRequired placeholder="Class Name"
               (keyup)="autoCompleteURI($event)" formControlName="name" #name  >
               <nz-form-explain *ngIf="createClassForm.get('name')?.dirty && createClassForm.get('name').hasError('required')">
@@ -38,8 +38,8 @@
           </nz-form-item>
     
               <nz-form-item class="full-width uri">
-                <nz-form-label nzFor="uri">Class URI</nz-form-label>
-                <nz-form-control [nzSm]="14" [nzXs]="24">
+                <nz-form-label nzFor="uri">Class URI</nz-form-label><br>
+                <nz-form-control >
               <input nz-input class="form-control" placeholder="uri" nzRequired formControlName="URI" readonly disabled>
               <nz-form-explain *ngIf="createClassForm.get('URI').hasError('invalidURI')">
                 URI is already in <strong>USE</strong>
@@ -50,7 +50,7 @@
         </div>
         <div class="bottom">
           <nz-form-item class="full-width">
-            <nz-form-label nzFor="description">Description</nz-form-label>
+            <nz-form-label nzFor="description">Description</nz-form-label><br>
             <nz-form-control>
               <textarea placeholder="Description" nz-input rows="2" class="description form-control"
               formControlName="description"></textarea>

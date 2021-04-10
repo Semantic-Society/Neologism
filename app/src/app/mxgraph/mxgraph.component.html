@@ -8,12 +8,12 @@
     <div *ngSwitchCase="'default'">
     <div class="button-div">
       <div class="pad-1">
-        <button mat-button (click)="showNodeCreator()">Add new class
+        <button nz-button  (click)="showNodeCreator()">Add new class
         </button>
       </div>
 
       <div class="pad-1">
-        <button *ngSwitchCase="'hidden'" mat-button (click)="showRecommender()">Search Existing class
+        <button *ngSwitchCase="'hidden'" nz-button  (click)="showRecommender()">Search Existing class
         </button>
       </div>
     </div>
@@ -38,14 +38,14 @@
       </div>
       <div id="ctrl-zoom">
         <div class="pad-1">
-          <button mat-button (click)="zoomin()"> Zoom In</button>
+          <button nz-button  (click)="zoomin()"> Zoom In</button>
           
         </div>
         <div class="pad-1">
-          <button  mat-button (click)="zoomout()"> Zoom Out</button>
+          <button  nz-button (click)="zoomout()"> Zoom Out</button>
         </div>
         <div class="pad-1">
-          <button  mat-button (click)="zoomreset()"> Reset</button>
+          <button  nz-button  (click)="zoomreset()"> Reset</button>
         </div>
       </div>
     </div>
@@ -76,8 +76,8 @@
 
   </p>
   <menu>
-    <button id="confirmBtn" (click)="showNodeCreator();dEmptyGraph.close()" value="default">Take me</button>
-    <button (click)="dEmptyGraph.close();">Skip!, I will explore</button>
+    <button nz-button nzType="primary" id="confirmBtn" (click)="showNodeCreator();dEmptyGraph.close()" value="default">Take me</button>
+    <button nz-button nzType="primary" (click)="dEmptyGraph.close();">Skip!, I will explore</button>
 
 
   </menu>

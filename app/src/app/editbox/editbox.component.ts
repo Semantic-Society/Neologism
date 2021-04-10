@@ -64,10 +64,10 @@ export class EditboxComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
-
+    this.uriPrefix=(this.uriPrefix.search(/^(.*)#$/)==-1)?`${this.uriPrefix}#`:`${this.uriPrefix}`
     this.formProp = this.fb.group({
       name: ['', Validators.required],
-      URI: [`${this.uriPrefix}#`,
+      URI: [`${this.uriPrefix}`,
       {
         asyncValidators: [this.vocabService.uriPropValidator()],
       }],
@@ -186,7 +186,7 @@ export class EditboxComponent implements OnInit, OnChanges {
   }
 
   listenerClassNameChange(value: string) {
-    this.editedClass.URI = `${this.uriPrefix}#${value.toLocaleLowerCase()}`
+    this.editedClass.URI = `${this.uriPrefix}${value.toLocaleLowerCase()}`
   }
 
   resetSidebarState() {
