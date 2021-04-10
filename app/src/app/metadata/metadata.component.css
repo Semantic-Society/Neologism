@@ -8,8 +8,7 @@ hr {
   margin: 0.3em 0em 0.3em 0em;
   width: 100%;
 }
-hr + span{
-  margin: 4em;
+.authors {
   word-wrap: break-word;
 }
 .no-pad {

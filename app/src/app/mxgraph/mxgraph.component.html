@@ -51,18 +51,9 @@
     </div>
    
   </nz-sider>
-  <nz-layout style="padding:0 24px 24px">
-    <!-- <nz-content> -->
-        <!-- <nz-tabset>
-          <nz-tab label="View &amp; Edit" [nzTitle]="'View &amp; Edit'">
-            <div class="mxgraph-container" #view></div>
-          </nz-tab>
-          <nz-tab label="List" [nzTitle]="'List'">
-            <app-standardview [classes]="classes">
-            </app-standardview>
-          </nz-tab>
-  
-        </nz-tabset> -->
+  <nz-layout>
+    <nz-content>
+
      
       <mat-tab-group headerPosition="below" class="mat-tab-fill-height">
         <mat-tab label="View &amp; Edit">
@@ -74,17 +65,10 @@
           </app-standardview>
         </mat-tab>
       </mat-tab-group>
-    <!-- </nz-content> -->
+    </nz-content>
+    
   </nz-layout>
 </nz-layout>
-
-<!-- <div style="margin-bottom: 16px;">
-  Tab position：
-  <nz-select [(ngModel)]="position" style="width: 80px;">
-    <nz-option *ngFor="let option of options" [nzLabel]="option.label" [nzValue]="option.value"> </nz-option>
-  </nz-select>
-</div> -->
-
 
 <dialog #dEmptyGraph class="modal">
   <p>
