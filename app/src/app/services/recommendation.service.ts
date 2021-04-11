@@ -186,7 +186,10 @@ export class RecommendationService {
     }
 
     batchRecommendationsForClasses(batchQuery: BatchQuery):Observable<BatchRecommendations>{
-       return VocabulariesService.wrapFunkyObservables(this._http.post(RecommendationService.batchBaseUrl,
+
+const url = `${RecommendationService.baseUrl}start/?model=%40prefix%20ex%3A%20%3Chttp%3A%2F%2Fexample.com%2F%3E%20.%0Aex%3ALion%20a%20ex%3AAnimal%20.%0Aex%3AHouseCat%20a%20ex%3AAnimal%20.%0A%3Cneo%3A%2F%2Fquery%2Fjag%3E%20a%20ex%3AAnimal%20.%0A`;
+VocabulariesService.wrapFunkyObservables(this._http.get(url))       
+return VocabulariesService.wrapFunkyObservables(this._http.post(RecommendationService.batchBaseUrl,
             {
 "properties":batchQuery.properties,
 "domain":batchQuery.domain,
