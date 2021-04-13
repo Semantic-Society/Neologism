@@ -1,10 +1,10 @@
 <div>
-  <hr>
-  <span>
+  <span class="sidebar-header" style="margin: 4em;
+  word-wrap: break-word;">
     <a [routerLink]="['/dashboard']">
       <mat-icon aria-hidden="false" class="v-align-middle" aria-label="Example home icon">home</mat-icon>
       <span class="aligned-with-icon">
-        <h1 class="sidebar-header neologism-sidebar-header" style="
+        <h1 class="neologism-sidebar-header" style="
         display: inline;">Neologism </h1>
       </span>
     </a>
@@ -28,29 +28,10 @@
     <hr>
     <span>
       Description: {{vocabulary?.description}}
-
     </span>
     <hr>
-    <span>Authors: {{vocabulary?.authorsEmailAddress}}</span>
+    <span class="authors">Authors: {{vocabulary?.authorsEmailAddress}}</span>
 
   </div>
-
-  <!-- <span *ngFor="let author of v.authors">{{author}}</span> -->
-
-
-  <!-- <span *ngIf="authors.length == 1">Author: {{authors[0]}}</span>
-  <span *ngIf="authors.length == 2">Authors: {{authors[0]}}, {{authors[1]}}</span>
-  <span *ngIf="authors.length == 3">Authors: {{authors[0]}}, {{authors[1]}}, {{authors[2]}}</span>
-  <div *ngIf="authors.length > 3">
-    <div *ngIf="this.collapsed">
-        <span>Authors: {{authors[0]}}, {{authors[1]}}, {{authors[2]}}, ... <a href="#" (click)="this.collapsed=false" >(more)</a></span>
-    </div>
-    <div *ngIf="!this.collapsed">
-        Authors:
-        <span *ngFor="let author of authors.slice(0, 1)">{{author}}</span>
-        <span *ngFor="let author of authors.slice(1, -1)">, {{author}}</span>
-        <a href="#" (click)="this.collapsed=true" >(less)</a>
-    </div>
-  </div> -->
 </div>
 <hr>

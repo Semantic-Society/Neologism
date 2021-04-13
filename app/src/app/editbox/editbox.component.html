@@ -1,148 +1,141 @@
-<mat-toolbar color="secondary">
+<nz-page-header (nzBack)="resetSidebarState()" style="padding: 0!important;" nzBackIcon>
 
-  <img mat-card-avatar
-    src="data:image/gif;base64,R0lGODlhOwBAAMQfAIWjzhpTo0h1tvH0+SpeqUh1tWeMwjlqr+Hp89Ld7cLR5rPG4RpSo8PS53aYyDhpr5Wv1FiBvO/z+KS62uDo8ileqWaMwXWXx7LF4KO62pSu1FeAu9Hc7P///wtHnf///yH5BAEAAB8ALAAAAAA7AEAAAAX/4CeOZGmeaJk4h+d6hLGkdG2rwssUxfMSjZtwKJq4GABKZ9mRZCouB3GaMno2EiYFwCtcCi4DdTxauCxMDvjFdgHI1EHAg9a2754EnAjwVLJMHXhtAntDcxmBHRSDbQiGNmYMihQ+jS9vkDR9G0sbl3iFmikRHgAdCqB4B6MpOacWqnitKK8dDLJtAbQnpWi5hLwmBH6CwC9iwmUvT8cuM8ofCHMuFRfOBNEfAy1slsAQ0QnEzm2syhPU5S8Bj7wIpetsBHo1AwsA+RBBKQMA6mwOAFjQwIGqCANqLMhxJ4ABdyNWAHQRAABEEQgMTERWAwHDajy+eTjgAEAEcncA/yREMQDljxoJqFXQAGiJBAC4QAm4iKLBnQk0Yrq4EEjBFx4AROoKJ6Tbi5UnWrpItEQBlFwH6gnp8+IcCq4aAmEAdgCqEJ8vREWdU0BRKlllx7DJdAKCCwWKxsrSOkUdXROlHrjNCSrZmI9/SxA7JUGpqsREEKdwgaGDhnKQh0hGcbeD48dwNp+4K2GdYSofI7gy9bYcT81pUxh80NqZ2iltUqDVa5pKgjZ8FXt4EEueALM27LKR0tPFGnkBoN1wCYOGQXltIrw2obxN5hEGsN95mKJ7SuQkwquqqKfBBI14ZKhwWgBABgUALOAKABTFAuptkGfCBE6xEUAE+VxHh7QSWiiAXxg0LGCASwI4sB0JDQDYBgN4LUGBfi9UYMlptECw0REcMMHbINK9U+ALlTFR2iUBoDcKN210oogqTCmD4wsMMnEZKNloM40LgnXAAQAYXCOLNiJcR5QEhOUC5QdonTLkMVdm2cFzwFw5gBvGOHPlB86VyeWVDM1o5pVWfOGMamJSc0GVqvBzZXd4XnIbm87UeOYIP8oSQHBnDvDRJfQMekI6lzhgo6NFRACQABCgFwIAOw==" />
+  <nz-avatar nz-page-header-avatar    nzSrc="../../../assets/default_node_image.gif">
+  </nz-avatar>
+  <nz-page-header-title>
+    <h3 class="sidebar-header neologism-sidebar-header" style="
+    display: inline; white-space:pre-wrap;">
+      Edit Your Selected Class Using Form Below
+    </h3>
 
-  <span>Edit Your Selected Class Using Form Below</span>
-  <span class="editor-toolbar-spacer"></span>
+  </nz-page-header-title>
+  <nz-page-header-extra>
+    <button nz-button nzNoAnimation class="edit-icon-wrapper" (click)="toggleEdit()" *ngIf="!editToggle"><i nz-icon
+        nzType="edit" nzTheme="twotone"></i></button>
+  </nz-page-header-extra>
+</nz-page-header>
 
-  <button (click)="resetSidebarState()" mat-icon-button color="primary">
-    <mat-icon>arrow_back</mat-icon>
-  </button>
+<ng-container *ngIf="(classInfo$ | async) as classInfo ">
 
-
-</mat-toolbar>
-
-<mat-card class="editbox-card no-pad">
-  <mat-card-header class="pad-fix">
-    <mat-card-title>
-      <div class="label-name">
-        <div class="edit-icon-wrapper" (click)="toggleEdit()" *ngIf="!editToggle">
-          <mat-icon class="edit-icon">
-            create
-          </mat-icon>
-        </div>
-        <p *ngIf="selectedClassID">
-          <mat-form-field class="full-width-field" *ngIf="!editToggle">
-            <mat-label>Class Name</mat-label>
-            <input disabled matInput value="{{(classInfo | async).label}}">
-          </mat-form-field>
-
-          <mat-form-field class="full-width-field" *ngIf="editToggle">
-            <mat-label>Class Name</mat-label>
-            <input #editClassElem matInput [(ngModel)]="editedClass.name" (keyup)="listenerClassNameChange(editClassElem.value)"
-              value="{{(classInfo | async).label}}">
-          </mat-form-field>
-        </p>
-        <mat-form-field class="full-width-field" *ngIf="!selectedClassID">
-          <input matInput placeholder="Class Name" value="" [(ngModel)]="newClass.name">
-        </mat-form-field>
+  <div *ngIf="selectedClassID">
+    <div *ngIf="editToggle" class="editbox-card">
+      <nz-form-item>
+        <nz-form-label nzFor="name">Class Name</nz-form-label><br>
+        <nz-form-control>
+          <input #editClassElem nz-input [(ngModel)]="editedClass.name"
+            (keyup)="listenerClassNameChange(editClassElem.value)" [ngModel]="classInfo.label">
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label nzFor="name">Class URI</nz-form-label>
+        <nz-form-control>
+          <input nz-input [(ngModel)]="editedClass.URI" [ngModel]="classInfo.url">
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label nzFor="name">About</nz-form-label><br>
+        <nz-form-control>
+          <nz-textarea-count [nzMaxCharacterCount]="256">
+            <textarea rows="2" #message placeholder="The class represents ..." [(ngModel)]="editedClass.description"
+            [ngModel]="classInfo.description" nz-input></textarea>
+          </nz-textarea-count>
+          
+        </nz-form-control>
+      </nz-form-item>
+      <div class="button-group-edit ">
+        <button nz-button nzType="primary" (click)="updateEdit()">Update</button>
+        <button nz-button nzType="default" (click)="cancelEdit()">Cancel</button>
       </div>
-    </mat-card-title>
+    </div>
 
-    <mat-card-subtitle>
-      <div class="uri-link">
-        <div class="uri-name">
-          <div *ngIf="selectedClassID">
-            <mat-form-field class="full-width-field" *ngIf="!editToggle">
-              <mat-label>Class URI</mat-label>
-              <input matInput disabled value="{{(classInfo | async).url}}">
-            </mat-form-field>
-            <mat-form-field class="full-width-field" *ngIf="editToggle">
-              <mat-label>Class URI</mat-label>
-              <input matInput [(ngModel)]="editedClass.URI" value="{{(classInfo | async).url}}">
-            </mat-form-field>
-          </div>
-
-          <mat-form-field class="full-width-field" *ngIf="!selectedClassID">
-            <input matInput placeholder="URI" value="" [(ngModel)]="newClass.URI">
-          </mat-form-field>
-        </div>
-      </div>
-      <div *ngIf="selectedClassID" class="description">
-        <mat-form-field class="full-width-field" *ngIf="!editToggle">
-          <input disabled matInput value="{{(classInfo | async).description}}">
-          <mat-label>Description</mat-label>
-        </mat-form-field>
-        <mat-form-field class="full-width-field" *ngIf="editToggle">
-          <mat-label>Describe Your Class</mat-label>
-          <input matInput #message maxlength="256" value="{{(classInfo | async).description}}"
-            [(ngModel)]="editedClass.description" placeholder="The class represents ...">
-          <mat-hint align="start"><strong>Highly recommended</strong> </mat-hint>
-          <mat-hint align="end">{{message.value.length}} / 256</mat-hint>
-        </mat-form-field>
-      </div>
-
-
-    </mat-card-subtitle>
-
-
-  </mat-card-header>
-
-  <mat-card-title></mat-card-title>
-  <mat-card-content>
-
-
-    <mat-form-field class="full-width-field" class="description" *ngIf="!selectedClassID">
-      <textarea matInput placeholder="Description" value="" [(ngModel)]="newClass.description"></textarea>
-    </mat-form-field>
-    <div class="button-group-edit" *ngIf="editToggle">
-      <button mat-raised-button color="primary" (click)="updateEdit()">Update</button>
-      <button mat-stroked-button (click)="cancelEdit()">Cancel</button>
+    <div *ngIf="!editToggle">
+      <nz-form-item>
+        <nz-form-label nzFor="name">Class Name</nz-form-label><br>
+        <nz-form-control>
+          <input disabled nz-input nzRequired value="{{classInfo.label}}">
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label nzFor="name">Class URI</nz-form-label><br>
+        <nz-form-control>
+          <input nz-input disabled value="{{classInfo.url}}">
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label nzFor="name">About</nz-form-label><br>
+        <nz-form-control>
+          <nz-textarea-count  [nzMaxCharacterCount]="256">
+            <textarea rows="2" disabled [ngModel]="classInfo.description" nz-input></textarea>
+          </nz-textarea-count>
+        </nz-form-control>
+      </nz-form-item>
     </div>
     <div class="button-group-edit">
-      <button mat-raised-button color="warn" (click)="showDeleteConfirm()">Delete</button>
+      <button nz-button nzType="danger" (click)="showDeleteConfirm()">Delete</button>
     </div>
-  </mat-card-content>
-  <div class="button-full-width">
-    <button mat-raised-button color="primary" (click)="addClass()" *ngIf="!selectedClassID">Add Class</button>
-  </div>
-  <mat-card-content style="height: 400px;overflow-y: auto">
-    <mat-list>
-      <div>
-        <!--Adding properties manually-->
-        <mat-expansion-panel style="padding:0;margin:0;" [expanded]="true" disabled>
-          <mat-expansion-panel-header class="mat-expansion-panel-custom-header" [collapsedHeight]="'30px'"
-            [expandedHeight]="'30px'" style="color:black">
-            <mat-panel-title>
-              Add Property to the Class
-            </mat-panel-title>
-          </mat-expansion-panel-header>
-          <div class="add-properties-container" *ngIf="selectedClassID">
-            <div class="button-full-width">
-              <form [formGroup]="formProp" (ngSubmit)="addProperty(formDirective)" #formDirective="ngForm">
-                <mat-form-field class="prop-input">
-                  <input matInput placeholder="Name"  (keyup)="listenerPropNameChange($event)"
-                    formControlName="name" required>
-                </mat-form-field>
-                <mat-form-field class="prop-input">
-                  <input matInput placeholder="URI"  formControlName="URI" required>
-                  <mat-error *ngIf="formProp.get('URI').hasError('invalidURI')">
-                    URI is already in <strong>USE</strong>
-                  </mat-error>
-                </mat-form-field>
-                <mat-form-field class="prop-input">
-                  <textarea matInput placeholder="Comment or Description" 
-                    formControlName="description"></textarea>
-                </mat-form-field>
-                <mat-form-field class="class-dropdown">
-                  <mat-select placeholder="Range" formControlName="range" required>
-                    <ng-container *ngFor="let c of rangeOptions | async">
-                      <mat-option [value]="c._id">
-                        {{ c.name }}
-                      </mat-option>
-                    </ng-container>
-                  </mat-select>
-                </mat-form-field>
-                <button mat-raised-button color="primary" type="submit" [disabled]="!formProp.valid">Add
-                  Property</button>
-              </form>
-            </div>
-          </div>
-        </mat-expansion-panel>
-      </div>
-    </mat-list>
-  </mat-card-content>
 
-  <mat-card-footer></mat-card-footer>
-</mat-card>
+    <nz-divider></nz-divider>
+
+    <nz-page-header>
+
+      <nz-page-header-title>
+        <h3 class="sidebar-header neologism-sidebar-header">
+          Add Properties
+        </h3>
+
+      </nz-page-header-title>
+    </nz-page-header>
+
+    <div class="">
+
+      <form [formGroup]="formProp" (ngSubmit)="addProperty(formDirective)" nz-form #formDirective="ngForm">
+
+        <nz-form-item class="prop-input">
+          <nz-form-control>
+            <nz-form-label nzFor="name">Property Name</nz-form-label> <br>
+            <input nz-input placeholder="Name" (keyup)="listenerPropNameChange($event)" formControlName="name" required>
+          </nz-form-control>
+        </nz-form-item>
+
+
+        <nz-form-item class="prop-input">
+          <nz-form-control>
+            <nz-form-label nzFor="URI">Property URI</nz-form-label> <br>
+            <input class="" nz-input placeholder="URI" formControlName="URI" required>
+            <nz-form-explain *ngIf="formProp.get('URI').hasError('invalidURI')">
+              URI is already in <strong>USE</strong>
+            </nz-form-explain>
+          </nz-form-control>
+        </nz-form-item>
+
+
+        <nz-form-item class="prop-input">
+          <nz-form-control>
+            <nz-form-label nzFor="description">About</nz-form-label> <br>
+            <nz-textarea-count [nzMaxCharacterCount]="256">
+              <textarea rows="2" #message placeholder="Comment or Description" formControlName="description" nz-input></textarea>
+            </nz-textarea-count>
+            
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item class="class-dropdown">
+          <nz-form-control>
+            <nz-form-label nzFor="range">Target</nz-form-label> <br>
+            <nz-select nzShowSearch nzAllowClear placeholder="Range" formControlName="range" required>
+              <ng-container *ngFor="let c of rangeOptions | async">
+                <nz-option [nzValue]="c._id" [nzLabel]="c.name" [value]="c._id">
+                </nz-option>
+              </ng-container>
+            </nz-select>
+          </nz-form-control>
+
+        </nz-form-item>
+
+        <button nz-button nzType="default" type="submit" [disabled]="!formProp.valid">Add
+          Property</button>
+
+      </form>
+    </div>
+  </div>
+</ng-container>
