@@ -46,7 +46,6 @@ export class RecommendationService {
 
     /** Neologism recommendation service endpoint base path */
      static baseUrl = `${environment.recommender.base}`+((environment.recommender.port=="")? "/recommender/" :`:${environment.recommender.port}/recommender/`);     
-     static batchBaseUrl= "http://recommender/recommender/batchRecommender"
 
      //static batchBaseUrl = "http://localhost:8080/recommender/batchRecommender";
         
@@ -187,9 +186,8 @@ export class RecommendationService {
 
     batchRecommendationsForClasses(batchQuery: BatchQuery):Observable<BatchRecommendations>{
 
-const url = `${RecommendationService.baseUrl}start/?model=%40prefix%20ex%3A%20%3Chttp%3A%2F%2Fexample.com%2F%3E%20.%0Aex%3ALion%20a%20ex%3AAnimal%20.%0Aex%3AHouseCat%20a%20ex%3AAnimal%20.%0A%3Cneo%3A%2F%2Fquery%2Fjag%3E%20a%20ex%3AAnimal%20.%0A`;
-VocabulariesService.wrapFunkyObservables(this._http.get(url))       
-return VocabulariesService.wrapFunkyObservables(this._http.post(RecommendationService.batchBaseUrl,
+
+return VocabulariesService.wrapFunkyObservables(this._http.post(RecommendationService.baseUrl+"/batchRecommender",
             {
 "properties":batchQuery.properties,
 "domain":batchQuery.domain,
