@@ -6,8 +6,8 @@
 export const environment = {
   production: false,
   recommender:{
-    base:"http://recommender",
-    port:"8080",
+    base:"http://localhost",
+    port:"80",
   },
   api:{
     base:"api/",

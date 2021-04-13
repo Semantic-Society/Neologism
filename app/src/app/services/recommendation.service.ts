@@ -187,7 +187,7 @@ export class RecommendationService {
     batchRecommendationsForClasses(batchQuery: BatchQuery):Observable<BatchRecommendations>{
 
 
-return VocabulariesService.wrapFunkyObservables(this._http.post(RecommendationService.baseUrl+"/batchRecommender",
+return VocabulariesService.wrapFunkyObservables(this._http.post(RecommendationService.baseUrl+"batchRecommender",
             {
 "properties":batchQuery.properties,
 "domain":batchQuery.domain,
