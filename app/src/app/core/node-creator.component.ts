@@ -33,12 +33,11 @@ export class SideBarNodeCreatorComponent {
     private httpClient: HttpClient) {
     }
 
-
-  ngOnInit() {  
+  ngOnInit() {
+    this.uriPrefix=(this.uriPrefix.search(/^(.*)#$/)==-1)?`${this.uriPrefix}#`:`${this.uriPrefix}`
     this.createClassForm = this.formBuilder.group({
       name: ['', [Validators.required]],
-      URI: [
-        `${this.uriPrefix}#`,
+      URI: [`${this.uriPrefix}`,
         {
           asyncValidators: [this.vocabService.uriValidator()],
         }

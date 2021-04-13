@@ -1,19 +1,20 @@
-<mat-toolbar color="secondary">
-  <span>Add Class</span>
-  <span class="editor-toolbar-spacer"></span>
+<div class="mat-drawer1">
+    <nz-page-header (nzBack)="resetSidebarState()" style="padding: 0!important;" nzBackIcon>
 
-  <button (click)="resetSidebarState()" mat-icon-button color="primary">
-    <mat-icon>arrow_back</mat-icon>
-  </button>
-</mat-toolbar>
-
-<div class="editbox-container no-pad">
-  <form [formGroup]="createClassForm" (ngSubmit)="addClass()" >
-    <div class="class-details">
-      <div class="top">
-        <div class="img">
-          <img src="../../../assets/default_node_image.gif" />
-        </div>
+      <nz-avatar nz-page-header-avatar    nzSrc="../../../assets/default_node_image.gif">
+      </nz-avatar>
+      <nz-page-header-title> 
+        <h3 class="sidebar-header neologism-sidebar-header" style="
+        display: inline; white-space:pre-wrap;">
+          Add Your Class
+        </h3>
+      </nz-page-header-title>
+    
+  </nz-page-header>
+  <div class="editbox-container">
+    <form nz-form [formGroup]="createClassForm" (ngSubmit)="addClass()" >
+      <div class="class-details">
+        <div class="top">
         <div class="name-plus-uri ">
           <mat-form-field class="full-width name">
             <input class="form-control" type="text" matInput [matAutocomplete]='auto' placeholder="Class Name"
@@ -33,21 +34,27 @@
               URI is already in <strong>USE</strong>
             </mat-error>
           </mat-form-field>
+        <div class="bottom">
+          <nz-form-item class="full-width">
+            <nz-form-label nzFor="description">Description</nz-form-label><br>
+            <nz-form-control>
+              <textarea placeholder="Description" nz-input rows="2" class="description form-control"
+              formControlName="description"></textarea>
+            </nz-form-control>
+          </nz-form-item>
         </div>
       </div>
-      <div class="bottom">
-        <mat-form-field class="full-width">
-          <textarea matInput placeholder="Description" class="description form-control"
-          formControlName="description"></textarea>
-        </mat-form-field>
+      <div class="button-full-width">
+        <nz-form-item nz-row >
+          <nz-form-control [nzSpan]="14" [nzOffset]="6">
+        <button type="submit" nz-button nzType="primary"  [disabled]="!createClassForm.valid"
+        >Add Class</button>
+      </nz-form-control>
+    </nz-form-item>
       </div>
-    </div>
-    <div class="button-full-width">
-      <button type="submit" mat-raised-button color="primary"  [disabled]="!createClassForm.valid"
-      >Add Class</button>
-    </div>
-  </form>
+  </div>
 </div>
+
 
 <ng-template #loading>
   <mat-spinner></mat-spinner>

@@ -66,6 +66,7 @@ interface IMergedPropertiesClass {
   templateUrl: "./mxgraph.component.html",
   styleUrls: ["./mxgraph.component.css"],
 })
+ 
 export class MxgraphComponent implements OnInit, OnDestroy {
   editMode: Observable<SidebarChange>; // type SidebarChange = 'default' | 'edit' | 'recommend'
   currentSelection: meteorID;
