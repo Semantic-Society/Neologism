@@ -1,5 +1,5 @@
 <nz-layout>
-  <nz-sider [ngSwitch]="editMode | async" [nzWidth]="350" style="height: 100vh;" class="mat-drawer">
+  <nz-sider [ngSwitch]="editMode | async" [nzWidth]="350" class="mat-drawer">
     <app-metadata [vocabulary]="vocabulary" *ngSwitchCase="'default'"></app-metadata>
       <app-editbox *ngSwitchCase="'edit'" [selectedClassID]="this.currentSelection" [uriPrefix]="vocabulary.uriPrefix" [vocabID]="this.vocabID"></app-editbox>
       <app-recommender *ngSwitchCase="'recommend'" [vocabID]="this.vocabID"></app-recommender>
@@ -82,7 +82,7 @@
           </app-standardview>
         </mat-tab>
       </mat-tab-group>
-      <app-batchRecommender  [classes]="classes" [recommendations]="recommendations" *ngIf="!batchPhase" #batchrec>
+      <app-batchRecommender  [classes]="classes" [recommendations]="recommendations" [hidden]="batchPhase" #batchrec>
 
       </app-batchRecommender>
     </nz-content>

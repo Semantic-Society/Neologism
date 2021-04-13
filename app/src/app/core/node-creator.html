@@ -15,25 +15,36 @@
     <form nz-form [formGroup]="createClassForm" (ngSubmit)="addClass()" >
       <div class="class-details">
         <div class="top">
-        <div class="name-plus-uri ">
-          <mat-form-field class="full-width name">
-            <input class="form-control" type="text" matInput [matAutocomplete]='auto' placeholder="Class Name"
-            (keyup)="autoCompleteURI($event); checkWord(createClassForm.get('name').value)" formControlName="name" #name >
-            <mat-autocomplete #auto="matAutocomplete">
-              <mat-option *ngFor="let s of suggestions" [value]="s">
-                {{s}}
-              </mat-option>
-            </mat-autocomplete>
-            <mat-error *ngIf="createClassForm.get('name').hasError('required')">
-              Class Name is required
-            </mat-error>
-          </mat-form-field>
-          <mat-form-field class="full-width uri">
-            <input matInput class="form-control" placeholder="uri" formControlName="URI" readonly disabled>
-            <mat-error *ngIf="createClassForm.get('URI').hasError('invalidURI')">
-              URI is already in <strong>USE</strong>
-            </mat-error>
-          </mat-form-field>
+       
+          <div class="name-plus-uri ">
+              <nz-form-item class="full-width name">
+                <nz-form-label  nzFor="name">Class Name</nz-form-label><br>
+                <nz-form-control >
+              <input class="form-control" type="text" nz-input nzRequired placeholder="Class Name"
+              (keyup)="autoCompleteURI($event);checkWord(createClassForm.get('name').value)" formControlName="name" #name [nzAutocomplete]="auto">
+      <nz-autocomplete nzBackfill #auto>
+<nz-auto-option *ngFor="let option of suggestions" [nzValue]="option" [nzLabel]="option">
+          {{ option }}
+        </nz-auto-option>
+        
+      </nz-autocomplete>
+              <nz-form-explain *ngIf="createClassForm.get('name')?.dirty && createClassForm.get('name').hasError('required')">
+                Class Name is required
+              </nz-form-explain>
+            </nz-form-control>
+          </nz-form-item>
+    
+              <nz-form-item class="full-width uri">
+                <nz-form-label nzFor="uri">Class URI</nz-form-label><br>
+                <nz-form-control >
+              <input nz-input class="form-control" placeholder="uri" nzRequired formControlName="URI" readonly disabled>
+              <nz-form-explain *ngIf="createClassForm.get('URI').hasError('invalidURI')">
+                URI is already in <strong>USE</strong>
+              </nz-form-explain>
+            </nz-form-control>
+          </nz-form-item>
+          </div>
+        </div>
         <div class="bottom">
           <nz-form-item class="full-width">
             <nz-form-label nzFor="description">Description</nz-form-label><br>
@@ -52,6 +63,7 @@
       </nz-form-control>
     </nz-form-item>
       </div>
+    </form>
   </div>
 </div>
 

@@ -23,9 +23,12 @@
         <nz-form-label nzFor="name">Class Name</nz-form-label><br>
         <nz-form-control>
           <input #editClassElem nz-input [(ngModel)]="editedClass.name"
-            (keyup)="listenerClassNameChange(editClassElem.value)" [ngModel]="classInfo.label"  [nzAutocomplete]="auto" (ngModelChange)="checkWord($event)">
-      <nz-autocomplete [nzDataSource]="suggestions_class" #auto></nz-autocomplete>
- >
+            (keyup)="listenerClassNameChange(editClassElem.value);checkWordClass(editClassElem.value)" [ngModel]="classInfo.label"  [nzAutocomplete]="autoClass">
+      <nz-autocomplete nzBackfill #autoClass>
+<nz-auto-option *ngFor="let option of suggestions_class" [nzValue]="option" [nzLabel]="option">
+          {{ option }}
+        </nz-auto-option>
+      </nz-autocomplete>
         </nz-form-control>
       </nz-form-item>
       <nz-form-item>
@@ -95,8 +98,12 @@
         <nz-form-item class="prop-input">
           <nz-form-control>
             <nz-form-label nzFor="name">Property Name</nz-form-label> <br>
-            <input nz-input placeholder="Name" (keyup)="listenerPropNameChange($event);checkWordProperty($event);" formControlName="name" required [nzAutocomplete]="auto">
-      <nz-autocomplete [nzDataSource]="suggestions_property" #auto></nz-autocomplete>
+            <input nz-input placeholder="Name" (keyup)="listenerPropNameChange($event);checkWordProperty(formProp.get('name').value)" formControlName="name" required [nzAutocomplete]="autoProperty">
+      <nz-autocomplete nzBackfill #autoProperty>
+        <nz-auto-option *ngFor="let option of suggestions_property" [nzValue]="option" [nzLabel]="option">
+          {{ option }}
+        </nz-auto-option>
+      </nz-autocomplete>
           </nz-form-control>
         </nz-form-item>
 

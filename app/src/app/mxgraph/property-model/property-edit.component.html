@@ -8,7 +8,11 @@
     <nz-form-item>
         <nz-form-label>Name</nz-form-label>
 <input placeholder="Label" nz-input [(ngModel)]="prop.name"  [nzAutocomplete]="auto" (ngModelChange)="checkWord($event)">
-      <nz-autocomplete [nzDataSource]="suggestions" #auto></nz-autocomplete>
+      <nz-autocomplete nzBackfill #auto>
+        <nz-auto-option *ngFor="let option of suggestions" [nzValue]="option" [nzLabel]="option">
+          {{ option }}
+        </nz-auto-option>
+      </nz-autocomplete>
     </nz-form-item>
     <nz-form-item>
         <nz-form-label>URI</nz-form-label>

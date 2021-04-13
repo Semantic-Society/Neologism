@@ -76,6 +76,10 @@ checkWord(word:string){
   autoCompleteURI($event) {
     this.createClassForm.controls['URI'].setValue(`${this.uriPrefix}${$event.target.value}`)
   }
+  onInput($event) {
+    const value = ($event.target as HTMLInputElement).value;
+    this.createClassForm.controls['URI'].setValue(`${this.uriPrefix}${$event.target.value}`)
+  }
 
   resetSidebarState() {
     this.sidebarService.changeSidebarToDefault()
