@@ -41,4 +41,4 @@ docker_build_and_push_lov:
     - docker tag $IMAGE_TAG $LOV_TAG
     - docker push $LOV_TAG
   only:
-    - merge_test
+    - final_thesis
