@@ -8,6 +8,7 @@ An RDF export allows quick bootstrapping of any other Semantic Web tool.
 ## Usage (Live Demo)
 
 We provide a [live demo version](http://cloud33.dbis.rwth-aachen.de/dashboard) of Neologism 2.0, which can be used as a guest without registration.
+Additionally, [this short video](https://owncloud.fraunhofer.de/index.php/s/V96LKrLRZ0NvTW3) shows the vocabulary creation process, but does not include the RDF export.
 
 ![img.png](screenshot01.png)
 
