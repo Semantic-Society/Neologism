@@ -5,6 +5,7 @@ services:
   neologism:
     container_name: neologism_app
     image: registry.git.rwth-aachen.de/neologism/neologism2:lov
+    # build creates a local docker container, to use the image comment it out
     build:
       context: .
       dockerfile: Dockerfile
