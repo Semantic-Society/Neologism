@@ -52,7 +52,10 @@ export class VocabularyListComponent implements OnInit {
     console.log('downloading vocabulary: ' + id + '...');
     HTTP.get(`${environment.api.base}vocabulary/${id}`, {
     }, function (err, res) {
-      console.log(res)
+      if(err){
+        console.log(err)
+        return;
+      }
       const blob = new Blob([res.content], { type: 'text/plain' });
       saveAs(blob, name + '.rdf');
       return;
