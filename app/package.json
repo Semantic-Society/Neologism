@@ -38,6 +38,7 @@
     "cross-blob": "^2.0.0",
     "downloadjs": "^1.4.7",
     "file-saver": "^2.0.2",
+    "fs": "0.0.1-security",
     "meteor-node-stubs": "^1.0.0",
     "meteor-rxjs": "^0.4.14",
     "mxgraph": "github:jgraph/mxgraph",
