@@ -10,7 +10,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "api": "cd api && meteor",
+    "api": "cd api && meteor --settings env.local.json",
     "api:reset": "cd api && meteor reset",
     "debug": "cd api && meteor debug --inspect-brk=9229",
     "meteor-client:bundle": "meteor-client bundle -s api",

@@ -42,7 +42,11 @@ JsonRoutes.add("get", "/vocabulary/:id", (req, res) => {
 
   JsonRoutes.add("post", "/vocabulary/publish/:id", (req, res) => {
     try {
-      const storageLocation=Meteor.settings.storageLocation || "/home/ali/Devel/Neologism/public";
+      const storageLocation=Meteor.settings.storageLocation;
+      if(!storageLocation){
+        res.end('Config error')
+        return;
+      }
       const vocabId = req.params.id || null
       let name = ""
       const vocab = Vocabularies.findOne({ _id: vocabId }) || null
@@ -62,7 +66,6 @@ JsonRoutes.add("get", "/vocabulary/:id", (req, res) => {
       const filePath=`${storageLocation}/${vocab.name}.ttl`
      let fd = fs.openSync(filePath, 'w');
       const encoding='utf8'
-      console.log(buffer)
       fs.write(fd, buffer,0, encoding, function(err) {
         if (err) {
           throw (new Meteor.Error(500, 'Failed to save file.', err.message));
