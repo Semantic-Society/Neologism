@@ -1,5 +1,6 @@
 
 
+import { Meteor } from 'meteor/meteor'
 import { Iclass, Iuser, Ivocabulary, IClassWithProperties } from 'models'
 import { meteorID } from '../models';
 import { Classes, Properties, Vocabularies, Users } from '../collections';
@@ -126,8 +127,3 @@ function getClasses(vocabularyId: string): Iclass[] {
 
     return res;
 }
-
-// module.exports = {
-//     saveClassesWithPropertiesAsFile: saveClassesWithPropertiesAsFile,
-//     getClassesWithProperties: getClassesWithProperties
-// }
