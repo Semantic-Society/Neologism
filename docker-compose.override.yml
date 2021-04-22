@@ -9,7 +9,7 @@ services:
       - '4200:80'
       - '3001:3001'
     volumes: 
-      - uploads:/etc/neologism/uploads
+      - uploads:/etc/neologism/uploads/vocabularies
   
   mongo:
     container_name: neologism_db
