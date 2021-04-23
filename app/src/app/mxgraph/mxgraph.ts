@@ -21,10 +21,10 @@ export class MxgraphService {
      canvas: m.mxCell;
      transactionSelection;
      selection$: Observable<string>;
-
+        wnd:any
      edgeSelection$: Observable<{ domainClazzID: string; edgeID: string }>;
 
-    //  toolbar: m.mxToolbar;
+     tb: m.mxToolbar;
     // public codec: N3Codec;
 
      deletePress: Subject<any>;
@@ -200,6 +200,52 @@ export class MxgraphService {
             this.graph.getSelectionModel().addListener(MxgraphService.mx.mxEvent.CHANGE, handler);
             return () => this.graph.getSelectionModel().removeListener(handler);
         }).pipe(distinctUntilChanged());
+
+
+
+				var content = document.createElement('div');
+				content.style.padding = '4px';
+
+				this.tb = new MxgraphService.mx.mxToolbar(content);
+
+				this.tb.addItem('Zoom In', '/assets/images/zoom_in32.png',(evt)=>
+				{
+					this.graph.zoomIn();
+				});
+
+				this.tb.addItem('Zoom Out', '/assets/images/zoom_out32.png',(evt)=>
+				{
+					this.graph.zoomOut();
+				});
+				
+				this.tb.addItem('Actual Size', '/assets/images/view_1_132.png',(evt)=>
+				{
+					this.graph.zoomActual();
+				});
+
+				this.tb.addItem('Print', '/assets/images/print32.png',(evt)=>
+				{
+					var preview = new MxgraphService.mx.mxPrintPreview(this.graph, 1);
+					preview.open();
+				});
+
+				this.tb.addItem('Poster Print', '/assets/images/press32.png',    (evt)=>
+				{
+					var pageCount = MxgraphService.mx.mxUtils.prompt('Enter maximum page count', '1');
+
+					if (pageCount != null)
+					{
+						var scale = MxgraphService.mx.mxUtils.getScaleForPageCount(pageCount, this.graph);
+						var preview = new MxgraphService.mx.mxPrintPreview(this.graph, scale);
+						preview.open();
+					}
+				});
+
+				this.wnd = new MxgraphService.mx.mxWindow('Tools', content, this.graph.view.translate.x, this.graph.view.translate.y, 200, 66, false);
+				this.wnd.setMaximizable(false);
+				this.wnd.setScrollable(false);
+				this.wnd.setResizable(false);
+				this.wnd.setVisible(true);
     }
 
      getEdgeWithId(edgeID: string) {
@@ -389,7 +435,8 @@ export class MxgraphService {
 
     destroy() {
         this.graph.destroy();
-        // this.toolbar.destroy();
+        this.tb.destroy();
+        this.wnd.destroy()
     }
 
     /** Highlight cell in graph by its ID */
