@@ -35,7 +35,7 @@ export class PropertyEditModal implements OnInit {
   selectedProp: string;
 
   closeModal(): void {
-    MeteorObservable.call('property.update', this.prop._id, this.prop.name, this.prop.description, this.prop.URI, this.prop.range).subscribe((response) => {
+    MeteorObservable.call('property.update', this.prop._id, this.prop.name, this.prop.description, encodeURIComponent(this.prop.URI), this.prop.range).subscribe((response) => {
       // Handle success and response from server!
       console.log("updated");
 
