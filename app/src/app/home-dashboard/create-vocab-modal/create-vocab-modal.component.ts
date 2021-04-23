@@ -39,7 +39,7 @@ export class CreateVocabModalComponent implements OnInit {
     this.modal.destroy(null)
   }
   change(value:string){    
-    this.validateForm.controls['uri'].setValue(encodeURIComponent(`http://w3id.org/neologism/${value.toLocaleLowerCase()}#`))
+    this.validateForm.controls['uri'].setValue(`http://w3id.org/neologism/${encodeURIComponent(value.toLocaleLowerCase())}#`)
 
  }
 }
