@@ -39,7 +39,7 @@ export function saveClassesWithPropertiesAsFile(classes: IClassWithProperties[],
         const owlclass = '<http://www.w3.org/2002/07/owl#Class>';
         const objectproperty = '<http://www.w3.org/2002/07/owl#ObjectProperty>';
         const rdfsLabel = '<http://www.w3.org/2000/01/rdf-schema#label>';
-        const rdfsDescription = '<http://www.w3.org/2000/01/rdf-schema#description>'
+        const rdfsDescription = '<http://www.w3.org/2000/01/rdf-schema#comment>'
         const xmlString = '<http://www.w3.org/2001/XMLSchema#string>'
 
         const allProps = Object.create(null);
