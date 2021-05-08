@@ -51,6 +51,7 @@ export interface Iclass {
 export interface Iproperty {
   _id?: meteorID; // Mongo generated ID
   name: string;
+  type?: PropertyType;
   description: string;
   URI: string;
   range: meteorID;
@@ -82,4 +83,107 @@ export interface IClassWithProperties {
     closeMatch: string[];
     exactMatch: string[];
   };
+}
+
+export enum PropertyType {
+  Object = 'OBJECT',
+  Data = 'DATA'
+}
+
+
+
+export enum xsdDataTypes {
+
+  anyURI,
+
+  base64Binary,
+  
+  boolean,
+  
+  byte,
+  
+  date,
+  
+  dateTime,
+  
+  decimal,
+  
+  derivationControl,
+  
+  double,
+  
+  duration,
+  
+  ENTITIES,
+  
+  ENTITY,
+  
+  float,
+  
+  gDay,
+  
+  gMonth,
+  
+  gMonthDay,
+  
+  gYear,
+  
+  gYearMonth,
+  
+  hexBinary,
+  
+  ID,
+  
+  IDREF,
+  
+  IDREFS,
+  
+  int,
+  
+  integer,
+  
+  language,
+  
+  long,
+  
+  Name,
+  
+  NCName,
+  
+  negativeInteger,
+  
+  NMTOKEN,
+  
+  NMTOKENS,
+  
+  nonNegativeInteger,
+  
+  nonPositiveInteger,
+  
+  normalizedString,
+  
+  NOTATION,
+  
+  positiveInteger,
+  
+  QName,
+  
+  short,
+  
+  simpleDerivationSet,
+  
+  string,
+  
+  time,
+  
+  token,
+  
+  unsignedByte,
+  
+  unsignedInt,
+  
+  unsignedLong,
+  
+  unsignedShort,
+
 }

@@ -6,7 +6,7 @@ import { combineLatest, empty, Observable, of, throwError, timer } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, filter, flatMap, map, switchMap, take } from 'rxjs/operators';
 
 import { Classes, Properties, Users, Vocabularies } from '../../../api/collections';
-import { Iclass, Iproperty, Ivocabulary, meteorID } from '../../../api/models';
+import { Iclass, Iproperty, Ivocabulary,PropertyType, meteorID } from '../../../api/models';
 
 const callWithPromise = (method, ...myParameters) => new Promise((resolve, reject) => {
   Meteor.call(method, ...myParameters, (err, res) => {
@@ -136,8 +136,8 @@ export class VocabulariesService {
     });
   }
 
-  addProperty(toClass: meteorID, name: string, description: string, URI: string, range: meteorID) {
-    MeteorObservable.call('property.create', toClass, name, description, URI, range)
+  addProperty(toClass: meteorID, name: string, description: string, URI: string, range: meteorID,properType:PropertyType = PropertyType.Object) {
+    MeteorObservable.call('property.create', toClass, {name, description, URI, range,properType })
       .subscribe((_response) => {
         // Handle success and response from server!
       }, (err) => {

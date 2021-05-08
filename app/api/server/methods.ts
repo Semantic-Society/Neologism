@@ -166,12 +166,12 @@ Meteor.methods({
       ).subscribe((_resp)=>Classes.remove(classId));
 
   },
-  'property.create'(classId, name, description, URI, range) {
+  'property.create'(classId, payload) {
     assertUser();
     // TODO: Sanitize
     // Note, these operations must occur in this order. Otherwise an observer of the vocabualry might
     const propID = Properties.insert(
-      { name, description, URI, range })
+      payload)
       ;
     propID.subscribe((pID) =>
       Classes.update(
