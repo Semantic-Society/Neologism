@@ -60,3 +60,27 @@ export interface Iproperty {
 export interface IvocabularyExtended extends Ivocabulary {
   authorsEmailAddress: string;
 }
+
+
+export interface IClassWithProperties {
+  _id: string; // Mongo generated ID
+  name: string;
+  description: string;
+  URI: string;
+
+  properties: Array<{
+    _id: string; // Mongo generated ID
+    name: string;
+    description: string;
+    URI: string;
+    range: IClassWithProperties; // these MUST be in the same vocabulary!
+  }>;
+  position: {
+    x: number;
+    y: number;
+  };
+  skos: {
+    closeMatch: string[];
+    exactMatch: string[];
+  };
+}

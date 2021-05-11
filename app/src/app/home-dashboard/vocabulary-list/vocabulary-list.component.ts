@@ -52,7 +52,10 @@ export class VocabularyListComponent implements OnInit {
     console.log('downloading vocabulary: ' + id + '...');
     HTTP.get(`${environment.api.base}vocabulary/${id}`, {
     }, function (err, res) {
-      console.log(res)
+      if(err){
+        console.log(err)
+        return;
+      }
       const blob = new Blob([res.content], { type: 'text/plain' });
       saveAs(blob, name + '.rdf');
       return;
@@ -96,6 +99,20 @@ export class VocabularyListComponent implements OnInit {
       width: '600px',
       data: { vocabId: vocab_id }
     });
+  }
+
+  publishVocab(vocabID: string){
+    console.log('publishing vocabulary: ' + vocabID + '...');
+    HTTP.post(`${environment.api.base}vocabulary/publish/${vocabID}`, {
+    }, function (err, res) {
+      if(err){
+        console.log(err)
+        return;
+      }
+      console.log('published vocabulary: ' + vocabID + '...' + res.content);
+      return;
+    });
+
   }
 
 }

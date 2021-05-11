@@ -103,7 +103,18 @@
             nzShape="circle">
             <i nz-icon  nzType="user" nzTheme="outline"></i>
         </button>
-
+        <button
+            class="actn-btn" 
+            nz-button 
+            nzType="default" 
+            nzTooltipTitle="Publish Vocabulary" 
+            nzTooltipPlacement="top" 
+            nz-tooltip
+            (click)="publishVocab(vocab._id)"
+            nzShape="circle">
+            <i nz-icon nzType="upload" nzTheme="outline"></i>
+        </button>
+       
        
       </td>
     </tr>

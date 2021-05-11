@@ -73,7 +73,7 @@ export class SignupDialog implements OnInit {
             Accounts.createUser({ email: this.signupForm.value.email, password: this.signupForm.value.password }, (error) => {
                 console.log(this);
                 if (error) {
-                    this.sendErrorMessage(error.reason || 'Unknown error');
+                    this.sendErrorMessage(error.message || 'Unknown error');
                 } else {
                     this.dialogRef.close();
                 }

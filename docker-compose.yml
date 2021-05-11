@@ -19,6 +19,7 @@ services:
       ROOT_URL: ${ROOT_URL:-http://localhost:4200}
       MONGO_URL: mongodb://mongo:27017/meteor
       PORT: 3000
+      METEOR_SETTINGS: '{ "storageLocation":"/etc/neologism/uploads/vocabularies" }' 
   
   mongo:
     container_name: neologism_db
@@ -36,3 +37,4 @@ services:
      
 volumes:
   data:
+  uploads:

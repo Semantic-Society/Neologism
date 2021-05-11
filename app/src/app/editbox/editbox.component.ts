@@ -219,7 +219,7 @@ checkWordClass(word:string){
   }
 
   listenerClassNameChange(value: string) {
-    this.editedClass.URI = `${this.uriPrefix}${value.toLocaleLowerCase()}`
+    this.editedClass.URI = `${this.uriPrefix}${encodeURIComponent(value.toLocaleLowerCase())}`
   }
 
   resetSidebarState() {
