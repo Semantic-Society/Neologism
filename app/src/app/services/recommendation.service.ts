@@ -5,6 +5,8 @@ import { debounceTime, distinctUntilChanged, map, merge, mergeAll, multicast, sc
 import { N3Codec } from '../mxgraph/N3Codec';
 import { VocabulariesService } from './vocabularies.service';
 import { environment } from '../../environments/environment';
+import { BatchQuery } from './BatchQuery';
+import { BatchRecommendations } from './BatchRecommendations';
 
 type IRI = string;
 
@@ -44,7 +46,7 @@ export class RecommendationService {
 
     /** Neologism recommendation service endpoint base path */
      static baseUrl = `${environment.recommender.base}`+((environment.recommender.port=="")? "/recommender/" :`:${environment.recommender.port}/recommender/`);
-        
+
      classReq: Subject<{ queryGraph: string, queryTerm: string }>;
      classResp: Subject<Array<{
         comment: string;
@@ -178,5 +180,14 @@ export class RecommendationService {
 
         this.propsReq.next({ url });
         return this.propsResp.asObservable();
+    }
+
+    batchRecommendationsForClasses(batchQuery: BatchQuery):Observable<BatchRecommendations>{
+        return VocabulariesService.wrapFunkyObservables(this._http.post(RecommendationService.baseUrl+"batchRecommender",
+            {
+                "properties":batchQuery.properties,
+                "domain":batchQuery.domain,
+                "classes":batchQuery.classes
+            }))
     }
 }

@@ -6,7 +6,7 @@ map $http_upgrade $connection_upgrade {
 server {
   listen 80;
   server_name localhost;
-  root   /usr/share/nginx/html;
+  root   /home/ali/Devel/Neologism/neologism2/frontend/dist/frontend;
   index  index.html;
 
   # asset matching
@@ -37,21 +37,14 @@ server {
             proxy_set_header X-Forwarded-For $remote_addr;
             proxy_set_header Host $host;
   }
-
-        location /recommender/batchRecommender {
-            proxy_pass http://recommender:8080/recommender/batchRecommender;
+     location /recommender/batchRecommender {
+            proxy_pass http://127.0.0.1:8080/recommender/batchRecommender;
             proxy_http_version 1.1;
-            proxy_set_header Upgrade $http_upgrade; #for websockets
-            proxy_set_header Connection $connection_upgrade;
             proxy_set_header X-Forwarded-For $remote_addr;
             proxy_set_header Host $host;
-			      add_header "Access-Control-Allow-Origin" "*";
-			      add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS, PUT, DELETE';
-			      add_header 'Access-Control-Allow-Headers' 'X-Requested-With,Accept,Content-Type, Origin';
-  }
-
-  location /vocabularies/ {
-    root /etc/neologism/uploads;
-    try_files $uri =404;
+			add_header "Access-Control-Allow-Origin" "*";
+			add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS, PUT, DELETE';
+			add_header 'Access-Control-Allow-Headers' 'X-Requested-With,Accept,Content-Type, Origin';
   }
 }
+
