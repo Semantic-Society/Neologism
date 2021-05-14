@@ -63,3 +63,8 @@ chromiumprofile
 !.vscode/extensions.json
 app/src/assets/env.js
 app/api/env.local.json
+
+package-lock.json
+app/package-lock.json
+app/api/package-lock.json
+docker/package-lock.json
