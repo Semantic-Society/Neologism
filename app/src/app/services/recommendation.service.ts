@@ -45,10 +45,8 @@ interface IDetails {
 export class RecommendationService {
 
     /** Neologism recommendation service endpoint base path */
-     static baseUrl = `${environment.recommender.base}`+((environment.recommender.port=="")? "/recommender/" :`:${environment.recommender.port}/recommender/`);     
+     static baseUrl = `${environment.recommender.base}`+((environment.recommender.port=="")? "/recommender/" :`:${environment.recommender.port}/recommender/`);
 
-     //static batchBaseUrl = "http://localhost:8080/recommender/batchRecommender";
-        
      classReq: Subject<{ queryGraph: string, queryTerm: string }>;
      classResp: Subject<Array<{
         comment: string;
@@ -100,7 +98,7 @@ export class RecommendationService {
                 const r = initialRequest.pipe(
                     merge(nextRecommendations),
                     map((res) => res.recommendation),
-                    map((resp: IRecommendationMetadata) => 
+                    map((resp: IRecommendationMetadata) =>
                         Array.isArray(resp && resp.list)
                             ? resp.list.map((rec) => {
                                 return {
@@ -185,14 +183,11 @@ export class RecommendationService {
     }
 
     batchRecommendationsForClasses(batchQuery: BatchQuery):Observable<BatchRecommendations>{
-
-
-return VocabulariesService.wrapFunkyObservables(this._http.post(RecommendationService.baseUrl+"batchRecommender",
+        return VocabulariesService.wrapFunkyObservables(this._http.post(RecommendationService.baseUrl+"batchRecommender",
             {
-"properties":batchQuery.properties,
-"domain":batchQuery.domain,
-"classes":batchQuery.classes
-
+                "properties":batchQuery.properties,
+                "domain":batchQuery.domain,
+                "classes":batchQuery.classes
             }))
     }
 }
