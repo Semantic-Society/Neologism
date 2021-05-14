@@ -24,7 +24,7 @@ export class BatchRecommenderComponent implements OnInit, OnDestroy {
   constructor(private vocabService: VocabulariesService) { }
 
   ngOnInit() {
-    this.radioSelected = new Array();
+    this.radioSelected = [];
   }
 
   ngOnDestroy() { }
@@ -64,7 +64,6 @@ export class BatchRecommenderComponent implements OnInit, OnDestroy {
                   }
                 }
 
-                //TODO Show something for no recommendation results & cancel Button
                 c.properties.forEach((p) => {
                   if (rec.keyword === p.name) {
                     let element = rec.list.find(
