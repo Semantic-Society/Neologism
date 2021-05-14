@@ -49,7 +49,7 @@ __Local setup:__
 3. Install node version to 12.20.1 with compatible npm
 4. Install /Download nginx for CORS (Linux: `sudo apt-get install nginx` Arch: `sudo pacman -S nginx` Windows: http://nginx.org/en/docs/windows.html) (On Windows move the folder to C:\)
 5. Create a `sites-enabled` folder inside the nginx folder (Linux: /etc/nginx/sites-enabled).
-6. Put the `neologism.com` file inside this folder.
+6. Put the [neologism.com](nginx/neologism.com) file inside this folder.
 7. Edit the `nginx.conf` file by including the path of the sites-enabled folder. For Windows the path to the .com file: 
 
 ```
