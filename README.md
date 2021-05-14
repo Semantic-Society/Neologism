@@ -70,6 +70,9 @@ http {
 13. Run `npm run start` for a dev server. Navigate to http://localhost:4200/. The app will automatically reload if you change any of the source files.
 14. Optional: If you need to run the recommender, install an AddOn for your browser to allow CORS, as configurations need to be done
 
+__TEST IF THE RECOMMENDER WORKS PROPERLY__
+
+- Run `curl -v -d @test-recommender-request.json http://localhost:8080/recommender/batchRecommender -H "Content-Type:application/json"` and inspect the result.
 
 __DISCLAIMER:__
 Steps above are valid to run in Ubuntu focal

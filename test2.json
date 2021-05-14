@@ -1,7 +1,0 @@
-{
-  "domain": "banana",
-  "properties": ["test"],
-  "classes": ["student"]
-}
-
-curl -v -d @test.json http://localhost:8080/recommender/batchRecommender -H "Content-Type:application/json"
