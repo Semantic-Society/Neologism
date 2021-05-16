@@ -31,7 +31,10 @@ export class BatchRecommenderComponent implements OnInit{
     this.radioSelected = [];
   }
   dataLoaded(){
-    this.loaded = true
+    this.loaded =true
+  }
+  return(){
+    this.loaded =false
   }
 
   ngAfterContentChecked(): void {
@@ -47,6 +50,7 @@ export class BatchRecommenderComponent implements OnInit{
   }
 
   liftOntology() {
+    this.loaded =false
     this.recommendations$
       .pipe(startWith([]), debounceTime(1000))
       .subscribe((recs) => {

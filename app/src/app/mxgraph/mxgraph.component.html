@@ -11,7 +11,7 @@
         </button>
       </div>
 
-        <button *ngIf="batchPhase" mat-button (click)="getBatchRecommendation()">Get BatchRecommendation
+        <button *ngIf="batchPhase" mat-button (click)="getBatchRecommendation(); batchrec.return()">Get BatchRecommendation
         </button>
 
      <nz-row *ngIf="batchPhase">
