@@ -87,6 +87,7 @@ export class MxgraphComponent implements OnInit, OnDestroy {
   vocabulary: IvocabularyExtended;
   classNames: string[];
   propertyNames: string[];
+  recommendationLimit: number;
 
   @HostListener("window:keydown", ["$event"])
   onKeyDown(event) {
@@ -332,6 +333,7 @@ export class MxgraphComponent implements OnInit, OnDestroy {
         classes: this.classNames,
         properties: this.propertyNames,
         domain: this.vocabulary.domain,
+        limit: this.recommendationLimit
       }
     );
 
