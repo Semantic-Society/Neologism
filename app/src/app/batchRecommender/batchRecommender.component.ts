@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChange } from "@angular/core";
 import { MeteorObservable } from "meteor-rxjs";
 import { Observable } from "rxjs";
 import { debounceTime, startWith } from "rxjs/operators";
@@ -13,22 +13,30 @@ import {
   selector: "app-batchRecommender",
   templateUrl: "./batchRecommender.component.html",
   styleUrls: ["./batchRecommender.component.css"],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class BatchRecommenderComponent implements OnInit, OnDestroy {
+export class BatchRecommenderComponent implements OnInit{
   radioSelected: Array<any>;
-  @Input() recommendations: Observable<BatchRecommendations[]>;
+  @Input() recommendations$: Observable<BatchRecommendations[]>;
   @Input() classes: Observable<IClassWithProperties[]>;
   chosen: string[];
   propertyNames: string[];
+  loaded: boolean;
 
-  constructor(private vocabService: VocabulariesService) { }
+  constructor(private vocabService: VocabulariesService, private changeDedectionRef: ChangeDetectorRef) {
+    this.loaded = false
+   }
 
   ngOnInit() {
     this.radioSelected = [];
   }
+  dataLoaded(){
+    this.loaded = true
+  }
 
-  ngOnDestroy() { }
-
+  ngAfterContentChecked(): void {
+      this.changeDedectionRef.detectChanges();
+  }
   preselect(URI: string, index: number) {
     if(!this.radioSelected[index]){
       this.radioSelected[index] = URI;
@@ -39,7 +47,7 @@ export class BatchRecommenderComponent implements OnInit, OnDestroy {
   }
 
   liftOntology() {
-    this.recommendations
+    this.recommendations$
       .pipe(startWith([]), debounceTime(1000))
       .subscribe((recs) => {
         this.classes
