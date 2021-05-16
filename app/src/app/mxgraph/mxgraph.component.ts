@@ -74,8 +74,6 @@ export class MxgraphComponent implements OnInit, OnDestroy {
   currentEdgeSelectionSub: Subscription;
   public batchPhase: boolean = true;
   recommendations: Observable<BatchRecommendations>;
-  domain: string;
-  public editing:boolean = false;
 
   vocabularySub: Subscription;
 
@@ -346,22 +344,7 @@ export class MxgraphComponent implements OnInit, OnDestroy {
     
   }
 
-  startEdit(){
-    this.editing=!this.editing;
-  }
 
-  editDomain(){
-    MeteorObservable.call("vocabulary.addDomain",this.domain,this.vocabulary._id).pipe(zoneOperator())
-    .subscribe((_response) => {
-      // Handle success and response from server!
-    }, (err) => {
-      console.log(err);
-      // Handle error
-    });;
-    console.log(this.vocabService.getVocabulary(this.vocabulary._id))
-      this.editing = false
-      console.log(this.vocabulary)
-  }
 
   showEditBox() {
     console.log("show edit box");
