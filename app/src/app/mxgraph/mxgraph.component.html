@@ -42,28 +42,10 @@
           <li>Click on the class/node for Class form</li>
         </ul>
     </div>
+    </div>
 
     
-    <div class="button-div" style="display:flex">
-      <span style="padding-right: 1rem">Domain:  </span>      
-      
-      <div [hidden]="editing"> {{vocabulary? vocabulary.domain: ""}}</div>
-
-      <form style="color:black" (ngSubmit)="editDomain()" [hidden]="!editing">
-        <input class="editable" [(ngModel)]="domain" name="domain">
-    </form> 
-    <div class="edit-icon-wrapper" (click)="startEdit()" *ngIf="!editing">
-      <mat-icon class="edit-icon">
-        create
-      </mat-icon>
-    </div>  
-    </div>
-    <div id="ctrl-zoom">
-      <div class="pad-1">
-        <button mat-button (click)="zoomin()"> Zoom In</button>
-      </div>
-    </div>
-   
+    </nz-sider>
   <nz-layout>
     <nz-content>
       <mat-tab-group [hidden]="!batchPhase" headerPosition="below" class="mat-tab-fill-height">
@@ -81,7 +63,7 @@
       </app-batchRecommender>
     </nz-content>
   </nz-layout>
-
+</nz-layout>
 
 <dialog #dEmptyGraph class="modal">
   <p>
