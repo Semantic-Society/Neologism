@@ -104,9 +104,7 @@ Meteor.methods({
     // TODO: Sanitize
     var classIdO
     // Note, these operations must occur in this order. Otherwise an observer of the vocabualry might
-    console.log(_id)
     if (_id) {
-      console.log("_id")
       classIdO = Classes.insert({ _id, name, description, URI, properties: [], position, skos: { closeMatch: [], exactMatch: [] } });
     } else {
       classIdO = Classes.insert({ name, description, URI, properties: [], position, skos: { closeMatch: [], exactMatch: [] } });

@@ -278,6 +278,11 @@ export class MxgraphService {
         this.graph.removeCells(this.graph.getChildCells(this.canvas, true, true)); // TODO: Assert this clear selection model
     }
 
+    public removeCell(_id:string) {
+        this.assertTransaction();
+        this.model.remove(this.model.getCell(_id)); // TODO: Assert this clear selection model
+    }
+
     assertTransaction() {
         if (this.model.updateLevel <= 0) {
             throw new Error('Start a transaction before making changes');

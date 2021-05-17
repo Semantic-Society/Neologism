@@ -186,12 +186,8 @@ export class MxgraphComponent implements OnInit, OnDestroy {
             // insert classes
             cs.forEach((c) => {
 
-                if (c.description===PropertyType.Data) {
-
-                    this.mx.insertDashedClass(c._id, c.name, c.position.x, c.position.y)
-                } else {
+    
                     this.mx.insertClass(c._id, c.name, c.position.x, c.position.y)
-                }
             }
 
             );
@@ -206,8 +202,9 @@ export class MxgraphComponent implements OnInit, OnDestroy {
                             p._id, p.name,
                             p.rangeID)
                     } else {
-
-                        // var vertex = this.mx.insertDashedClass(p._id, p.rangeID, c.position.x, c.position.y)
+                        this.mx.removeCell(p._id)
+                        const cl=cs.find((c)=>c._id==p._id)
+                        this.mx.insertDashedClass(cl._id, cl.name, cl.position.x, cl.position.y)
                         this.mx.insertProperty(c._id,
                             p._id, p.name,
                             p._id)

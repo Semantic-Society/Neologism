@@ -279,7 +279,7 @@ export class EditboxComponent implements OnInit, OnChanges {
   }
 
   listenerPropNameChange($event) {
-    this.formProp.controls['URI'].setValue(`${this.uriPrefix}${$event.target.value.toLocaleLowerCase()}`)
+    this.formProp.controls['URI'].setValue(`${this.uriPrefix}${encodeURIComponent($event.target.value.toLocaleLowerCase())}`)
 
   }
 
