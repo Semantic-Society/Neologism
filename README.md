@@ -125,7 +125,8 @@ After starting Neologism, navigate to `localhost` (or whatever server you are ho
    "name":"string",
    "description":"string",
    "URI":"string",
-   "range":"class_id"
+   "range":"class_id | xsdDataTypes",
+   "type":"owl:ObjectProperty | owl:DatatypeProperty"
 }
 ```
 ### Vocabulary (vocabularies)
