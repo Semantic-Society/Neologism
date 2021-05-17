@@ -1,7 +1,5 @@
-
-
 import { Meteor } from 'meteor/meteor'
-import { Iclass, Iuser, Ivocabulary, IClassWithProperties } from 'models'
+import { Iclass, Iuser, Ivocabulary, IClassWithProperties, PropertyType } from 'models'
 import { meteorID } from '../models';
 import { Classes, Properties, Vocabularies, Users } from '../collections';
 
@@ -15,6 +13,7 @@ export function saveClassesWithPropertiesAsFile(classes: IClassWithProperties[],
         const namespace = `<${vocabDetail.uriPrefix}>`
         const creator: Iuser = (vocab.creator) ? Users.findOne({ _id: vocab.creator }, { fields: { emails: 1 } }) : null
         let rdf = ""
+
 
         // Adding meta for documenation generator
         rdf += `${namespace} a <http://www.w3.org/2002/07/owl#Ontology> .\r\n`;
@@ -38,12 +37,13 @@ export function saveClassesWithPropertiesAsFile(classes: IClassWithProperties[],
         const rdfsclass = '<http://www.w3.org/2000/01/rdf-schema#Class>';
         const owlclass = '<http://www.w3.org/2002/07/owl#Class>';
         const objectproperty = '<http://www.w3.org/2002/07/owl#ObjectProperty>';
+        const dataTypeProperty = '<http://www.w3.org/2002/07/owl#DatatypeProperty>';
         const rdfsLabel = '<http://www.w3.org/2000/01/rdf-schema#label>';
         const rdfsDescription = '<http://www.w3.org/2000/01/rdf-schema#comment>'
         const xmlString = '<http://www.w3.org/2001/XMLSchema#string>'
 
-        const allProps = Object.create(null);
-
+        const objectProps = Object.create(null);
+        const dataProps = Object.create(null);
         classes.forEach((clazz) => {
             const classURI = '<' + clazz.URI + '>';
             rdf += `${classURI} ${a} ${rdfsclass} .\r\n`;
@@ -51,17 +51,30 @@ export function saveClassesWithPropertiesAsFile(classes: IClassWithProperties[],
             rdf += `${classURI} ${rdfsLabel} "${clazz.name}"^^${xmlString} .\r\n`;
             rdf += `${classURI} ${rdfsDescription} "${clazz.description}"^^${xmlString} .\r\n`;
             clazz.properties.forEach((prop) => {
-                const propURI = '<' + prop.URI + '> ';
-                allProps[propURI] = propURI;
-                const rangeClassURI = '<' + prop.range.URI + '>';
-                rdf += propURI + domain + classURI + ' .\r\n';
-                rdf += propURI + range + rangeClassURI + ' .\r\n';
+                if(prop.type===PropertyType.Object){
+                    const propURI = '<' + prop.URI + '> ';
+                    objectProps[propURI] = propURI;
+                    const rangeClassURI = '<' + prop.range.URI + '>';
+                    rdf += propURI + domain + classURI + ' .\r\n';
+                    rdf += propURI + range + rangeClassURI + ' .\r\n';
+                }
+                else{
+                    const propURI = '<' + prop.URI + '> ';
+                    dataProps[propURI] = propURI;
+                    const rangeClassURI = '<' + prop.range.URI + '>';
+                    rdf += propURI + domain + classURI + ' .\r\n';
+                    rdf += propURI + range + rangeClassURI + ' .\r\n';
+                }
             });
         });
 
         // tslint:disable-next-line:forin
-        for (const prop in allProps) {
+        for (const prop in objectProps) {
             rdf += prop + a + objectproperty + ' .\n';
+        }
+
+        for (const prop in dataProps) {
+            rdf += prop + a + dataProps + ' .\n';
         }
 
         return rdf
@@ -98,9 +111,12 @@ export function getClassesWithProperties(vocabularyId: string): IClassWithProper
     classeswithoutrangefilter.forEach((c, i) => {
         c.properties.forEach((p, j) => {
             p.range = classeswithoutrangefilter.find((cr) => cr._id === classes[i].properties[j].range);
-            if (!p.range) {
+            if (!p.range && p.type == PropertyType.Data) {
+                p.range = classes[i].properties[j].range
+              } else if (!p.range) {
+                // return null; // not all required classes returned yet
                 failed = true;
-            }
+              }
 
         })
     })

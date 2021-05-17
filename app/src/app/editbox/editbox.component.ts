@@ -54,97 +54,97 @@ export class EditboxComponent implements OnInit, OnChanges {
   };
    xsdDataTypes = [
 
-    "xsd:anyURI",
+    "anyURI",
   
-    "xsd:base64Binary",
+    "base64Binary",
     
-    "xsd:boolean",
+    "boolean",
     
-    "xsd:byte",
+    "byte",
     
-    "xsd:date",
+    "date",
     
-    "xsd:dateTime",
+    "dateTime",
     
-    "xsd:decimal",
+    "decimal",
     
-    "xsd:derivationControl",
+    "derivationControl",
     
-    "xsd:double",
+    "double",
     
-    "xsd:duration",
+    "duration",
     
-    "xsd:ENTITIES",
+    "ENTITIES",
     
-    "xsd:ENTITY",
+    "ENTITY",
     
-    "xsd:float",
+    "float",
     
-    "xsd:gDay",
+    "gDay",
     
-    "xsd:gMonth",
+    "gMonth",
     
-    "xsd:gMonthDay",
+    "gMonthDay",
     
-    "xsd:gYear",
+    "gYear",
     
-    "xsd:gYearMonth",
+    "gYearMonth",
     
-    "xsd:hexBinary",
+    "hexBinary",
     
-    "xsd:ID",
+    "ID",
     
-    "xsd:IDREF",
+    "IDREF",
     
-    "xsd:IDREFS",
+    "IDREFS",
     
-    "xsd:int",
+    "int",
     
-    "xsd:integer",
+    "integer",
     
-    "xsd:language",
+    "language",
     
-    "xsd:long",
+    "long",
     
-    "xsd:Name",
+    "Name",
     
-    "xsd:NCName",
+    "NCName",
     
-    "xsd:negativeInteger",
+    "negativeInteger",
     
-    "xsd:NMTOKEN",
+    "NMTOKEN",
     
-    "xsd:NMTOKENS",
+    "NMTOKENS",
     
-    "xsd:nonNegativeInteger",
+    "nonNegativeInteger",
     
-    "xsd:nonPositiveInteger",
+    "nonPositiveInteger",
     
-    "xsd:normalizedString",
+    "normalizedString",
     
-    "xsd:NOTATION",
+    "NOTATION",
     
-    "xsd:positiveInteger",
+    "positiveInteger",
     
-    "xsd:QName",
+    "QName",
     
-    "xsd:short",
+    "short",
     
-    "xsd:simpleDerivationSet",
+    "simpleDerivationSet",
     
-    "xsd:string",
+    "string",
     
-    "xsd:time",
+    "time",
     
-    "xsd:token",
+    "token",
     
-    "xsd:unsignedByte",
+    "unsignedByte",
     
-    "xsd:unsignedInt",
+    "unsignedInt",
     
-    "xsd:unsignedLong",
+    "unsignedLong",
     
-    "xsd:unsignedShort"
+    "unsignedShort"
   
   ]
   protected classToUpdate: Observable<IClassWithProperties>;
@@ -164,10 +164,7 @@ export class EditboxComponent implements OnInit, OnChanges {
     this.uriPrefix=(this.uriPrefix.search(/^(.*)#$/)==-1)?`${this.uriPrefix}#`:`${this.uriPrefix}`
     this.formProp = this.fb.group({
       name: ['', Validators.required],
-      URI: [`${this.uriPrefix}`,
-      {
-        asyncValidators: [this.vocabService.uriPropValidator()],
-      }],
+      URI: [`${this.uriPrefix}` ],
       range: ['', Validators.required],
       description: [''],
 
@@ -241,6 +238,9 @@ export class EditboxComponent implements OnInit, OnChanges {
 
   addProperty(formDirective: FormGroupDirective, index: number) {
     const typo=(index===0)? PropertyType.Object: PropertyType.Data;
+    if(index){
+      this.formProp.controls['URI'].setValue(`http://www.w3.org/2001/XMLSchema#${this.formProp.value.range.toLocaleLowerCase()}`)
+    }
     this.vocabService.addProperty(this.selectedClassID, this.formProp.value.name,this.formProp.value.description, this.formProp.value.URI, this.formProp.value.range,typo,this.vocabID );
     formDirective.resetForm();
     this.formProp.reset()

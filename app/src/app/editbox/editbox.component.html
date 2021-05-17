@@ -145,18 +145,15 @@
         <nz-form-item class="prop-input">
           <nz-form-control>
             <nz-form-label nzFor="name">Property Name</nz-form-label> <br>
-            <input nz-input placeholder="Name" (keyup)="listenerPropNameChange($event)" formControlName="name" required>
+            <input nz-input placeholder="Name" formControlName="name" required>
           </nz-form-control>
         </nz-form-item>
 
 
-        <nz-form-item class="prop-input">
+        <nz-form-item class="prop-input" style="display: none;">
           <nz-form-control>
             <nz-form-label nzFor="URI">Property URI</nz-form-label> <br>
             <input class="" nz-input placeholder="URI" formControlName="URI" required>
-            <nz-form-explain *ngIf="formProp.get('URI').hasError('invalidURI')">
-              URI is already in <strong>USE</strong>
-            </nz-form-explain>
           </nz-form-control>
         </nz-form-item>
 
@@ -176,7 +173,7 @@
             <nz-form-label nzFor="range">Data Type</nz-form-label> <br>
             <nz-select nzShowSearch nzAllowClear placeholder="Range" formControlName="range" required>
               <ng-container *ngFor="let element of xsdDataTypes; let i = index">
-                <nz-option [nzValue]="element" [nzLabel]="element" [value]="element">
+                <nz-option [nzValue]="element" [nzLabel]="'xsd:'+element" [value]="element">
                 </nz-option>
               </ng-container>
             </nz-select>
