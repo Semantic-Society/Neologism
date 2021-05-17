@@ -5,7 +5,7 @@ import { VocabulariesService, IClassWithProperties } from '../services/vocabular
 import { of, Observable, BehaviorSubject } from 'rxjs';
 import { map, startWith, switchMap, tap, take, filter } from 'rxjs/operators';
 import { MeteorObservable } from 'meteor-rxjs';
-
+import { PropertyType } from "./../../../api/models";
 @Injectable()
 export class EditboxService {
     alreadyThere2: Observable<any>
@@ -96,7 +96,7 @@ export class EditboxService {
 
 
         if (rangeID) {
-            this.vocabService.addProperty(selectedClassID, rec.label, rec.comment, rec.uri, rangeID);
+            this.vocabService.addProperty(selectedClassID, rec.label, rec.comment, rec.uri, rangeID,PropertyType.Object,null);
         } else {
 
             let className = 'no name yet'

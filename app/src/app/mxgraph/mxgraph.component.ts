@@ -7,7 +7,7 @@ import { auditTime, catchError, combineLatest, debounceTime, defaultIfEmpty, dis
 
 import { MxgraphService } from './mxgraph';
 
-import { Ivocabulary, meteorID, IvocabularyExtended } from '../../../api/models';
+import { Ivocabulary, meteorID, IvocabularyExtended, PropertyType } from '../../../api/models';
 import { IClassWithProperties, VocabulariesService } from '../services/vocabularies.service';
 
 // import sidebar state dep.
@@ -24,6 +24,7 @@ interface IMergedPropertiesClass {
         _id: string;
         name: string;
         rangeID: string; // just the ID
+        type: PropertyType;
     }>;
 }
 
@@ -42,9 +43,9 @@ export class MxgraphComponent implements OnInit, OnDestroy {
 
     vocabularySub: Subscription;
 
-    @ViewChild('view',{static: true}) mxGraphView: ElementRef;
-    @ViewChild('dEmptyGraph',{static: true}) showDialogForEmptyGraph: ElementRef;
-    
+    @ViewChild('view', { static: true }) mxGraphView: ElementRef;
+    @ViewChild('dEmptyGraph', { static: true }) showDialogForEmptyGraph: ElementRef;
+
     mx: MxgraphService;
     vocabID: string;
     classes: Observable<IClassWithProperties[]>;
@@ -174,7 +175,7 @@ export class MxgraphComponent implements OnInit, OnDestroy {
             startWith([]),
             debounceTime(1000),
         ).subscribe((cs) => {
-            if(!cs.length){
+            if (!cs.length) {
                 this.showDialogForEmptyGraph.nativeElement.showModal()
                 return;
             }
@@ -183,24 +184,41 @@ export class MxgraphComponent implements OnInit, OnDestroy {
             this.mx.clearModel();
 
             // insert classes
-            cs.forEach((c) =>
-                this.mx.insertClass(c._id, c.name, c.position.x, c.position.y)
+            cs.forEach((c) => {
+
+                if (c.description===PropertyType.Data) {
+
+                    this.mx.insertDashedClass(c._id, c.name, c.position.x, c.position.y)
+                } else {
+                    this.mx.insertClass(c._id, c.name, c.position.x, c.position.y)
+                }
+            }
+
             );
 
             // insert properties
             cs.forEach((c) => {
                 // grouping the properties by their target
                 const merged = this.mergeProperties(c);
-                merged.properties.forEach((p) =>
-                    this.mx.insertProperty(c._id,
-                        p._id, p.name,
-                        p.rangeID)
-                );
+                merged.properties.forEach((p) => {
+                    if (p.type == PropertyType.Object) {
+                        this.mx.insertProperty(c._id,
+                            p._id, p.name,
+                            p.rangeID)
+                    } else {
+
+                        // var vertex = this.mx.insertDashedClass(p._id, p.rangeID, c.position.x, c.position.y)
+                        this.mx.insertProperty(c._id,
+                            p._id, p.name,
+                            p._id)
+                    }
+
+                });
             });
 
             this.mx.endTransaction();
         });
-        
+
     }// end ngOnInit
     mergeProperties(c: IClassWithProperties): IMergedPropertiesClass {
         // only takes the necessary parts
@@ -221,7 +239,7 @@ export class MxgraphComponent implements OnInit, OnDestroy {
             const group: Array<{
                 _id: string;
                 name: string;
-
+                type: PropertyType;
                 range: IClassWithProperties;
             }> = grouped[key];
             // join names
@@ -237,7 +255,7 @@ export class MxgraphComponent implements OnInit, OnDestroy {
                 }, []);
             const combinedName = nameList.join(' | ');
             const combinedKey = keyList.join(',');
-            withMergedProps.properties.push({ _id: combinedKey, name: combinedName, rangeID: group[0].range._id });
+            withMergedProps.properties.push({ _id: combinedKey, name: combinedName, rangeID: group[0].range._id || group[0].range as any, type: group[0].type });
             // }
         }
         return withMergedProps;
@@ -263,5 +281,5 @@ export class MxgraphComponent implements OnInit, OnDestroy {
         this.vocabularySub.unsubscribe();
         this.currentEdgeSelectionSub.unsubscribe()
     }
-    
+
 }

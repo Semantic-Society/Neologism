@@ -9,6 +9,7 @@ import { EditboxService } from './editbox.service';
 import { IClassProperties, IClassProperty } from '../models/editbox.model';
 import { FormArray, FormBuilder, FormControl, FormGroup, FormGroupDirective, Validators } from '@angular/forms';
 import { NzModalService } from 'ng-zorro-antd/modal';
+import { PropertyType } from './../../../api/models';
 
 @Component({
   selector: 'app-editbox',
@@ -38,6 +39,8 @@ export class EditboxComponent implements OnInit, OnChanges {
 
   formProp: FormGroup;
 
+  formEnable ="data"
+
   protected editedClass: {
     name: string;
     URI: string;
@@ -49,7 +52,101 @@ export class EditboxComponent implements OnInit, OnChanges {
     URI: '',
     description: ''
   };
+   xsdDataTypes = [
 
+    "xsd:anyURI",
+  
+    "xsd:base64Binary",
+    
+    "xsd:boolean",
+    
+    "xsd:byte",
+    
+    "xsd:date",
+    
+    "xsd:dateTime",
+    
+    "xsd:decimal",
+    
+    "xsd:derivationControl",
+    
+    "xsd:double",
+    
+    "xsd:duration",
+    
+    "xsd:ENTITIES",
+    
+    "xsd:ENTITY",
+    
+    "xsd:float",
+    
+    "xsd:gDay",
+    
+    "xsd:gMonth",
+    
+    "xsd:gMonthDay",
+    
+    "xsd:gYear",
+    
+    "xsd:gYearMonth",
+    
+    "xsd:hexBinary",
+    
+    "xsd:ID",
+    
+    "xsd:IDREF",
+    
+    "xsd:IDREFS",
+    
+    "xsd:int",
+    
+    "xsd:integer",
+    
+    "xsd:language",
+    
+    "xsd:long",
+    
+    "xsd:Name",
+    
+    "xsd:NCName",
+    
+    "xsd:negativeInteger",
+    
+    "xsd:NMTOKEN",
+    
+    "xsd:NMTOKENS",
+    
+    "xsd:nonNegativeInteger",
+    
+    "xsd:nonPositiveInteger",
+    
+    "xsd:normalizedString",
+    
+    "xsd:NOTATION",
+    
+    "xsd:positiveInteger",
+    
+    "xsd:QName",
+    
+    "xsd:short",
+    
+    "xsd:simpleDerivationSet",
+    
+    "xsd:string",
+    
+    "xsd:time",
+    
+    "xsd:token",
+    
+    "xsd:unsignedByte",
+    
+    "xsd:unsignedInt",
+    
+    "xsd:unsignedLong",
+    
+    "xsd:unsignedShort"
+  
+  ]
   protected classToUpdate: Observable<IClassWithProperties>;
   public editToggle = false;
   protected rangeOptions: Observable<Array<{ _id: string, name: string }>>;
@@ -142,13 +239,14 @@ export class EditboxComponent implements OnInit, OnChanges {
   }
 
 
-  addProperty(formDirective: FormGroupDirective) {
-    this.vocabService.addProperty(this.selectedClassID, this.formProp.value.name,
-      this.formProp.value.description, this.formProp.value.URI, this.formProp.value.range);
-
+  addProperty(formDirective: FormGroupDirective, index: number) {
+    const typo=(index===0)? PropertyType.Object: PropertyType.Data;
+    this.vocabService.addProperty(this.selectedClassID, this.formProp.value.name,this.formProp.value.description, this.formProp.value.URI, this.formProp.value.range,typo,this.vocabID );
     formDirective.resetForm();
     this.formProp.reset()
   }
+
+  
 
   cancelEdit() {
     this.editToggle = false;

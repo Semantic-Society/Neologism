@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { AbstractControl, AsyncValidatorFn, ValidationErrors } from '@angular/forms';
 
+import { Random } from 'meteor/random'
 import { MeteorObservable, zoneOperator } from 'meteor-rxjs';
 import { combineLatest, empty, Observable, of, throwError, timer } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, filter, flatMap, map, switchMap, take } from 'rxjs/operators';
 
 import { Classes, Properties, Users, Vocabularies } from '../../../api/collections';
-import { Iclass, Iproperty, Ivocabulary,PropertyType, meteorID } from '../../../api/models';
+import { Iclass, Iproperty, Ivocabulary, PropertyType, meteorID } from '../../../api/models';
 
 const callWithPromise = (method, ...myParameters) => new Promise((resolve, reject) => {
   Meteor.call(method, ...myParameters, (err, res) => {
@@ -26,7 +27,8 @@ export interface IClassWithProperties {
     name: string;
     description: string;
     URI: string;
-    range: IClassWithProperties; // these MUST be in the same vocabulary!
+    type?: PropertyType;
+    range: any; // these MUST be in the same vocabulary!
   }>;
   position: {
     x: number;
@@ -103,8 +105,8 @@ export class VocabulariesService {
       });
   }
 
-  addClass(vocabularyId: string, name: string, description: string, URI: string, position: { x: number, y: number } = { x: 0, y: 0 }) {
-    MeteorObservable.call('class.create', vocabularyId, name, description, URI, position).subscribe((response) => {
+  addClass(vocabularyId: string, name: string, description: string, URI: string, position: { x: number, y: number } = { x: 0, y: 0 },id?) {
+    MeteorObservable.call('class.create', vocabularyId, name, description, URI, position, id).subscribe((response) => {
       // Handle success and response from server!
       console.log('addClass', response);
     }, (err) => {
@@ -136,13 +138,28 @@ export class VocabulariesService {
     });
   }
 
-  addProperty(toClass: meteorID, name: string, description: string, URI: string, range: meteorID,properType:PropertyType = PropertyType.Object) {
-    MeteorObservable.call('property.create', toClass, {name, description, URI, range,properType })
-      .subscribe((_response) => {
-        // Handle success and response from server!
-      }, (err) => {
-        console.log(err);
-      });
+  addProperty(toClass: meteorID, name: string, description: string, URI: string, range: string,
+    dataType, vocabID: string) {
+    var _id = undefined;
+    if (dataType == PropertyType.Data) {
+      _id = Random.id();
+      this.addClass(vocabID, name = range, description = PropertyType.Data, URI, undefined, _id)
+      MeteorObservable.call('property.create', toClass, { name, description, URI, range:_id, type: dataType, _id })
+        .subscribe((_response) => {
+          // Handle success and response from server!
+        }, (err) => {
+          console.log(err);
+        });
+    } else {
+      MeteorObservable.call('property.create', toClass, { name, description, URI, range, type: dataType, _id })
+        .subscribe((_response) => {
+          // Handle success and response from server!
+        }, (err) => {
+          console.log(err);
+        });
+    }
+
+
   }
 
   /**
@@ -231,7 +248,9 @@ export class VocabulariesService {
         newClassesWithoutRangeFilledLater.forEach((c, i) =>
           c.properties.forEach((p, j) => {
             p.range = newClassesWithoutRangeFilledLater.find((cr) => cr._id === cs[i].properties[j].range);
-            if (!p.range) {
+            if (!p.range && p.type == PropertyType.Data) {
+              p.range = cs[i].properties[j].range
+            } else if (!p.range) {
               // return null; // not all required classes returned yet
               failed = true;
             }
@@ -246,7 +265,7 @@ export class VocabulariesService {
     );
 
     // automatic unsubscription handling
-    return Observable.create((observer: any) => {
+    return new Observable((observer: any) => {
       const subscription = filledClasses.subscribe(observer);
 
       // Now let's return a tear-down/unsubscribe function

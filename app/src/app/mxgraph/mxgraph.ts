@@ -71,6 +71,14 @@ export class MxgraphService {
         const edgeStyle = this.graph.stylesheet.getDefaultEdgeStyle();
         edgeStyle[MxgraphService.mx.mxConstants.STYLE_FILLCOLOR] = '#FFFFFF';
         edgeStyle[MxgraphService.mx.mxConstants.STYLE_LABEL_BACKGROUNDCOLOR] = '#FFFFFF';
+        var style = new Object();
+        style[MxgraphService.mx.mxConstants.STYLE_SHAPE] = MxgraphService.mx.mxConstants.SHAPE_RECTANGLE;
+        style[MxgraphService.mx.mxConstants.STYLE_DASHED] = 1;
+        style[MxgraphService.mx.mxConstants.STYLE_STROKECOLOR] = '#000000';
+        style[MxgraphService.mx.mxConstants.STYLE_FILLCOLOR] = '#17E506';
+        style[MxgraphService.mx.mxConstants.STYLE_FONTCOLOR] = '#000000';
+        style[MxgraphService.mx.mxConstants.STYLE_LABEL_BACKGROUNDCOLOR] = '#17E506';
+        this.graph.getStylesheet().putCellStyle('Dashed', style);
 
         this.deletePress = new Subject();
         const keyHandler = new MxgraphService.mx.mxKeyHandler(this.graph);
@@ -322,6 +330,23 @@ export class MxgraphService {
 
         this.graph.insertVertex(this.canvas, id, label, x, y, 100, 15);
     }
+
+
+        /**
+     * Inserts a new class into the graph
+     * @param id The internal ID of the class
+     * @param label The label to show in the rendering
+     * @param x The x offset of the new class. Middle of screen by default.
+     * @param y The y offset of the new class. Middle of screen by default.
+     */
+         public insertDashedClass(id: string, label: string, x: number, y: number) {
+            if (this.model.getCell(id)) {
+                throw new Error('Class already exists');
+            }
+            this.assertTransaction();
+    
+            this.graph.insertVertex(this.canvas, id, label, x, y, 100, 15,'Dashed');
+        }
 
     /**
      * Inserts a new property into the graph

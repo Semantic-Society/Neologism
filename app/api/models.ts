@@ -71,6 +71,7 @@ export interface IClassWithProperties {
   properties: Array<{
     _id: string; // Mongo generated ID
     name: string;
+    type?: PropertyType;
     description: string;
     URI: string;
     range: IClassWithProperties; // these MUST be in the same vocabulary!
@@ -86,104 +87,104 @@ export interface IClassWithProperties {
 }
 
 export enum PropertyType {
-  Object = 'OBJECT',
-  Data = 'DATA'
+  Object = 'owl:ObjectProperty',
+  Data = 'owl:DatatypeProperty'
 }
 
 
 
-export enum xsdDataTypes {
+export const xsdDataTypes = [
 
-  anyURI,
+  "anyURI",
 
-  base64Binary,
+  "base64Binary",
   
-  boolean,
+  "boolean",
   
-  byte,
+  "byte",
   
-  date,
+  "date",
   
-  dateTime,
+  "dateTime",
   
-  decimal,
+  "decimal",
   
-  derivationControl,
+  "derivationControl",
   
-  double,
+  "double",
   
-  duration,
+  "duration",
   
-  ENTITIES,
+  "ENTITIES",
   
-  ENTITY,
+  "ENTITY",
   
-  float,
+  "float",
   
-  gDay,
+  "gDay",
   
-  gMonth,
+  "gMonth",
   
-  gMonthDay,
+  "gMonthDay",
   
-  gYear,
+  "gYear",
   
-  gYearMonth,
+  "gYearMonth",
   
-  hexBinary,
+  "hexBinary",
   
-  ID,
+  "ID",
   
-  IDREF,
+  "IDREF",
   
-  IDREFS,
+  "IDREFS",
   
-  int,
+  "int",
   
-  integer,
+  "integer",
   
-  language,
+  "language",
   
-  long,
+  "long",
   
-  Name,
+  "Name",
   
-  NCName,
+  "NCName",
   
-  negativeInteger,
+  "negativeInteger",
   
-  NMTOKEN,
+  "NMTOKEN",
   
-  NMTOKENS,
+  "NMTOKENS",
   
-  nonNegativeInteger,
+  "nonNegativeInteger",
   
-  nonPositiveInteger,
+  "nonPositiveInteger",
   
-  normalizedString,
+  "normalizedString",
   
-  NOTATION,
+  "NOTATION",
   
-  positiveInteger,
+  "positiveInteger",
   
-  QName,
+  "QName",
   
-  short,
+  "short",
   
-  simpleDerivationSet,
+  "simpleDerivationSet",
   
-  string,
+  "string",
   
-  time,
+  "time",
   
-  token,
+  "token",
   
-  unsignedByte,
+  "unsignedByte",
   
-  unsignedInt,
+  "unsignedInt",
   
-  unsignedLong,
+  "unsignedLong",
   
-  unsignedShort,
+  "unsignedShort"
 
-}
+]

@@ -87,8 +87,12 @@
     </nz-page-header>
 
     <div class="">
+      <nz-radio-group [(ngModel)]="formEnable">
+        <label nz-radio-button [nzValue]="'object'">Object Property</label>
+        <label nz-radio-button [nzValue]="'data'">Data Property</label>
+      </nz-radio-group>
 
-      <form [formGroup]="formProp" (ngSubmit)="addProperty(formDirective)" nz-form #formDirective="ngForm">
+      <form [formGroup]="formProp" *ngIf="formEnable==='object'" (ngSubmit)="addProperty(formDirective,0)" nz-form #formDirective="ngForm">
 
         <nz-form-item class="prop-input">
           <nz-form-control>
@@ -125,6 +129,54 @@
             <nz-select nzShowSearch nzAllowClear placeholder="Range" formControlName="range" required>
               <ng-container *ngFor="let c of rangeOptions | async">
                 <nz-option [nzValue]="c._id" [nzLabel]="c.name" [value]="c._id">
+                </nz-option>
+              </ng-container>
+            </nz-select>
+          </nz-form-control>
+
+        </nz-form-item>
+
+        <button nz-button nzType="default" type="submit" [disabled]="!formProp.valid">Add
+          Property</button>
+
+      </form>
+      <form [formGroup]="formProp" *ngIf="formEnable==='data'" (ngSubmit)="addProperty(formDirective,1)" nz-form #formDirective="ngForm">
+
+        <nz-form-item class="prop-input">
+          <nz-form-control>
+            <nz-form-label nzFor="name">Property Name</nz-form-label> <br>
+            <input nz-input placeholder="Name" (keyup)="listenerPropNameChange($event)" formControlName="name" required>
+          </nz-form-control>
+        </nz-form-item>
+
+
+        <nz-form-item class="prop-input">
+          <nz-form-control>
+            <nz-form-label nzFor="URI">Property URI</nz-form-label> <br>
+            <input class="" nz-input placeholder="URI" formControlName="URI" required>
+            <nz-form-explain *ngIf="formProp.get('URI').hasError('invalidURI')">
+              URI is already in <strong>USE</strong>
+            </nz-form-explain>
+          </nz-form-control>
+        </nz-form-item>
+
+
+        <nz-form-item class="prop-input">
+          <nz-form-control>
+            <nz-form-label nzFor="description">About</nz-form-label> <br>
+            <nz-textarea-count [nzMaxCharacterCount]="256">
+              <textarea rows="2" #message placeholder="Comment or Description" formControlName="description" nz-input></textarea>
+            </nz-textarea-count>
+            
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item class="class-dropdown">
+          <nz-form-control>
+            <nz-form-label nzFor="range">Data Type</nz-form-label> <br>
+            <nz-select nzShowSearch nzAllowClear placeholder="Range" formControlName="range" required>
+              <ng-container *ngFor="let element of xsdDataTypes; let i = index">
+                <nz-option [nzValue]="element" [nzLabel]="element" [value]="element">
                 </nz-option>
               </ng-container>
             </nz-select>

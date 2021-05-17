@@ -99,12 +99,19 @@ Meteor.methods({
     // currently: pseudo permission check via only being able to remove documents where the current user is also an author
     Vocabularies.remove({ _id: vocabId, creator: this.userId });
   },
-  'class.create'(vocabId, name, description, URI, position) {
+  'class.create'(vocabId, name, description, URI, position, _id?) {
     assertUser();
     // TODO: Sanitize
-
+    var classIdO
     // Note, these operations must occur in this order. Otherwise an observer of the vocabualry might
-    const classIdO = Classes.insert({ name, description, URI, properties: [], position, skos: { closeMatch: [], exactMatch: [] } });
+    console.log(_id)
+    if (_id) {
+      console.log("_id")
+      classIdO = Classes.insert({ _id, name, description, URI, properties: [], position, skos: { closeMatch: [], exactMatch: [] } });
+    } else {
+      classIdO = Classes.insert({ name, description, URI, properties: [], position, skos: { closeMatch: [], exactMatch: [] } });
+    }
+
     classIdO.subscribe((classID) =>
       Vocabularies.update(
         { _id: vocabId },
@@ -149,30 +156,37 @@ Meteor.methods({
   },
   'classes.delete'(classId: string) {
     assertUser();
-    const $getClassProps = Classes.find({ _id: classId }, {limit:1}).pipe(map((classes) => classes[0].properties))
+    const $getClassProps = Classes.find({ _id: classId }, { limit: 1 }).pipe(map((classes) => classes[0].properties))
     const $getClassRangeProps = Properties.find({ range: classId }).pipe(map((props) => props.map((prop) => prop._id)))
 
     combineLatest([$getClassProps,
       $getClassRangeProps]
     )
-    .pipe(
-      take(1),
+      .pipe(
+        take(1),
         tap(([x, y]) => console.log(x.concat(y))),
         map(([first, second]) => {
           first.concat(second)
-          .forEach((propId)=>Properties.remove(propId))
+            .forEach((propId) => Properties.remove(propId))
           return true;
         })
-      ).subscribe((_resp)=>Classes.remove(classId));
+      ).subscribe((_resp) => Classes.remove(classId));
 
   },
-  'property.create'(classId, payload) {
+  'property.create'(classId, payload, _id?) {
     assertUser();
     // TODO: Sanitize
     // Note, these operations must occur in this order. Otherwise an observer of the vocabualry might
-    const propID = Properties.insert(
-      payload)
-      ;
+    let propID
+    if (_id) {
+      propID = Properties.insert(
+        { _id, ...payload })
+        ;
+    } else {
+      propID = Properties.insert(
+        { ...payload })
+        ;
+    }
     propID.subscribe((pID) =>
       Classes.update(
         { _id: classId },

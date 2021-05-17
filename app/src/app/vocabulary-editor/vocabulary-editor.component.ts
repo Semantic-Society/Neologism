@@ -8,6 +8,7 @@ import { map, switchMap, tap, startWith } from 'rxjs/operators';
 import { Observable, of, combineLatest } from 'rxjs';
 import { IClassProperty } from '../models/editbox.model';
 import { EditComponentService } from './edit.component.service';
+import { PropertyType } from "./../../../api/models";
 
  class VocabClass {
   name: string
@@ -231,7 +232,7 @@ export class VocabularyEditorComponent implements OnInit {
 
   addProperty() {
     if (this.selectedClassID !== this.newClass.property.range) {
-      this.vocabService.addProperty(this.selectedClassID, this.newClass.property.name, this.newClass.property.description, this.newClass.property.URI, this.newClass.property.range);
+      this.vocabService.addProperty(this.selectedClassID, this.newClass.property.name, this.newClass.property.description, this.newClass.property.URI, this.newClass.property.range,PropertyType.Object,null);
       this.newClass = this.emptyClass;
     }
   }
