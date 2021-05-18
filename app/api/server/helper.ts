@@ -61,7 +61,7 @@ export function saveClassesWithPropertiesAsFile(classes: IClassWithProperties[],
                 else{
                     const propURI = '<' + prop.URI + '> ';
                     dataProps[propURI] = propURI;
-                    const rangeClassURI = '<' + prop.range.URI + '>';
+                    const rangeClassURI = '<' + prop.URI + '>';
                     rdf += propURI  + domain + ' '+ classURI + ' .\r\n';
                     rdf += propURI  + range + ' ' + rangeClassURI + ' .\r\n';
                 }
@@ -101,7 +101,6 @@ export function getClassesWithProperties(vocabularyId: string): IClassWithProper
 
     classes=classes.filter(classa => propIds.find(prop=> (prop===classa._id))===undefined )
 
-    console.log(classes)
     const classeswithoutrangefilter = classes.map((cs) => {
 
         const filledProps = cs.properties.map((p) => {
