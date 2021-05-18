@@ -49,7 +49,7 @@ __Local setup:__
 3. Install node version to 12.20.1 with compatible npm
 4. Install /Download nginx for CORS (Linux: `sudo apt-get install nginx` Arch: `sudo pacman -S nginx` Windows: http://nginx.org/en/docs/windows.html) (On Windows move the folder to C:\)
 5. Create a `sites-enabled` folder inside the nginx folder (Linux: /etc/nginx/sites-enabled).
-6. Put the `neologism.com` file inside this folder.
+6. Put the [neologism.com](nginx/neologism.com) file inside this folder.
 7. Edit the `nginx.conf` file by including the path of the sites-enabled folder. For Windows the path to the .com file: 
 
 ```
@@ -70,6 +70,9 @@ http {
 13. Run `npm run start` for a dev server. Navigate to http://localhost:4200/. The app will automatically reload if you change any of the source files.
 14. Optional: If you need to run the recommender, install an AddOn for your browser to allow CORS, as configurations need to be done
 
+__TEST IF THE RECOMMENDER WORKS PROPERLY__
+
+- Run `curl -v -d @test-recommender-request.json http://localhost:8080/recommender/batchRecommender -H "Content-Type:application/json"` and inspect the result.
 
 __DISCLAIMER:__
 Steps above are valid to run in Ubuntu focal

@@ -21,7 +21,13 @@
                 <nz-form-label  nzFor="name">Class Name</nz-form-label><br>
                 <nz-form-control >
               <input class="form-control" type="text" nz-input nzRequired placeholder="Class Name"
-              (keyup)="autoCompleteURI($event)" formControlName="name" #name  >
+              (keyup)="autoCompleteURI($event);checkWord(createClassForm.get('name').value)" formControlName="name" #name [nzAutocomplete]="auto">
+      <nz-autocomplete nzBackfill #auto>
+<nz-auto-option *ngFor="let option of suggestions" [nzValue]="option" [nzLabel]="option">
+          {{ option }}
+        </nz-auto-option>
+        
+      </nz-autocomplete>
               <nz-form-explain *ngIf="createClassForm.get('name')?.dirty && createClassForm.get('name').hasError('required')">
                 Class Name is required
               </nz-form-explain>

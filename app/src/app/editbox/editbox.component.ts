@@ -10,11 +10,14 @@ import { IClassProperties, IClassProperty } from '../models/editbox.model';
 import { FormArray, FormBuilder, FormControl, FormGroup, FormGroupDirective, Validators } from '@angular/forms';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { PropertyType } from './../../../api/models';
+import { SpellCheckerService } from 'ngx-spellchecker';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-editbox',
   templateUrl: './editbox.component.html',
   styleUrls: ['./editbox.component.css'],
+  providers: [SpellCheckerService]
 })
 
 export class EditboxComponent implements OnInit, OnChanges {
@@ -150,14 +153,22 @@ export class EditboxComponent implements OnInit, OnChanges {
   protected classToUpdate: Observable<IClassWithProperties>;
   public editToggle = false;
   protected rangeOptions: Observable<Array<{ _id: string, name: string }>>;
-
+  public suggestions_class:string[]
+  public suggestions_property:string[]
+  contextmenu_class:boolean = false
+  contextmenu_property:boolean = false
+  
+  fileURL = "https://raw.githubusercontent.com/JacobSamro/ngx-spellchecker/master/dict/normalized_en-US.dic"
+ 
   constructor(
     private vocabService: VocabulariesService,
     private recommender: RecommendationService,
     private sidebarService: SideBarStateService,
     private editboxService: EditboxService,
     private fb: FormBuilder,
-    private modal: NzModalService) {
+    private spellCheckerService: SpellCheckerService,
+    private modal: NzModalService,
+    private httpClient: HttpClient) {
   }
 
   ngOnInit() {
@@ -230,7 +241,29 @@ export class EditboxComponent implements OnInit, OnChanges {
 
 
   }
+checkWordProperty(word:string){
+   
+  this.httpClient.get(this.fileURL, { responseType: 'text' }).subscribe((res: any) => {
+    let dictionary = this.spellCheckerService.getDictionary(res)
+    
+   this.suggestions_property=  dictionary.getSuggestions(word)
+  })
+ 
+ 
+    this.contextmenu_class = true
+}
 
+checkWordClass(word:string){
+   
+  this.httpClient.get(this.fileURL, { responseType: 'text' }).subscribe((res: any) => {
+    let dictionary = this.spellCheckerService.getDictionary(res)
+    
+   this.suggestions_class =  dictionary.getSuggestions(word)
+  })
+ 
+ 
+    this.contextmenu_class = true
+}
   addRecommendedProperyToGraph(rec: IClassProperty) {
     this.editboxService.addRecommendedProperyToGraph(rec, this.selectedClassID, this.vocabID)
   }

@@ -3,10 +3,14 @@ import { Properties, Classes } from '../../../../api/collections';
 import { Iclass, Iproperty } from '../../../../api/models';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 import { MeteorObservable } from 'meteor-rxjs';
+import { SpellCheckerService } from 'ngx-spellchecker';
+import { HttpClient } from '@angular/common/http';
+import { NzAutocompleteModule } from 'ng-zorro-antd/auto-complete';
 
 @Component({
   selector: 'app-update-prop-modal',
   templateUrl: './property-edit.component.html',
+  providers: [SpellCheckerService]
 })
 export class PropertyEditModal implements OnInit {
   @Input() propListString: string;
@@ -16,9 +20,16 @@ export class PropertyEditModal implements OnInit {
   propSourceNodeId: string
   public prop: Iproperty
 
+  fileURL = "https://raw.githubusercontent.com/JacobSamro/ngx-spellchecker/master/dict/normalized_en-US.dic"
+ 
   classes: Array<Iclass>
 
-  constructor(private modal: NzModalRef) { }
+  public suggestions:string[]
+  contextmenu:boolean = false
+
+  constructor(private modal: NzModalRef,
+    private spellCheckerService: SpellCheckerService,
+    private httpClient: HttpClient) { }
 
   ngOnInit() {
     this.propList = []
@@ -43,6 +54,18 @@ export class PropertyEditModal implements OnInit {
       console.log(err);
     });
     this.modal.destroy();
+  }
+
+  checkWord(word:string){
+   
+    this.httpClient.get(this.fileURL, { responseType: 'text' }).subscribe((res: any) => {
+      let dictionary = this.spellCheckerService.getDictionary(res)
+      
+     this.suggestions=  dictionary.getSuggestions(word)
+    })
+   
+   
+      this.contextmenu = true
   }
 
 
