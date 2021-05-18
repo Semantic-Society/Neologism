@@ -1,6 +1,6 @@
 <nz-page-header (nzBack)="resetSidebarState()" style="padding: 0!important;" nzBackIcon>
 
-  <nz-avatar nz-page-header-avatar    nzSrc="../../../assets/default_node_image.gif">
+  <nz-avatar nz-page-header-avatar nzSrc="../../../assets/default_node_image.gif">
   </nz-avatar>
   <nz-page-header-title>
     <h3 class="sidebar-header neologism-sidebar-header" style="
@@ -37,9 +37,9 @@
         <nz-form-control>
           <nz-textarea-count [nzMaxCharacterCount]="256">
             <textarea rows="2" #message placeholder="The class represents ..." [(ngModel)]="editedClass.description"
-            [ngModel]="classInfo.description" nz-input></textarea>
+              [ngModel]="classInfo.description" nz-input></textarea>
           </nz-textarea-count>
-          
+
         </nz-form-control>
       </nz-form-item>
       <div class="button-group-edit ">
@@ -64,7 +64,7 @@
       <nz-form-item>
         <nz-form-label nzFor="name">About</nz-form-label><br>
         <nz-form-control>
-          <nz-textarea-count  [nzMaxCharacterCount]="256">
+          <nz-textarea-count [nzMaxCharacterCount]="256">
             <textarea rows="2" disabled [ngModel]="classInfo.description" nz-input></textarea>
           </nz-textarea-count>
         </nz-form-control>
@@ -92,7 +92,8 @@
         <label nz-radio-button [nzValue]="'data'">Data Property</label>
       </nz-radio-group>
 
-      <form [formGroup]="formProp" *ngIf="formEnable==='object'" (ngSubmit)="addProperty(formDirective,0)" nz-form #formDirective="ngForm">
+      <form [formGroup]="formProp" *ngIf="formEnable==='object'" (ngSubmit)="addProperty(formDirective,0)" nz-form
+        #formDirective="ngForm">
 
         <nz-form-item class="prop-input">
           <nz-form-control>
@@ -117,9 +118,10 @@
           <nz-form-control>
             <nz-form-label nzFor="description">About</nz-form-label> <br>
             <nz-textarea-count [nzMaxCharacterCount]="256">
-              <textarea rows="2" #message placeholder="Comment or Description" formControlName="description" nz-input></textarea>
+              <textarea rows="2" #message placeholder="Comment or Description" formControlName="description"
+                nz-input></textarea>
             </nz-textarea-count>
-            
+
           </nz-form-control>
         </nz-form-item>
 
@@ -140,7 +142,8 @@
           Property</button>
 
       </form>
-      <form [formGroup]="formProp" *ngIf="formEnable==='data'" (ngSubmit)="addProperty(formDirective,1)" nz-form #formDirective="ngForm">
+      <form [formGroup]="formProp" *ngIf="formEnable==='data'" (ngSubmit)="addProperty(formDirective,1)" nz-form
+        #formDirective="ngForm">
 
         <nz-form-item class="prop-input">
           <nz-form-control>
@@ -153,7 +156,7 @@
         <nz-form-item class="prop-input" style="display: none;">
           <nz-form-control>
             <nz-form-label nzFor="URI">Property URI</nz-form-label> <br>
-            <input class="" nz-input placeholder="URI" formControlName="URI" required>
+            <input class="" nz-input placeholder="URI" formControlName="URI">
           </nz-form-control>
         </nz-form-item>
 
@@ -162,9 +165,10 @@
           <nz-form-control>
             <nz-form-label nzFor="description">About</nz-form-label> <br>
             <nz-textarea-count [nzMaxCharacterCount]="256">
-              <textarea rows="2" #message placeholder="Comment or Description" formControlName="description" nz-input></textarea>
+              <textarea rows="2" #message placeholder="Comment or Description" formControlName="description"
+                nz-input></textarea>
             </nz-textarea-count>
-            
+
           </nz-form-control>
         </nz-form-item>
 

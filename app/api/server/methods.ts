@@ -171,27 +171,20 @@ Meteor.methods({
       ).subscribe((_resp) => Classes.remove(classId));
 
   },
-  'property.create'(classId, payload, _id?) {
+  'property.create'(classId, payload) {
     assertUser();
     // TODO: Sanitize
     // Note, these operations must occur in this order. Otherwise an observer of the vocabualry might
-    let propID
-    if (_id) {
-      propID = Properties.insert(
-        { _id, ...payload })
-        ;
-    } else {
-      propID = Properties.insert(
-        { ...payload })
-        ;
-    }
-    propID.subscribe((pID) =>
-      Classes.update(
+    const propID = Properties.insert(
+      { ...payload })
+      ;
+    propID.subscribe((pID) => {
+      return Classes.update(
         { _id: classId },
         {
-          $push:
-            { properties: pID }
-        })
+          $push: { properties: pID }
+        });
+    }
     );
   },
   'property.update'(id, name, description, URI, range) {

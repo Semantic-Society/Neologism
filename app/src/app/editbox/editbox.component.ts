@@ -39,7 +39,7 @@ export class EditboxComponent implements OnInit, OnChanges {
 
   formProp: FormGroup;
 
-  formEnable ="data"
+  formEnable = "data"
 
   protected editedClass: {
     name: string;
@@ -52,100 +52,100 @@ export class EditboxComponent implements OnInit, OnChanges {
     URI: '',
     description: ''
   };
-   xsdDataTypes = [
+  xsdDataTypes = [
 
     "anyURI",
-  
+
     "base64Binary",
-    
+
     "boolean",
-    
+
     "byte",
-    
+
     "date",
-    
+
     "dateTime",
-    
+
     "decimal",
-    
+
     "derivationControl",
-    
+
     "double",
-    
+
     "duration",
-    
+
     "ENTITIES",
-    
+
     "ENTITY",
-    
+
     "float",
-    
+
     "gDay",
-    
+
     "gMonth",
-    
+
     "gMonthDay",
-    
+
     "gYear",
-    
+
     "gYearMonth",
-    
+
     "hexBinary",
-    
+
     "ID",
-    
+
     "IDREF",
-    
+
     "IDREFS",
-    
+
     "int",
-    
+
     "integer",
-    
+
     "language",
-    
+
     "long",
-    
+
     "Name",
-    
+
     "NCName",
-    
+
     "negativeInteger",
-    
+
     "NMTOKEN",
-    
+
     "NMTOKENS",
-    
+
     "nonNegativeInteger",
-    
+
     "nonPositiveInteger",
-    
+
     "normalizedString",
-    
+
     "NOTATION",
-    
+
     "positiveInteger",
-    
+
     "QName",
-    
+
     "short",
-    
+
     "simpleDerivationSet",
-    
+
     "string",
-    
+
     "time",
-    
+
     "token",
-    
+
     "unsignedByte",
-    
+
     "unsignedInt",
-    
+
     "unsignedLong",
-    
+
     "unsignedShort"
-  
+
   ]
   protected classToUpdate: Observable<IClassWithProperties>;
   public editToggle = false;
@@ -161,10 +161,10 @@ export class EditboxComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
-    this.uriPrefix=(this.uriPrefix.search(/^(.*)#$/)==-1)?`${this.uriPrefix}#`:`${this.uriPrefix}`
+    this.uriPrefix = (this.uriPrefix.search(/^(.*)#$/) == -1) ? `${this.uriPrefix}#` : `${this.uriPrefix}`
     this.formProp = this.fb.group({
       name: ['', Validators.required],
-      URI: [`${this.uriPrefix}` ],
+      URI: [`${this.uriPrefix}`],
       range: ['', Validators.required],
       description: [''],
 
@@ -237,16 +237,17 @@ export class EditboxComponent implements OnInit, OnChanges {
 
 
   addProperty(formDirective: FormGroupDirective, index: number) {
-    const typo=(index===0)? PropertyType.Object: PropertyType.Data;
-    if(index){
-      this.formProp.controls['URI'].setValue(`http://www.w3.org/2001/XMLSchema#${this.formProp.value.range.toLocaleLowerCase()}`)
+    const typo = (index === 0) ? PropertyType.Object : PropertyType.Data;
+    if (index) {
+      this.formProp.controls['URI'].setValue(`http://www.w3.org/2001/XMLSchema#${this.formProp.value.range}`)
     }
-    this.vocabService.addProperty(this.selectedClassID, this.formProp.value.name,this.formProp.value.description, this.formProp.value.URI, this.formProp.value.range,typo,this.vocabID );
+    console.log(formDirective.value)
+    this.vocabService.addProperty(this.selectedClassID, this.formProp.value.name, this.formProp.value.description, this.formProp.value.URI, this.formProp.value.range, typo, this.vocabID);
     formDirective.resetForm();
     this.formProp.reset()
   }
 
-  
+
 
   cancelEdit() {
     this.editToggle = false;

@@ -105,7 +105,7 @@ export class VocabulariesService {
       });
   }
 
-  addClass(vocabularyId: string, name: string, description: string, URI: string, position: { x: number, y: number } = { x: 0, y: 0 },id?) {
+  addClass(vocabularyId: string, name: string, description: string, URI: string, position: { x: number, y: number } = { x: 0, y: 0 }, id?) {
     MeteorObservable.call('class.create', vocabularyId, name, description, URI, position, id).subscribe((response) => {
       // Handle success and response from server!
       console.log('addClass', response);
@@ -143,15 +143,15 @@ export class VocabulariesService {
     var _id = undefined;
     if (dataType == PropertyType.Data) {
       _id = Random.id();
-      this.addClass(vocabID, name = range, description = PropertyType.Data, URI, undefined, _id)
-      MeteorObservable.call('property.create', toClass, { name, description, URI, range:_id, type: dataType, _id })
+      this.addClass(vocabID, range, description = PropertyType.Data, URI, undefined, _id)
+      MeteorObservable.call('property.create', toClass, { name, description, URI, range: _id, type: dataType, _id })
         .subscribe((_response) => {
           // Handle success and response from server!
         }, (err) => {
           console.log(err);
         });
     } else {
-      MeteorObservable.call('property.create', toClass, { name, description, URI, range, type: dataType, _id })
+      MeteorObservable.call('property.create', toClass, { name, description, URI, range, type: dataType })
         .subscribe((_response) => {
           // Handle success and response from server!
         }, (err) => {
