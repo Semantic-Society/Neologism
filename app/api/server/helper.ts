@@ -55,26 +55,26 @@ export function saveClassesWithPropertiesAsFile(classes: IClassWithProperties[],
                     const propURI = '<' + prop.URI + '> ';
                     objectProps[propURI] = propURI;
                     const rangeClassURI = '<' + prop.range.URI + '>';
-                    rdf += propURI + domain + classURI + ' .\r\n';
-                    rdf += propURI + range + rangeClassURI + ' .\r\n';
+                    rdf += propURI  + domain + ' ' + classURI + ' .\r\n';
+                    rdf += propURI + range + ' ' + rangeClassURI + ' .\r\n';
                 }
                 else{
                     const propURI = '<' + prop.URI + '> ';
                     dataProps[propURI] = propURI;
                     const rangeClassURI = '<' + prop.range.URI + '>';
-                    rdf += propURI + domain + classURI + ' .\r\n';
-                    rdf += propURI + range + rangeClassURI + ' .\r\n';
+                    rdf += propURI  + domain + ' '+ classURI + ' .\r\n';
+                    rdf += propURI  + range + ' ' + rangeClassURI + ' .\r\n';
                 }
             });
         });
 
         // tslint:disable-next-line:forin
         for (const prop in objectProps) {
-            rdf += prop + a + objectproperty + ' .\n';
+            rdf += prop + a + ' '+ objectproperty + ' .\n';
         }
 
         for (const prop in dataProps) {
-            rdf += prop + a + dataProps + ' .\n';
+            rdf += prop + a + ' '  + dataTypeProperty + ' .\n';
         }
 
         return rdf
@@ -91,11 +91,17 @@ export function saveClassesWithPropertiesAsFile(classes: IClassWithProperties[],
 
 export function getClassesWithProperties(vocabularyId: string): IClassWithProperties[] {
 
+    let propIds=[]
     let classes = getClasses(vocabularyId).map((c) => {
         const ps = Properties.find({ _id: { $in: c.properties } }).fetch()
+        propIds=propIds.concat(ps.map(ps=>ps._id))
         return { ...c, properties: ps };
     })
 
+
+    classes=classes.filter(classa => propIds.find(prop=> (prop===classa._id))===undefined )
+
+    console.log(classes)
     const classeswithoutrangefilter = classes.map((cs) => {
 
         const filledProps = cs.properties.map((p) => {
