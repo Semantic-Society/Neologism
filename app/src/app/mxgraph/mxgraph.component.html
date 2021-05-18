@@ -1,37 +1,39 @@
 <nz-layout>
   <nz-sider [ngSwitch]="editMode | async" [nzWidth]="350" class="mat-drawer">
     <app-metadata [vocabulary]="vocabulary" *ngSwitchCase="'default'"></app-metadata>
-      <app-editbox *ngSwitchCase="'edit'" [selectedClassID]="this.currentSelection" [uriPrefix]="vocabulary.uriPrefix" [vocabID]="this.vocabID"></app-editbox>
-      <app-recommender *ngSwitchCase="'recommend'" [vocabID]="this.vocabID"></app-recommender>
-      <app-node-creator *ngSwitchCase="'create'" [vocabID]="this.vocabID" [uriPrefix]="vocabulary.uriPrefix" [graphService]="mx"></app-node-creator>
+    <app-editbox *ngSwitchCase="'edit'" [selectedClassID]="this.currentSelection" [uriPrefix]="vocabulary.uriPrefix"
+      [vocabID]="this.vocabID"></app-editbox>
+    <app-recommender *ngSwitchCase="'recommend'" [vocabID]="this.vocabID"></app-recommender>
+    <app-node-creator *ngSwitchCase="'create'" [vocabID]="this.vocabID" [uriPrefix]="vocabulary.uriPrefix"
+      [graphService]="mx"></app-node-creator>
     <div *ngSwitchCase="'default'">
-    <div class="button-div">
-      <div class="pad-1">
-        <button nz-button  (click)="showNodeCreator()">Add new class
-        </button>
-      </div>
+      <div class="button-div">
+        <div class="pad-1">
+          <button nz-button (click)="showNodeCreator()">Add new class
+          </button>
+        </div>
         <button *ngIf="batchPhase" mat-button (click)="getBatchRecommendation()">Get BatchRecommendation
         </button>
 
-          <div class="pad-1" *ngIf=!batchPhase>
+        <div class="pad-1" *ngIf=!batchPhase>
           <button mat-button (click)="batchrec.liftOntology(); hideBatch()">Lift Ontology
           </button>
-          </div>
-            <button *ngIf="!batchPhase" mat-button (click)="hideBatch()">Return
-            </button>
-
-        <button *ngSwitchCase="'hidden'" nz-button  (click)="showRecommender()">Search Existing class
+        </div>
+        <button *ngIf="!batchPhase" mat-button (click)="hideBatch()">Return
         </button>
-    </div>
 
-    
-      <div class="button-div">
-      
-      <div style="text-align: center;">
-        <h3  style="color: white; border-style: dashed;">
-          How to edit Property / Class
-        </h3>
+        <button *ngSwitchCase="'hidden'" nz-button (click)="showRecommender()">Search Existing class
+        </button>
       </div>
+
+
+      <div class="button-div">
+
+        <div style="text-align: center;">
+          <h3 style="color: white; border-style: dashed;">
+            How to edit Property / Class
+          </h3>
+        </div>
         <br>
         <em>
           On the graph:
@@ -41,46 +43,44 @@
           <li>Click on the arrow for Property form</li>
           <li>Click on the class/node for Class form</li>
         </ul>
-    </div>
+      </div>
 
-    
-    <div class="button-div" style="display:flex">
-      <span style="padding-right: 1rem">Domain:  </span>      
-      
-      <div [hidden]="editing"> {{vocabulary? vocabulary.domain: ""}}</div>
 
-      <form style="color:black" (ngSubmit)="editDomain()" [hidden]="!editing">
-        <input class="editable" [(ngModel)]="domain" name="domain">
-    </form> 
-    <div class="edit-icon-wrapper" (click)="startEdit()" *ngIf="!editing">
-      <mat-icon class="edit-icon">
-        create
-      </mat-icon>
-    </div>  
-    </div>
-    <div id="ctrl-zoom">
-      <div class="pad-1">
-        <button mat-button (click)="zoomin()"> Zoom In</button>
+      <div class="button-div" style="display:flex">
+        <span style="padding-right: 1rem">Domain: </span>
+
+        <div [hidden]="editing"> {{vocabulary? vocabulary.domain: ""}}</div>
+
+        <form style="color:black" (ngSubmit)="editDomain()" [hidden]="!editing">
+          <input class="editable" [(ngModel)]="domain" name="domain">
+        </form>
+        <div class="edit-icon-wrapper" (click)="startEdit()" *ngIf="!editing">
+          <mat-icon class="edit-icon">
+            create
+          </mat-icon>
+        </div>
       </div>
     </div>
-   
+  </nz-sider>
   <nz-layout>
     <nz-content>
       <mat-tab-group [hidden]="!batchPhase" headerPosition="below" class="mat-tab-fill-height">
         <mat-tab label="View &amp; Edit">
-      <div class="mxgraph-container" #view></div>
-        
+          <div class="mxgraph-container" #view></div>
+
         </mat-tab>
         <mat-tab label="List">
           <app-standardview [classes]="classes">
           </app-standardview>
         </mat-tab>
       </mat-tab-group>
-      <app-batchRecommender  [classes]="classes" [recommendations]="recommendations" [hidden]="batchPhase" #batchrec>
+      <app-batchRecommender [classes]="classes" [recommendations]="recommendations" [hidden]="batchPhase" #batchrec>
 
       </app-batchRecommender>
     </nz-content>
+
   </nz-layout>
+</nz-layout>
 
 
 <dialog #dEmptyGraph class="modal">
@@ -89,7 +89,8 @@
 
   </p>
   <menu>
-    <button nz-button nzType="primary" id="confirmBtn" (click)="showNodeCreator();dEmptyGraph.close()" value="default">Take me</button>
+    <button nz-button nzType="primary" id="confirmBtn" (click)="showNodeCreator();dEmptyGraph.close()"
+      value="default">Take me</button>
     <button nz-button nzType="primary" (click)="dEmptyGraph.close();">Skip!, I will explore</button>
 
 
