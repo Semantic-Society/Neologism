@@ -17,7 +17,7 @@ ENV APP_BUNDLE_FOLDER /opt/bundle
 # Install dependencies, based on https://github.com/jshimko/meteor-launchpad/blob/master/scripts/install-deps.sh (only the parts we plan to use)
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && \
-	apt-get install --assume-yes apt-transport-https ca-certificates nodejs npm && \
+	apt-get install --assume-yes apt-transport-https ca-certificates && \
 	apt-get install --assume-yes --no-install-recommends build-essential bzip2 curl git libarchive-tools python
 
 # Install Meteor
