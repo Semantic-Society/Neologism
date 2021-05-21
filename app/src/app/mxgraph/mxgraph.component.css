@@ -7,7 +7,7 @@
   flex: 1;
 }
 
-mat-drawer-container, mat-drawer-content, mat-tab-group, .mxgraph-container  {
+mat-drawer-container, mat-drawer-content, mat-tab-group, .mxgraph-container, nz-layout  {
   height: 100%;
 }
 
