@@ -56,7 +56,7 @@ import { ListEditorComponent } from './vocabulary-editor/list-editor/list-editor
 import { EditComponentService } from './vocabulary-editor/edit.component.service';
 import { RemoveUserModalComponent } from './vocablist/components/remove-user-modal/remove-user-modal.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { PropertyEditModal } from './mxgraph/property-model/property-edit.component';
+import { PropertyEditModal } from './mxgraph/property-edit-form/property-edit.component';
 import {DupURIValidator } from './shared/DupURIValidator'
 import { BatchRecommenderComponent } from './batchRecommender/batchRecommender.component';
 import { SpellCheckerModule } from 'ngx-spellchecker';
