@@ -227,7 +227,7 @@ export class MxgraphService {
     }
 
     getEdgeWithId(edgeID: string) {
-        // TODO in principle getCell should work, but upon inserting there is an issue and the cell gets assingned a new id
+        // TODO in principle getCell should work, but upon inserting there is an issue and the cell gets assigned a new id
         for (const key in this.model.cells) {
             if (this.model.cells.hasOwnProperty(key)) {
                 const candidate = this.model.cells[key];
@@ -240,7 +240,7 @@ export class MxgraphService {
     }
 
     getVertexWithId(classId: string) {
-        // TODO in principle getCell should work, but upon inserting there is an issue and the cell gets assingned a new id
+        // TODO in principle getCell should work, but upon inserting there is an issue and the cell gets assigned a new id
         for (const key in this.model.cells) {
             if (this.model.cells.hasOwnProperty(key)) {
                 const candidate = this.model.cells[key];
