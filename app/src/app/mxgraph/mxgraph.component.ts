@@ -121,7 +121,7 @@ export class MxgraphComponent implements OnInit, OnDestroy {
     this.currentEdgeSelectionSub = this.mx
       .currentEdgeSelection()
       .subscribe((edgeSelection) => {
-        if (edgeSelection != null) {
+        if (edgeSelection != null && !edgeSelection.isDataTypeProp) {
           const modal = this.modalService.create({
             nzTitle: "Actions on Property",
             nzContent: PropertyEditModal,
