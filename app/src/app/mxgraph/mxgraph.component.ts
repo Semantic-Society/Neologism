@@ -46,7 +46,7 @@ import {
   SidebarChange,
 } from "../services/state-services/sidebar-state.service";
 import { NzModalService } from "ng-zorro-antd/modal";
-import { PropertyEditModal } from "./property-model/property-edit.component";
+import { PropertyEditModal } from "./property-edit-form/property-edit.component";
 import { Classes } from "../../../api/collections";
 import { RecommendationService } from "../services/recommendation.service";
 import { MeteorObservable, zoneOperator } from "meteor-rxjs";
@@ -175,36 +175,36 @@ export class MxgraphComponent implements OnInit, OnDestroy {
       });
 
     // TODO It looks like this currently leaks observables.
-    this.mx
-      .deleteRequestObservable()
-      .pipe(
-        combineLatest(
-          this.mx.currentEdgeSelection(),
-          this.mx.currentSelection(),
-          (keyevent, edgeSel, nodeSel) => ({
-            key: keyevent,
-            edge: edgeSel,
-            node: nodeSel,
-          })
-        ),
-        filter(
-          (possibleDelReq) =>
-            possibleDelReq.key !== null &&
-            (possibleDelReq.edge !== null || possibleDelReq.node !== null)
-        )
-      )
-      .subscribe((deleteRequest) => {
-        console.log(
-          "delete key presses seem to be not deatlh correctly atm. Pressing the del key multiple times and then clicking nodes, fires delete events still."
-        );
-        if (deleteRequest.edge !== null) {
-          // this.vocabService.deleteProperty();
-          console.log("delete edge ", deleteRequest.edge);
-        }
-        if (deleteRequest.node !== null) {
-          console.log("delete node", deleteRequest.node);
-        }
-      });
+    // this.mx
+    //   .deleteRequestObservable()
+    //   .pipe(
+    //     combineLatest(
+    //       this.mx.currentEdgeSelection(),
+    //       this.mx.currentSelection(),
+    //       (keyevent, edgeSel, nodeSel) => ({
+    //         key: keyevent,
+    //         edge: edgeSel,
+    //         node: nodeSel,
+    //       })
+    //     ),
+    //     filter(
+    //       (possibleDelReq) =>
+    //         possibleDelReq.key !== null &&
+    //         (possibleDelReq.edge !== null || possibleDelReq.node !== null)
+    //     )
+    //   )
+    //   .subscribe((deleteRequest) => {
+    //     console.log(
+    //       "delete key presses seem to be not deatlh correctly atm. Pressing the del key multiple times and then clicking nodes, fires delete events still."
+    //     );
+    //     if (deleteRequest.edge !== null) {
+    //       // this.vocabService.deleteProperty();
+    //       console.log("delete edge ", deleteRequest.edge);
+    //     }
+    //     if (deleteRequest.node !== null) {
+    //       console.log("delete node", deleteRequest.node);
+    //     }
+    //   });
 
     this.vocabularySub = this.vocabService
       .getVocabulary(this.vocabID)
