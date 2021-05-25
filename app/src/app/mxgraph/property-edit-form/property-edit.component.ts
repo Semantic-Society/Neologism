@@ -6,6 +6,7 @@ import { MeteorObservable } from 'meteor-rxjs';
 import { SpellCheckerService } from 'ngx-spellchecker';
 import { HttpClient } from '@angular/common/http';
 import { NzAutocompleteModule } from 'ng-zorro-antd/auto-complete';
+import { VocabulariesService } from '../../services/vocabularies.service';
 
 @Component({
   selector: 'app-update-prop-modal',
@@ -20,6 +21,102 @@ export class PropertyEditModal implements OnInit {
   propSourceNodeId: string
   public prop: Iproperty
 
+  xsdDataTypes = [
+
+    "anyURI",
+
+    "base64Binary",
+
+    "boolean",
+
+    "byte",
+
+    "date",
+
+    "dateTime",
+
+    "decimal",
+
+    "derivationControl",
+
+    "double",
+
+    "duration",
+
+    "ENTITIES",
+
+    "ENTITY",
+
+    "float",
+
+    "gDay",
+
+    "gMonth",
+
+    "gMonthDay",
+
+    "gYear",
+
+    "gYearMonth",
+
+    "hexBinary",
+
+    "ID",
+
+    "IDREF",
+
+    "IDREFS",
+
+    "int",
+
+    "integer",
+
+    "language",
+
+    "long",
+
+    "Name",
+
+    "NCName",
+
+    "negativeInteger",
+
+    "NMTOKEN",
+
+    "NMTOKENS",
+
+    "nonNegativeInteger",
+
+    "nonPositiveInteger",
+
+    "normalizedString",
+
+    "NOTATION",
+
+    "positiveInteger",
+
+    "QName",
+
+    "short",
+
+    "simpleDerivationSet",
+
+    "string",
+
+    "time",
+
+    "token",
+
+    "unsignedByte",
+
+    "unsignedInt",
+
+    "unsignedLong",
+
+    "unsignedShort"
+
+  ]
+
   fileURL = "https://raw.githubusercontent.com/JacobSamro/ngx-spellchecker/master/dict/normalized_en-US.dic"
 
   classes: Array<Iclass>
@@ -29,10 +126,10 @@ export class PropertyEditModal implements OnInit {
 
   constructor(private modal: NzModalRef,
     private spellCheckerService: SpellCheckerService,
-    private httpClient: HttpClient) { }
+    private httpClient: HttpClient,
+    private vocabService: VocabulariesService) { }
 
   ngOnInit() {
-
     this.propList = []
     this.propListName = []
     this.propListString.split(',').forEach(key => {
@@ -48,13 +145,30 @@ export class PropertyEditModal implements OnInit {
   selectedProp: string;
 
   closeModal(): void {
-    MeteorObservable.call('property.update', this.prop._id, this.prop.name, this.prop.description, this.prop.URI, this.prop.range).subscribe((response) => {
-      // Handle success and response from server!
-      console.log("updated");
 
-    }, (err) => {
-      console.log(err);
-    });
+    if (this.prop.type === PropertyType.Data) {
+      
+      this.prop.URI = `http://www.w3.org/2001/XMLSchema#${this.prop.rangeName}`
+      this.vocabService.updateClassName(this.prop._id, this.prop.rangeName)
+      this.vocabService.updateClassURI(this.prop._id, this.prop.URI);
+
+      MeteorObservable.call('property.update', this.prop._id, this.prop.name, this.prop.description, this.prop.URI, this.prop._id).subscribe((response) => {
+        // Handle success and response from server!
+        console.log("updated");
+
+      }, (err) => {
+        console.log(err);
+      });
+    } else {
+      MeteorObservable.call('property.update', this.prop._id, this.prop.name, this.prop.description, this.prop.URI, this.prop.range).subscribe((response) => {
+        // Handle success and response from server!
+        console.log("updated");
+
+      }, (err) => {
+        console.log(err);
+      });
+    }
+
     this.modal.destroy();
   }
 
@@ -62,23 +176,35 @@ export class PropertyEditModal implements OnInit {
 
     this.httpClient.get(this.fileURL, { responseType: 'text' }).subscribe((res: any) => {
       let dictionary = this.spellCheckerService.getDictionary(res)
-
       this.suggestions = dictionary.getSuggestions(word)
     })
-
-
+    
     this.contextmenu = true
   }
 
 
   deleteProp(): void {
-    MeteorObservable.call('property.delete', this.prop._id, this.propSourceNodeId).subscribe((response) => {
-      // Handle success and response from server!
-      console.log("delted");
 
-    }, (err) => {
-      console.log(err);
-    });
+    if (this.prop.type === PropertyType.Data) {
+      MeteorObservable.call('property.delete', this.prop._id, this.propSourceNodeId).subscribe((response) => {
+        // Handle success and response from server!
+      }, (err) => {
+        console.log(err);
+      });
+
+      MeteorObservable.call('classes.delete', this.prop._id).subscribe((response) => {
+        // Handle success and response from server!
+      }, (err) => {
+        console.log(err);
+      });
+    }
+    else {
+      MeteorObservable.call('property.delete', this.prop._id, this.propSourceNodeId).subscribe((response) => {
+        // Handle success and response from server!
+      }, (err) => {
+        console.log(err);
+      });
+    }
     this.modal.destroy();
   }
 

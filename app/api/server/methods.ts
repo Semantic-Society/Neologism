@@ -222,10 +222,10 @@ Meteor.methods({
       { _id: sourceId },
       { $pull: { properties: { $in: [propId] } } },
       {}
-    )
+    ).subscribe()
 
     Properties.remove(
       { _id: propId }
-    )
+    ).subscribe()
   }
 });

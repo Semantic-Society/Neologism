@@ -56,6 +56,7 @@ export interface Iproperty {
   description: string;
   URI: string;
   range: meteorID;
+  rangeName?:string
 }
 
 export interface IvocabularyExtended extends Ivocabulary {
@@ -93,99 +94,100 @@ export enum PropertyType {
 }
 
 
-
-export const xsdDataTypes = [
+const xsdDataTypes = [
 
   "anyURI",
 
   "base64Binary",
-  
+
   "boolean",
-  
+
   "byte",
-  
+
   "date",
-  
+
   "dateTime",
-  
+
   "decimal",
-  
+
   "derivationControl",
-  
+
   "double",
-  
+
   "duration",
-  
+
   "ENTITIES",
-  
+
   "ENTITY",
-  
+
   "float",
-  
+
   "gDay",
-  
+
   "gMonth",
-  
+
   "gMonthDay",
-  
+
   "gYear",
-  
+
   "gYearMonth",
-  
+
   "hexBinary",
-  
+
   "ID",
-  
+
   "IDREF",
-  
+
   "IDREFS",
-  
+
   "int",
-  
+
   "integer",
-  
+
   "language",
-  
+
   "long",
-  
+
   "Name",
-  
+
   "NCName",
-  
+
   "negativeInteger",
-  
+
   "NMTOKEN",
-  
+
   "NMTOKENS",
-  
+
   "nonNegativeInteger",
-  
+
   "nonPositiveInteger",
-  
+
   "normalizedString",
-  
+
   "NOTATION",
-  
+
   "positiveInteger",
-  
+
   "QName",
-  
+
   "short",
-  
+
   "simpleDerivationSet",
-  
+
   "string",
-  
+
   "time",
-  
+
   "token",
-  
+
   "unsignedByte",
-  
+
   "unsignedInt",
-  
+
   "unsignedLong",
-  
+
   "unsignedShort"
 
 ]
+
+export {xsdDataTypes}

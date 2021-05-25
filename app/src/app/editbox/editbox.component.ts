@@ -55,101 +55,104 @@ export class EditboxComponent implements OnInit, OnChanges {
     URI: '',
     description: ''
   };
-  xsdDataTypes = [
 
-    "anyURI",
+xsdDataTypes = [
 
-    "base64Binary",
+  "anyURI",
 
-    "boolean",
+  "base64Binary",
 
-    "byte",
+  "boolean",
 
-    "date",
+  "byte",
 
-    "dateTime",
+  "date",
 
-    "decimal",
+  "dateTime",
 
-    "derivationControl",
+  "decimal",
 
-    "double",
+  "derivationControl",
 
-    "duration",
+  "double",
 
-    "ENTITIES",
+  "duration",
 
-    "ENTITY",
+  "ENTITIES",
 
-    "float",
+  "ENTITY",
 
-    "gDay",
+  "float",
 
-    "gMonth",
+  "gDay",
 
-    "gMonthDay",
+  "gMonth",
 
-    "gYear",
+  "gMonthDay",
 
-    "gYearMonth",
+  "gYear",
 
-    "hexBinary",
+  "gYearMonth",
 
-    "ID",
+  "hexBinary",
 
-    "IDREF",
+  "ID",
 
-    "IDREFS",
+  "IDREF",
 
-    "int",
+  "IDREFS",
 
-    "integer",
+  "int",
 
-    "language",
+  "integer",
 
-    "long",
+  "language",
 
-    "Name",
+  "long",
 
-    "NCName",
+  "Name",
 
-    "negativeInteger",
+  "NCName",
 
-    "NMTOKEN",
+  "negativeInteger",
 
-    "NMTOKENS",
+  "NMTOKEN",
 
-    "nonNegativeInteger",
+  "NMTOKENS",
 
-    "nonPositiveInteger",
+  "nonNegativeInteger",
 
-    "normalizedString",
+  "nonPositiveInteger",
 
-    "NOTATION",
+  "normalizedString",
 
-    "positiveInteger",
+  "NOTATION",
 
-    "QName",
+  "positiveInteger",
 
-    "short",
+  "QName",
 
-    "simpleDerivationSet",
+  "short",
 
-    "string",
+  "simpleDerivationSet",
 
-    "time",
+  "string",
 
-    "token",
+  "time",
 
-    "unsignedByte",
+  "token",
 
-    "unsignedInt",
+  "unsignedByte",
 
-    "unsignedLong",
+  "unsignedInt",
 
-    "unsignedShort"
+  "unsignedLong",
 
-  ]
+  "unsignedShort"
+
+]
+
+  
   protected classToUpdate: Observable<IClassWithProperties>;
   public editToggle = false;
   protected rangeOptions: Observable<Array<{ _id: string, name: string }>>;

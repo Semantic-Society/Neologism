@@ -35,4 +35,39 @@
     </nz-form-item>
 </ng-component>
 
+
+<nz-form-item>
+    <nz-form-label>Name</nz-form-label>
+    <input placeholder="Label" nz-input [(ngModel)]="prop.name" [nzAutocomplete]="auto"
+        (ngModelChange)="checkWord($event)">
+    <nz-autocomplete nzBackfill #auto>
+        <nz-auto-option *ngFor="let option of suggestions" [nzValue]="option" [nzLabel]="option">
+            {{ option }}
+        </nz-auto-option>
+    </nz-autocomplete>
+</nz-form-item>
+<nz-form-item>
+    <nz-form-label>URI</nz-form-label>
+    <input placeholder="URI" nz-input [(ngModel)]="prop.URI" readonly>
+
+</nz-form-item>
+<nz-form-item>
+    <nz-form-label>Description</nz-form-label>
+    <input placeholder="Comment" nz-input [(ngModel)]="prop.description" readonly>
+
+</nz-form-item>
+<nz-form-item>
+    <nz-form-label>Target Node/Range</nz-form-label>
+    <nz-select style="width: 100%; margin-top: 7px;" nzShowSearch nzPlaceHolder="Select Range"
+        [(ngModel)]="prop.rangeName">
+        <ng-container *ngFor="let element of xsdDataTypes; let i = index">
+            <nz-option [nzValue]="element" [nzLabel]="'xsd:'+element" [value]="element"></nz-option>
+        </ng-container>
+
+    </nz-select>
+</nz-form-item>
+
+
+
+
 <div>
