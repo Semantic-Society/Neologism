@@ -55,12 +55,12 @@ import { BatchRecommendations } from "../services/BatchRecommendations";
 interface IMergedPropertiesClass {
   _id: string; // Mongo generated ID
   name: string;
-    properties: Array<{
-        _id: string;
-        name: string;
-        rangeID: string; // just the ID
-        type: PropertyType;
-    }>;
+  properties: Array<{
+    _id: string;
+    name: string;
+    rangeID: string; // just the ID
+    type: PropertyType;
+  }>;
 }
 
 @Component({
@@ -68,7 +68,7 @@ interface IMergedPropertiesClass {
   templateUrl: "./mxgraph.component.html",
   styleUrls: ["./mxgraph.component.css"],
 })
- 
+
 export class MxgraphComponent implements OnInit, OnDestroy {
   editMode: Observable<SidebarChange>; // type SidebarChange = 'default' | 'edit' | 'recommend'
   currentSelection: meteorID;
@@ -77,7 +77,7 @@ export class MxgraphComponent implements OnInit, OnDestroy {
   public batchPhase: boolean = true;
   recommendations: Observable<BatchRecommendations>;
   domain: string;
-  public editing:boolean = false;
+  public editing: boolean = false;
 
   vocabularySub: Subscription;
 
@@ -121,7 +121,7 @@ export class MxgraphComponent implements OnInit, OnDestroy {
     this.currentEdgeSelectionSub = this.mx
       .currentEdgeSelection()
       .subscribe((edgeSelection) => {
-        if (edgeSelection != null && !edgeSelection.isDataTypeProp) {
+        if (edgeSelection != null) {
           const modal = this.modalService.create({
             nzTitle: "Actions on Property",
             nzContent: PropertyEditModal,
@@ -241,10 +241,10 @@ export class MxgraphComponent implements OnInit, OnDestroy {
     this.classes.pipe(
       startWith([]),
       debounceTime(1000),
-  ).subscribe((cs) => {
+    ).subscribe((cs) => {
       if (!cs.length) {
-          this.showDialogForEmptyGraph.nativeElement.showModal()
-          return;
+        this.showDialogForEmptyGraph.nativeElement.showModal()
+        return;
       }
       this.mx.startTransaction();
 
@@ -254,9 +254,13 @@ export class MxgraphComponent implements OnInit, OnDestroy {
       this.classNames = [];
       cs.forEach((c) => {
 
+        if (c.isDataTypeVertex) {
+          this.mx.insertDashedClass(c._id, c.name, c.position.x, c.position.y)
+        } else {
+          this.mx.insertClass(c._id, c.name, c.position.x, c.position.y)
+        }
 
-              this.mx.insertClass(c._id, c.name, c.position.x, c.position.y)
-              !this.classNames.includes(c.name)?this.classNames.push(c.name):null;
+        !this.classNames.includes(c.name) ? this.classNames.push(c.name) : null;
       }
 
       );
@@ -264,70 +268,60 @@ export class MxgraphComponent implements OnInit, OnDestroy {
       // insert properties
       this.propertyNames = [];
       cs.forEach((c) => {
-          // grouping the properties by their target
-          const merged = this.mergeProperties(c);
-          merged.properties.forEach((p) => {
-              !this.propertyNames.includes(p.name)?this.propertyNames.push(p.name):null;
-              if (p.type == PropertyType.Object) {
-                  this.mx.insertProperty(c._id,
-                      p._id, p.name,
-                      p.rangeID)
-              } else {
-                  this.mx.removeCell(p._id)
-                  const cl=cs.find((c)=>c._id==p._id)
-                  this.mx.insertDashedClass(cl._id, cl.name, cl.position.x, cl.position.y)
-                  this.mx.insertProperty(c._id,
-                      p._id, p.name,
-                      p._id)
-              }
-
-          });
+        // grouping the properties by their target
+        const merged = this.mergeProperties(c);
+        merged.properties.forEach((p) => {
+          !this.propertyNames.includes(p.name) ? this.propertyNames.push(p.name) : null;
+          this.mx.insertProperty(c._id,
+            p._id, p.name,
+            p.rangeID)
+        });
       });
 
       this.mx.endTransaction();
-  });
+    });
 
-}// end ngOnInit
-mergeProperties(c: IClassWithProperties): IMergedPropertiesClass {
-  // only takes the necessary parts
-  const withMergedProps: IMergedPropertiesClass = { _id: c._id, properties: [], name: c.name };
-  // merge the properties and fill.
-  // TODO: is this better solved with a ES6 Map?
-  const grouped = c.properties.reduce(
+  }// end ngOnInit
+  mergeProperties(c: IClassWithProperties): IMergedPropertiesClass {
+    // only takes the necessary parts
+    const withMergedProps: IMergedPropertiesClass = { _id: c._id, properties: [], name: c.name };
+    // merge the properties and fill.
+    // TODO: is this better solved with a ES6 Map?
+    const grouped = c.properties.reduce(
       (groups, x, ignored) => {
-          (groups[x.range._id] = groups[x.range._id] || []).push(x);
-          return groups;
+        (groups[x.range._id] = groups[x.range._id] || []).push(x);
+        return groups;
       }, Object.create(null));
 
-  // We used Object.create(null) to make grouped. So, it does not have any non-own properties.
-  // in fact, it does not have hasOwnProperty
-  // tslint:disable-next-line:forin
-  for (const key in grouped) {
+    // We used Object.create(null) to make grouped. So, it does not have any non-own properties.
+    // in fact, it does not have hasOwnProperty
+    // tslint:disable-next-line:forin
+    for (const key in grouped) {
       // if (grouped.hasOwnProperty(key)) {
       const group: Array<{
-          _id: string;
-          name: string;
-          type: PropertyType;
-          range: IClassWithProperties;
+        _id: string;
+        name: string;
+        type: PropertyType;
+        range: IClassWithProperties;
       }> = grouped[key];
       // join names
       const nameList: string[] = group.reduce<string[]>(
-          (combinedNameAcc, prop, ignores) => {
-              combinedNameAcc.push(prop.name);
-              return combinedNameAcc;
-          }, []);
+        (combinedNameAcc, prop, ignores) => {
+          combinedNameAcc.push(prop.name);
+          return combinedNameAcc;
+        }, []);
       const keyList: string[] = group.reduce<string[]>(
-          (combinedNameAcc, prop, ignores) => {
-              combinedNameAcc.push(prop._id);
-              return combinedNameAcc;
-          }, []);
+        (combinedNameAcc, prop, ignores) => {
+          combinedNameAcc.push(prop._id);
+          return combinedNameAcc;
+        }, []);
       const combinedName = nameList.join(' | ');
       const combinedKey = keyList.join(',');
       withMergedProps.properties.push({ _id: combinedKey, name: combinedName, rangeID: group[0].range._id || group[0].range as any, type: group[0].type });
       // }
+    }
+    return withMergedProps;
   }
-  return withMergedProps;
-}
 
   showRecommender() {
     this.sideBarState.changeSidebarState("recommend");
@@ -339,7 +333,7 @@ mergeProperties(c: IClassWithProperties): IMergedPropertiesClass {
 
   getBatchRecommendation() {
 
-    
+
     this.recommendations = this.recommenderService.batchRecommendationsForClasses(
       {
         classes: this.classNames,
@@ -354,24 +348,24 @@ mergeProperties(c: IClassWithProperties): IMergedPropertiesClass {
 
   hideBatch() {
     this.batchPhase = true;
-    
+
   }
 
-  startEdit(){
-    this.editing=!this.editing;
+  startEdit() {
+    this.editing = !this.editing;
   }
 
-  editDomain(){
-    MeteorObservable.call("vocabulary.addDomain",this.domain,this.vocabulary._id).pipe(zoneOperator())
-    .subscribe((_response) => {
-      // Handle success and response from server!
-    }, (err) => {
-      console.log(err);
-      // Handle error
-    });;
+  editDomain() {
+    MeteorObservable.call("vocabulary.addDomain", this.domain, this.vocabulary._id).pipe(zoneOperator())
+      .subscribe((_response) => {
+        // Handle success and response from server!
+      }, (err) => {
+        console.log(err);
+        // Handle error
+      });;
     console.log(this.vocabService.getVocabulary(this.vocabulary._id))
-      this.editing = false
-      console.log(this.vocabulary)
+    this.editing = false
+    console.log(this.vocabulary)
   }
 
   showEditBox() {

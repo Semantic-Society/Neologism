@@ -115,9 +115,10 @@ Meteor.methods({
     assertUser();
     // TODO: Sanitize
     var classIdO
-    // Note, these operations must occur in this order. Otherwise an observer of the vocabualry might
+    // checking for Id indicates that it is a DataType Vertex
+    // where the id for prop and vertex are identical
     if (_id) {
-      classIdO = Classes.insert({ _id, name, description, URI, properties: [], position, skos: { closeMatch: [], exactMatch: [] } });
+      classIdO = Classes.insert({ _id, name, isDataTypeVertex: true, description, URI, properties: [], position, skos: { closeMatch: [], exactMatch: [] } });
     } else {
       classIdO = Classes.insert({ name, description, URI, properties: [], position, skos: { closeMatch: [], exactMatch: [] } });
     }

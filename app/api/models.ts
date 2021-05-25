@@ -37,7 +37,7 @@ export interface Iclass {
   name: string;
   description: string;
   URI: string;
-
+  isDataTypeVertex?: boolean;
   properties: meteorID[];
   position: {
     x: number;

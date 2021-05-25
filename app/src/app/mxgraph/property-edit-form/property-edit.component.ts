@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Properties, Classes } from '../../../../api/collections';
-import { Iclass, Iproperty } from '../../../../api/models';
+import { Iclass, Iproperty, PropertyType } from '../../../../api/models';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 import { MeteorObservable } from 'meteor-rxjs';
 import { SpellCheckerService } from 'ngx-spellchecker';
@@ -14,33 +14,35 @@ import { NzAutocompleteModule } from 'ng-zorro-antd/auto-complete';
 })
 export class PropertyEditModal implements OnInit {
   @Input() propListString: string;
-
+  isDataTypeProp: boolean
   propList: Array<Iproperty>
   propListName: Array<string>
   propSourceNodeId: string
   public prop: Iproperty
 
   fileURL = "https://raw.githubusercontent.com/JacobSamro/ngx-spellchecker/master/dict/normalized_en-US.dic"
- 
+
   classes: Array<Iclass>
 
-  public suggestions:string[]
-  contextmenu:boolean = false
+  public suggestions: string[]
+  contextmenu: boolean = false
 
   constructor(private modal: NzModalRef,
     private spellCheckerService: SpellCheckerService,
     private httpClient: HttpClient) { }
 
   ngOnInit() {
+
     this.propList = []
     this.propListName = []
     this.propListString.split(',').forEach(key => {
       const prop = Properties.findOne({ _id: key })
       this.propList.push(prop)
     })
-    this.classes = Classes.find({}).fetch()
-    this.prop=this.propList[0]
+    this.classes = Classes.find({ isDataTypeVertex: { $exists: false } }).fetch()
+    this.prop = this.propList[0]
     this.selectedProp = this.prop._id
+    this.isDataTypeProp = this.prop.type === PropertyType.Data;
   }
 
   selectedProp: string;
@@ -56,21 +58,21 @@ export class PropertyEditModal implements OnInit {
     this.modal.destroy();
   }
 
-  checkWord(word:string){
-   
+  checkWord(word: string) {
+
     this.httpClient.get(this.fileURL, { responseType: 'text' }).subscribe((res: any) => {
       let dictionary = this.spellCheckerService.getDictionary(res)
-      
-     this.suggestions=  dictionary.getSuggestions(word)
+
+      this.suggestions = dictionary.getSuggestions(word)
     })
-   
-   
-      this.contextmenu = true
+
+
+    this.contextmenu = true
   }
 
 
   deleteProp(): void {
-    MeteorObservable.call('property.delete', this.prop._id,this.propSourceNodeId).subscribe((response) => {
+    MeteorObservable.call('property.delete', this.prop._id, this.propSourceNodeId).subscribe((response) => {
       // Handle success and response from server!
       console.log("delted");
 
@@ -82,6 +84,7 @@ export class PropertyEditModal implements OnInit {
 
   propChange(_id: string) {
     this.prop = this.propList.find(x => x._id == _id)
+    this.isDataTypeProp = this.prop.type === PropertyType.Data;
   }
 
 

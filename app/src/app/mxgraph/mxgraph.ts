@@ -22,7 +22,7 @@ export class MxgraphService {
     transactionSelection;
     selection$: Observable<string>;
     wnd: any
-    edgeSelection$: Observable<{ domainClazzID: string; edgeID: string }>;
+    edgeSelection$: Observable<{ domainClazzID: string; edgeID: string ,isDataTypeProp: boolean}>;
 
     tb: m.mxToolbar;
     // public codec: N3Codec;

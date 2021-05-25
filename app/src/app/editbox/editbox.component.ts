@@ -153,13 +153,13 @@ export class EditboxComponent implements OnInit, OnChanges {
   protected classToUpdate: Observable<IClassWithProperties>;
   public editToggle = false;
   protected rangeOptions: Observable<Array<{ _id: string, name: string }>>;
-  public suggestions_class:string[]
-  public suggestions_property:string[]
-  contextmenu_class:boolean = false
-  contextmenu_property:boolean = false
-  
+  public suggestions_class: string[]
+  public suggestions_property: string[]
+  contextmenu_class: boolean = false
+  contextmenu_property: boolean = false
+
   fileURL = "https://raw.githubusercontent.com/JacobSamro/ngx-spellchecker/master/dict/normalized_en-US.dic"
- 
+
   constructor(
     private vocabService: VocabulariesService,
     private recommender: RecommendationService,
@@ -241,29 +241,29 @@ export class EditboxComponent implements OnInit, OnChanges {
 
 
   }
-checkWordProperty(word:string){
-   
-  this.httpClient.get(this.fileURL, { responseType: 'text' }).subscribe((res: any) => {
-    let dictionary = this.spellCheckerService.getDictionary(res)
-    
-   this.suggestions_property=  dictionary.getSuggestions(word)
-  })
- 
- 
-    this.contextmenu_class = true
-}
+  checkWordProperty(word: string) {
 
-checkWordClass(word:string){
-   
-  this.httpClient.get(this.fileURL, { responseType: 'text' }).subscribe((res: any) => {
-    let dictionary = this.spellCheckerService.getDictionary(res)
-    
-   this.suggestions_class =  dictionary.getSuggestions(word)
-  })
- 
- 
+    this.httpClient.get(this.fileURL, { responseType: 'text' }).subscribe((res: any) => {
+      let dictionary = this.spellCheckerService.getDictionary(res)
+
+      this.suggestions_property = dictionary.getSuggestions(word)
+    })
+
+
     this.contextmenu_class = true
-}
+  }
+
+  checkWordClass(word: string) {
+
+    this.httpClient.get(this.fileURL, { responseType: 'text' }).subscribe((res: any) => {
+      let dictionary = this.spellCheckerService.getDictionary(res)
+
+      this.suggestions_class = dictionary.getSuggestions(word)
+    })
+
+
+    this.contextmenu_class = true
+  }
   addRecommendedProperyToGraph(rec: IClassProperty) {
     this.editboxService.addRecommendedProperyToGraph(rec, this.selectedClassID, this.vocabID)
   }
@@ -274,7 +274,6 @@ checkWordClass(word:string){
     if (index) {
       this.formProp.controls['URI'].setValue(`http://www.w3.org/2001/XMLSchema#${this.formProp.value.range}`)
     }
-    console.log(formDirective.value)
     this.vocabService.addProperty(this.selectedClassID, this.formProp.value.name, this.formProp.value.description, this.formProp.value.URI, this.formProp.value.range, typo, this.vocabID);
     formDirective.resetForm();
     this.formProp.reset()
