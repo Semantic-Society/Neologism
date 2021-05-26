@@ -4,6 +4,7 @@ import { IClassInfo, IClassProperties, IClassProperty } from '../models/editbox.
 import { VocabulariesService, IClassWithProperties } from '../services/vocabularies.service';
 import { of, Observable, BehaviorSubject } from 'rxjs';
 import { map, startWith, combineLatest, switchMap, tap, take, withLatestFrom, filter } from 'rxjs/operators';
+import { PropertyType } from "./../../../api/models";
 
 @Injectable()
 export class EditComponentService {
@@ -94,7 +95,7 @@ export class EditComponentService {
 
 
         if(rangeID){
-            this.vocabService.addProperty(selectedClassID, rec.label, rec.comment, rec.uri, rangeID);
+            this.vocabService.addProperty(selectedClassID, rec.label, rec.comment, rec.uri, rangeID,PropertyType.Object,null);
         } else {
             
             let className = 'no name yet'

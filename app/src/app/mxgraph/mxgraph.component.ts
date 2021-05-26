@@ -33,6 +33,7 @@ import {
   Ivocabulary,
   meteorID,
   IvocabularyExtended,
+  PropertyType,
 } from "../../../api/models";
 import {
   IClassWithProperties,
@@ -45,7 +46,7 @@ import {
   SidebarChange,
 } from "../services/state-services/sidebar-state.service";
 import { NzModalService } from "ng-zorro-antd/modal";
-import { PropertyEditModal } from "./property-model/property-edit.component";
+import { PropertyEditModal } from "./property-edit-form/property-edit.component";
 import { Classes } from "../../../api/collections";
 import { RecommendationService } from "../services/recommendation.service";
 import { MeteorObservable, zoneOperator } from "meteor-rxjs";
@@ -58,6 +59,7 @@ interface IMergedPropertiesClass {
     _id: string;
     name: string;
     rangeID: string; // just the ID
+    type: PropertyType;
   }>;
 }
 
@@ -66,7 +68,7 @@ interface IMergedPropertiesClass {
   templateUrl: "./mxgraph.component.html",
   styleUrls: ["./mxgraph.component.css"],
 })
- 
+
 export class MxgraphComponent implements OnInit, OnDestroy {
   editMode: Observable<SidebarChange>; // type SidebarChange = 'default' | 'edit' | 'recommend'
   currentSelection: meteorID;
@@ -75,7 +77,7 @@ export class MxgraphComponent implements OnInit, OnDestroy {
   public batchPhase: boolean = true;
   recommendations: Observable<BatchRecommendations>;
   domain: string;
-  public editing:boolean = false;
+  public editing: boolean = false;
 
   vocabularySub: Subscription;
 
@@ -173,36 +175,36 @@ export class MxgraphComponent implements OnInit, OnDestroy {
       });
 
     // TODO It looks like this currently leaks observables.
-    this.mx
-      .deleteRequestObservable()
-      .pipe(
-        combineLatest(
-          this.mx.currentEdgeSelection(),
-          this.mx.currentSelection(),
-          (keyevent, edgeSel, nodeSel) => ({
-            key: keyevent,
-            edge: edgeSel,
-            node: nodeSel,
-          })
-        ),
-        filter(
-          (possibleDelReq) =>
-            possibleDelReq.key !== null &&
-            (possibleDelReq.edge !== null || possibleDelReq.node !== null)
-        )
-      )
-      .subscribe((deleteRequest) => {
-        console.log(
-          "delete key presses seem to be not deatlh correctly atm. Pressing the del key multiple times and then clicking nodes, fires delete events still."
-        );
-        if (deleteRequest.edge !== null) {
-          // this.vocabService.deleteProperty();
-          console.log("delete edge ", deleteRequest.edge);
-        }
-        if (deleteRequest.node !== null) {
-          console.log("delete node", deleteRequest.node);
-        }
-      });
+    // this.mx
+    //   .deleteRequestObservable()
+    //   .pipe(
+    //     combineLatest(
+    //       this.mx.currentEdgeSelection(),
+    //       this.mx.currentSelection(),
+    //       (keyevent, edgeSel, nodeSel) => ({
+    //         key: keyevent,
+    //         edge: edgeSel,
+    //         node: nodeSel,
+    //       })
+    //     ),
+    //     filter(
+    //       (possibleDelReq) =>
+    //         possibleDelReq.key !== null &&
+    //         (possibleDelReq.edge !== null || possibleDelReq.node !== null)
+    //     )
+    //   )
+    //   .subscribe((deleteRequest) => {
+    //     console.log(
+    //       "delete key presses seem to be not deatlh correctly atm. Pressing the del key multiple times and then clicking nodes, fires delete events still."
+    //     );
+    //     if (deleteRequest.edge !== null) {
+    //       // this.vocabService.deleteProperty();
+    //       console.log("delete edge ", deleteRequest.edge);
+    //     }
+    //     if (deleteRequest.node !== null) {
+    //       console.log("delete node", deleteRequest.node);
+    //     }
+    //   });
 
     this.vocabularySub = this.vocabService
       .getVocabulary(this.vocabID)
@@ -236,9 +238,12 @@ export class MxgraphComponent implements OnInit, OnDestroy {
       this.vocabService.translateClasses(ids, dx, dy);
     });
 
-    this.classes.pipe(startWith([]), debounceTime(1000)).subscribe((cs) => {
+    this.classes.pipe(
+      startWith([]),
+      debounceTime(1000),
+    ).subscribe((cs) => {
       if (!cs.length) {
-        //this.showDialogForEmptyGraph.nativeElement.showModal()
+        this.showDialogForEmptyGraph.nativeElement.showModal()
         return;
       }
       this.mx.startTransaction();
@@ -246,39 +251,47 @@ export class MxgraphComponent implements OnInit, OnDestroy {
       this.mx.clearModel();
 
       // insert classes
-     this.classNames = [];
+      this.classNames = [];
       cs.forEach((c) => {
-        this.mx.insertClass(c._id, c.name, c.position.x, c.position.y);
-        !this.classNames.includes(c.name)?this.classNames.push(c.name):null;
-      });
+
+        if (c.isDataTypeVertex) {
+          this.mx.insertDashedClass(c._id, c.name, c.position.x, c.position.y)
+        } else {
+          this.mx.insertClass(c._id, c.name, c.position.x, c.position.y)
+        }
+
+        !this.classNames.includes(c.name) ? this.classNames.push(c.name) : null;
+      }
+
+      );
 
       // insert properties
-    this.propertyNames = [];
+      this.propertyNames = [];
       cs.forEach((c) => {
         // grouping the properties by their target
         const merged = this.mergeProperties(c);
         merged.properties.forEach((p) => {
-          this.mx.insertProperty(c._id, p._id, p.name, p.rangeID);
-          !this.propertyNames.includes(p.name)?this.propertyNames.push(p.name):null;
+          !this.propertyNames.includes(p.name) ? this.propertyNames.push(p.name) : null;
+          this.mx.insertProperty(c._id,
+            p._id, p.name,
+            p.rangeID)
         });
       });
 
       this.mx.endTransaction();
     });
-  } // end ngOnInit
+
+  }// end ngOnInit
   mergeProperties(c: IClassWithProperties): IMergedPropertiesClass {
     // only takes the necessary parts
-    const withMergedProps: IMergedPropertiesClass = {
-      _id: c._id,
-      properties: [],
-      name: c.name,
-    };
+    const withMergedProps: IMergedPropertiesClass = { _id: c._id, properties: [], name: c.name };
     // merge the properties and fill.
     // TODO: is this better solved with a ES6 Map?
-    const grouped = c.properties.reduce((groups, x, ignored) => {
-      (groups[x.range._id] = groups[x.range._id] || []).push(x);
-      return groups;
-    }, Object.create(null));
+    const grouped = c.properties.reduce(
+      (groups, x, ignored) => {
+        (groups[x.range._id] = groups[x.range._id] || []).push(x);
+        return groups;
+      }, Object.create(null));
 
     // We used Object.create(null) to make grouped. So, it does not have any non-own properties.
     // in fact, it does not have hasOwnProperty
@@ -288,7 +301,7 @@ export class MxgraphComponent implements OnInit, OnDestroy {
       const group: Array<{
         _id: string;
         name: string;
-
+        type: PropertyType;
         range: IClassWithProperties;
       }> = grouped[key];
       // join names
@@ -296,23 +309,15 @@ export class MxgraphComponent implements OnInit, OnDestroy {
         (combinedNameAcc, prop, ignores) => {
           combinedNameAcc.push(prop.name);
           return combinedNameAcc;
-        },
-        []
-      );
+        }, []);
       const keyList: string[] = group.reduce<string[]>(
         (combinedNameAcc, prop, ignores) => {
           combinedNameAcc.push(prop._id);
           return combinedNameAcc;
-        },
-        []
-      );
-      const combinedName = nameList.join(" | ");
-      const combinedKey = keyList.join(",");
-      withMergedProps.properties.push({
-        _id: combinedKey,
-        name: combinedName,
-        rangeID: group[0].range._id,
-      });
+        }, []);
+      const combinedName = nameList.join(' | ');
+      const combinedKey = keyList.join(',');
+      withMergedProps.properties.push({ _id: combinedKey, name: combinedName, rangeID: group[0].range._id || group[0]._id as any, type: group[0].type });
       // }
     }
     return withMergedProps;
@@ -328,7 +333,7 @@ export class MxgraphComponent implements OnInit, OnDestroy {
 
   getBatchRecommendation() {
 
-    
+
     this.recommendations = this.recommenderService.batchRecommendationsForClasses(
       {
         classes: this.classNames,
@@ -343,24 +348,24 @@ export class MxgraphComponent implements OnInit, OnDestroy {
 
   hideBatch() {
     this.batchPhase = true;
-    
+
   }
 
-  startEdit(){
-    this.editing=!this.editing;
+  startEdit() {
+    this.editing = !this.editing;
   }
 
-  editDomain(){
-    MeteorObservable.call("vocabulary.addDomain",this.domain,this.vocabulary._id).pipe(zoneOperator())
-    .subscribe((_response) => {
-      // Handle success and response from server!
-    }, (err) => {
-      console.log(err);
-      // Handle error
-    });;
+  editDomain() {
+    MeteorObservable.call("vocabulary.addDomain", this.domain, this.vocabulary._id).pipe(zoneOperator())
+      .subscribe((_response) => {
+        // Handle success and response from server!
+      }, (err) => {
+        console.log(err);
+        // Handle error
+      });;
     console.log(this.vocabService.getVocabulary(this.vocabulary._id))
-      this.editing = false
-      console.log(this.vocabulary)
+    this.editing = false
+    console.log(this.vocabulary)
   }
 
   showEditBox() {
@@ -376,5 +381,4 @@ export class MxgraphComponent implements OnInit, OnDestroy {
     this.currentEdgeSelectionSub.unsubscribe();
   }
 
-    
 }

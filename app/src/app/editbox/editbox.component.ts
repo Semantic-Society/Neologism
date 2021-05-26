@@ -9,6 +9,7 @@ import { EditboxService } from './editbox.service';
 import { IClassProperties, IClassProperty } from '../models/editbox.model';
 import { FormArray, FormBuilder, FormControl, FormGroup, FormGroupDirective, Validators } from '@angular/forms';
 import { NzModalService } from 'ng-zorro-antd/modal';
+import { PropertyType, xsdDataTypes } from './../../../api/models';
 import { SpellCheckerService } from 'ngx-spellchecker';
 import { HttpClient } from '@angular/common/http';
 
@@ -41,6 +42,8 @@ export class EditboxComponent implements OnInit, OnChanges {
 
   formProp: FormGroup;
 
+  formEnable = "data"
+
   protected editedClass: {
     name: string;
     URI: string;
@@ -52,17 +55,18 @@ export class EditboxComponent implements OnInit, OnChanges {
     URI: '',
     description: ''
   };
+  readonly xsdDataTypes = xsdDataTypes;
 
   protected classToUpdate: Observable<IClassWithProperties>;
   public editToggle = false;
   protected rangeOptions: Observable<Array<{ _id: string, name: string }>>;
-  public suggestions_class:string[]
-  public suggestions_property:string[]
-  contextmenu_class:boolean = false
-  contextmenu_property:boolean = false
-  
+  public suggestions_class: string[]
+  public suggestions_property: string[]
+  contextmenu_class: boolean = false
+  contextmenu_property: boolean = false
+
   fileURL = "https://raw.githubusercontent.com/JacobSamro/ngx-spellchecker/master/dict/normalized_en-US.dic"
- 
+
   constructor(
     private vocabService: VocabulariesService,
     private recommender: RecommendationService,
@@ -75,13 +79,10 @@ export class EditboxComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
-    this.uriPrefix=(this.uriPrefix.search(/^(.*)#$/)==-1)?`${this.uriPrefix}#`:`${this.uriPrefix}`
+    this.uriPrefix = (this.uriPrefix.search(/^(.*)#$/) == -1) ? `${this.uriPrefix}#` : `${this.uriPrefix}`
     this.formProp = this.fb.group({
       name: ['', Validators.required],
-      URI: [`${this.uriPrefix}`,
-      {
-        asyncValidators: [this.vocabService.uriPropValidator()],
-      }],
+      URI: [`${this.uriPrefix}`],
       range: ['', Validators.required],
       description: [''],
 
@@ -147,41 +148,45 @@ export class EditboxComponent implements OnInit, OnChanges {
 
 
   }
-checkWordProperty(word:string){
-   
-  this.httpClient.get(this.fileURL, { responseType: 'text' }).subscribe((res: any) => {
-    let dictionary = this.spellCheckerService.getDictionary(res)
-    
-   this.suggestions_property=  dictionary.getSuggestions(word)
-  })
- 
- 
-    this.contextmenu_class = true
-}
+  checkWordProperty(word: string) {
 
-checkWordClass(word:string){
-   
-  this.httpClient.get(this.fileURL, { responseType: 'text' }).subscribe((res: any) => {
-    let dictionary = this.spellCheckerService.getDictionary(res)
-    
-   this.suggestions_class =  dictionary.getSuggestions(word)
-  })
- 
- 
+    this.httpClient.get(this.fileURL, { responseType: 'text' }).subscribe((res: any) => {
+      let dictionary = this.spellCheckerService.getDictionary(res)
+
+      this.suggestions_property = dictionary.getSuggestions(word)
+    })
+
+
     this.contextmenu_class = true
-}
+  }
+
+  checkWordClass(word: string) {
+
+    this.httpClient.get(this.fileURL, { responseType: 'text' }).subscribe((res: any) => {
+      let dictionary = this.spellCheckerService.getDictionary(res)
+
+      this.suggestions_class = dictionary.getSuggestions(word)
+    })
+
+
+    this.contextmenu_class = true
+  }
   addRecommendedProperyToGraph(rec: IClassProperty) {
     this.editboxService.addRecommendedProperyToGraph(rec, this.selectedClassID, this.vocabID)
   }
 
 
-  addProperty(formDirective: FormGroupDirective) {
-    this.vocabService.addProperty(this.selectedClassID, this.formProp.value.name,
-      this.formProp.value.description, this.formProp.value.URI, this.formProp.value.range);
-
+  addProperty(formDirective: FormGroupDirective, index: number) {
+    const type = (index === 0) ? PropertyType.Object : PropertyType.Data;
+    if (index) {
+      this.formProp.controls['URI'].setValue(`${this.uriPrefix}${encodeURIComponent(this.formProp.value.name.toLocaleLowerCase())}`)
+    }
+    this.vocabService.addProperty(this.selectedClassID, this.formProp.value.name, this.formProp.value.description, this.formProp.value.URI, this.formProp.value.range, type, this.vocabID);
     formDirective.resetForm();
     this.formProp.reset()
   }
+
+
 
   cancelEdit() {
     this.editToggle = false;
@@ -214,7 +219,7 @@ checkWordClass(word:string){
   }
 
   listenerPropNameChange($event) {
-    this.formProp.controls['URI'].setValue(`${this.uriPrefix}${$event.target.value.toLocaleLowerCase()}`)
+    this.formProp.controls['URI'].setValue(`${this.uriPrefix}${encodeURIComponent($event.target.value.toLocaleLowerCase())}`)
 
   }
 

@@ -1,6 +1,6 @@
 <nz-page-header (nzBack)="resetSidebarState()" style="padding: 0!important;" nzBackIcon>
 
-  <nz-avatar nz-page-header-avatar    nzSrc="../../../assets/default_node_image.gif">
+  <nz-avatar nz-page-header-avatar nzSrc="../../../assets/default_node_image.gif">
   </nz-avatar>
   <nz-page-header-title>
     <h3 class="sidebar-header neologism-sidebar-header" style="
@@ -23,12 +23,13 @@
         <nz-form-label nzFor="name">Class Name</nz-form-label><br>
         <nz-form-control>
           <input #editClassElem nz-input [(ngModel)]="editedClass.name"
-            (keyup)="listenerClassNameChange(editClassElem.value);checkWordClass(editClassElem.value)" [ngModel]="classInfo.label"  [nzAutocomplete]="autoClass">
-      <nz-autocomplete nzBackfill #autoClass>
-<nz-auto-option *ngFor="let option of suggestions_class" [nzValue]="option" [nzLabel]="option">
-          {{ option }}
-        </nz-auto-option>
-      </nz-autocomplete>
+            (keyup)="listenerClassNameChange(editClassElem.value);checkWordClass(editClassElem.value)"
+            [ngModel]="classInfo.label" [nzAutocomplete]="autoClass">
+          <nz-autocomplete nzBackfill #autoClass>
+            <nz-auto-option *ngFor="let option of suggestions_class" [nzValue]="option" [nzLabel]="option">
+              {{ option }}
+            </nz-auto-option>
+          </nz-autocomplete>
         </nz-form-control>
       </nz-form-item>
       <nz-form-item>
@@ -42,9 +43,9 @@
         <nz-form-control>
           <nz-textarea-count [nzMaxCharacterCount]="256">
             <textarea rows="2" #message placeholder="The class represents ..." [(ngModel)]="editedClass.description"
-            [ngModel]="classInfo.description" nz-input></textarea>
+              [ngModel]="classInfo.description" nz-input></textarea>
           </nz-textarea-count>
-          
+
         </nz-form-control>
       </nz-form-item>
       <div class="button-group-edit ">
@@ -69,7 +70,7 @@
       <nz-form-item>
         <nz-form-label nzFor="name">About</nz-form-label><br>
         <nz-form-control>
-          <nz-textarea-count  [nzMaxCharacterCount]="256">
+          <nz-textarea-count [nzMaxCharacterCount]="256">
             <textarea rows="2" disabled [ngModel]="classInfo.description" nz-input></textarea>
           </nz-textarea-count>
         </nz-form-control>
@@ -81,29 +82,36 @@
 
     <nz-divider></nz-divider>
 
-    <nz-page-header>
+    <nz-page-header >
 
       <nz-page-header-title>
         <h3 class="sidebar-header neologism-sidebar-header">
-          Add Properties
+          Add Property
         </h3>
 
       </nz-page-header-title>
     </nz-page-header>
 
-    <div class="">
+    <div>
+      <nz-radio-group [(ngModel)]="formEnable">
+        <label nz-radio-button [nzValue]="'object'">Object Property</label>
+        <label nz-radio-button [nzValue]="'data'">Data Property</label>
+      </nz-radio-group>
 
-      <form [formGroup]="formProp" (ngSubmit)="addProperty(formDirective)" nz-form #formDirective="ngForm">
+      <form [formGroup]="formProp" *ngIf="formEnable==='object'" (ngSubmit)="addProperty(formDirective,0)" nz-form
+        #formDirective="ngForm">
 
         <nz-form-item class="prop-input">
           <nz-form-control>
             <nz-form-label nzFor="name">Property Name</nz-form-label> <br>
-            <input nz-input placeholder="Name" (keyup)="listenerPropNameChange($event);checkWordProperty(formProp.get('name').value)" formControlName="name" required [nzAutocomplete]="autoProperty">
-      <nz-autocomplete nzBackfill #autoProperty>
-        <nz-auto-option *ngFor="let option of suggestions_property" [nzValue]="option" [nzLabel]="option">
-          {{ option }}
-        </nz-auto-option>
-      </nz-autocomplete>
+            <input nz-input placeholder="Name"
+              (keyup)="listenerPropNameChange($event);checkWordProperty(formProp.get('name').value)"
+              formControlName="name" required [nzAutocomplete]="autoProperty">
+            <nz-autocomplete nzBackfill #autoProperty>
+              <nz-auto-option *ngFor="let option of suggestions_property" [nzValue]="option" [nzLabel]="option">
+                {{ option }}
+              </nz-auto-option>
+            </nz-autocomplete>
           </nz-form-control>
         </nz-form-item>
 
@@ -123,9 +131,10 @@
           <nz-form-control>
             <nz-form-label nzFor="description">About</nz-form-label> <br>
             <nz-textarea-count [nzMaxCharacterCount]="256">
-              <textarea rows="2" #message placeholder="Comment or Description" formControlName="description" nz-input></textarea>
+              <textarea rows="2" #message placeholder="Comment or Description" formControlName="description"
+                nz-input></textarea>
             </nz-textarea-count>
-            
+
           </nz-form-control>
         </nz-form-item>
 
@@ -135,6 +144,52 @@
             <nz-select nzShowSearch nzAllowClear placeholder="Range" formControlName="range" required>
               <ng-container *ngFor="let c of rangeOptions | async">
                 <nz-option [nzValue]="c._id" [nzLabel]="c.name" [value]="c._id">
+                </nz-option>
+              </ng-container>
+            </nz-select>
+          </nz-form-control>
+
+        </nz-form-item>
+
+        <button nz-button nzType="default" type="submit" [disabled]="!formProp.valid">Add
+          Property</button>
+
+      </form>
+      <form [formGroup]="formProp" *ngIf="formEnable==='data'" (ngSubmit)="addProperty(formDirective,1)" nz-form
+        #formDirective="ngForm">
+
+        <nz-form-item class="prop-input">
+          <nz-form-control>
+            <nz-form-label nzFor="name">Property Name</nz-form-label> <br>
+            <input nz-input placeholder="Name" formControlName="name" required>
+          </nz-form-control>
+        </nz-form-item>
+
+
+        <nz-form-item class="prop-input" style="display: none;">
+          <nz-form-control>
+            <nz-form-label nzFor="URI">Property URI</nz-form-label> <br>
+            <input class="" nz-input placeholder="URI" formControlName="URI">
+          </nz-form-control>
+        </nz-form-item>
+
+
+        <nz-form-item class="prop-input">
+          <nz-form-control>
+            <nz-form-label nzFor="description">About</nz-form-label> <br>
+            <nz-textarea-count [nzMaxCharacterCount]="256">
+              <textarea rows="2" #message placeholder="Comment or Description" formControlName="description"
+                nz-input></textarea>
+            </nz-textarea-count>
+
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item class="class-dropdown">
+          <nz-form-control>
+            <nz-form-label nzFor="range">Data Type</nz-form-label> <br>
+            <nz-select nzShowSearch nzAllowClear placeholder="Range" formControlName="range" required>
+              <ng-container *ngFor="let element of xsdDataTypes; let i = index">
+                <nz-option [nzValue]="element" [nzLabel]="'xsd:'+element" [value]="element">
                 </nz-option>
               </ng-container>
             </nz-select>

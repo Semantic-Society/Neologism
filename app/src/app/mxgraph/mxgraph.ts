@@ -22,7 +22,7 @@ export class MxgraphService {
     transactionSelection;
     selection$: Observable<string>;
     wnd: any
-    edgeSelection$: Observable<{ domainClazzID: string; edgeID: string }>;
+    edgeSelection$: Observable<{ domainClazzID: string; edgeID: string ,isDataTypeProp: boolean}>;
 
     tb: m.mxToolbar;
     // public codec: N3Codec;
@@ -71,6 +71,14 @@ export class MxgraphService {
         const edgeStyle = this.graph.stylesheet.getDefaultEdgeStyle();
         edgeStyle[MxgraphService.mx.mxConstants.STYLE_FILLCOLOR] = '#FFFFFF';
         edgeStyle[MxgraphService.mx.mxConstants.STYLE_LABEL_BACKGROUNDCOLOR] = '#FFFFFF';
+        var style = new Object();
+        style[MxgraphService.mx.mxConstants.STYLE_SHAPE] = MxgraphService.mx.mxConstants.SHAPE_RECTANGLE;
+        style[MxgraphService.mx.mxConstants.STYLE_DASHED] = 1;
+        style[MxgraphService.mx.mxConstants.STYLE_STROKECOLOR] = '#000000';
+        style[MxgraphService.mx.mxConstants.STYLE_FILLCOLOR] = '#17E506';
+        style[MxgraphService.mx.mxConstants.STYLE_FONTCOLOR] = '#000000';
+        style[MxgraphService.mx.mxConstants.STYLE_LABEL_BACKGROUNDCOLOR] = '#17E506';
+        this.graph.getStylesheet().putCellStyle('Dashed', style);
 
         this.deletePress = new Subject();
         const keyHandler = new MxgraphService.mx.mxKeyHandler(this.graph);
@@ -163,13 +171,24 @@ export class MxgraphService {
         //         this.zoomToFit();
         //     });
 
+        // TODO: Check if multiple listener on same event creating UI flow disturbances
         this.selection$ = new Observable<string>((observer) => {
             const handler = (selectionModel: m.mxGraphSelectionModel, evt: m.mxEventObject) => {
                 const values = selectionModel.cells
                     .filter((cell) => cell.vertex)
                     .map((cell) => cell.getId());
                 if (values.length === 1) {
-                    observer.next(values[0]);
+                    const vertexId: string = values[0];
+                    const vertex = this.getVertexWithId(vertexId);
+
+                    //  check to disallow direct edit of
+                    //  DataType vertex from vertex form
+                    if (vertex.style === "Dashed") {
+                        observer.next(null);
+                    } else {
+                        observer.next(values[0]);
+                    }
+
                 } else if (values.length === 0) {
                     observer.next(null);
                 } else {
@@ -180,7 +199,7 @@ export class MxgraphService {
             return () => this.graph.getSelectionModel().removeListener(handler);
         }).pipe(distinctUntilChanged());
 
-        this.edgeSelection$ = new Observable<{ domainClazzID: string; edgeID: string }>((observer) => {
+        this.edgeSelection$ = new Observable<{ domainClazzID: string; edgeID: string, isDataTypeProp: boolean }>((observer) => {
             const handler = (selectionModel: m.mxGraphSelectionModel, evt: m.mxEventObject) => {
                 const values = selectionModel.cells
                     .filter((cell) => cell.edge)
@@ -189,8 +208,9 @@ export class MxgraphService {
                     const edgeID: string = values[0];
                     const edgeO = this.getEdgeWithId(edgeID);
                     const sourceNode = edgeO.getTerminal(true);
+                    const isDestNodeDataType = edgeO.getTerminal(false).style === "Dashed";
                     const domainClazzID: string = sourceNode.getId();
-                    observer.next({ domainClazzID, edgeID });
+                    observer.next({ domainClazzID, edgeID, isDataTypeProp: isDestNodeDataType });
                 } else if (values.length === 0) {
                     observer.next(null);
                 } else {
@@ -207,7 +227,7 @@ export class MxgraphService {
     }
 
     getEdgeWithId(edgeID: string) {
-        // TODO in principle getCell should work, but upon inserting there is an issue and the cell gets assingned a new id
+        // TODO in principle getCell should work, but upon inserting there is an issue and the cell gets assigned a new id
         for (const key in this.model.cells) {
             if (this.model.cells.hasOwnProperty(key)) {
                 const candidate = this.model.cells[key];
@@ -217,6 +237,18 @@ export class MxgraphService {
             }
         }
         throw new Error('edge with id ' + edgeID + ' not found');
+    }
+
+    getVertexWithId(classId: string) {
+        for (const key in this.model.cells) {
+            if (this.model.cells.hasOwnProperty(key)) {
+                const candidate = this.model.cells[key];
+                if (candidate.vertex && candidate.id === classId) {
+                    return candidate;
+                }
+            }
+        }
+        throw new Error('vertex with id ' + classId + ' not found');
     }
 
     //  addToolbarItem(prototype: m.mxCell, image: string) {
@@ -270,6 +302,11 @@ export class MxgraphService {
         this.graph.removeCells(this.graph.getChildCells(this.canvas, true, true)); // TODO: Assert this clear selection model
     }
 
+    public removeCell(_id: string) {
+        this.assertTransaction();
+        this.model.remove(this.model.getCell(_id)); // TODO: Assert this clear selection model
+    }
+
     assertTransaction() {
         if (this.model.updateLevel <= 0) {
             throw new Error('Start a transaction before making changes');
@@ -321,6 +358,23 @@ export class MxgraphService {
         this.assertTransaction();
 
         this.graph.insertVertex(this.canvas, id, label, x, y, 100, 15);
+    }
+
+
+    /**
+     * Inserts a new class into the graph
+     * @param id The internal ID of the class
+     * @param label The label to show in the rendering
+     * @param x The x offset of the new class. Middle of screen by default.
+     * @param y The y offset of the new class. Middle of screen by default.
+     */
+    public insertDashedClass(id: string, label: string, x: number, y: number) {
+        if (this.model.getCell(id)) {
+            throw new Error('Class already exists');
+        }
+        this.assertTransaction();
+
+        this.graph.insertVertex(this.canvas, id, label, x, y, 100, 15, 'Dashed');
     }
 
     /**
@@ -411,7 +465,7 @@ export class MxgraphService {
         return this.selection$;
     }
 
-    public currentEdgeSelection(): Observable<{ domainClazzID: string; edgeID: string }> {
+    public currentEdgeSelection(): Observable<{ domainClazzID: string; edgeID: string, isDataTypeProp: boolean }> {
         return this.edgeSelection$;
     }
 

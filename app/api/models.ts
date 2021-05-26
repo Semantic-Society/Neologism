@@ -37,7 +37,7 @@ export interface Iclass {
   name: string;
   description: string;
   URI: string;
-
+  isDataTypeVertex?: boolean;
   properties: meteorID[];
   position: {
     x: number;
@@ -52,9 +52,11 @@ export interface Iclass {
 export interface Iproperty {
   _id?: meteorID; // Mongo generated ID
   name: string;
+  type?: PropertyType;
   description: string;
   URI: string;
   range: meteorID;
+  rangeName?:string
 }
 
 export interface IvocabularyExtended extends Ivocabulary {
@@ -71,6 +73,7 @@ export interface IClassWithProperties {
   properties: Array<{
     _id: string; // Mongo generated ID
     name: string;
+    type?: PropertyType;
     description: string;
     URI: string;
     range: IClassWithProperties; // these MUST be in the same vocabulary!
@@ -84,3 +87,107 @@ export interface IClassWithProperties {
     exactMatch: string[];
   };
 }
+
+export enum PropertyType {
+  Object = 'owl:ObjectProperty',
+  Data = 'owl:DatatypeProperty'
+}
+
+
+const xsdDataTypes = [
+
+  "anyURI",
+
+  "base64Binary",
+
+  "boolean",
+
+  "byte",
+
+  "date",
+
+  "dateTime",
+
+  "decimal",
+
+  "derivationControl",
+
+  "double",
+
+  "duration",
+
+  "ENTITIES",
+
+  "ENTITY",
+
+  "float",
+
+  "gDay",
+
+  "gMonth",
+
+  "gMonthDay",
+
+  "gYear",
+
+  "gYearMonth",
+
+  "hexBinary",
+
+  "ID",
+
+  "IDREF",
+
+  "IDREFS",
+
+  "int",
+
+  "integer",
+
+  "language",
+
+  "long",
+
+  "Name",
+
+  "NCName",
+
+  "negativeInteger",
+
+  "NMTOKEN",
+
+  "NMTOKENS",
+
+  "nonNegativeInteger",
+
+  "nonPositiveInteger",
+
+  "normalizedString",
+
+  "NOTATION",
+
+  "positiveInteger",
+
+  "QName",
+
+  "short",
+
+  "simpleDerivationSet",
+
+  "string",
+
+  "time",
+
+  "token",
+
+  "unsignedByte",
+
+  "unsignedInt",
+
+  "unsignedLong",
+
+  "unsignedShort"
+
+]
+
+export {xsdDataTypes}
