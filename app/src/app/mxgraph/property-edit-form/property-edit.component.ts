@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Properties, Classes } from '../../../../api/collections';
-import { Iclass, Iproperty, PropertyType } from '../../../../api/models';
+import { Iclass, Iproperty, PropertyType, xsdDataTypes } from '../../../../api/models';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 import { MeteorObservable } from 'meteor-rxjs';
 import { SpellCheckerService } from 'ngx-spellchecker';
@@ -20,102 +20,7 @@ export class PropertyEditModal implements OnInit {
   propListName: Array<string>
   propSourceNodeId: string
   public prop: Iproperty
-
-  xsdDataTypes = [
-
-    "anyURI",
-
-    "base64Binary",
-
-    "boolean",
-
-    "byte",
-
-    "date",
-
-    "dateTime",
-
-    "decimal",
-
-    "derivationControl",
-
-    "double",
-
-    "duration",
-
-    "ENTITIES",
-
-    "ENTITY",
-
-    "float",
-
-    "gDay",
-
-    "gMonth",
-
-    "gMonthDay",
-
-    "gYear",
-
-    "gYearMonth",
-
-    "hexBinary",
-
-    "ID",
-
-    "IDREF",
-
-    "IDREFS",
-
-    "int",
-
-    "integer",
-
-    "language",
-
-    "long",
-
-    "Name",
-
-    "NCName",
-
-    "negativeInteger",
-
-    "NMTOKEN",
-
-    "NMTOKENS",
-
-    "nonNegativeInteger",
-
-    "nonPositiveInteger",
-
-    "normalizedString",
-
-    "NOTATION",
-
-    "positiveInteger",
-
-    "QName",
-
-    "short",
-
-    "simpleDerivationSet",
-
-    "string",
-
-    "time",
-
-    "token",
-
-    "unsignedByte",
-
-    "unsignedInt",
-
-    "unsignedLong",
-
-    "unsignedShort"
-
-  ]
+  readonly xsdDataTypes = xsdDataTypes;
 
   fileURL = "https://raw.githubusercontent.com/JacobSamro/ngx-spellchecker/master/dict/normalized_en-US.dic"
 

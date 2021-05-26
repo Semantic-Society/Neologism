@@ -9,7 +9,7 @@ import { EditboxService } from './editbox.service';
 import { IClassProperties, IClassProperty } from '../models/editbox.model';
 import { FormArray, FormBuilder, FormControl, FormGroup, FormGroupDirective, Validators } from '@angular/forms';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { PropertyType } from './../../../api/models';
+import { PropertyType, xsdDataTypes } from './../../../api/models';
 import { SpellCheckerService } from 'ngx-spellchecker';
 import { HttpClient } from '@angular/common/http';
 
@@ -55,104 +55,8 @@ export class EditboxComponent implements OnInit, OnChanges {
     URI: '',
     description: ''
   };
+  readonly xsdDataTypes = xsdDataTypes;
 
-xsdDataTypes = [
-
-  "anyURI",
-
-  "base64Binary",
-
-  "boolean",
-
-  "byte",
-
-  "date",
-
-  "dateTime",
-
-  "decimal",
-
-  "derivationControl",
-
-  "double",
-
-  "duration",
-
-  "ENTITIES",
-
-  "ENTITY",
-
-  "float",
-
-  "gDay",
-
-  "gMonth",
-
-  "gMonthDay",
-
-  "gYear",
-
-  "gYearMonth",
-
-  "hexBinary",
-
-  "ID",
-
-  "IDREF",
-
-  "IDREFS",
-
-  "int",
-
-  "integer",
-
-  "language",
-
-  "long",
-
-  "Name",
-
-  "NCName",
-
-  "negativeInteger",
-
-  "NMTOKEN",
-
-  "NMTOKENS",
-
-  "nonNegativeInteger",
-
-  "nonPositiveInteger",
-
-  "normalizedString",
-
-  "NOTATION",
-
-  "positiveInteger",
-
-  "QName",
-
-  "short",
-
-  "simpleDerivationSet",
-
-  "string",
-
-  "time",
-
-  "token",
-
-  "unsignedByte",
-
-  "unsignedInt",
-
-  "unsignedLong",
-
-  "unsignedShort"
-
-]
-
-  
   protected classToUpdate: Observable<IClassWithProperties>;
   public editToggle = false;
   protected rangeOptions: Observable<Array<{ _id: string, name: string }>>;
