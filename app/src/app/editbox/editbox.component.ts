@@ -177,11 +177,11 @@ export class EditboxComponent implements OnInit, OnChanges {
 
 
   addProperty(formDirective: FormGroupDirective, index: number) {
-    const typo = (index === 0) ? PropertyType.Object : PropertyType.Data;
+    const type = (index === 0) ? PropertyType.Object : PropertyType.Data;
     if (index) {
-      this.formProp.controls['URI'].setValue(`http://www.w3.org/2001/XMLSchema#${this.formProp.value.range}`)
+      this.formProp.controls['URI'].setValue(`${this.uriPrefix}${encodeURIComponent(this.formProp.value.name.toLocaleLowerCase())}`)
     }
-    this.vocabService.addProperty(this.selectedClassID, this.formProp.value.name, this.formProp.value.description, this.formProp.value.URI, this.formProp.value.range, typo, this.vocabID);
+    this.vocabService.addProperty(this.selectedClassID, this.formProp.value.name, this.formProp.value.description, this.formProp.value.URI, this.formProp.value.range, type, this.vocabID);
     formDirective.resetForm();
     this.formProp.reset()
   }

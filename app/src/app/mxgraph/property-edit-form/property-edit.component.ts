@@ -41,7 +41,7 @@ export class PropertyEditModal implements OnInit {
       const prop = Properties.findOne({ _id: key })
       this.propList.push(prop)
     })
-    this.classes = Classes.find({ isDataTypeVertex: { $exists: false } }).fetch()
+    this.classes = Classes.find({ isDataTypeVertex: false }).fetch()
     this.prop = this.propList[0]
     this.selectedProp = this.prop._id
     this.isDataTypeProp = this.prop.type === PropertyType.Data;

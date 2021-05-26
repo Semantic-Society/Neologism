@@ -51,30 +51,30 @@ export function saveClassesWithPropertiesAsFile(classes: IClassWithProperties[],
             rdf += `${classURI} ${rdfsLabel} "${clazz.name}"^^${xmlString} .\r\n`;
             rdf += `${classURI} ${rdfsDescription} "${clazz.description}"^^${xmlString} .\r\n`;
             clazz.properties.forEach((prop) => {
-                if(prop.type===PropertyType.Object){
+                if (prop.type === PropertyType.Object) {
                     const propURI = '<' + prop.URI + '> ';
                     objectProps[propURI] = propURI;
                     const rangeClassURI = '<' + prop.range.URI + '>';
-                    rdf += propURI  + domain + ' ' + classURI + ' .\r\n';
+                    rdf += propURI + domain + ' ' + classURI + ' .\r\n';
                     rdf += propURI + range + ' ' + rangeClassURI + ' .\r\n';
                 }
-                else{
+                else {
                     const propURI = '<' + prop.URI + '> ';
                     dataProps[propURI] = propURI;
-                    const rangeClassURI = '<' + prop.URI + '>';
-                    rdf += propURI  + domain + ' '+ classURI + ' .\r\n';
-                    rdf += propURI  + range + ' ' + rangeClassURI + ' .\r\n';
+                    const rangeClassURI = `<http://www.w3.org/2001/XMLSchema#${prop.range}>`;
+                    rdf += propURI + domain + ' ' + classURI + ' .\r\n';
+                    rdf += propURI + range + ' ' + rangeClassURI + ' .\r\n';
                 }
             });
         });
 
         // tslint:disable-next-line:forin
         for (const prop in objectProps) {
-            rdf += prop + a + ' '+ objectproperty + ' .\n';
+            rdf += prop + a + ' ' + objectproperty + ' .\n';
         }
 
         for (const prop in dataProps) {
-            rdf += prop + a + ' '  + dataTypeProperty + ' .\n';
+            rdf += prop + a + ' ' + dataTypeProperty + ' .\n';
         }
 
         return rdf
@@ -91,15 +91,12 @@ export function saveClassesWithPropertiesAsFile(classes: IClassWithProperties[],
 
 export function getClassesWithProperties(vocabularyId: string): IClassWithProperties[] {
 
-    let propIds=[]
+    let propIds = []
     let classes = getClasses(vocabularyId).map((c) => {
         const ps = Properties.find({ _id: { $in: c.properties } }).fetch()
-        propIds=propIds.concat(ps.map(ps=>ps._id))
+        propIds = propIds.concat(ps.map(ps => ps._id))
         return { ...c, properties: ps };
     })
-
-
-    classes=classes.filter(classa => propIds.find(prop=> (prop===classa._id))===undefined )
 
     const classeswithoutrangefilter = classes.map((cs) => {
 
@@ -118,10 +115,10 @@ export function getClassesWithProperties(vocabularyId: string): IClassWithProper
             p.range = classeswithoutrangefilter.find((cr) => cr._id === classes[i].properties[j].range);
             if (!p.range && p.type == PropertyType.Data) {
                 p.range = classes[i].properties[j].range
-              } else if (!p.range) {
+            } else if (!p.range) {
                 // return null; // not all required classes returned yet
                 failed = true;
-              }
+            }
 
         })
     })
@@ -144,7 +141,7 @@ function getClasses(vocabularyId: string): Iclass[] {
         throw new Meteor.Error('vocabularyID not correctly specified. Got "' + vocabularyId + '"');
     }
     const classIDs: meteorID[] = getClassIDsForVocabID(vocabularyId);
-    const res: Iclass[] = Classes.find({ _id: { $in: classIDs } }).fetch()
+    const res: Iclass[] = Classes.find({ _id: { $in: classIDs },isDataTypeVertex: false }).fetch()
 
     return res;
 }

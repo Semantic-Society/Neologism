@@ -79,7 +79,7 @@ Meteor.methods({
     Vocabularies.update(
       { _id: vocabId, creator: this.userId },
       {
-        $set:{
+        $set: {
           domain
         }
       }).subscribe((value) => console.log("added domain " + domain + " for" + value))
@@ -120,7 +120,7 @@ Meteor.methods({
     if (_id) {
       classIdO = Classes.insert({ _id, name, isDataTypeVertex: true, description, URI, properties: [], position, skos: { closeMatch: [], exactMatch: [] } });
     } else {
-      classIdO = Classes.insert({ name, description, URI, properties: [], position, skos: { closeMatch: [], exactMatch: [] } });
+      classIdO = Classes.insert({ name, isDataTypeVertex: false, description, URI, properties: [], position, skos: { closeMatch: [], exactMatch: [] } });
     }
 
     classIdO.subscribe((classID) =>
@@ -156,7 +156,7 @@ Meteor.methods({
       {}
     );
   },
-  'class.update'(classID: string, URI: string, description: string, name:string) {
+  'class.update'(classID: string, URI: string, description: string, name: string) {
     assertUser();
     Classes.update(
       { _id: classID },

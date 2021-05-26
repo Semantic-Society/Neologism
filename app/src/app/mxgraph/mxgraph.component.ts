@@ -317,7 +317,7 @@ export class MxgraphComponent implements OnInit, OnDestroy {
         }, []);
       const combinedName = nameList.join(' | ');
       const combinedKey = keyList.join(',');
-      withMergedProps.properties.push({ _id: combinedKey, name: combinedName, rangeID: group[0].range._id || group[0].range as any, type: group[0].type });
+      withMergedProps.properties.push({ _id: combinedKey, name: combinedName, rangeID: group[0].range._id || group[0]._id as any, type: group[0].type });
       // }
     }
     return withMergedProps;
