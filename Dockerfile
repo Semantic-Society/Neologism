@@ -106,7 +106,7 @@ COPY --from=1 $SCRIPTS_FOLDER $SCRIPTS_FOLDER/
 # Copy in app bundle with the built and installed dependencies from the previous image
 COPY --from=1 $APP_BUNDLE_FOLDER/api/bundle $APP_BUNDLE_FOLDER/api/bundle/
 
-COPY --from=1 $APP_BUNDLE_FOLDER/client/frontend /usr/share/nginx/html
+COPY --from=1 $APP_BUNDLE_FOLDER/client/neologism /usr/share/nginx/html
 
 COPY $SCRIPTS_FOLDER/config/supervisord.conf /etc/
 

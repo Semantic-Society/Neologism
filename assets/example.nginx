@@ -6,7 +6,7 @@ map $http_upgrade $connection_upgrade {
 server {
   listen 80;
   server_name localhost;
-  root   /home/ali/Devel/Neologism/neologism2/frontend/dist/frontend;
+  root   /path/to/frontend/dist/folder;
   index  index.html;
 
   # asset matching
