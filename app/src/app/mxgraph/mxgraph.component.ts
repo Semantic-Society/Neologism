@@ -75,7 +75,7 @@ export class MxgraphComponent implements OnInit, OnDestroy {
   currentSelectionSub: Subscription;
   currentEdgeSelectionSub: Subscription;
   public batchPhase: boolean = true;
-  recommendations: Observable<BatchRecommendations>;
+  recommendations$: Observable<BatchRecommendations>;
   domain: string;
   public editing: boolean = false;
 
@@ -335,7 +335,7 @@ export class MxgraphComponent implements OnInit, OnDestroy {
   getBatchRecommendation() {
 
 
-    this.recommendations = this.recommenderService.batchRecommendationsForClasses(
+    this.recommendations$ = this.recommenderService.batchRecommendationsForClasses(
       {
         classes: this.classNames,
         properties: this.propertyNames,

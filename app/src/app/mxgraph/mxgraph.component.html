@@ -100,7 +100,7 @@
           </app-standardview>
         </mat-tab>
       </mat-tab-group>
-      <app-batchRecommender [classes]="classes" [recommendations]="recommendations" [hidden]="batchPhase" #batchrec>
+      <app-batchRecommender [classes]="classes" [recommendations$]="recommendations$" [hidden]="batchPhase" #batchrec>
       </app-batchRecommender>
 
     </nz-content>
