@@ -1,19 +1,43 @@
 <nz-layout>
   <nz-sider [ngSwitch]="editMode | async" [nzWidth]="350" class="mat-drawer">
-    <app-metadata [vocabulary]="vocabulary" *ngSwitchCase="'default'"></app-metadata>
+
+    <app-metadata [vocabulary]="vocabulary" *ngSwitchCase="'default'">
+
+    </app-metadata>
+
     <app-editbox *ngSwitchCase="'edit'" [selectedClassID]="this.currentSelection" [uriPrefix]="vocabulary.uriPrefix"
-      [vocabID]="this.vocabID"></app-editbox>
-    <app-recommender *ngSwitchCase="'recommend'" [vocabID]="this.vocabID"></app-recommender>
+      [vocabID]="this.vocabID">
+    </app-editbox>
+
+    <app-recommender *ngSwitchCase="'recommend'" [vocabID]="this.vocabID">
+
+    </app-recommender>
+
     <app-node-creator *ngSwitchCase="'create'" [vocabID]="this.vocabID" [uriPrefix]="vocabulary.uriPrefix"
-      [graphService]="mx"></app-node-creator>
+      [graphService]="mx">
+    </app-node-creator>
+
+
     <div *ngSwitchCase="'default'">
       <div class="button-div">
         <div class="pad-1">
-          <button nz-button (click)="showNodeCreator()">Add new class
+          <button *ngIf="batchPhase" nz-button (click)="showNodeCreator()">Add new class
           </button>
         </div>
-        <button *ngIf="batchPhase" mat-button (click)="getBatchRecommendation()">Get BatchRecommendation
+        <button *ngIf="batchPhase" mat-button (click)="getBatchRecommendation(); batchrec.return()">Get
+          BatchRecommendation
         </button>
+
+        <nz-row *ngIf="batchPhase">
+          <span style="padding-top: 1rem;">Recommendation Limit:</span>
+          <nz-col nzSpan="16">
+            <nz-slider [nzMin]="1" [nzMax]="10" [(ngModel)]="recommendationLimit"></nz-slider>
+          </nz-col>
+          <div nz-col nzSpan="4">
+            <nz-input-number [nzMin]="1" [nzMax]="10" [ngStyle]="{ marginLeft: '16px' }"
+              [(ngModel)]="recommendationLimit"></nz-input-number>
+          </div>
+        </nz-row>
 
         <div class="pad-1" *ngIf=!batchPhase>
           <button mat-button (click)="batchrec.liftOntology(); hideBatch()">Lift Ontology
@@ -27,7 +51,8 @@
       </div>
 
 
-      <div class="button-div">
+
+      <div class="button-div" *ngIf="batchPhase">
 
         <div style="text-align: center;">
           <h3 style="color: white; border-style: dashed;">
@@ -62,6 +87,7 @@
       </div>
     </div>
   </nz-sider>
+
   <nz-layout>
     <nz-content>
       <mat-tab-group [hidden]="!batchPhase" headerPosition="below" class="mat-tab-fill-height">
@@ -75,8 +101,8 @@
         </mat-tab>
       </mat-tab-group>
       <app-batchRecommender [classes]="classes" [recommendations]="recommendations" [hidden]="batchPhase" #batchrec>
-
       </app-batchRecommender>
+
     </nz-content>
 
   </nz-layout>
@@ -96,3 +122,4 @@
 
   </menu>
 </dialog>
+<ng-template #loading>Loading User Data...</ng-template>
