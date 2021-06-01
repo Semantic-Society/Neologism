@@ -187,7 +187,8 @@ export class RecommendationService {
             {
                 "properties":batchQuery.properties,
                 "domain":batchQuery.domain,
-                "classes":batchQuery.classes
+                "classes":batchQuery.classes,
+                "limit":batchQuery.limit
             }))
     }
 }

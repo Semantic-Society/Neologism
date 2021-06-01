@@ -1,4 +1,11 @@
-<div *ngFor="let r of (recommendations | async);let i = index;">
+  <div *ngIf="!loaded" style="padding-top:10rem; text-align:center">
+    <nz-spin nzSimple></nz-spin>
+    The recommendations are loading...
+  </div>
+<div *ngIf="recommendations$ | async as recommendations">
+<div *ngFor="let r of recommendations; let i = index">
+  {{dataLoaded()}}
+
   {{r.list.length>0?preselect(r.list[0].URI,i):preselectNone(i)}}
   <div class="attributes-container"><!-- TODO: add anchor for references (see standardView.component.html) -->
     <div class="attribute-container">
@@ -20,4 +27,7 @@
       <b>No recommendations retrieved for this keyword.</b>
   <hr class="divider">
 </div>
-</div>
+    </div>
+  </div>
+  </div>
+  

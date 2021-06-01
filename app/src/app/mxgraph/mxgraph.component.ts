@@ -75,7 +75,7 @@ export class MxgraphComponent implements OnInit, OnDestroy {
   currentSelectionSub: Subscription;
   currentEdgeSelectionSub: Subscription;
   public batchPhase: boolean = true;
-  recommendations: Observable<BatchRecommendations>;
+  recommendations$: Observable<BatchRecommendations>;
   domain: string;
   public editing: boolean = false;
 
@@ -91,6 +91,7 @@ export class MxgraphComponent implements OnInit, OnDestroy {
   vocabulary: IvocabularyExtended;
   classNames: string[];
   propertyNames: string[];
+  recommendationLimit: number;
 
   @HostListener("window:keydown", ["$event"])
   onKeyDown(event) {
@@ -334,11 +335,12 @@ export class MxgraphComponent implements OnInit, OnDestroy {
   getBatchRecommendation() {
 
 
-    this.recommendations = this.recommenderService.batchRecommendationsForClasses(
+    this.recommendations$ = this.recommenderService.batchRecommendationsForClasses(
       {
         classes: this.classNames,
         properties: this.propertyNames,
         domain: this.vocabulary.domain,
+        limit: this.recommendationLimit
       }
     );
 
@@ -363,10 +365,9 @@ export class MxgraphComponent implements OnInit, OnDestroy {
         console.log(err);
         // Handle error
       });;
-    console.log(this.vocabService.getVocabulary(this.vocabulary._id))
     this.editing = false
-    console.log(this.vocabulary)
   }
+
 
   showEditBox() {
     console.log("show edit box");
