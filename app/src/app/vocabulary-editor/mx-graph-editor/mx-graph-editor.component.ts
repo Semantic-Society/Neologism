@@ -52,12 +52,6 @@ export class MxGraphEditorComponent implements OnInit {
       this.vocabEditorService.setClasses(this.classes)
       this.mx = new MxgraphService(this.mxGraphView.nativeElement);
 
-      // console.log('the is of the vocb is ' + this.id);
-
-      // this.vocabService.addClass(this.vocabID, 'ClassName', 'Iraklis did it', 'the URI');
-      // this.vocabService.addProperty('ikhjrcSqXJQQrgfC6', 'myprop', 'nice prop', 'example.org', 'c8YSBREPsKex4526d');
-
-      // this.currentSelection = this.mx.currentSelection().publish(new BehaviorSubject<string>(null));
       this.currentSelectionSub = this.mx.currentSelection().pipe(
           combineLatest(this.mx.currentEdgeSelection(),
               (classSelection, edgeSelection) => {
