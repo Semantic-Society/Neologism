@@ -82,7 +82,7 @@ export class N3Codec {
         return this.store.getTriples(null, 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', 'http://www.w3.org/2000/01/rdf-schema#Class')
             .map((triple) => {
                 const subject = triple.subject;
-                const labels = this.store.getObjectsByIRI(subject, 'http://www.w3.org/2000/01/rdf-schema#label'); // TODO Michael: Assuming string[] returned
+                const labels = this.store.getObjectsByIRI(subject, 'http://www.w3.org/2000/01/rdf-schema#label'); // TODO Michael (186): Assuming string[] returned
                 const oneLabel = N3Codec.getEnlishLiteral(labels);
                 return {
                     uri: subject,
@@ -143,7 +143,7 @@ export class N3Codec {
         this.store.getTriples(null, 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', 'http://www.w3.org/2000/01/rdf-schema#Class')
             .forEach((triple) => {
                 const aClass = triple.subject;
-                const subClasses = this.store.getObjectsByIRI(aClass, 'http://www.w3.org/2000/01/rdf-schema#subClassOf'); // TODO Michael: Assuming string[] returned
+                const subClasses = this.store.getObjectsByIRI(aClass, 'http://www.w3.org/2000/01/rdf-schema#subClassOf'); // TODO Michael (187): Assuming string[] returned
                 subClasses.forEach((subClass) => {
                     result.push(
                         {
@@ -162,7 +162,7 @@ export class N3Codec {
     //     return this.store.addTriple(subject, predicate, object);
     // }
 
-     getUrl(url: string) { // TODO: Not exactly foolproof
+     getUrl(url: string) { // TODO (187): Not exactly foolproof
         url = encodeURI(url);
         const conversionService = `http://rdf-translator.appspot.com/convert/detect/n3/${url}`;
         const toGet = this.absuluteURI.test(url) ? conversionService : url;

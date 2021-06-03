@@ -72,7 +72,7 @@ export class VocabularyEditorComponent implements OnInit {
     //  propertyRecommendations: Array<{ comment: string; label: string; uri: string; range: string; }> = [];
      propertyRecommendations: Observable<Array<{ comment: string; label: string; uri: string; range: string; }>>
   
-    // TODO: as this is an observable, does it need @Input?
+    // TODO (186): as this is an observable, does it need @Input?
     @Input() selectedClassID: string;
   
     /**
@@ -80,7 +80,7 @@ export class VocabularyEditorComponent implements OnInit {
      */
      classInfo: Observable<{ label: string, description: string; url: string }>;
   
-    // TODO: strictly speaking, this component does not need this as it only needs access to classes and properties.
+    // TODO (184): strictly speaking, this component does not need this as it only needs access to classes and properties.
     // However, more fine grained methods in the VocabulariesService are not yet implemented.
      newClass = {
       name: '',
@@ -202,7 +202,7 @@ export class VocabularyEditorComponent implements OnInit {
             // combineLatest(this.alreadyThere2, (recommendations, alreadys) => {
             //   const newReccommendations = [];
             //   recommendations.forEach((recommendation) => {
-            //     //       // TODO is there a better way in JS?
+            //     //       // TODO (184)is there a better way in JS?
             //     if (!alreadys.some((already) => {
             //       return already.uri === recommendation.uri;
             //     })) {
@@ -252,7 +252,7 @@ export class VocabularyEditorComponent implements OnInit {
 
   updateEdit() {
     // console.log(this.)
-    // TODO: Call the updateClass (needs to be implemented) of vocabService and call toggleEdit() afterwards
+    // TODO (187): Call the updateClass (needs to be implemented) of vocabService and call toggleEdit() afterwards
     // this.vocabService.updateClass(this.newClass.name);
     console.log(this.editedClass);
     if (this.editedClass.name) {
