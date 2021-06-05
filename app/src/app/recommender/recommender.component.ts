@@ -45,12 +45,12 @@ export class RecommenderComponent implements OnInit {
   @Input() vocabID: string;
 
   constructor(
-     private recommendationService: RecommendationService, 
+     private recommendationService: RecommendationService,
      private vocabService: VocabulariesService,
      private sidebarService: SideBarStateService) {
   }
 
-  @ViewChild('labelInput',{static: true}) labelInput: ElementRef;
+  @ViewChild('labelInput', {static: true}) labelInput: ElementRef;
 
   public showSpinner = false;
    showSpinnerProp = false;
@@ -152,7 +152,7 @@ export class RecommenderComponent implements OnInit {
     this.showSpinnerProp = false;
   }
 
-  resetSidebarState(){
-    this.sidebarService.changeSidebarToDefault()
+  resetSidebarState() {
+    this.sidebarService.changeSidebarToDefault();
   }
 }

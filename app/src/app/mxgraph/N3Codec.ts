@@ -138,7 +138,7 @@ export class N3Codec {
         this.store.addTriple(subclass, 'http://www.w3.org/2000/01/rdf-schema#subClassOf', superclass);
     }
 
-    getSubClassRelations(): Array<{ uri: string; label: string; domain: string; range: string; }> {
+    getSubClassRelations(): { uri: string; label: string; domain: string; range: string; }[] {
         const result = [];
         this.store.getTriples(null, 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', 'http://www.w3.org/2000/01/rdf-schema#Class')
             .forEach((triple) => {

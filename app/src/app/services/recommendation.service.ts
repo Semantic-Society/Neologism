@@ -45,22 +45,22 @@ interface IDetails {
 export class RecommendationService {
 
     /** Neologism recommendation service endpoint base path */
-     static baseUrl = `${environment.recommender.base}`+((environment.recommender.port=="")? "/recommender/" :`:${environment.recommender.port}/recommender/`);
+     static baseUrl = `${environment.recommender.base}` + ((environment.recommender.port == '') ? '/recommender/' : `:${environment.recommender.port}/recommender/`);
 
      classReq: Subject<{ queryGraph: string, queryTerm: string }>;
-     classResp: Subject<Array<{
+     classResp: Subject<{
         comment: string;
         label: string;
         uri: string;
-    }>>;
+    }[]>;
 
      propsReq: Subject<{ url: IRI }>;
-     propsResp: Subject<Array<{
+     propsResp: Subject<{
         comment: string;
         label: string;
         uri: string;
         range: string;
-    }>>;
+    }[]>;
 
      static strip(html: string) { return html.replace(/<(?:.|\n)*?>/gm, ''); }
 
@@ -182,13 +182,13 @@ export class RecommendationService {
         return this.propsResp.asObservable();
     }
 
-    batchRecommendationsForClasses(batchQuery: BatchQuery):Observable<BatchRecommendations>{
-        return VocabulariesService.wrapFunkyObservables(this._http.post(RecommendationService.baseUrl+"batchRecommender",
+    batchRecommendationsForClasses(batchQuery: BatchQuery): Observable<BatchRecommendations> {
+        return VocabulariesService.wrapFunkyObservables(this._http.post(RecommendationService.baseUrl + 'batchRecommender',
             {
-                "properties":batchQuery.properties,
-                "domain":batchQuery.domain,
-                "classes":batchQuery.classes,
-                "limit":batchQuery.limit
-            }))
+                'properties': batchQuery.properties,
+                'domain': batchQuery.domain,
+                'classes': batchQuery.classes,
+                'limit': batchQuery.limit
+            }));
     }
 }

@@ -5,13 +5,13 @@ import { Mongo } from 'meteor/mongo';
 import { Iclass, Iproperty, Iuser, Ivocabulary, meteorID } from 'models';
 import { Classes, Properties, Users, Vocabularies } from '../collections';
 
-// There are no permission checks yet on  a lot of published data. The case of public data, example 
-// github punlic repos should be integrated in designing the access to the publisghed vocab data. 
+// There are no permission checks yet on  a lot of published data. The case of public data, example
+// github punlic repos should be integrated in designing the access to the publisghed vocab data.
 (Meteor as any).publishComposite('vocabularies', function (): any {
     return {
-        find:()=>{
+        find: () => {
             return Vocabularies.collection
-            .find({ $or: [{creator:this.userId},{ authors: this.userId }, { public: true }] })
+            .find({ $or: [{creator: this.userId}, { authors: this.userId }, { public: true }] });
         },
         children: [
             // Get author details
@@ -19,12 +19,12 @@ import { Classes, Properties, Users, Vocabularies } from '../collections';
                 find: (vocab) => {
                     return Users.collection.find(
                         { _id: { $in: vocab.authors } },
-                        { fields: { profile: 1, "emails.address": 1 } }
+                        { fields: { profile: 1, 'emails.address': 1 } }
                     );
                 }
             } as PublishCompositeConfig1<Ivocabulary, Iuser>
         ]
-    }
+    };
 
 });
 
@@ -37,8 +37,8 @@ import { Classes, Properties, Users, Vocabularies } from '../collections';
     return {
         // Must return a cursor containing top level documents
         find: () => {
-            console.log("Received vocabDetails req. for id", vocabularyID)
-            return Vocabularies.collection.find({ _id: vocabularyID, $or: [{ creator: this.userId },{ authors: this.userId }, { public: true }] }, { limit: 1 });
+            console.log('Received vocabDetails req. for id', vocabularyID);
+            return Vocabularies.collection.find({ _id: vocabularyID, $or: [{ creator: this.userId }, { authors: this.userId }, { public: true }] }, { limit: 1 });
         },
 
         children: [
@@ -47,7 +47,7 @@ import { Classes, Properties, Users, Vocabularies } from '../collections';
                 find: (vocab) => {
                     return Users.collection.find(
                         { _id: { $in: vocab.authors } },
-                        { fields: { profile: 1, "emails.address": 1 } }
+                        { fields: { profile: 1, 'emails.address': 1 } }
                     );
                 }
             } as PublishCompositeConfig1<Ivocabulary, Iuser>,

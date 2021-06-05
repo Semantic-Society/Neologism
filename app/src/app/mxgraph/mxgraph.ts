@@ -21,8 +21,8 @@ export class MxgraphService {
     canvas: m.mxCell;
     transactionSelection;
     selection$: Observable<string>;
-    wnd: any
-    edgeSelection$: Observable<{ domainClazzID: string; edgeID: string ,isDataTypeProp: boolean}>;
+    wnd: any;
+    edgeSelection$: Observable<{ domainClazzID: string; edgeID: string , isDataTypeProp: boolean}>;
 
     tb: m.mxToolbar;
     // public codec: N3Codec;
@@ -71,7 +71,7 @@ export class MxgraphService {
         const edgeStyle = this.graph.stylesheet.getDefaultEdgeStyle();
         edgeStyle[MxgraphService.mx.mxConstants.STYLE_FILLCOLOR] = '#FFFFFF';
         edgeStyle[MxgraphService.mx.mxConstants.STYLE_LABEL_BACKGROUNDCOLOR] = '#FFFFFF';
-        var style = new Object();
+        let style = new Object();
         style[MxgraphService.mx.mxConstants.STYLE_SHAPE] = MxgraphService.mx.mxConstants.SHAPE_RECTANGLE;
         style[MxgraphService.mx.mxConstants.STYLE_DASHED] = 1;
         style[MxgraphService.mx.mxConstants.STYLE_STROKECOLOR] = '#000000';
@@ -183,7 +183,7 @@ export class MxgraphService {
 
                     //  check to disallow direct edit of
                     //  DataType vertex from vertex form
-                    if (vertex.style === "Dashed") {
+                    if (vertex.style === 'Dashed') {
                         observer.next(null);
                     } else {
                         observer.next(values[0]);
@@ -208,7 +208,7 @@ export class MxgraphService {
                     const edgeID: string = values[0];
                     const edgeO = this.getEdgeWithId(edgeID);
                     const sourceNode = edgeO.getTerminal(true);
-                    const isDestNodeDataType = edgeO.getTerminal(false).style === "Dashed";
+                    const isDestNodeDataType = edgeO.getTerminal(false).style === 'Dashed';
                     const domainClazzID: string = sourceNode.getId();
                     observer.next({ domainClazzID, edgeID, isDataTypeProp: isDestNodeDataType });
                 } else if (values.length === 0) {
@@ -222,7 +222,7 @@ export class MxgraphService {
         }).pipe(distinctUntilChanged());
 
 
-        this.initializeToolBar()
+        this.initializeToolBar();
 
     }
 
@@ -448,7 +448,7 @@ export class MxgraphService {
     destroy() {
         this.graph.destroy();
         this.tb.destroy();
-        this.wnd.destroy()
+        this.wnd.destroy();
     }
 
     /** Highlight cell in graph by its ID */
@@ -507,7 +507,7 @@ export class MxgraphService {
 
     private initializeToolBar() {
 
-        var content = document.createElement('div');
+        let content = document.createElement('div');
         content.style.padding = '4px';
 
         this.tb = new MxgraphService.mx.mxToolbar(content);
@@ -525,16 +525,16 @@ export class MxgraphService {
         });
 
         this.tb.addItem('Print', '/assets/images/print32.png', (evt) => {
-            var preview = new MxgraphService.mx.mxPrintPreview(this.graph, 1);
+            let preview = new MxgraphService.mx.mxPrintPreview(this.graph, 1);
             preview.open();
         });
 
         this.tb.addItem('Poster Print', '/assets/images/press32.png', (evt) => {
-            var pageCount = MxgraphService.mx.mxUtils.prompt('Enter maximum page count', '1');
+            let pageCount = MxgraphService.mx.mxUtils.prompt('Enter maximum page count', '1');
 
             if (pageCount != null) {
-                var scale = MxgraphService.mx.mxUtils.getScaleForPageCount(pageCount, this.graph);
-                var preview = new MxgraphService.mx.mxPrintPreview(this.graph, scale);
+                let scale = MxgraphService.mx.mxUtils.getScaleForPageCount(pageCount, this.graph);
+                let preview = new MxgraphService.mx.mxPrintPreview(this.graph, scale);
                 preview.open();
             }
         });
