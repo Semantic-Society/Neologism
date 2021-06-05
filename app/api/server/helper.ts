@@ -1,29 +1,29 @@
-import { Meteor } from 'meteor/meteor'
-import { Iclass, Iuser, Ivocabulary, IClassWithProperties, PropertyType } from 'models'
+import { Meteor } from 'meteor/meteor';
+import { Iclass, Iuser, Ivocabulary, IClassWithProperties, PropertyType } from 'models';
 import { meteorID } from '../models';
 import { Classes, Properties, Vocabularies, Users } from '../collections';
 
 
 
-export function saveClassesWithPropertiesAsFile(classes: IClassWithProperties[], vocab: Ivocabulary, authorEmails: Array<Meteor.UserEmail[]>) {
+export function saveClassesWithPropertiesAsFile(classes: IClassWithProperties[], vocab: Ivocabulary, authorEmails: Meteor.UserEmail[][]) {
 
     try {
-        console.log('saveClassesWithPropertiesAsFile')
-        const vocabDetail = vocab
-        const namespace = `<${vocabDetail.uriPrefix}>`
-        const creator: Iuser = (vocab.creator) ? Users.findOne({ _id: vocab.creator }, { fields: { emails: 1 } }) : null
-        let rdf = ""
+        console.log('saveClassesWithPropertiesAsFile');
+        const vocabDetail = vocab;
+        const namespace = `<${vocabDetail.uriPrefix}>`;
+        const creator: Iuser = (vocab.creator) ? Users.findOne({ _id: vocab.creator }, { fields: { emails: 1 } }) : null;
+        let rdf = '';
 
 
         // Adding meta for documenation generator
         rdf += `${namespace} a <http://www.w3.org/2002/07/owl#Ontology> .\r\n`;
         if (creator) {
-            rdf += `${namespace} <http://purl.org/dc/terms/creator> "${creator.emails[0].address}" .\r\n`
-            authorEmails = authorEmails.filter((emails) => emails[0].address != creator.emails[0].address)
+            rdf += `${namespace} <http://purl.org/dc/terms/creator> "${creator.emails[0].address}" .\r\n`;
+            authorEmails = authorEmails.filter((emails) => emails[0].address != creator.emails[0].address);
         }
 
         authorEmails.forEach((emails) => emails.forEach((email) => {
-            rdf += `${namespace} <http://purl.org/dc/terms/contributor> "${email.address}" .\r\n`
+            rdf += `${namespace} <http://purl.org/dc/terms/contributor> "${email.address}" .\r\n`;
         })
         );
 
@@ -39,8 +39,8 @@ export function saveClassesWithPropertiesAsFile(classes: IClassWithProperties[],
         const objectproperty = '<http://www.w3.org/2002/07/owl#ObjectProperty>';
         const dataTypeProperty = '<http://www.w3.org/2002/07/owl#DatatypeProperty>';
         const rdfsLabel = '<http://www.w3.org/2000/01/rdf-schema#label>';
-        const rdfsDescription = '<http://www.w3.org/2000/01/rdf-schema#comment>'
-        const xmlString = '<http://www.w3.org/2001/XMLSchema#string>'
+        const rdfsDescription = '<http://www.w3.org/2000/01/rdf-schema#comment>';
+        const xmlString = '<http://www.w3.org/2001/XMLSchema#string>';
 
         const objectProps = Object.create(null);
         const dataProps = Object.create(null);
@@ -57,8 +57,7 @@ export function saveClassesWithPropertiesAsFile(classes: IClassWithProperties[],
                     const rangeClassURI = '<' + prop.range.URI + '>';
                     rdf += propURI + domain + ' ' + classURI + ' .\r\n';
                     rdf += propURI + range + ' ' + rangeClassURI + ' .\r\n';
-                }
-                else {
+                } else {
                     const propURI = '<' + prop.URI + '> ';
                     dataProps[propURI] = propURI;
                     const rangeClassURI = `<http://www.w3.org/2001/XMLSchema#${prop.range}>`;
@@ -77,11 +76,11 @@ export function saveClassesWithPropertiesAsFile(classes: IClassWithProperties[],
             rdf += prop + a + ' ' + dataTypeProperty + ' .\n';
         }
 
-        return rdf
+        return rdf;
 
     } catch (error) {
-        console.log(error)
-        throw error
+        console.log(error);
+        throw error;
     }
 
 }
@@ -91,12 +90,12 @@ export function saveClassesWithPropertiesAsFile(classes: IClassWithProperties[],
 
 export function getClassesWithProperties(vocabularyId: string): IClassWithProperties[] {
 
-    let propIds = []
-    let classes = getClasses(vocabularyId).map((c) => {
-        const ps = Properties.find({ _id: { $in: c.properties } }).fetch()
-        propIds = propIds.concat(ps.map(ps => ps._id))
+    let propIds = [];
+    const classes = getClasses(vocabularyId).map((c) => {
+        const ps = Properties.find({ _id: { $in: c.properties } }).fetch();
+        propIds = propIds.concat(ps.map(ps => ps._id));
         return { ...c, properties: ps };
-    })
+    });
 
     const classeswithoutrangefilter = classes.map((cs) => {
 
@@ -114,24 +113,24 @@ export function getClassesWithProperties(vocabularyId: string): IClassWithProper
         c.properties.forEach((p, j) => {
             p.range = classeswithoutrangefilter.find((cr) => cr._id === classes[i].properties[j].range);
             if (!p.range && p.type == PropertyType.Data) {
-                p.range = classes[i].properties[j].range
+                p.range = classes[i].properties[j].range;
             } else if (!p.range) {
                 // return null; // not all required classes returned yet
                 failed = true;
             }
 
-        })
-    })
+        });
+    });
 
     if (failed) {
         return null;
     }
-    return classeswithoutrangefilter
+    return classeswithoutrangefilter;
 }
 
 function getClassIDsForVocabID(vocabularyId: string): meteorID[] {
 
-    return Vocabularies.findOne({ _id: vocabularyId }, { fields: { classes: 1 } }).classes
+    return Vocabularies.findOne({ _id: vocabularyId }, { fields: { classes: 1 } }).classes;
 
 }
 
@@ -141,7 +140,7 @@ function getClasses(vocabularyId: string): Iclass[] {
         throw new Meteor.Error('vocabularyID not correctly specified. Got "' + vocabularyId + '"');
     }
     const classIDs: meteorID[] = getClassIDsForVocabID(vocabularyId);
-    const res: Iclass[] = Classes.find({ _id: { $in: classIDs },isDataTypeVertex: false }).fetch()
+    const res: Iclass[] = Classes.find({ _id: { $in: classIDs }, isDataTypeVertex: false }).fetch();
 
     return res;
 }

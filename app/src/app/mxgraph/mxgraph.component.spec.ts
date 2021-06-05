@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { MxgraphComponent } from './mxgraph.component';
 
@@ -6,7 +6,7 @@ describe('MxgraphComponent', () => {
   let component: MxgraphComponent;
   let fixture: ComponentFixture<MxgraphComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ MxgraphComponent ]
     })
