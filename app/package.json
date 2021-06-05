@@ -36,7 +36,6 @@
     "bcryptjs": "^2.4.3",
     "core-js": "^2.5.4",
     "cross-blob": "^2.0.0",
-    "downloadjs": "^1.4.7",
     "ej-angular2": "^18.4.39",
     "file-saver": "^2.0.2",
     "fs": "0.0.1-security",
