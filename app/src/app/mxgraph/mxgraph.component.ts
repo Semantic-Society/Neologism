@@ -97,7 +97,7 @@ export class MxgraphComponent implements OnInit, OnDestroy {
   onKeyDown(event) {
     if (event.keyCode === 27) {
       // 27 is keycode for ESC
-      this.sideBarState.changeBySelection("default");
+      this.sideBarState.changeBySelection(null);
     }
   }
 
