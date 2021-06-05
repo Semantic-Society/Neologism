@@ -105,12 +105,12 @@ registerLocaleData(en);
     NzButtonModule,
     MatSnackBarModule,
   ],
-  entryComponents: [
-    AddUserModalComponent,
-    CreateVocabModalComponent,
-    RemoveUserModalComponent,
-    PropertyEditModal
-  ],
+  // entryComponents: [
+  //   AddUserModalComponent,
+  //   CreateVocabModalComponent,
+  //   RemoveUserModalComponent,
+  //   PropertyEditModal
+  // ],
   providers: [
     LoginAuthGuard,
     AuthGuard,
