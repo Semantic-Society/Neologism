@@ -1,0 +1,29 @@
+name: ci
+on:
+  push:
+    branches:
+      - 'main'
+jobs:
+  build-and-push:
+    name: Build and push Docker image to GitHub Packages
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v2
+      - name: Login to GitHub Docker Registry
+        uses: docker/login-action@v1
+        with:
+          registry: docker.pkg.github.com
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build and push container image
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          tags: |
+            neologism/neologism2:${{ github.sha }}
+            neologism/neologism2:${{ github.ref }}
+            neologism/neologism2:latest
