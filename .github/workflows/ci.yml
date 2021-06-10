@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - 'main'
+      - '166-move-ci-pipeline'
 jobs:
   build-and-push:
     name: Build and push Docker image to GitHub Packages
