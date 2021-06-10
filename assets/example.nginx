@@ -21,7 +21,6 @@ server {
     rewrite ^(.+)$ /index.html last;
   }
 
-  # TODO improve cache config
   location ~* \.(?:ico|css|js|gif|jpe?g|png|svg|ttf)$ {
     # Some basic cache-control for static files to be sent to the browser
     expires max;

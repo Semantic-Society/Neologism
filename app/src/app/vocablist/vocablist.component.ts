@@ -41,7 +41,7 @@ export class VocablistComponent implements OnInit {
     this.dataSource.subscribe(x => console.log(x))
   }
 
-  // TODO: Move to VocabService #decouple
+  // TODO (188): Move to VocabService #decouple
   addVocabulary() {
     this.vocabService.createVocabulary(
       this.vocabForm.name,

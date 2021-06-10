@@ -76,7 +76,7 @@ export class VocabulariesService {
     });
   }
 
-  getVocabulary(id: string): Observable<Ivocabulary> { // TODO: Breaks upon deletion
+  getVocabulary(id: string): Observable<Ivocabulary> { // TODO (186): Breaks upon deletion
     return VocabulariesService.wrapFunkyObservables(
       Vocabularies.find({ _id: id }).pipe(
         filter((arr: any[]) => arr.length > 0),
@@ -290,7 +290,7 @@ export class VocabulariesService {
    * @param selectedClassID
    */
   getClassWithProperties(vocabID: string, selectedClassID: Observable<string>): Observable<IClassWithProperties> {
-    // TODO: this following steps are overkill. We can use something more granular later.
+    //TODO (184): this following steps are overkill. We can use something more granular later.
     const theClassO: Observable<IClassWithProperties> = selectedClassID.pipe(
       switchMap((classID) => {
         const allClassesO: Observable<IClassWithProperties[]> = this.getClassesWithProperties(vocabID);

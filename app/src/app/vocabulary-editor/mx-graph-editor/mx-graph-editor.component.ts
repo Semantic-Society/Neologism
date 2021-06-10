@@ -45,19 +45,13 @@ export class MxGraphEditorComponent implements OnInit {
 
     ngOnInit() {
       this.vocabID = this.vocabEditorService.vocabularyId;
-      // TODO: Currently creates a new instance with each subscription. Use something like this instead: .multicast(new BehaviorSubject([]));
+      // TODO 18: Currently creates a new instance with each subscription. Use something like this instead: .multicast(new BehaviorSubject([]));
       // This did, however, not work.
       this.classes = this.vocabService.getClassesWithProperties(this.vocabID);
 
       this.vocabEditorService.setClasses(this.classes)
       this.mx = new MxgraphService(this.mxGraphView.nativeElement);
 
-      // console.log('the is of the vocb is ' + this.id);
-
-      // this.vocabService.addClass(this.vocabID, 'ClassName', 'Iraklis did it', 'the URI');
-      // this.vocabService.addProperty('ikhjrcSqXJQQrgfC6', 'myprop', 'nice prop', 'example.org', 'c8YSBREPsKex4526d');
-
-      // this.currentSelection = this.mx.currentSelection().publish(new BehaviorSubject<string>(null));
       this.currentSelectionSub = this.mx.currentSelection().pipe(
           combineLatest(this.mx.currentEdgeSelection(),
               (classSelection, edgeSelection) => {
@@ -78,7 +72,7 @@ export class MxGraphEditorComponent implements OnInit {
             this.vocabEditorService.setEditorDrawer(true);
       });
 
-      // TODO It looks like this currently leaks observables.
+      // TODO (186) It looks like this currently leaks observables.
       this.mx.deleteRequestObservable().pipe(
           combineLatest(this.mx.currentEdgeSelection(), this.mx.currentSelection(),
               (keyevent, edgeSel, nodeSel) => ({ key: keyevent, edge: edgeSel, node: nodeSel })
@@ -154,7 +148,7 @@ export class MxGraphEditorComponent implements OnInit {
       // only takes the necessary parts
       const withMergedProps: IMergedPropertiesClass = { _id: c._id, properties: [], name: c.name };
       // merge the properties and fill.
-      // TODO: is this better solved with a ES6 Map?
+      // TODO (184): is this better solved with a ES6 Map?
       const grouped = c.properties.reduce(
           (groups, x, ignored) => {
               (groups[x.range._id] = groups[x.range._id] || []).push(x);
