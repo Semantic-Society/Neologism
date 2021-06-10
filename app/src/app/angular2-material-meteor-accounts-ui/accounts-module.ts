@@ -26,7 +26,6 @@ import { ValidationService } from './validation.service';
     MatDialogModule,
     BrowserAnimationsModule
   ],
-  // entryComponents: [LoginButtons, LoginDialog, SignupDialog],
   declarations: [
     LoginButtons,
     LoginDialog,
