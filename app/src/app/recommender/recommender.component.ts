@@ -36,10 +36,10 @@ interface IPropertyRecommendation {
   styleUrls: ['./recommender.component.css'],
 })
 export class RecommenderComponent implements OnInit {
-  // TODO REFACTOR THIS
+  // TODO (189) REFACTOR THIS
 
-  // TODO MC: I don't know a better way to ensure that an old finishing request does not turn of the spinner OR fills the results.
-  // TODO before it was be possible that an old, still pending request which returns turns off the spinner or fills the result list
+  // TODO (189) MC: I don't know a better way to ensure that an old finishing request does not turn of the spinner OR fills the results.
+  // TODO (189) before it was be possible that an old, still pending request which returns turns off the spinner or fills the result list
    currentRequestNumber = 0;
 
   @Input() vocabID: string;
@@ -86,14 +86,14 @@ export class RecommenderComponent implements OnInit {
         throw new Error('labelFiled null');
       }
       // this.mx.serializeModel().then((context) =>
-      // TODO re-enable context
+      // TODO (187) re-enable context
       this.recommendationService.classRecommendationforNewClass(''/*context*/, queryString)
         .subscribe(
           (recs) => {
             if (this.currentRequestNumber === requestNumber) {
               this.recommendations = recs;
             }
-          }, null // TODO handle error?
+          }, null // TODO (187) handle error?
           , () => {
             if (this.currentRequestNumber === requestNumber) {
               this.disableSpinner();

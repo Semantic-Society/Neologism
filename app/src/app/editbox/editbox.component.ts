@@ -28,7 +28,7 @@ export class EditboxComponent implements OnInit, OnChanges {
   // protected propertyRecommendations: Array<{ comment: string; label: string; uri: string; range: string; }> = [];
   protected propertyRecommendations: Observable<Array<{ comment: string; label: string; uri: string; range: string; }>>
 
-  // TODO: as this is an observable, does it need @Input?
+  // TODO (184): as this is an observable, does it need @Input?
   @Input() selectedClassID: string;
   @Input() uriPrefix: string;
   /**
@@ -36,7 +36,7 @@ export class EditboxComponent implements OnInit, OnChanges {
    */
   classInfo$: Observable<{ label: string, description: string; url: string }>;
 
-  // TODO: strictly speaking, this component does not need this as it only needs access to classes and properties.
+  // TODO (184): strictly speaking, this component does not need this as it only needs access to classes and properties.
   // However, more fine grained methods in the VocabulariesService are not yet implemented.
   @Input() vocabID: string;
 
@@ -131,7 +131,7 @@ export class EditboxComponent implements OnInit, OnChanges {
             combineLatest(this.alreadyThere$, (recommendations, alreadys) => {
               const newReccommendations = [];
               recommendations.forEach((recommendation) => {
-                //       // TODO is there a better way in JS?
+                //       // TODO (184): is there a better way in JS?
                 if (!alreadys.some((already) => {
                   return already.uri === recommendation.uri;
                 })) {
