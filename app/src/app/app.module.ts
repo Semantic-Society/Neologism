@@ -32,7 +32,7 @@ import { StateServiceModule } from './services/state-services/state.services.mod
 import { EditboxService } from './editbox/editbox.service';
 import { AccessManagement } from './services/access-management.service';
 import { AddUserModalComponent } from './vocablist/components/add-user-modal/add-user-modal.component';
-import { NgZorroAntdModule } from 'ng-zorro-antd';
+import { NGZorrModule } from './ng-zorro.module';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NZ_I18N, en_US } from 'ng-zorro-antd/i18n';
 import { NzDrawerService } from 'ng-zorro-antd/drawer';
@@ -101,15 +101,9 @@ registerLocaleData(en);
     RoutingModule,
     TruncateModule,
     StateServiceModule,
-    NgZorroAntdModule,
+    NGZorrModule,
     NzButtonModule,
     MatSnackBarModule,
-  ],
-  entryComponents: [
-    AddUserModalComponent,
-    CreateVocabModalComponent,
-    RemoveUserModalComponent,
-    PropertyEditModal
   ],
   providers: [
     LoginAuthGuard,

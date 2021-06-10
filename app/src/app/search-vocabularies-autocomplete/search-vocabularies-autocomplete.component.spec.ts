@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { SearchVocabulariesAutocompleteComponent } from './search-vocabularies-autocomplete.component';
 
@@ -6,7 +6,7 @@ describe('SearchVocabulariesAutocompleteComponent', () => {
   let component: SearchVocabulariesAutocompleteComponent;
   let fixture: ComponentFixture<SearchVocabulariesAutocompleteComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ SearchVocabulariesAutocompleteComponent ]
     })

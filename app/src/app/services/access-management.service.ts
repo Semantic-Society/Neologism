@@ -24,7 +24,7 @@ export class AccessManagement {
     }
 
 
-    addUsersVocab(userIds: Array<string>, vocabId: string) {
+    addUsersVocab(userIds: string[], vocabId: string) {
         console.log('meteor-cal')
         MeteorObservable.call('vocabulary.addAuthors', userIds, vocabId)
             .pipe(zoneOperator())
@@ -37,7 +37,7 @@ export class AccessManagement {
             });
     }
 
-    removeUsersVocab(userIds: Array<string>, vocabId: string) {
+    removeUsersVocab(userIds: string[], vocabId: string) {
         console.log('meteor-cal')
         MeteorObservable.call('vocabulary.removeAuthors', userIds, vocabId)
             .pipe(zoneOperator())

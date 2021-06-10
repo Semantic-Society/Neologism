@@ -26,26 +26,26 @@ function assertUser() {
 Meteor.methods({
   // get user by email, needed to add users by email, collaboration feature
   'users-without-self.get'(email: string) {
-    assertUser()
+    assertUser();
 
     const re = new RegExp(this.userId);
     const users = Users.find({
       'emails.address': { $regex: email },
       _id: { $not: re },
     },
-      { limit: 10 }).fetch()
+      { limit: 10 }).fetch();
 
     return users;
   },
   'vocabulary.assign-creator.self'(vocabId: string) {
-    assertUser()
+    assertUser();
     Vocabularies.update(
       { _id: vocabId },
       {
         $set: {
           creator: this.userId
         }
-      }).subscribe((value) => console.log("assigned creator to vocabulary " + vocabId + " " + value))
+      }).subscribe((value) => console.log('assigned creator to vocabulary ' + vocabId + ' ' + value));
   },
   'vocabulary.addAuthors'(authorIds: string[], vocabId: string) {
     assertUser();
@@ -58,11 +58,11 @@ Meteor.methods({
           authors:
             { $each: authorIds }
         }
-      }).subscribe((value) => console.log("added authors " + value))
+      }).subscribe((value) => console.log('added authors ' + value));
   },
   'vocabulary.removeAuthors'(authorIds: string[], vocabId: string) {
     assertUser();
-    console.log(authorIds + " ids")
+    console.log(authorIds + ' ids');
     Vocabularies.update(
       { _id: vocabId, creator: this.userId },
       {
@@ -71,7 +71,7 @@ Meteor.methods({
           authors:
             { $in: authorIds }
         }
-      }).subscribe((value) => console.log("removed authors" + value))
+      }).subscribe((value) => console.log('removed authors' + value));
   },
   'vocabulary.addDomain'(domain: string, vocabId: string) {
     assertUser();
@@ -82,7 +82,7 @@ Meteor.methods({
         $set: {
           domain
         }
-      }).subscribe((value) => console.log("added domain " + domain + " for" + value))
+      }).subscribe((value) => console.log('added domain ' + domain + ' for' + value));
   },
   'vocabulary.create'(_id: string, name: string, description: string, uriPrefix: string, field_public: boolean = false, domain: string) {
     assertUser();
@@ -99,7 +99,7 @@ Meteor.methods({
         field_public,
       classes: [],
       domain
-    })
+    });
 
   },
   /*'vocabulary.insertClass'({id, vClass}) {
@@ -175,8 +175,8 @@ Meteor.methods({
   },
   'classes.delete'(classId: string) {
     assertUser();
-    const $getClassProps = Classes.find({ _id: classId }, { limit: 1 }).pipe(map((classes) => classes[0].properties))
-    const $getClassRangeProps = Properties.find({ range: classId }).pipe(map((props) => props.map((prop) => prop._id)))
+    const $getClassProps = Classes.find({ _id: classId }, { limit: 1 }).pipe(map((classes) => classes[0].properties));
+    const $getClassRangeProps = Properties.find({ range: classId }).pipe(map((props) => props.map((prop) => prop._id)));
 
     combineLatest([$getClassProps,
       $getClassRangeProps]
@@ -186,7 +186,7 @@ Meteor.methods({
         tap(([x, y]) => console.log(x.concat(y))),
         map(([first, second]) => {
           first.concat(second)
-            .forEach((propId) => Properties.remove(propId))
+            .forEach((propId) => Properties.remove(propId));
           return true;
         })
       ).subscribe((_resp) => Classes.remove(classId));
@@ -214,7 +214,7 @@ Meteor.methods({
       { _id: id },
       { $set: { name, description, URI, range } },
       {}
-    )
+    );
   },
   'property.delete'(propId, sourceId) {
     assertUser();
@@ -222,10 +222,10 @@ Meteor.methods({
       { _id: sourceId },
       { $pull: { properties: { $in: [propId] } } },
       {}
-    ).subscribe()
+    ).subscribe();
 
     Properties.remove(
       { _id: propId }
-    ).subscribe()
+    ).subscribe();
   }
 });
