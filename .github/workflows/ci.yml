@@ -25,6 +25,6 @@ jobs:
         with:
           push: true
           tags: |
-            neologism/neologism2:${{ github.sha }}
-            neologism/neologism2:${{ github.ref }}
-            neologism/neologism2:latest
+            docker.pkg.github.com/${{ github.repository }}/neologism2:${{ github.sha }}
+            docker.pkg.github.com/${{ github.repository }}/neologism2:${{ github.ref }}
+            docker.pkg.github.com/${{ github.repository }}/neologism2:latest
