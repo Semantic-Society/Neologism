@@ -1,68 +1,7 @@
-import { DataFactory, Store, Writer, Util, Quad } from 'n3';
+import { DataFactory, Writer, Quad } from 'n3';
 const { namedNode, literal, quad } = DataFactory
-import { Classes, Properties, Vocabularies, Users } from '../../../api/collections';
-import { Iclass, Iuser, Ivocabulary, IClassWithProperties, PropertyType, meteorID } from '../../../api/models'
-
-
-
-
-function getClassesWithProperties(vocabularyId: string): IClassWithProperties[] {
-
-    let propIds = []
-    let classes = getClasses(vocabularyId).map((c) => {
-        const ps = Properties.find({ _id: { $in: c.properties } }).fetch()
-        propIds = propIds.concat(ps.map(ps => ps._id))
-        return { ...c, properties: ps };
-    })
-
-    const classeswithoutrangefilter = classes.map((cs) => {
-
-        const filledProps = cs.properties.map((p) => {
-            if (!p._id) throw new Meteor.Error(p + 'is missing an ID!');
-            return { ...p, _id: p._id, range: null };
-        });
-        if (!cs._id) throw new Meteor.Error(cs + 'is missing an ID!');
-        return { ...cs, _id: cs._id, properties: filledProps };
-    });
-
-    let failed = false;
-
-    classeswithoutrangefilter.forEach((c, i) => {
-        c.properties.forEach((p, j) => {
-            p.range = classeswithoutrangefilter.find((cr) => cr._id === classes[i].properties[j].range);
-            if (!p.range && p.type == PropertyType.Data) {
-                p.range = classes[i].properties[j].range
-            } else if (!p.range) {
-                // return null; // not all required classes returned yet
-                failed = true;
-            }
-
-        })
-    })
-
-    if (failed) {
-        return null;
-    }
-    return classeswithoutrangefilter
-}
-
-function getClassIDsForVocabID(vocabularyId: string): meteorID[] {
-
-    return Vocabularies.findOne({ _id: vocabularyId }, { fields: { classes: 1 } }).classes
-
-}
-
-
-function getClasses(vocabularyId: string): Iclass[] {
-    if (vocabularyId === undefined || vocabularyId === '') {
-        throw new Meteor.Error('vocabularyID not correctly specified. Got "' + vocabularyId + '"');
-    }
-    const classIDs: meteorID[] = getClassIDsForVocabID(vocabularyId);
-    const res: Iclass[] = Classes.find({ _id: { $in: classIDs }, isDataTypeVertex: false }).fetch()
-
-    return res;
-}
-
+import { Vocabularies, Users } from '../../../api/collections';
+import { IClassWithProperties, Iuser, PropertyType, } from '../../../api/models'
 export class N3Codec {
 
 
@@ -70,10 +9,11 @@ export class N3Codec {
         rdf: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
         rdfs: 'http://www.w3.org/2000/01/rdf-schema#',
         owl: 'http://www.w3.org/2002/07/owl#',
-        xmlString: 'http://www.w3.org/2001/XMLSchema#',
+        xmlns: 'http://www.w3.org/2001/XMLSchema#',
         purl: 'http://purl.org/dc/terms/'
     }
-    public static serialize(id: string) {
+
+    public static serialize(id, classesWithProps, saveToFile) {
 
         try {
             const vocabId = id || null
@@ -96,7 +36,8 @@ export class N3Codec {
 
             if (name === '' || name === undefined) name = 'vocab-' + vocabId;
 
-            const classes: IClassWithProperties[] = getClassesWithProperties(vocabId)
+
+            const classes: IClassWithProperties[] = classesWithProps
             const creator: Iuser = (vocab.creator) ? Users.findOne({ _id: vocab.creator }, { fields: { emails: 1 } }) : null
             let quads: Quad[] = []
             quads.push(quad(
@@ -157,21 +98,29 @@ export class N3Codec {
                     ))
 
                 clazz.properties.forEach((prop) => {
-                    if (prop.type === PropertyType.Object) {
-                        objectProps[prop.range.URI] = prop.range.URI;
-                    }
-                    else {
-                        dataProps[prop.range.URI] = prop.range.URI;
-                    }
                     quads.push(quad(
                         namedNode(prop.URI),
                         namedNode('http://www.w3.org/2000/01/rdf-schema#domain'),
                         namedNode(clazz.URI)
-                    ), quad(
-                        namedNode(prop.URI),
-                        namedNode('http://www.w3.org/2000/01/rdf-schema#range'),
-                        namedNode(prop.range.URI)
                     ))
+                    if (prop.type === PropertyType.Object) {
+                        objectProps[prop.URI] = prop.URI;
+                        quads.push(quad(
+                            namedNode(prop.URI),
+                            namedNode('http://www.w3.org/2000/01/rdf-schema#range'),
+                            namedNode(prop.range.URI)
+                        ))
+                    }
+                    else {
+                        dataProps[prop.URI] = prop.URI;
+                        quads.push(quad(
+                            namedNode(prop.URI),
+                            namedNode('http://www.w3.org/2000/01/rdf-schema#range'),
+                            namedNode(`http://www.w3.org/2001/XMLSchema#${prop.range as unknown as string}`)
+                        ))
+                    }
+
+
 
                 });
             });
@@ -191,7 +140,11 @@ export class N3Codec {
                 ))
             }
             writer.addQuads(quads)
-            writer.end((error, result) => console.log(result));
+            writer.end((error, result) => {
+                if (error)
+                    return null
+                saveToFile(result)
+            })
         } catch (error) {
             console.log(error)
             return;

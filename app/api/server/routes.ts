@@ -8,6 +8,7 @@ import {saveClassesWithPropertiesAsFile, getClassesWithProperties } from './help
 
 import * as fs from 'fs';
 
+// TODO (Johannes): Do we need this ?
 JsonRoutes.add("get", "/vocabulary/:id", (req, res) => {
     try {
       const vocabId = req.params.id || null
