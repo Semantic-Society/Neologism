@@ -1,17 +1,12 @@
 import { DataFactory, Store, Writer, Util, Quad } from 'n3';
 const { namedNode, literal, quad } = DataFactory
 import { Classes, Properties, Vocabularies, Users } from '../../../api/collections';
-// import * as helper from '../../../api/server/helper';
-import { Iclass, Iuser, Ivocabulary, IClassWithProperties, PropertyType ,meteorID} from '../../../api/models'
-// import { Injectable } from '@angular/core';
-// import { mxgraph } from 'mxgraph';
-// import * as N3 from 'n3';
-// import { Observable, Subject } from 'rxjs';
-// import { switchMap } from 'rxjs/operators';
+import { Iclass, Iuser, Ivocabulary, IClassWithProperties, PropertyType, meteorID } from '../../../api/models'
 
 
 
-export function getClassesWithProperties(vocabularyId: string): IClassWithProperties[] {
+
+function getClassesWithProperties(vocabularyId: string): IClassWithProperties[] {
 
     let propIds = []
     let classes = getClasses(vocabularyId).map((c) => {
@@ -63,7 +58,7 @@ function getClasses(vocabularyId: string): Iclass[] {
         throw new Meteor.Error('vocabularyID not correctly specified. Got "' + vocabularyId + '"');
     }
     const classIDs: meteorID[] = getClassIDsForVocabID(vocabularyId);
-    const res: Iclass[] = Classes.find({ _id: { $in: classIDs },isDataTypeVertex: false }).fetch()
+    const res: Iclass[] = Classes.find({ _id: { $in: classIDs }, isDataTypeVertex: false }).fetch()
 
     return res;
 }
@@ -71,17 +66,17 @@ function getClasses(vocabularyId: string): Iclass[] {
 export class N3Codec {
 
 
-    static neoPrefixes = {
+    public static neoPrefixes = {
         rdf: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
         rdfs: 'http://www.w3.org/2000/01/rdf-schema#',
         owl: 'http://www.w3.org/2002/07/owl#',
         xmlString: 'http://www.w3.org/2001/XMLSchema#',
         purl: 'http://purl.org/dc/terms/'
     }
-    static serialize(id: string) {
+    public static serialize(id: string) {
 
         try {
-            const vocabId = id|| null
+            const vocabId = id || null
             let name = ""
 
             const writer = new Writer({
@@ -102,27 +97,26 @@ export class N3Codec {
             if (name === '' || name === undefined) name = 'vocab-' + vocabId;
 
             const classes: IClassWithProperties[] = getClassesWithProperties(vocabId)
-            const namespace = `<${vocab.uriPrefix}>`
             const creator: Iuser = (vocab.creator) ? Users.findOne({ _id: vocab.creator }, { fields: { emails: 1 } }) : null
-            let quads:Quad[] =[]
+            let quads: Quad[] = []
             quads.push(quad(
                 namedNode(vocab.uriPrefix),
                 namedNode('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'),
                 namedNode('http://www.w3.org/2002/07/owl#Ontology')
-              ))
+            ))
             quads.push(quad(
                 namedNode(vocab.uriPrefix),
                 namedNode('http://purl.org/dc/terms/creator'),
                 literal(creator.emails[0].address)
-              ))
+            ))
 
-              authorEmails = authorEmails.filter((emails) => emails[0].address != creator.emails[0].address)
-              authorEmails.forEach((emails) => emails.forEach((email) => {
+            authorEmails = authorEmails.filter((emails) => emails[0].address != creator.emails[0].address)
+            authorEmails.forEach((emails) => emails.forEach((email) => {
                 quads.push(quad(
                     namedNode(vocab.uriPrefix),
                     namedNode('http://purl.org/dc/terms/contributor'),
                     literal(email.address)
-                  ))
+                ))
             }))
 
 
@@ -130,37 +124,37 @@ export class N3Codec {
                 namedNode(vocab.uriPrefix),
                 namedNode('http://purl.org/dc/terms/title'),
                 literal(vocab.name)
-              ),quad(
+            ), quad(
                 namedNode(vocab.uriPrefix),
                 namedNode('http://purl.org/dc/terms/description'),
                 literal(vocab.description)
-              ))
+            ))
 
 
-              const objectProps = Object.create(null);
-              const dataProps = Object.create(null);
+            const objectProps = Object.create(null);
+            const dataProps = Object.create(null);
 
-              classes.forEach((clazz) => {
+            classes.forEach((clazz) => {
 
                 quads.push(quad(
                     namedNode(clazz.URI),
                     namedNode('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'),
                     namedNode('http://www.w3.org/2000/01/rdf-schema#Class')
-                  ),
-                  quad(
-                    namedNode(clazz.URI),
-                    namedNode('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'),
-                    namedNode('http://www.w3.org/2002/07/owl#Class')
-                  ),quad(
-                    namedNode(clazz.URI),
-                    namedNode('http://www.w3.org/2000/01/rdf-schema#label'),
-                    literal(clazz.name)
-                  ),
-                  quad(
-                    namedNode(clazz.URI),
-                    namedNode('http://www.w3.org/2000/01/rdf-schema#comment'),
-                    literal(clazz.description)
-                  ))
+                ),
+                    quad(
+                        namedNode(clazz.URI),
+                        namedNode('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'),
+                        namedNode('http://www.w3.org/2002/07/owl#Class')
+                    ), quad(
+                        namedNode(clazz.URI),
+                        namedNode('http://www.w3.org/2000/01/rdf-schema#label'),
+                        literal(clazz.name)
+                    ),
+                    quad(
+                        namedNode(clazz.URI),
+                        namedNode('http://www.w3.org/2000/01/rdf-schema#comment'),
+                        literal(clazz.description)
+                    ))
 
                 clazz.properties.forEach((prop) => {
                     if (prop.type === PropertyType.Object) {
@@ -173,11 +167,11 @@ export class N3Codec {
                         namedNode(prop.URI),
                         namedNode('http://www.w3.org/2000/01/rdf-schema#domain'),
                         namedNode(clazz.URI)
-                      ),quad(
+                    ), quad(
                         namedNode(prop.URI),
                         namedNode('http://www.w3.org/2000/01/rdf-schema#range'),
                         namedNode(prop.range.URI)
-                      ))
+                    ))
 
                 });
             });
@@ -186,28 +180,23 @@ export class N3Codec {
                     namedNode(propURI),
                     namedNode('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'),
                     namedNode('http://www.w3.org/2002/07/owl#ObjectProperty')
-                  ))
+                ))
             }
-    
+
             for (const propURI in dataProps) {
                 quads.push(quad(
                     namedNode(propURI),
                     namedNode('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'),
                     namedNode('http://www.w3.org/2002/07/owl#DatatypeProperty')
-                  ))
+                ))
             }
             writer.addQuads(quads)
             writer.end((error, result) => console.log(result));
-        }catch (error) {
+        } catch (error) {
             console.log(error)
             return;
         }
     }
-    //     // See https://github.com/RubenVerborgh/N3.js
-    absuluteURI = /^https?:\/\/|^\/\//i;
-    //      n3parser = N3.Parser();
-    store: Store = new Store()
-
     static neologismId(id: string) {
         return id ? new URL(id, 'neo://query/').toString() : null;
     }
