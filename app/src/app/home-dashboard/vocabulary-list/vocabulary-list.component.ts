@@ -45,7 +45,11 @@ export class VocabularyListComponent implements OnInit {
       nzOnOk: () => this.vocabService.deleteVocabulary(vocab_id)
     });
   }
-
+  
+  /**
+   * 
+   * @param vocab_id TODO: TO BE IMPLEMENTED
+   */
   editVocabulary(vocab_id: string) {
   }
 
