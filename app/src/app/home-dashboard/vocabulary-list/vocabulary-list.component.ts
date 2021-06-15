@@ -11,6 +11,7 @@ import { environment } from '../../../environments/environment';
 import { Iuser } from '../../../../api/models';
 import { MeteorObservable, zoneOperator } from 'meteor-rxjs';
 import { RemoveUserModalComponent } from '../../../app/vocablist/components/remove-user-modal/remove-user-modal.component';
+import { N3Codec } from '../../../app/mxgraph/N3Codec';
 
 @Component({
   selector: 'app-vocabulary-list',
@@ -50,6 +51,7 @@ export class VocabularyListComponent implements OnInit {
 
   downloadVocab(id: string, name: string) {
     console.log('downloading vocabulary: ' + id + '...');
+    N3Codec.serialize(id)
     HTTP.get(`${environment.api.base}vocabulary/${id}`, {
     }, function (err, res) {
       if(err){
