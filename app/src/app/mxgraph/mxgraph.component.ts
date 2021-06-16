@@ -262,10 +262,9 @@ export class MxgraphComponent implements OnInit, OnDestroy {
         }
 
         !this.classNames.includes(c.name) ? this.classNames.push(c.name) : null;
-      }
+      });
 
-      );
-
+      cs = cs.filter(c => !c.isDataTypeVertex)
       // insert properties
       this.propertyNames = [];
       cs.forEach((c) => {
