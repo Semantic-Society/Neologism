@@ -6,8 +6,6 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { MatDialog } from '@angular/material/dialog';
 import { AddUserModalComponent } from '../../../app/vocablist/components/add-user-modal/add-user-modal.component';
 import { Router } from '@angular/router';
-import { HTTP } from 'meteor/http'
-import { environment } from '../../../environments/environment';
 import { Iuser } from '../../../../api/models';
 import { MeteorObservable, zoneOperator } from 'meteor-rxjs';
 import { RemoveUserModalComponent } from '../../../app/vocablist/components/remove-user-modal/remove-user-modal.component';
@@ -106,15 +104,14 @@ export class VocabularyListComponent implements OnInit {
     this.vocabService.getClassesWithProperties(vocabID).pipe(take(1)).subscribe(
       (classesWithProps) => {
         N3Codec.serialize(vocabID, classesWithProps, (content) => {
-          HTTP.post(`${environment.api.base}vocabulary/publish/${vocabID}`, { data: { rdf: content } }, function (err, res) {
-            if (err) {
-              console.log(err)
-              return;
-            }
-            console.log('published vocabulary: ' + vocabID + '...' + res.content);
-            return;
+          MeteorObservable.call('vocabulary.publish', content, vocabID).subscribe((_response) => {
+            // Handle success and response from server!
+          }, (err) => {
+            console.log(err);
+            // Handle error
           });
-        })
+          })
+
       }
     )
 

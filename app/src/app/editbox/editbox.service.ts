@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { RecommendationService } from '../services/recommendation.service';
 import { IClassInfo, IClassProperties, IClassProperty } from '../models/editbox.model';
-import { VocabulariesService, IClassWithProperties } from '../services/vocabularies.service';
+import { VocabulariesService } from '../services/vocabularies.service';
 import { of, Observable, BehaviorSubject } from 'rxjs';
 import { map, startWith, switchMap, tap, take, filter } from 'rxjs/operators';
 import { MeteorObservable } from 'meteor-rxjs';
-import { PropertyType } from './../../../api/models';
+import { PropertyType,IClassWithProperties } from './../../../api/models';
 @Injectable()
 export class EditboxService {
     alreadyThere2: Observable<any>;

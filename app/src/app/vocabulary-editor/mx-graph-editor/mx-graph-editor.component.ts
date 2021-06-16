@@ -1,7 +1,7 @@
 import { Component, OnInit, ElementRef, ViewChild,  HostListener, OnDestroy,} from '@angular/core';
-import { meteorID, Ivocabulary } from '../../../../api/models';
+import { meteorID, Ivocabulary,IClassWithProperties } from '../../../../api/models';
 import { MxgraphService } from '../../mxgraph/mxgraph';
-import { IClassWithProperties, VocabulariesService } from '../../services/vocabularies.service';
+import { VocabulariesService } from '../../services/vocabularies.service';
 import { Observable, Subscription } from 'rxjs';
 import { mxgraph as m } from 'mxgraph';
 import { combineLatest, debounceTime, distinctUntilChanged, filter} from 'rxjs/operators';

@@ -77,7 +77,7 @@ export interface IClassWithProperties {
     description: string;
     URI: string;
     range: IClassWithProperties; // these MUST be in the same vocabulary!
-  }>[];
+  }>;
   position: {
     x: number;
     y: number;

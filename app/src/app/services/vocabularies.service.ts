@@ -7,7 +7,7 @@ import { combineLatest, empty, Observable, of, throwError, timer } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, filter, flatMap, map, switchMap, take } from 'rxjs/operators';
 
 import { Classes, Properties, Users, Vocabularies } from '../../../api/collections';
-import { Iclass, Iproperty, Ivocabulary, PropertyType, meteorID } from '../../../api/models';
+import { Iclass, Iproperty, Ivocabulary, PropertyType, meteorID, IClassWithProperties } from '../../../api/models';
 
 const callWithPromise = (method, ...myParameters) => new Promise((resolve, reject) => {
   Meteor.call(method, ...myParameters, (err, res) => {
@@ -16,29 +16,6 @@ const callWithPromise = (method, ...myParameters) => new Promise((resolve, rejec
   });
 });
 
-export interface IClassWithProperties {
-  _id: string; // Mongo generated ID
-  name: string;
-  description: string;
-  URI: string;
-
-  properties: {
-    _id: string; // Mongo generated ID
-    name: string;
-    description: string;
-    URI: string;
-    type?: PropertyType;
-    range: any; // these MUST be in the same vocabulary!
-  }[];
-  position: {
-    x: number;
-    y: number;
-  };
-  skos: {
-    closeMatch: string[];
-    exactMatch: string[];
-  };
-}
 @Injectable()
 export class VocabulariesService {
 

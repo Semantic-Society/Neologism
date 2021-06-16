@@ -34,9 +34,9 @@ import {
   meteorID,
   IvocabularyExtended,
   PropertyType,
+  IClassWithProperties
 } from '../../../api/models';
 import {
-  IClassWithProperties,
   VocabulariesService,
 } from '../services/vocabularies.service';
 
