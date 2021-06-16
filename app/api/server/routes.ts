@@ -63,7 +63,7 @@ JsonRoutes.add("get", "/vocabulary/:id", (req, res) => {
   
       if (name === '' || name === undefined) name = 'vocab-' + vocabId;
   
-      const buffer = saveClassesWithPropertiesAsFile(getClassesWithProperties(vocabId), vocab, authorEmails);
+      const buffer = req.body.rdf
       const filePath=`${storageLocation}/${vocab.name}.ttl`
      let fd = fs.openSync(filePath, 'w');
       const encoding='utf8'

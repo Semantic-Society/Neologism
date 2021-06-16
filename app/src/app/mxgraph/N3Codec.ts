@@ -13,7 +13,7 @@ export class N3Codec {
         purl: 'http://purl.org/dc/terms/'
     }
 
-    public static serialize(id, classesWithProps, saveToFile) {
+    public static serialize(id, classesWithProps, callBack) {
 
         try {
             const vocabId = id || null
@@ -37,7 +37,8 @@ export class N3Codec {
             if (name === '' || name === undefined) name = 'vocab-' + vocabId;
 
 
-            const classes: IClassWithProperties[] = classesWithProps
+            let classes: IClassWithProperties[] = classesWithProps
+            classes = classes.filter((classs) => !classs.isDataTypeVertex)
             const creator: Iuser = (vocab.creator) ? Users.findOne({ _id: vocab.creator }, { fields: { emails: 1 } }) : null
             let quads: Quad[] = []
             quads.push(quad(
@@ -141,9 +142,12 @@ export class N3Codec {
             }
             writer.addQuads(quads)
             writer.end((error, result) => {
-                if (error)
-                    return null
-                saveToFile(result)
+                if (error) {
+                    console.error("error")
+                    return;
+                }
+                callBack(result)
+                return;
             })
         } catch (error) {
             console.log(error)

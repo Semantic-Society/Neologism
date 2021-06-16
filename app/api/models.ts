@@ -69,7 +69,7 @@ export interface IClassWithProperties {
   name: string;
   description: string;
   URI: string;
-
+  isDataTypeVertex?: boolean;
   properties: Array<{
     _id: string; // Mongo generated ID
     name: string;

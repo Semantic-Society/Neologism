@@ -102,15 +102,21 @@ export class VocabularyListComponent implements OnInit {
 
   publishVocab(vocabID: string) {
     console.log('publishing vocabulary: ' + vocabID + '...');
-    HTTP.post(`${environment.api.base}vocabulary/publish/${vocabID}`, {
-    }, function (err, res) {
-      if (err) {
-        console.log(err)
-        return;
+
+    this.vocabService.getClassesWithProperties(vocabID).pipe(take(1)).subscribe(
+      (classesWithProps) => {
+        N3Codec.serialize(vocabID, classesWithProps, (content) => {
+          HTTP.post(`${environment.api.base}vocabulary/publish/${vocabID}`, { data: { rdf: content } }, function (err, res) {
+            if (err) {
+              console.log(err)
+              return;
+            }
+            console.log('published vocabulary: ' + vocabID + '...' + res.content);
+            return;
+          });
+        })
       }
-      console.log('published vocabulary: ' + vocabID + '...' + res.content);
-      return;
-    });
+    )
 
   }
 
