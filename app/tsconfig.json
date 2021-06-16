@@ -3,10 +3,9 @@
   "compilerOptions": {
     "baseUrl": "./",
     "declaration": false,
-    "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "importHelpers": true,
-    "module": "esnext",
+    "module": "es2020",
     "moduleResolution": "node",
     "noImplicitAny": false,
     "outDir": "./dist/out-tsc",

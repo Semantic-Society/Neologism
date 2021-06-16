@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AbstractControl, AsyncValidatorFn, ValidationErrors } from '@angular/forms';
 
-import { Random } from 'meteor/random'
+import { Random } from 'meteor/random';
 import { MeteorObservable, zoneOperator } from 'meteor-rxjs';
 import { combineLatest, empty, Observable, of, throwError, timer } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, filter, flatMap, map, switchMap, take } from 'rxjs/operators';
@@ -22,14 +22,14 @@ export interface IClassWithProperties {
   description: string;
   URI: string;
 
-  properties: Array<{
+  properties: {
     _id: string; // Mongo generated ID
     name: string;
     description: string;
     URI: string;
     type?: PropertyType;
     range: any; // these MUST be in the same vocabulary!
-  }>;
+  }[];
   position: {
     x: number;
     y: number;
@@ -76,7 +76,7 @@ export class VocabulariesService {
     });
   }
 
-  getVocabulary(id: string): Observable<Ivocabulary> { // TODO: Breaks upon deletion
+  getVocabulary(id: string): Observable<Ivocabulary> { // TODO (186): Breaks upon deletion
     return VocabulariesService.wrapFunkyObservables(
       Vocabularies.find({ _id: id }).pipe(
         filter((arr: any[]) => arr.length > 0),
@@ -86,12 +86,12 @@ export class VocabulariesService {
   }
 
   createVocabulary(name: string, description: string, uriPrefix: string) {
-    const _id = new Mongo.ObjectID().toHexString()
+    const _id = new Mongo.ObjectID().toHexString();
     return MeteorObservable.call('vocabulary.create', _id, name, description, uriPrefix)
       .pipe(
         zoneOperator(),
         map(result => ({ ...result, vocabId: _id }))
-      )
+      );
   }
 
   deleteVocabulary(id: string) {
@@ -148,10 +148,10 @@ export class VocabulariesService {
 
   addProperty(toClass: meteorID, name: string, description: string, URI: string, range: string,
     type: string, vocabID: string) {
-    var _id = undefined;
+    let _id;
     if (type == PropertyType.Data) {
       _id = Random.id();
-      this.addClass(vocabID, range, description = PropertyType.Data, URI, undefined, _id)
+      this.addClass(vocabID, range, description = PropertyType.Data, URI, undefined, _id);
       MeteorObservable.call('property.create', toClass, { name, description, URI, range, type, _id })
         .subscribe((_response) => {
           // Handle success and response from server!
@@ -175,7 +175,7 @@ export class VocabulariesService {
    * @param vocabularyId
    */
   getClassIDsForVocabID(vocabularyId: string): Observable<meteorID[]> {
-    const thevocabO: Observable<Array<{ classes: meteorID[] }>> = VocabulariesService.wrapFunkyObservables(
+    const thevocabO: Observable<{ classes: meteorID[] }[]> = VocabulariesService.wrapFunkyObservables(
       Vocabularies.find({ _id: vocabularyId }, { fields: { classes: 1 }, limit: 1 })
     );
 
@@ -220,7 +220,7 @@ export class VocabulariesService {
    * @param vocabularyId
    */
   getClassesWithProperties(vocabularyId: string): Observable<IClassWithProperties[]> {
-    console.log('in vocab service ')
+    console.log('in vocab service ');
     // Ask Meteor Server to send a feed of accessible documents
     const handle = Meteor.subscribe('vocabDetails', vocabularyId);
 
@@ -257,7 +257,7 @@ export class VocabulariesService {
           c.properties.forEach((p, j) => {
             p.range = newClassesWithoutRangeFilledLater.find((cr) => cr._id === cs[i].properties[j].range);
             if (!p.range && p.type == PropertyType.Data) {
-              p.range = cs[i].properties[j].range
+              p.range = cs[i].properties[j].range;
             } else if (!p.range) {
               // return null; // not all required classes returned yet
               failed = true;
@@ -290,7 +290,7 @@ export class VocabulariesService {
    * @param selectedClassID
    */
   getClassWithProperties(vocabID: string, selectedClassID: Observable<string>): Observable<IClassWithProperties> {
-    // TODO: this following steps are overkill. We can use something more granular later.
+    //TODO (184): this following steps are overkill. We can use something more granular later.
     const theClassO: Observable<IClassWithProperties> = selectedClassID.pipe(
       switchMap((classID) => {
         const allClassesO: Observable<IClassWithProperties[]> = this.getClassesWithProperties(vocabID);
@@ -331,7 +331,7 @@ export class VocabulariesService {
   getClassIDFromVocabForURI(vocabularyId: string, URI: string): Observable<string> {
     const res = this.getClassIDsForVocabID(vocabularyId).pipe(
       flatMap((classes, _ignored) => {
-        const classqueryRes: Observable<Array<{ _id: meteorID }>> = VocabulariesService.wrapFunkyObservables(Classes.find({ _id: { $in: classes }, URI }, { fields: { _id: 1 }, limit: 1 }));
+        const classqueryRes: Observable<{ _id: meteorID }[]> = VocabulariesService.wrapFunkyObservables(Classes.find({ _id: { $in: classes }, URI }, { fields: { _id: 1 }, limit: 1 }));
         return classqueryRes;
       }),
       map((classes) => {
@@ -356,7 +356,7 @@ export class VocabulariesService {
     },
       {
         limit: 10
-      }).fetch()
+      }).fetch();
   }
 
   // gets first email address for the user if any
@@ -364,24 +364,24 @@ export class VocabulariesService {
     try {
       const user = Users.findOne({
         _id: userId
-      })
+      });
 
-      return (user!.emails[0].address) ? user.emails[0].address : "";
+      return (user!.emails[0].address) ? user.emails[0].address : '';
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
 
   }
 
-  isURITaken(URI: string, type: "class" | "property") {
+  isURITaken(URI: string, type: 'class' | 'property') {
     try {
-      if (type === "class") {
-        return of((Classes.findOne({ URI: URI }) != null))
+      if (type === 'class') {
+        return of((Classes.findOne({ URI }) != null));
       } else {
-        return of((Properties.findOne({ URI: URI }) != null))
+        return of((Properties.findOne({ URI }) != null));
       }
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   }
 
@@ -396,20 +396,20 @@ export class VocabulariesService {
   uriValidator(): AsyncValidatorFn {
     return (control: AbstractControl): Promise<ValidationErrors | null> | Observable<ValidationErrors | null> => {
       return timer(500).pipe(
-        switchMap(_ => this.isURITaken(control.value, "class")),
+        switchMap(_ => this.isURITaken(control.value, 'class')),
         map(isTaken => (isTaken ? { invalidURI: true } : null)),
-        catchError(() => of(null)))
-    }
+        catchError(() => of(null)));
+    };
 
   }
 
   uriPropValidator(): AsyncValidatorFn {
     return (control: AbstractControl): Promise<ValidationErrors | null> | Observable<ValidationErrors | null> => {
       return timer(500).pipe(
-        switchMap(_ => this.isURITaken(control.value, "property")),
+        switchMap(_ => this.isURITaken(control.value, 'property')),
         map(isTaken => (isTaken ? { invalidURI: true } : null)),
-        catchError(() => of(null)))
-    }
+        catchError(() => of(null)));
+    };
 
   }
 

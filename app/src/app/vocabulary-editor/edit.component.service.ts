@@ -82,7 +82,7 @@ export class EditComponentService {
     
         // this is currently rather weirdly working.
         // When the rangeID is not found, the class is added, after which the rangeID is found and the property can be added.
-        // TODO: is this a good way to do this?
+        // TODO (184): is this a good way to do this?
         this.vocabService.getClassIDFromVocabForURI(vocabID, rec.range)
             .pipe(
                 take(1),

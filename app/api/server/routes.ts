@@ -1,6 +1,6 @@
 
-import { Meteor } from 'meteor/meteor'
-import {JsonRoutes} from 'meteor/simple:json-routes'
+import { Meteor } from 'meteor/meteor';
+import {JsonRoutes} from 'meteor/simple:json-routes';
 
 import {Vocabularies, Users } from '../collections';
 
@@ -11,56 +11,56 @@ import * as fs from 'fs';
 // TODO (Johannes): Do we need this ?
 JsonRoutes.add("get", "/vocabulary/:id", (req, res) => {
     try {
-      const vocabId = req.params.id || null
-      let name = ""
-  
-      const vocab = Vocabularies.findOne({ _id: vocabId }) || null
+      const vocabId = req.params.id || null;
+      let name = '';
+
+      const vocab = Vocabularies.findOne({ _id: vocabId }) || null;
       if (!vocab) {
-        throw new Meteor.Error(404, 'Not Found')
+        throw new Meteor.Error(404, 'Not Found');
       }
-  
+
       const authorEmails = vocab.authors.map((author) => {
         const emails = Users.findOne({ _id: author }).emails;
         if (!!emails)
-          return emails
-      })
-  
+          return emails;
+      });
+
       if (name === '' || name === undefined) name = 'vocab-' + vocabId;
-  
+
       const buffer = saveClassesWithPropertiesAsFile(getClassesWithProperties(vocabId), vocab, authorEmails);
-  
+
       res.setHeader('Content-type', 'text/plain');
-  
-      res.end(buffer)
-  
+
+      res.end(buffer);
+
     } catch (error) {
-      console.log(error)
-      res.end('Internal Server Error')
+      console.log(error);
+      res.end('Internal Server Error');
       return;
     }
   });
 
 
-  JsonRoutes.add("post", "/vocabulary/publish/:id", (req, res) => {
+  JsonRoutes.add('post', '/vocabulary/publish/:id', (req, res) => {
     try {
-      const storageLocation=Meteor.settings.storageLocation;
-      if(!storageLocation){
-        res.end('Config error')
+      const storageLocation = Meteor.settings.storageLocation;
+      if (!storageLocation) {
+        res.end('Config error');
         return;
       }
-      const vocabId = req.params.id || null
-      let name = ""
-      const vocab = Vocabularies.findOne({ _id: vocabId }) || null
+      const vocabId = req.params.id || null;
+      let name = '';
+      const vocab = Vocabularies.findOne({ _id: vocabId }) || null;
       if (!vocab) {
-        throw new Meteor.Error(404, 'Not Found')
+        throw new Meteor.Error(404, 'Not Found');
       }
-  
+
       const authorEmails = vocab.authors.map((author) => {
         const emails = Users.findOne({ _id: author }).emails;
         if (!!emails)
-          return emails
-      })
-  
+          return emails;
+      });
+
       if (name === '' || name === undefined) name = 'vocab-' + vocabId;
   
       const buffer = req.body.rdf
@@ -73,17 +73,16 @@ JsonRoutes.add("get", "/vocabulary/:id", (req, res) => {
         } else {
           console.log('The file ' + name + ' (' + encoding + ') was saved to ' + filePath);
         }
-      }); 
-      res.statusCode=200
-      res.end('File uploaded')
-  
+      });
+      res.statusCode = 200;
+      res.end('File uploaded');
+
     } catch (error) {
-      console.log(error)
-      res.end('Internal Server Error')
+      console.log(error);
+      res.end('Internal Server Error');
       return;
     }
   });
-  
 
-  
-  
+
+

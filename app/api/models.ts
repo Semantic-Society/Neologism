@@ -56,7 +56,7 @@ export interface Iproperty {
   description: string;
   URI: string;
   range: meteorID;
-  rangeName?:string
+  rangeName?: string;
 }
 
 export interface IvocabularyExtended extends Ivocabulary {
@@ -77,7 +77,7 @@ export interface IClassWithProperties {
     description: string;
     URI: string;
     range: IClassWithProperties; // these MUST be in the same vocabulary!
-  }>;
+  }>[];
   position: {
     x: number;
     y: number;
@@ -96,98 +96,98 @@ export enum PropertyType {
 
 const xsdDataTypes = [
 
-  "anyURI",
+  'anyURI',
 
-  "base64Binary",
+  'base64Binary',
 
-  "boolean",
+  'boolean',
 
-  "byte",
+  'byte',
 
-  "date",
+  'date',
 
-  "dateTime",
+  'dateTime',
 
-  "decimal",
+  'decimal',
 
-  "derivationControl",
+  'derivationControl',
 
-  "double",
+  'double',
 
-  "duration",
+  'duration',
 
-  "ENTITIES",
+  'ENTITIES',
 
-  "ENTITY",
+  'ENTITY',
 
-  "float",
+  'float',
 
-  "gDay",
+  'gDay',
 
-  "gMonth",
+  'gMonth',
 
-  "gMonthDay",
+  'gMonthDay',
 
-  "gYear",
+  'gYear',
 
-  "gYearMonth",
+  'gYearMonth',
 
-  "hexBinary",
+  'hexBinary',
 
-  "ID",
+  'ID',
 
-  "IDREF",
+  'IDREF',
 
-  "IDREFS",
+  'IDREFS',
 
-  "int",
+  'int',
 
-  "integer",
+  'integer',
 
-  "language",
+  'language',
 
-  "long",
+  'long',
 
-  "Name",
+  'Name',
 
-  "NCName",
+  'NCName',
 
-  "negativeInteger",
+  'negativeInteger',
 
-  "NMTOKEN",
+  'NMTOKEN',
 
-  "NMTOKENS",
+  'NMTOKENS',
 
-  "nonNegativeInteger",
+  'nonNegativeInteger',
 
-  "nonPositiveInteger",
+  'nonPositiveInteger',
 
-  "normalizedString",
+  'normalizedString',
 
-  "NOTATION",
+  'NOTATION',
 
-  "positiveInteger",
+  'positiveInteger',
 
-  "QName",
+  'QName',
 
-  "short",
+  'short',
 
-  "simpleDerivationSet",
+  'simpleDerivationSet',
 
-  "string",
+  'string',
 
-  "time",
+  'time',
 
-  "token",
+  'token',
 
-  "unsignedByte",
+  'unsignedByte',
 
-  "unsignedInt",
+  'unsignedInt',
 
-  "unsignedLong",
+  'unsignedLong',
 
-  "unsignedShort"
+  'unsignedShort'
 
-]
+];
 
-export {xsdDataTypes}
+export {xsdDataTypes};

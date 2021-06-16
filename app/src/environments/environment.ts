@@ -5,14 +5,14 @@
 
 export const environment = {
   production: false,
-  recommender:{
-    base:"http://localhost",
-    port:"80",
+  recommender: {
+    base: 'http://localhost',
+    port: '80',
   },
-  api:{
-    base:"api/",
+  api: {
+    base: 'api/',
   },
-  guestUserName: window["env"]["guser"] || "guest",
-  guestPassword: window["env"]["gpass"] || "12345",
-  gMaxVocab: window["env"]["gMaxlength"] || "5"
+  guestUserName: window['env']['guser'] || 'guest',
+  guestPassword: window['env']['gpass'] || '12345',
+  gMaxVocab: window['env']['gMaxlength'] || '5'
 };

@@ -22,13 +22,24 @@ import { HttpClient } from '@angular/common/http';
 
 export class EditboxComponent implements OnInit, OnChanges {
 
+  constructor(
+    private vocabService: VocabulariesService,
+    private recommender: RecommendationService,
+    private sidebarService: SideBarStateService,
+    private editboxService: EditboxService,
+    private fb: FormBuilder,
+    private spellCheckerService: SpellCheckerService,
+    private modal: NzModalService,
+    private httpClient: HttpClient) {
+  }
+
   // protected alreadyThere: Array<{ comment: string; label: string; uri: string; range: string; }> = [];
-  protected alreadyThere$: Observable<Array<{ comment: string; label: string; uri: string; range: string; }>>;
+  protected alreadyThere$: Observable<{ comment: string; label: string; uri: string; range: string; }[]>;
 
   // protected propertyRecommendations: Array<{ comment: string; label: string; uri: string; range: string; }> = [];
-  protected propertyRecommendations: Observable<Array<{ comment: string; label: string; uri: string; range: string; }>>
+  protected propertyRecommendations: Observable<{ comment: string; label: string; uri: string; range: string; }[]>;
 
-  // TODO: as this is an observable, does it need @Input?
+  // TODO (184): as this is an observable, does it need @Input?
   @Input() selectedClassID: string;
   @Input() uriPrefix: string;
   /**
@@ -36,13 +47,13 @@ export class EditboxComponent implements OnInit, OnChanges {
    */
   classInfo$: Observable<{ label: string, description: string; url: string }>;
 
-  // TODO: strictly speaking, this component does not need this as it only needs access to classes and properties.
+  // TODO (184): strictly speaking, this component does not need this as it only needs access to classes and properties.
   // However, more fine grained methods in the VocabulariesService are not yet implemented.
   @Input() vocabID: string;
 
   formProp: FormGroup;
 
-  formEnable = "data"
+  formEnable = 'data';
 
   protected editedClass: {
     name: string;
@@ -59,27 +70,17 @@ export class EditboxComponent implements OnInit, OnChanges {
 
   protected classToUpdate: Observable<IClassWithProperties>;
   public editToggle = false;
-  protected rangeOptions: Observable<Array<{ _id: string, name: string }>>;
-  public suggestions_class: string[]
-  public suggestions_property: string[]
-  contextmenu_class: boolean = false
-  contextmenu_property: boolean = false
+  protected rangeOptions: Observable<{ _id: string, name: string }[]>;
+  public suggestions_class: string[];
+  public suggestions_property: string[];
+  contextmenu_class = false;
+  contextmenu_property = false;
 
-  fileURL = "https://raw.githubusercontent.com/JacobSamro/ngx-spellchecker/master/dict/normalized_en-US.dic"
-
-  constructor(
-    private vocabService: VocabulariesService,
-    private recommender: RecommendationService,
-    private sidebarService: SideBarStateService,
-    private editboxService: EditboxService,
-    private fb: FormBuilder,
-    private spellCheckerService: SpellCheckerService,
-    private modal: NzModalService,
-    private httpClient: HttpClient) {
-  }
+  fileURL = 'https://raw.githubusercontent.com/JacobSamro/ngx-spellchecker/master/dict/normalized_en-US.dic';
+  oldClassID: string;
 
   ngOnInit() {
-    this.uriPrefix = (this.uriPrefix.search(/^(.*)#$/) == -1) ? `${this.uriPrefix}#` : `${this.uriPrefix}`
+    this.uriPrefix = (this.uriPrefix.search(/^(.*)#$/) == -1) ? `${this.uriPrefix}#` : `${this.uriPrefix}`;
     this.formProp = this.fb.group({
       name: ['', Validators.required],
       URI: [`${this.uriPrefix}`],
@@ -107,10 +108,9 @@ export class EditboxComponent implements OnInit, OnChanges {
 
     });
   }
-  oldClassID: string
   ngOnChanges(input) {
 
-    this.editedClass = this.editboxService.getUndefinedClass()
+    this.editedClass = this.editboxService.getUndefinedClass();
 
     const classID: string = input.selectedClassID.currentValue;
 
@@ -119,9 +119,9 @@ export class EditboxComponent implements OnInit, OnChanges {
     }
 
     // we get several small pieces of info from the class. multicast is likely a good idea, but did not get it working.
-    this.classInfo$ = this.editboxService.createClassInfoObj(this.vocabID, classID)
+    this.classInfo$ = this.editboxService.createClassInfoObj(this.vocabID, classID);
 
-    // actually already refacored (in editbox service) but very hard to test as the 
+    // actually already refacored (in editbox service) but very hard to test as the
     // recommender service always returns an empty array, bug ?
     this.propertyRecommendations = this.editboxService.getClass$(this.vocabID, classID)
       .pipe(
@@ -131,7 +131,7 @@ export class EditboxComponent implements OnInit, OnChanges {
             combineLatest(this.alreadyThere$, (recommendations, alreadys) => {
               const newReccommendations = [];
               recommendations.forEach((recommendation) => {
-                //       // TODO is there a better way in JS?
+                //       // TODO (184): is there a better way in JS?
                 if (!alreadys.some((already) => {
                   return already.uri === recommendation.uri;
                 })) {
@@ -151,46 +151,46 @@ export class EditboxComponent implements OnInit, OnChanges {
   checkWordProperty(word: string) {
 
     this.httpClient.get(this.fileURL, { responseType: 'text' }).subscribe((res: any) => {
-      let dictionary = this.spellCheckerService.getDictionary(res)
+      const dictionary = this.spellCheckerService.getDictionary(res);
 
-      this.suggestions_property = dictionary.getSuggestions(word)
-    })
+      this.suggestions_property = dictionary.getSuggestions(word);
+    });
 
 
-    this.contextmenu_class = true
+    this.contextmenu_class = true;
   }
 
   checkWordClass(word: string) {
 
     this.httpClient.get(this.fileURL, { responseType: 'text' }).subscribe((res: any) => {
-      let dictionary = this.spellCheckerService.getDictionary(res)
+      const dictionary = this.spellCheckerService.getDictionary(res);
 
-      this.suggestions_class = dictionary.getSuggestions(word)
-    })
+      this.suggestions_class = dictionary.getSuggestions(word);
+    });
 
 
-    this.contextmenu_class = true
+    this.contextmenu_class = true;
   }
   addRecommendedProperyToGraph(rec: IClassProperty) {
-    this.editboxService.addRecommendedProperyToGraph(rec, this.selectedClassID, this.vocabID)
+    this.editboxService.addRecommendedProperyToGraph(rec, this.selectedClassID, this.vocabID);
   }
 
 
   addProperty(formDirective: FormGroupDirective, index: number) {
     const type = (index === 0) ? PropertyType.Object : PropertyType.Data;
     if (index) {
-      this.formProp.controls['URI'].setValue(`${this.uriPrefix}${encodeURIComponent(this.formProp.value.name.toLocaleLowerCase())}`)
+      this.formProp.controls['URI'].setValue(`${this.uriPrefix}${encodeURIComponent(this.formProp.value.name.toLocaleLowerCase())}`);
     }
     this.vocabService.addProperty(this.selectedClassID, this.formProp.value.name, this.formProp.value.description, this.formProp.value.URI, this.formProp.value.range, type, this.vocabID);
     formDirective.resetForm();
-    this.formProp.reset()
+    this.formProp.reset();
   }
 
 
 
   cancelEdit() {
     this.editToggle = false;
-    this.editedClass = this.editboxService.getUndefinedClass()
+    this.editedClass = this.editboxService.getUndefinedClass();
   }
 
   updateEdit() {
@@ -219,16 +219,16 @@ export class EditboxComponent implements OnInit, OnChanges {
   }
 
   listenerPropNameChange($event) {
-    this.formProp.controls['URI'].setValue(`${this.uriPrefix}${encodeURIComponent($event.target.value.toLocaleLowerCase())}`)
+    this.formProp.controls['URI'].setValue(`${this.uriPrefix}${encodeURIComponent($event.target.value.toLocaleLowerCase())}`);
 
   }
 
   listenerClassNameChange(value: string) {
-    this.editedClass.URI = `${this.uriPrefix}${encodeURIComponent(value.toLocaleLowerCase())}`
+    this.editedClass.URI = `${this.uriPrefix}${encodeURIComponent(value.toLocaleLowerCase())}`;
   }
 
   resetSidebarState() {
-    this.sidebarService.changeSidebarToDefault()
+    this.sidebarService.changeSidebarToDefault();
   }
 
   toggleEdit() {
