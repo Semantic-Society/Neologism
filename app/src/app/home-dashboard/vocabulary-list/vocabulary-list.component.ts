@@ -10,7 +10,7 @@ import { Iuser } from '../../../../api/models';
 import { MeteorObservable, zoneOperator } from 'meteor-rxjs';
 import { RemoveUserModalComponent } from '../../../app/vocablist/components/remove-user-modal/remove-user-modal.component';
 import { N3Codec } from '../../../app/mxgraph/N3Codec';
-
+import { NzMessageService } from 'ng-zorro-antd/message';
 @Component({
   selector: 'app-vocabulary-list',
   templateUrl: './vocabulary-list.component.html',
@@ -25,6 +25,7 @@ export class VocabularyListComponent implements OnInit {
     private router: Router,
     private vocabService: VocabulariesService,
     private modalService: NzModalService,
+    private messageService: NzMessageService,
     public dialog: MatDialog,) {
     this.context$ = this.vocabService.getVocabularies().pipe(map(vocabulary => {
       return vocabulary;
@@ -34,8 +35,8 @@ export class VocabularyListComponent implements OnInit {
 
   deleteVocabulary(vocab_id: string) {
     this.modalService.confirm({
-      nzTitle: '<i>Do you Want to delete this vocabulary?</i>',
-      nzContent: '<b>You will loose all access to this vocabulary</b>',
+      nzTitle: '<i>Do you want to delete this vocabulary?</i>',
+      nzContent: '<b>You will lose all access to this vocabulary</b>',
       nzOnOk: () => this.vocabService.deleteVocabulary(vocab_id)
     });
   }
@@ -92,21 +93,7 @@ export class VocabularyListComponent implements OnInit {
 
   publishVocab(vocabID: string) {
     console.log('publishing vocabulary: ' + vocabID + '...');
-
-    this.vocabService.getClassesWithProperties(vocabID).pipe(take(1)).subscribe(
-      (classesWithProps) => {
-        N3Codec.serialize(vocabID, classesWithProps, (content) => {
-          MeteorObservable.call('vocabulary.publish', content, vocabID).subscribe((_response) => {
-            // Handle success and response from server!
-          }, (err) => {
-            console.log(err);
-            // Handle error
-          });
-          })
-
-      }
-    )
-
+    this.vocabService.publishVocab(vocabID)
   }
 
 }
