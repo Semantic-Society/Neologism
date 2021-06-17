@@ -2,13 +2,13 @@ import { Component, OnInit, Input} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 // import sidebar state dep.
 import { VocabularyEditorService } from './vocabulary-editor.service';
-import { VocabulariesService, IClassWithProperties } from '../services/vocabularies.service';
+import { VocabulariesService,  } from '../services/vocabularies.service';
 import { RecommendationService } from '../services/recommendation.service';
 import { map, switchMap, tap, startWith } from 'rxjs/operators';
 import { Observable, of, combineLatest } from 'rxjs';
 import { IClassProperty } from '../models/editbox.model';
 import { EditComponentService } from './edit.component.service';
-import { PropertyType } from "./../../../api/models";
+import { PropertyType ,IClassWithProperties} from "./../../../api/models";
 
  class VocabClass {
   name: string

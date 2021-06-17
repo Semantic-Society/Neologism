@@ -5,10 +5,9 @@ import { debounceTime, startWith } from "rxjs/operators";
 import { BatchRecommendations } from "../services/BatchRecommendations";
 import { Recommendation } from "../services/Recommendation";
 import {
-  IClassWithProperties,
   VocabulariesService
 } from "../services/vocabularies.service";
-
+import { IClassWithProperties } from '../../../api/models';
 @Component({
   selector: "app-batchRecommender",
   templateUrl: "./batchRecommender.component.html",

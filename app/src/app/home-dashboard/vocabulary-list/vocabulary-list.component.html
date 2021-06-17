@@ -45,18 +45,6 @@
 
               <i nz-icon style="color: red" nzType="delete"></i>
             </button>
-            
-            <button *ngIf="loggedInUser._id===vocab.creator"
-                class="actn-btn" 
-                nz-button 
-                nzType="default"
-                nzTooltipTitle="Edit Vocabulary" 
-                nzTooltipPlacement="top" 
-                nz-tooltip
-                (click)="editVocabulary(vocab._id)"
-                nzShape="circle">
-              <i nz-icon style="color: green" nzType="edit"></i>
-            </button>
             <button  *ngIf="loggedInUser._id===vocab.creator"
             class="actn-btn" 
             nz-button 
@@ -91,18 +79,6 @@
                 nzShape="circle">
               <i nz-icon  nzType="arrow-right"></i>
             </button>
-
-            <button  *ngIf="!vocab.creator"
-            class="actn-btn" 
-            nz-button 
-            nzType="default" 
-            nzTooltipTitle="Become a creator?" 
-            nzTooltipPlacement="top" 
-            nz-tooltip
-            (click)="becomeCreator(vocab._id)"
-            nzShape="circle">
-            <i nz-icon  nzType="user" nzTheme="outline"></i>
-        </button>
         <button
             class="actn-btn" 
             nz-button 

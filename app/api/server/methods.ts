@@ -5,6 +5,7 @@ import { map, take, tap } from 'rxjs/operators';
 
 
 import { Classes, Properties, Vocabularies, Users } from '../collections';
+import { publishVocabulary } from './helper';
 
 
 // should be refactored as well. The checck is not sufficient
@@ -110,6 +111,11 @@ Meteor.methods({
     // TODO (#183): Sanitize
     // currently: pseudo permission check via only being able to remove documents where the current user is also an author
     Vocabularies.remove({ _id: vocabId, creator: this.userId });
+  },
+  'vocabulary.publish'(rdfTtl:string, vocabId: string) {
+    assertUser();
+    // TODO (#183): Sanitize
+    publishVocabulary(rdfTtl,vocabId)
   },
   'class.create'(vocabId, name, description, URI, position, _id?) {
     assertUser();

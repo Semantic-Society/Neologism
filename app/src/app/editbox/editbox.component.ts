@@ -3,15 +3,16 @@ import { Observable, of } from 'rxjs';
 import { combineLatest, filter, map, startWith, switchMap, tap } from 'rxjs/operators';
 
 import { RecommendationService } from '../services/recommendation.service';
-import { IClassWithProperties, VocabulariesService } from '../services/vocabularies.service';
+import { VocabulariesService } from '../services/vocabularies.service';
 import { SideBarStateService } from '../services/state-services/sidebar-state.service';
 import { EditboxService } from './editbox.service';
 import { IClassProperties, IClassProperty } from '../models/editbox.model';
 import { FormArray, FormBuilder, FormControl, FormGroup, FormGroupDirective, Validators } from '@angular/forms';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { PropertyType, xsdDataTypes } from './../../../api/models';
+import { PropertyType, xsdDataTypes,IClassWithProperties} from './../../../api/models';
 import { SpellCheckerService } from 'ngx-spellchecker';
 import { HttpClient } from '@angular/common/http';
+
 
 @Component({
   selector: 'app-editbox',

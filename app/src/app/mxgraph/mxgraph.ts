@@ -285,7 +285,7 @@ export class MxgraphService {
     // }
 
     public startTransaction() {
-        this.model.beginUpdate();
+        this.model.beginUpdate() 
         this.transactionSelection = this.graph.getSelectionModel().cells.map((cell) => cell.getId());
     }
 
@@ -441,10 +441,6 @@ export class MxgraphService {
     //     return model;
     // }
 
-    zoomToFit() {
-        this.graph.fit();
-    }
-
     destroy() {
         this.graph.destroy();
         this.tb.destroy();
@@ -533,8 +529,8 @@ export class MxgraphService {
             let pageCount = MxgraphService.mx.mxUtils.prompt('Enter maximum page count', '1');
 
             if (pageCount != null) {
-                let scale = MxgraphService.mx.mxUtils.getScaleForPageCount(pageCount, this.graph);
-                let preview = new MxgraphService.mx.mxPrintPreview(this.graph, scale);
+                var scale = MxgraphService.mx.mxUtils.getScaleForPageCount(Number(pageCount), this.graph);
+                var preview = new MxgraphService.mx.mxPrintPreview(this.graph, scale);
                 preview.open();
             }
         });

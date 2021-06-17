@@ -6,16 +6,15 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { MatDialog } from '@angular/material/dialog';
 import { AddUserModalComponent } from '../../../app/vocablist/components/add-user-modal/add-user-modal.component';
 import { Router } from '@angular/router';
-import { HTTP } from 'meteor/http'
-import { environment } from '../../../environments/environment';
 import { Iuser } from '../../../../api/models';
 import { MeteorObservable, zoneOperator } from 'meteor-rxjs';
 import { RemoveUserModalComponent } from '../../../app/vocablist/components/remove-user-modal/remove-user-modal.component';
+import { N3Codec } from '../../../app/mxgraph/N3Codec';
 
 @Component({
   selector: 'app-vocabulary-list',
   templateUrl: './vocabulary-list.component.html',
-  styleUrls: ['./vocabulary-list.component.scss']
+  styleUrls: ['./vocabulary-list.component.scss'],
 })
 export class VocabularyListComponent implements OnInit {
   public context$: Observable<any>;
@@ -29,11 +28,7 @@ export class VocabularyListComponent implements OnInit {
     public dialog: MatDialog,) {
     this.context$ = this.vocabService.getVocabularies().pipe(map(vocabulary => {
       return vocabulary;
-    }),tap(vocabularies=>this.totalVocab.emit(vocabularies.length)));
-
-  }
-
-  addUserToVocabulary() {
+    }), tap(vocabularies => this.totalVocab.emit(vocabularies.length)));
 
   }
 
@@ -45,31 +40,30 @@ export class VocabularyListComponent implements OnInit {
     });
   }
 
+  /**
+   * 
+   * @param vocab_id TODO (Johannes): TBD
+   */
   editVocabulary(vocab_id: string) {
   }
 
   downloadVocab(id: string, name: string) {
     console.log('downloading vocabulary: ' + id + '...');
-    HTTP.get(`${environment.api.base}vocabulary/${id}`, {
-    }, function (err, res) {
-      if(err){
-        console.log(err)
-        return;
-      }
-      const blob = new Blob([res.content], { type: 'text/plain' });
-      saveAs(blob, name + '.rdf');
-      return;
-    });
 
+    this.vocabService.getClassesWithProperties(id).pipe(take(1)).subscribe(
+      (classesWithProps) => {
+        N3Codec.serialize(id, classesWithProps, (content) => {
+          const blob = new Blob([content], { type: 'text/plain' });
+          saveAs(blob, name + '.rdf');
+          return;
+        })
+      }
+    )
   }
 
 
   openVocabulary(vocab_id: string) {
     this.router.navigateByUrl('edit/' + vocab_id);
-  }
-
-  addVocabulary(vocabForm: any) {
-
   }
 
   addPersonToVocab(vocab_id: string) {
@@ -79,11 +73,6 @@ export class VocabularyListComponent implements OnInit {
       data: { vocabId: vocab_id }
     });
   }
-  becomeCreator(vocab_id: string) {
-    MeteorObservable.call('vocabulary.assign-creator.self', vocab_id)
-      .pipe(zoneOperator())
-      .subscribe()
-  }
 
   ngOnInit() {
     Tracker.autorun(() => {
@@ -92,7 +81,7 @@ export class VocabularyListComponent implements OnInit {
     })
 
   }
-  
+
   removePersonFromVocab(vocab_id: string) {
     let dialogRef = this.dialog.open(RemoveUserModalComponent, {
       height: '400px',
@@ -101,17 +90,22 @@ export class VocabularyListComponent implements OnInit {
     });
   }
 
-  publishVocab(vocabID: string){
+  publishVocab(vocabID: string) {
     console.log('publishing vocabulary: ' + vocabID + '...');
-    HTTP.post(`${environment.api.base}vocabulary/publish/${vocabID}`, {
-    }, function (err, res) {
-      if(err){
-        console.log(err)
-        return;
+
+    this.vocabService.getClassesWithProperties(vocabID).pipe(take(1)).subscribe(
+      (classesWithProps) => {
+        N3Codec.serialize(vocabID, classesWithProps, (content) => {
+          MeteorObservable.call('vocabulary.publish', content, vocabID).subscribe((_response) => {
+            // Handle success and response from server!
+          }, (err) => {
+            console.log(err);
+            // Handle error
+          });
+          })
+
       }
-      console.log('published vocabulary: ' + vocabID + '...' + res.content);
-      return;
-    });
+    )
 
   }
 

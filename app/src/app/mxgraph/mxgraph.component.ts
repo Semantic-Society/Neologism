@@ -34,9 +34,9 @@ import {
   meteorID,
   IvocabularyExtended,
   PropertyType,
+  IClassWithProperties
 } from '../../../api/models';
 import {
-  IClassWithProperties,
   VocabulariesService,
 } from '../services/vocabularies.service';
 
@@ -262,10 +262,9 @@ export class MxgraphComponent implements OnInit, OnDestroy {
         }
 
         !this.classNames.includes(c.name) ? this.classNames.push(c.name) : null;
-      }
+      });
 
-      );
-
+      cs = cs.filter(c => !c.isDataTypeVertex)
       // insert properties
       this.propertyNames = [];
       cs.forEach((c) => {
