@@ -32,10 +32,6 @@ export class VocabularyListComponent implements OnInit {
 
   }
 
-  addUserToVocabulary() {
-
-  }
-
   deleteVocabulary(vocab_id: string) {
     this.modalService.confirm({
       nzTitle: '<i>Do you Want to delete this vocabulary?</i>',
@@ -68,10 +64,6 @@ export class VocabularyListComponent implements OnInit {
 
   openVocabulary(vocab_id: string) {
     this.router.navigateByUrl('edit/' + vocab_id);
-  }
-
-  addVocabulary(vocabForm: any) {
-
   }
 
   addPersonToVocab(vocab_id: string) {
