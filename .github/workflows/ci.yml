@@ -32,7 +32,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: |
-            docker.pkg.github.com/semantic-society/neologism/neologism2:latest
-            docker.pkg.github.com/semantic-society/neologism/neologism2:${{ github.sha }}
-            docker.pkg.github.com/semantic-society/neologism/neologism2:${{ github.ref }}
+#          tags: |
+#            docker.pkg.github.com/semantic-society/neologism/neologism2:latest
+#            docker.pkg.github.com/semantic-society/neologism/neologism2:${{ github.sha }}
+#            docker.pkg.github.com/semantic-society/neologism/neologism2:${{ github.ref }}
