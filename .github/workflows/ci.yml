@@ -33,6 +33,6 @@ jobs:
         with:
           push: true
           tags: |
-            docker.pkg.github.com/${{ github.repository }}/neologism2:latest
-            docker.pkg.github.com/${{ github.repository }}/neologism2:${{ github.sha }}
-            docker.pkg.github.com/${{ github.repository }}/neologism2:${{ github.ref }}
+            docker.pkg.github.com/semantic-society/neologism/neologism2:latest
+            docker.pkg.github.com/semantic-society/neologism/neologism2:${{ github.sha }}
+            docker.pkg.github.com/semantic-society/neologism/neologism2:${{ github.ref }}
