@@ -35,8 +35,8 @@ export class VocabularyListComponent implements OnInit {
 
   deleteVocabulary(vocab_id: string) {
     this.modalService.confirm({
-      nzTitle: '<i>Do you want to delete this vocabulary?</i>',
-      nzContent: '<b>You will lose all access to this vocabulary</b>',
+      nzTitle: '<i> Do you really want to delete this vocabulary?</i>',
+      nzContent: '<b>You will lose all access to this vocabulary. This action cannot be undone.</b>',
       nzOnOk: () => this.vocabService.deleteVocabulary(vocab_id)
     });
   }
