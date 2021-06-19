@@ -34,7 +34,7 @@ export class VocabulariesService {
   }
 
   constructor(
-    private messageService:NzMessageService,
+    private messageService: NzMessageService,
   ) { }
 
   getVocabularies(): Observable<Ivocabulary[]> {
@@ -97,7 +97,7 @@ export class VocabulariesService {
   }
 
   updateClass(classID: string, URI: string, name: string, description: string) {
-     MeteorObservable.call('class.update', classID, URI, description, name).subscribe((_response) => {
+    MeteorObservable.call('class.update', classID, URI, description, name).subscribe((_response) => {
       // Handle success and response from server!
     }, (err) => {
       console.log(err);
@@ -395,13 +395,16 @@ export class VocabulariesService {
 
   }
 
-  publishVocab(vocabID){
-   this.getClassesWithProperties(vocabID).pipe(take(1)).subscribe(
+  publishVocab(vocabID) {
+    this.getClassesWithProperties(vocabID).pipe(take(1)).subscribe(
       (classesWithProps) => {
         N3Codec.serialize(vocabID, classesWithProps, (content) => {
           MeteorObservable.call('vocabulary.publish', content, vocabID).subscribe((_response) => {
             // Handle success and response from server!
-            this.messageService.success(`Vocabulary has been published`);
+            const vocabName = Vocabularies.findOne({ _id: vocabID }).name
+            const fileUrl = `${window.location.protocol}//${window.location.hostname}/vocabularies/${vocabName}.ttl`
+            this.messageService.success(`Vocabulary has been published <br>at <a href="${fileUrl}" target="_blank">${fileUrl}</a>`);
+
           }, (err) => {
             console.log(err);
             this.messageService.error(`Vocabulary cannot be publish, try later`);
