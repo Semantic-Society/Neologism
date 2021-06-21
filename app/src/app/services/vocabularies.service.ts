@@ -342,13 +342,13 @@ export class VocabulariesService {
   }
 
   // gets first email address for the user if any
-  getEmailAddress(userId: string) {
+  getEmailAddress(userId: string):string {
     try {
       const user = Users.findOne({
         _id: userId
       });
 
-      return (user!.emails[0].address) ? user.emails[0].address : '';
+      return (user?.emails[0]?.address) ? user.emails[0].address : '';
     } catch (error) {
       console.log(error);
     }
