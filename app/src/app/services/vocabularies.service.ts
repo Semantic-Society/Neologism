@@ -8,6 +8,9 @@ import { catchError, debounceTime, distinctUntilChanged, filter, flatMap, map, s
 
 import { Classes, Properties, Users, Vocabularies } from '../../../api/collections';
 import { Iclass, Iproperty, Ivocabulary, PropertyType, meteorID, IClassWithProperties } from '../../../api/models';
+import { NzMessageService } from 'ng-zorro-antd/message';
+import { SideBarNodeCreatorComponent } from '../core/node-creator.component';
+import { N3Codec } from '../mxgraph/N3Codec';
 
 const callWithPromise = (method, ...myParameters) => new Promise((resolve, reject) => {
   Meteor.call(method, ...myParameters, (err, res) => {
@@ -30,7 +33,9 @@ export class VocabulariesService {
     });
   }
 
-  constructor() { }
+  constructor(
+    private messageService: NzMessageService,
+  ) { }
 
   getVocabularies(): Observable<Ivocabulary[]> {
     // Ask Meteor Server to send a feed of accessible documents
@@ -85,7 +90,7 @@ export class VocabulariesService {
   addClass(vocabularyId: string, name: string, description: string, URI: string, position: { x: number, y: number } = { x: 0, y: 0 }, id?) {
     MeteorObservable.call('class.create', vocabularyId, name, description, URI, position, id).subscribe((response) => {
       // Handle success and response from server!
-      console.log('addClass', response);
+      this.messageService.success(SideBarNodeCreatorComponent.CLASS_ADD_MESSAGE);
     }, (err) => {
       console.log(err);
     });
@@ -388,6 +393,26 @@ export class VocabulariesService {
         catchError(() => of(null)));
     };
 
+  }
+
+  publishVocab(vocabID) {
+    this.getClassesWithProperties(vocabID).pipe(take(1)).subscribe(
+      (classesWithProps) => {
+        N3Codec.serialize(vocabID, classesWithProps, (content) => {
+          MeteorObservable.call('vocabulary.publish', content, vocabID).subscribe((_response) => {
+            // Handle success and response from server!
+            const vocabName = Vocabularies.findOne({ _id: vocabID }).name
+            const fileUrl = `${window.location.protocol}//${window.location.hostname}/vocabularies/${vocabName}.ttl`
+            this.messageService.success(`Vocabulary has been published <br>at <a href="${fileUrl}" target="_blank">${fileUrl}</a>`);
+
+          }, (err) => {
+            console.log(err);
+            this.messageService.error(`Vocabulary cannot be publish, try later`);
+          });
+        })
+
+      }
+    )
   }
 
 
