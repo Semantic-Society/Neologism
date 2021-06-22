@@ -25,12 +25,8 @@ export class VocabularyListComponent implements OnInit {
     private router: Router,
     private vocabService: VocabulariesService,
     private modalService: NzModalService,
-    private messageService: NzMessageService,
     public dialog: MatDialog,) {
-    this.context$ = this.vocabService.getVocabularies().pipe(map(vocabulary => {
-      return vocabulary;
-    }), tap(vocabularies => this.totalVocab.emit(vocabularies.length)));
-
+    this.context$ = this.vocabService.getVocabularies().pipe(tap(vocabularies => this.totalVocab.emit(vocabularies.length)));
   }
 
   deleteVocabulary(vocab_id: string) {

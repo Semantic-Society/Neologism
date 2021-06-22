@@ -1,104 +1,65 @@
-
 <ng-container *ngIf="(context$ | async) as vocabularies">
 
-<nz-table #basicTable  [nzData]="[1,2]" *ngIf="vocabularies.length > 0; else noVocabsListes ">
-  <thead>
-    <th>Name</th>
-    <th>Contributors</th>
+  <nz-table #basicTable [nzData]="[1,2]" *ngIf="vocabularies.length > 0; else noVocabsListes ">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Contributors</th>
+        <th>Actions</th>
+      </tr>
 
-  </thead>
-  <tbody>
-    <tr  style="background-color: #fff" class="vocabulary-row" *ngFor="let vocab of vocabularies">
-      
-      <td>{{vocab.name}}</td>
-      <td>
-        <div style="max-width: 100px;">
-          <nz-avatar *ngFor="let author of vocab.authors" 
-            nzTooltipTitle={{this.vocabService.getEmailAddress(author)}}
-            nzTooltipPlacement="top" 
-            nz-tooltip 
-            nzIcon="user" >
-          </nz-avatar>
-        </div>
-      </td>
-      <td>
-            <button *ngIf="loggedInUser._id===vocab.creator"
-                class="actn-btn" 
-                nz-button 
-                nzTooltipTitle="Add Contributor" 
-                nzTooltipPlacement="top" 
-                nz-tooltip 
-                nzType="default" 
-                (click)="addPersonToVocab(vocab._id)"
-                nzShape="circle">
-              <i nz-icon  nzType="user-add"></i>
-            </button>
+    </thead>
+    <tbody>
+      <tr style="background-color: #fff" *ngFor="let vocab of vocabularies">
 
-            <button *ngIf="loggedInUser._id===vocab.creator"
-                class="actn-btn" 
-                nzTooltipTitle="Delete Vocabulary" 
-                nzTooltipPlacement="top" 
-                nz-tooltip nz-button 
-                nzType="default"
-                (click)="deleteVocabulary(vocab._id)"
-                nzShape="circle">
+        <td> <a [routerLink]="['/edit',vocab._id]">{{vocab.name}}</a></td>
+        <td>
+          <div style="max-width: 100px;">
+            <!-- TODO: nzToolTipTitle not working -->
+            <nz-avatar *ngFor="let author of vocab.authors" nzTooltipTitle='vocabService.getEmailAddress(author)'
+              nzTooltipPlacement="top" nz-tooltip nzIcon="user">
+            </nz-avatar>
+          </div>
+        </td>
+        <td>
+          <button *ngIf="loggedInUser._id===vocab.creator" class="actn-btn" nz-button nzTooltipTitle="Add Contributor"
+            nzTooltipPlacement="top" nz-tooltip nzType="default" (click)="addPersonToVocab(vocab._id)" nzShape="circle">
+            <i nz-icon nzType="user-add"></i>
+          </button>
 
-              <i nz-icon style="color: red" nzType="delete"></i>
-            </button>
-            <button  *ngIf="loggedInUser._id===vocab.creator"
-            class="actn-btn" 
-            nz-button 
-            nzType="default" 
-            nzTooltipTitle="Remove Contributor" 
-            nzTooltipPlacement="top" 
-            nz-tooltip
-            (click)="removePersonFromVocab(vocab._id)"
+          <button *ngIf="loggedInUser._id===vocab.creator" class="actn-btn" nzTooltipTitle="Delete Vocabulary"
+            nzTooltipPlacement="top" nz-tooltip nz-button nzType="default" (click)="deleteVocabulary(vocab._id)"
             nzShape="circle">
-            <i nz-icon  nzType="user-delete" nzTheme="outline"></i>
-        </button>
-            <button 
-                class="actn-btn" 
-                nz-button 
-                nzType="default"
-                nzTooltipTitle="Download Vocabulary" 
-                nzTooltipPlacement="top" 
-                nz-tooltip
-                (click)="downloadVocab(vocab._id, vocab.name)"
-                nzShape="circle">
-              <i nz-icon style="color: lightslategray" nzType="download"></i>
-            </button>
 
-            <button 
-                class="actn-btn" 
-                nz-button 
-                nzType="default" 
-                nzTooltipTitle="Open Editor" 
-                nzTooltipPlacement="top" 
-                nz-tooltip
-                (click)="openVocabulary(vocab._id)"
-                nzShape="circle">
-              <i nz-icon  nzType="arrow-right"></i>
-            </button>
-        <button
-            class="actn-btn" 
-            nz-button 
-            nzType="default" 
-            nzTooltipTitle="Publish Vocabulary" 
-            nzTooltipPlacement="top" 
-            nz-tooltip
-            (click)="publishVocab(vocab._id)"
-            nzShape="circle">
+            <i nz-icon style="color: red" nzType="delete"></i>
+          </button>
+          <button *ngIf="loggedInUser._id===vocab.creator" class="actn-btn" nz-button nzType="default"
+            nzTooltipTitle="Remove Contributor" nzTooltipPlacement="top" nz-tooltip
+            (click)="removePersonFromVocab(vocab._id)" nzShape="circle">
+            <i nz-icon nzType="user-delete" nzTheme="outline"></i>
+          </button>
+          <button class="actn-btn" nz-button nzType="default" nzTooltipTitle="Download Vocabulary"
+            nzTooltipPlacement="top" nz-tooltip (click)="downloadVocab(vocab._id, vocab.name)" nzShape="circle">
+            <i nz-icon style="color: lightslategray" nzType="download"></i>
+          </button>
+
+          <button class="actn-btn" nz-button nzType="default" nzTooltipTitle="Publish Vocabulary"
+            nzTooltipPlacement="top" nz-tooltip (click)="publishVocab(vocab._id)" nzShape="circle">
             <i nz-icon nzType="upload" nzTheme="outline"></i>
+          </button>
+          <button class="actn-btn" nz-button nzType="default" nzTooltipTitle="Open Editor" nzTooltipPlacement="top"
+          nz-tooltip (click)="openVocabulary(vocab._id)" nzShape="circle">
+          <i nz-icon nzType="arrow-right"></i>
         </button>
-       
-       
-      </td>
-    </tr>
-  </tbody>
-</nz-table>
 
-<ng-template #noVocabsListes>
-  
-</ng-template>
+
+        </td>
+      </tr>
+    </tbody>
+  </nz-table>
+
+  <ng-template #noVocabsListes>
+
+  </ng-template>
 
 </ng-container>

@@ -1,8 +1,8 @@
 // Angular Core
 import { HttpClientModule } from '@angular/common/http';
-import { NgModule, } from '@angular/core';
+import { ApplicationRef, NgModule, } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, enableDebugTools } from '@angular/platform-browser';
 
 // Angular Material
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -60,7 +60,10 @@ import { PropertyEditModal } from './mxgraph/property-edit-form/property-edit.co
 import {DupURIValidator } from './shared/DupURIValidator'
 import { BatchRecommenderComponent } from './batchRecommender/batchRecommender.component';
 import { SpellCheckerModule } from 'ngx-spellchecker';
+import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 registerLocaleData(en);
+
+
 
 @NgModule({
   declarations: [
@@ -120,3 +123,10 @@ registerLocaleData(en);
   bootstrap: [AppComponent],
 })
 export class AppModule { }
+
+platformBrowserDynamic().bootstrapModule(AppModule).then(moduleRef => {
+  const applicationRef = moduleRef.injector.get(ApplicationRef);
+  const componentRef = applicationRef.components[0];
+  // allows to run `ng.profiler.timeChangeDetection();`
+  enableDebugTools(componentRef);
+}).catch(err => window['console'].error(err));
