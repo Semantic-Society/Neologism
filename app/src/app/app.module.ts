@@ -25,7 +25,6 @@ import { RecommenderComponent } from './recommender/recommender.component';
 import { VocablistComponent } from './vocablist/vocablist.component';
 import {SideBarNodeCreatorComponent} from './core/node-creator.component'
 // Pipes
-import { TruncateModule } from '@yellowspot/ng-truncate';
 import { TruncatedTextComponentComponent } from './truncated-text-component/truncated-text-component.component';
 import { NeologismMaterialModule } from './app.material.module';
 import { StateServiceModule } from './services/state-services/state.services.module';
@@ -46,7 +45,6 @@ import { LoginPageComponent } from './login-page/login-page.component';
 import { AuthGuard } from './guards/auth.guard';
 import { LoginAuthGuard } from './guards/login.auth.guard';
 import { VocabularyListComponent } from './home-dashboard/vocabulary-list/vocabulary-list.component';
-import { FlexLayoutModule } from '@angular/flex-layout';
 import { CreateVocabModalComponent } from './home-dashboard/create-vocab-modal/create-vocab-modal.component';
 import { SearchVocabulariesAutocompleteComponent } from './search-vocabularies-autocomplete/search-vocabularies-autocomplete.component';
 import { VocabularyEditorComponent } from './vocabulary-editor/vocabulary-editor.component';
@@ -96,13 +94,10 @@ registerLocaleData(en);
     FormsModule,
     HttpClientModule,
     ReactiveFormsModule,
-    // NgParticlesModule,
     NeologismMaterialModule,
     BrowserAnimationsModule,
-    FlexLayoutModule,
     SpellCheckerModule,
     RoutingModule,
-    TruncateModule,
     StateServiceModule,
     NGZorrModule,
     NzButtonModule,
