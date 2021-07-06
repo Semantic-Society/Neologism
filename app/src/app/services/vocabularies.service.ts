@@ -22,6 +22,12 @@ const callWithPromise = (method, ...myParameters) => new Promise((resolve, rejec
 @Injectable()
 export class VocabulariesService {
 
+  /**
+   * func for wrapping minimongo query observable for 
+   * one time execution and unsubscribing
+   * @param observable 
+   * @returns 
+   */
   public static wrapFunkyObservables(observable): Observable<any> {
     return new Observable((observer) => {
       const subscription = observable.subscribe(
@@ -38,16 +44,17 @@ export class VocabulariesService {
   ) { }
 
   getVocabularies(): Observable<Ivocabulary[]> {
-    // Ask Meteor Server to send a feed of accessible documents
+    // Opening Meteor feed for vocabularies publication
     const handle = Meteor.subscribe('vocabularies');
 
-    // Query from local minimongo
+    // wrapping mini mongo query
+    // in an observable
     const localQuery = VocabulariesService.wrapFunkyObservables(
       Vocabularies.find()
         .pipe(zoneOperator())
     );
 
-    return Observable.create((observer: any) => {
+    return new Observable((observer: any) => {
       const subscription = localQuery.subscribe(observer);
 
       // Now let's return a tear-down/unsubscribe function
@@ -206,7 +213,7 @@ export class VocabulariesService {
     // Ask Meteor Server to send a feed of accessible documents
     const handle = Meteor.subscribe('vocabDetails', vocabularyId);
 
-    const classes = this.getClasses(vocabularyId)
+    const classes$ = this.getClasses(vocabularyId)
       .pipe(
         switchMap((cs) =>
           combineLatest(
@@ -223,7 +230,7 @@ export class VocabulariesService {
         )
       );
 
-    const filledClasses: Observable<IClassWithProperties[]> = classes.pipe(
+    const filledClasses: Observable<IClassWithProperties[]> = classes$.pipe(
       map((cs) => {
         const newClassesWithoutRangeFilledLater = cs.map((c) => {
           const filledProps = c.properties.map((p) => {
@@ -237,7 +244,7 @@ export class VocabulariesService {
         let failed = false;
         newClassesWithoutRangeFilledLater.forEach((c, i) =>
           c.properties.forEach((p, j) => {
-            p.range = newClassesWithoutRangeFilledLater.find((cr) => cr._id === cs[i].properties[j].range);
+            p.range = newClassesWithoutRangeFilledLater.find((resource) => resource._id === cs[i].properties[j].range);
             if (!p.range && p.type == PropertyType.Data) {
               p.range = cs[i].properties[j].range;
             } else if (!p.range) {

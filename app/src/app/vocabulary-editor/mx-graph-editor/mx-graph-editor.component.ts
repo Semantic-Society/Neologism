@@ -3,10 +3,8 @@ import { meteorID, Ivocabulary,IClassWithProperties } from '../../../../api/mode
 import { MxgraphService } from '../../mxgraph/mxgraph';
 import { VocabulariesService } from '../../services/vocabularies.service';
 import { Observable, Subscription } from 'rxjs';
-import { mxgraph as m } from 'mxgraph';
 import { combineLatest, debounceTime, distinctUntilChanged, filter} from 'rxjs/operators';
 import { VocabularyEditorService } from '../vocabulary-editor.service';
-import { copyFile } from 'fs';
 
 // import sidebar state dep.
 
@@ -179,19 +177,9 @@ export class MxGraphEditorComponent implements OnInit {
       return withMergedProps;
   }
 
-  showRecommender() {
-      //this.sideBarState.changeSidebarState('recommend');
-  }
-
-  showNodeCreator() {
-      // this.sideBarState.changeSidebarState('create');
-
-  }
-
   showEditBox() {
       console.log('show edit box')
       this.currentSelection = null;
-      // this.sideBarState.changeSidebarState('edit');
   }
 
   ngOnDestroy() {
