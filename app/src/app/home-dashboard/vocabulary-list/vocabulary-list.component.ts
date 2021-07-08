@@ -7,10 +7,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { AddUserModalComponent } from '../../../app/vocablist/components/add-user-modal/add-user-modal.component';
 import { Router } from '@angular/router';
 import { Iuser } from '../../../../api/models';
-import { MeteorObservable, zoneOperator } from 'meteor-rxjs';
 import { RemoveUserModalComponent } from '../../../app/vocablist/components/remove-user-modal/remove-user-modal.component';
 import { N3Codec } from '../../../app/mxgraph/N3Codec';
-import { NzMessageService } from 'ng-zorro-antd/message';
 @Component({
   selector: 'app-vocabulary-list',
   templateUrl: './vocabulary-list.component.html',

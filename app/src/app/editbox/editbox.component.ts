@@ -113,7 +113,7 @@ export class EditboxComponent implements OnInit, OnChanges {
 
     this.editedClass = this.editboxService.getUndefinedClass();
 
-    const classID: string = input.selectedClassID.currentValue;
+    const classID: string = input.selectedClassID.currentValue.id;
 
     if (!classID) {
       return;

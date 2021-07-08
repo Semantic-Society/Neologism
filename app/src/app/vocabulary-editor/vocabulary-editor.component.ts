@@ -196,7 +196,6 @@ export class VocabularyEditorComponent implements OnInit {
     this.propertyRecommendations = this.editComponentService.getClass$(this.vocabID, classID)
       .pipe(
         switchMap((theclass) => {
-          console.log('asdasd')
           return this.recommender.propertyRecommendation(theclass.URI).pipe(
             tap(as=> console.log(as, 'recommendations')),
             // combineLatest(this.alreadyThere2, (recommendations, alreadys) => {
@@ -251,7 +250,6 @@ export class VocabularyEditorComponent implements OnInit {
   }
 
   updateEdit() {
-    // console.log(this.)
     // TODO (187): Call the updateClass (needs to be implemented) of vocabService and call toggleEdit() afterwards
     // this.vocabService.updateClass(this.newClass.name);
     console.log(this.editedClass);

@@ -52,21 +52,6 @@ export class MxgraphService {
         this.graph.view.refresh();
         // allow only one thing to be selected at the same time.
         this.graph.getSelectionModel().setSingleSelection(true);
-        // Overwrite label change handler in order to correctly write new lables to the user object
-        // const defaultLabelChangeHandler = this.graph.cellLabelChanged.bind(this.graph);
-        // this.graph.cellLabelChanged = (cell: m.mxCell, newValue: string, autoSize: boolean = true) => {
-        //     cell.id = N3Codec.neologismId(newValue);
-        //     defaultLabelChangeHandler(cell, cell.value, autoSize);
-        // };
-        /*const vertexStyle = this.graph.stylesheet.getDefaultVertexStyle();
-      vertexStyle[MxgraphService.mx.mxConstants.DEFAULT_VALID_COLOR] = '#FF0000';
-      vertexStyle[MxgraphService.mx.mxConstants.OUTLINE_HIGHLIGHT_COLOR] = '#FF0000';
-      vertexStyle[MxgraphService.mx.mxConstants.HIGHLIGHT_COLOR] = '#FF0000';
-      vertexStyle[MxgraphService.mx.mxConstants.VALID_COLOR] = '#FF0000';
-      vertexStyle[MxgraphService.mx.mxConstants.EDGE_SELECTION_COLOR] = '#FF0000';
-      vertexStyle[MxgraphService.mx.mxConstants.VERTEX_SELECTION_COLOR] = '#FF0000';
-      vertexStyle[MxgraphService.mx.mxConstants.HANDLE_FILLCOLOR] = '#FF0000';
-        vertexStyle[MxgraphService.mx.mxConstants.HIGHLIGHT_STROKEWIDTH] = 10;*/
 
         const edgeStyle = this.graph.stylesheet.getDefaultEdgeStyle();
         edgeStyle[MxgraphService.mx.mxConstants.STYLE_FILLCOLOR] = '#FFFFFF';
@@ -173,29 +158,20 @@ export class MxgraphService {
 
         // TODO (186): Check if multiple listener on same event creating UI flow disturbances
         this.selection$ = new Observable<string>((observer) => {
-            const handler = (selectionModel: m.mxGraphSelectionModel, evt: m.mxEventObject) => {
-                const values = selectionModel.cells
-                    .filter((cell) => cell.vertex)
-                    .map((cell) => cell.getId());
-                if (values.length === 1) {
-                    const vertexId: string = values[0];
-                    const vertex = this.getVertexWithId(vertexId);
+            const handler = (sender, evt) => {
+                var cell = evt.getProperty("cell"); // cell may be null
+                if (cell != null && cell.vertex) {
 
-                    //  check to disallow direct edit of
-                    //  DataType vertex from vertex form
-                    if (vertex.style === 'Dashed') {
+                    if (cell.style === 'Dashed') {
                         observer.next(null);
                     } else {
-                        observer.next(values[0]);
+                        observer.next(cell);
                     }
-
-                } else if (values.length === 0) {
-                    observer.next(null);
-                } else {
-                    throw new Error('Multiple items selected. Should not be possible');
+                    this.graph.setSelectionCell(cell);
                 }
+                evt.consume();
             };
-            this.graph.getSelectionModel().addListener(MxgraphService.mx.mxEvent.CHANGE, handler);
+            this.graph.addListener(MxgraphService.mx.mxEvent.CLICK, handler);
             return () => this.graph.getSelectionModel().removeListener(handler);
         }).pipe(distinctUntilChanged());
 
