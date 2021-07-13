@@ -23,6 +23,7 @@ import { NzRadioModule } from 'ng-zorro-antd/radio';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { NzPaginationModule } from 'ng-zorro-antd/pagination';
+import { NzUploadModule } from 'ng-zorro-antd/upload';
 @NgModule({
   imports: [
     NzPaginationModule,
@@ -48,6 +49,7 @@ import { NzPaginationModule } from 'ng-zorro-antd/pagination';
     NzLayoutModule,
     NzButtonModule,
     NzListModule,
+    NzUploadModule,
   ],
   exports: [
     NzPaginationModule,
@@ -72,7 +74,8 @@ import { NzPaginationModule } from 'ng-zorro-antd/pagination';
     NzMenuModule,
     NzDividerModule,
     NzIconModule,
-    NzLayoutModule
+    NzLayoutModule,
+    NzUploadModule
 
   ],
   providers: [

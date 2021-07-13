@@ -1,13 +1,15 @@
 <nz-layout class="home-db-lyt-ctnr">
   <!-- SIDEBAR   -->
-  <nz-sider style="background: #fff; padding:0;" nzCollapsible [(nzCollapsed)]="isCollapsed" [nzTrigger]="triggerTemplate">
+  <nz-sider style="background: #fff; padding:0;" nzCollapsible [(nzCollapsed)]="isCollapsed"
+    [nzTrigger]="triggerTemplate">
 
-      <img class="logo-fit" src="/assets/neologism.png"/>
+    <img class="logo-fit" src="/assets/neologism.png" />
 
 
     <ul nz-menu style="margin-top: 15px;" nzTheme="light" nzMode="inline" [nzInlineCollapsed]="isCollapsed">
       <li nz-submenu>
-        <span title><i nz-icon  nzType="user"></i><span class="nav-text">{{loggedInUser?.emails[0].address}}</span></span>
+        <span title><i nz-icon nzType="user"></i><span
+            class="nav-text">{{loggedInUser?.emails[0].address}}</span></span>
         <ul>
           <li nz-menu-item>Settings</li>
           <li nz-menu-item (click)="onLogout()">Logout</li>
@@ -17,13 +19,13 @@
   </nz-sider>
   <nz-layout>
     <!-- HEADER -->
-     <nz-header style="background: #fff; padding:0;">
+    <nz-header style="background: #fff; padding:0;">
       <search-vocabularies-autocomplete [width]="'50vw'" class="div-search"></search-vocabularies-autocomplete>
 
       <ul nz-menu nzMode="horizontal" style="position: fixed; top: 2px; right: 15px; ">
         <li nz-submenu nzIcon="setting">
           <ul>
-            <li >
+            <li>
               <ul>
                 <li nz-menu-item>Option 1</li>
                 <li nz-menu-item>Option 2</li>
@@ -32,8 +34,8 @@
           </ul>
         </li>
       </ul>
-    </nz-header> 
-    
+    </nz-header>
+
 
     <!-- Main Content HEADER -->
     <nz-content style=" margin:0 16px">
@@ -41,15 +43,18 @@
       <div style="padding:24px;">
         <app-vocabulary-list (totalVocab)="updateListLength($event)"></app-vocabulary-list>
       </div>
+
+      <div class="add-vocabulary-frm">
+        <app-rdf-uploader>
+
+        </app-rdf-uploader>
+        &nbsp;&nbsp;
+        <button nz-button nzType="primary" [nzSize]="'large'" (click)="createVocabulary()" nzShape="circle"><i nz-icon
+            nzType="plus"></i>
+        </button>
+      </div>
+
     </nz-content>
     <nz-footer style="text-align: center;">Neologism - 2020-2021</nz-footer>
   </nz-layout>
 </nz-layout>
-
-<button
-  class="add-vocabulary-frm"
-  nz-button nzType="primary"
-  [nzSize]="'large'"
-  (click)="createVocabulary()"
-  nzShape="circle"><i nz-icon  nzType="plus"></i>
-</button>

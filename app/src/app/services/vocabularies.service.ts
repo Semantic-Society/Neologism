@@ -4,13 +4,15 @@ import { AbstractControl, AsyncValidatorFn, ValidationErrors } from '@angular/fo
 import { Random } from 'meteor/random';
 import { MeteorObservable, zoneOperator } from 'meteor-rxjs';
 import { combineLatest, empty, Observable, of, throwError, timer } from 'rxjs';
-import { catchError, debounceTime, distinctUntilChanged, filter, flatMap, map, switchMap, take } from 'rxjs/operators';
+import { catchError, debounceTime, distinctUntilChanged, filter, flatMap, map, switchMap, take, tap } from 'rxjs/operators';
 
 import { Classes, Properties, Users, Vocabularies } from '../../../api/collections';
 import { Iclass, Iproperty, Ivocabulary, PropertyType, meteorID, IClassWithProperties } from '../../../api/models';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { SideBarNodeCreatorComponent } from '../core/node-creator.component';
 import { N3Codec } from '../mxgraph/N3Codec';
+import { environment } from './../../environments/environment';
+
 
 const callWithPromise = (method, ...myParameters) => new Promise((resolve, reject) => {
   Meteor.call(method, ...myParameters, (err, res) => {
@@ -21,6 +23,15 @@ const callWithPromise = (method, ...myParameters) => new Promise((resolve, rejec
 
 @Injectable()
 export class VocabulariesService {
+
+  private env = environment
+  private _vocabCount = 0;
+  public get vocabCount() {
+    return this._vocabCount;
+  }
+  public set vocabCount(value) {
+    this._vocabCount = value;
+  }
 
   /**
    * func for wrapping minimongo query observable for 
@@ -349,7 +360,7 @@ export class VocabulariesService {
   }
 
   // gets first email address for the user if any
-  getEmailAddress(userId: string):string {
+  getEmailAddress(userId: string): string {
     try {
       const user = Users.findOne({
         _id: userId
@@ -422,6 +433,8 @@ export class VocabulariesService {
     )
   }
 
-
+  isEligibleForCreatingVocab() {
+    return (Meteor.user().emails[0].address === this.env.guestUserName && this.vocabCount < this.env.gMaxVocab);
+  }
 }
 

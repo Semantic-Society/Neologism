@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 import { CreateVocabModalComponent } from './create-vocab-modal/create-vocab-modal.component';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { VocabulariesService } from '../services/vocabularies.service';
-import { environment } from './../../environments/environment';
 
 @Component({
   selector: 'app-home-dashboard',
@@ -45,9 +44,9 @@ export class HomeDashboardComponent implements OnInit {
   }
 
   createVocabulary(): void {
-    let GRestriction = Meteor.user().emails[0].address === environment.guestUserName && this.vocabCount > environment.gMaxVocab;
+    let eligible = this.vocabService.isEligibleForCreatingVocab()
 
-    if (GRestriction)
+    if (!eligible)
       return;
 
     const modal = this.modalService.create({
@@ -81,6 +80,7 @@ export class HomeDashboardComponent implements OnInit {
 
   updateListLength(count: number) {
     this.vocabCount = count
+    this.vocabService.vocabCount = count
 
   }
 

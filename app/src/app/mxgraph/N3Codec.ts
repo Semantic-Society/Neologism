@@ -1,9 +1,15 @@
-import { DataFactory, Writer, Quad } from 'n3';
+import { Injectable } from '@angular/core';
+import { DataFactory, Writer, Quad, Parser,Store } from 'n3';
 const { namedNode, literal, quad } = DataFactory
 import { Vocabularies, Users } from '../../../api/collections';
 import { IClassWithProperties, Iuser, PropertyType, } from '../../../api/models'
-export class N3Codec {
 
+@Injectable({
+    providedIn: 'root',
+  })
+export class N3Codec {
+    store = new Store()
+    parser = new Parser();
 
     public static neoPrefixes = {
         rdf: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
@@ -154,6 +160,22 @@ export class N3Codec {
             return;
         }
     }
+
+    deserialize(quads: String | any, callBack): void {
+        const list: Quad[] = []
+        this.parser.parse(
+            quads,
+            (error, quad: Quad, prefixes) => {
+                if (quad)
+                        list.push(quad)
+                else{
+                    callBack(list)
+                    console.log("# That's all, folks!", prefixes);
+                }
+                    
+            });
+    }
+
     static neologismId(id: string) {
         return id ? new URL(id, 'neo://query/').toString() : null;
     }
