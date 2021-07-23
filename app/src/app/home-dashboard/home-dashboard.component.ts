@@ -20,7 +20,7 @@ export class HomeDashboardComponent implements OnInit {
   constructor(
     private router: Router,
     private vocabService: VocabulariesService,
-    private modalService: NzModalService) {
+   ) {
 
   }
 
@@ -49,12 +49,7 @@ export class HomeDashboardComponent implements OnInit {
     if (!eligible)
       return;
 
-    const modal = this.modalService.create({
-      nzTitle: 'Create new vocabulary',
-      nzContent: CreateVocabModalComponent,
-
-      nzFooter: null
-    });
+    const modal = this.vocabService.openNewVocabForm()
 
     // Return a result when closed
     modal.afterClose.subscribe((result) => {

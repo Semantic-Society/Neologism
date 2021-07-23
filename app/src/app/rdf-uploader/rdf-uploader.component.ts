@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { NamedNode, Store,DataFactory } from 'n3';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { N3Codec } from '../mxgraph/N3Codec';
@@ -32,8 +34,33 @@ export class RdfUploaderComponent implements OnInit {
 
     reader.onload = e => {
       console.log(e.target.result);
-      this.n3Util.deserialize(e.target.result,(quads:any[])=>{
-        console.log(quads)
+     
+      this.n3Util.deserialize(e.target.result,(store:Store)=>{
+        console.log()
+        const result= this.processImport(store)
+        console.log(result)
+       
+        const modal = this.vocabService.openImportVocabForm(result.meta)
+  
+        // Return a result when closed
+        modal.afterClose.subscribe((result) => {
+    
+          if (!result || result.name === undefined)
+            return;
+    
+    
+          this.vocabService.createVocabulary(
+            result.name,
+            result.description,
+            result.uri
+          ).subscribe((response) => {
+            this.router.navigateByUrl('edit/' + response.vocabId);
+            // Handle success and response from server!
+          }, (err) => {
+            console.log(err);
+            // Handle error
+          });
+        });
     
         
       })
@@ -45,7 +72,21 @@ export class RdfUploaderComponent implements OnInit {
     return false;
   };
 
-  constructor(private msg: NzMessageService,private n3Util:N3Codec,private vocabService:VocabulariesService) { }
+  
+  processImport(store: Store) {
+    const meta= this.n3Util.getMeta(store);
+    const classess=this.n3Util.getClasses(store);
+    const subclasses= this.n3Util.getSubClassRelations(store)
+    return {
+      meta,
+      classes:classess,
+      subclasses
+    }
+  }
+
+  constructor(private msg: NzMessageService,private n3Util:N3Codec
+    ,private vocabService:VocabulariesService,
+    private router: Router) { }
 
   ngOnInit(): void {
   }

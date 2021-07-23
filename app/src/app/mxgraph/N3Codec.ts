@@ -1,14 +1,14 @@
+import { stringify } from '@angular/compiler/src/util';
 import { Injectable } from '@angular/core';
-import { DataFactory, Writer, Quad, Parser,Store } from 'n3';
+import { DataFactory, Writer, Quad, Parser, Store, termToId } from 'n3';
 const { namedNode, literal, quad } = DataFactory
 import { Vocabularies, Users } from '../../../api/collections';
 import { IClassWithProperties, Iuser, PropertyType, } from '../../../api/models'
 
 @Injectable({
     providedIn: 'root',
-  })
+})
 export class N3Codec {
-    store = new Store()
     parser = new Parser();
 
     public static neoPrefixes = {
@@ -167,13 +167,62 @@ export class N3Codec {
             quads,
             (error, quad: Quad, prefixes) => {
                 if (quad)
-                        list.push(quad)
-                else{
-                    callBack(list)
+                    list.push(quad)
+                else {
+                    callBack(new Store(list))
                     console.log("# That's all, folks!", prefixes);
                 }
-                    
+
             });
+    }
+
+    getMeta(store: Store) : {name:string, uri:string,desc:string}{
+
+        const quad = store.getQuads(null, namedNode('http://purl.org/dc/terms/title'), null, null)[0]
+        return {
+            name: store.getQuads(null, namedNode('http://purl.org/dc/terms/title'), null, null)[0].object.value,
+            uri: store.getQuads(null, null, namedNode('http://www.w3.org/2002/07/owl#Ontology'), null)[0].subject.value,
+            desc: store.getQuads(null, namedNode('http://purl.org/dc/terms/description'), null, null)[0].object.value,
+        }
+
+    }
+
+    getClasses(store: Store) {
+        return store.getQuads(null, namedNode('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'), namedNode('http://www.w3.org/2000/01/rdf-schema#Class'), null)
+            .map((triple) => {
+                const subject = triple.subject;
+                const labels = store.getQuads(subject, namedNode('http://www.w3.org/2000/01/rdf-schema#label'), null, null); // TODO Michael: Assuming string[] returned
+                const oneLabel = labels[0].object.value
+                const description = store.getQuads(subject, namedNode('http://www.w3.org/2000/01/rdf-schema#comment'), null, null)[0].object.value
+                return {
+                    uri: subject.value,
+                    label: oneLabel || subject,
+                    description: description
+                };
+            });
+    }
+
+    getSubClassRelations(store: Store): Array<{ uri: string; label: string; domain: string; range: string; }> {
+        const result = [];
+        store.getQuads(null, namedNode('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'), namedNode('http://www.w3.org/2000/01/rdf-schema#Class'), null)
+            .forEach((triple) => {
+                const aClass = triple.subject;
+                const subClasses = store.getQuads(null, 'http://www.w3.org/2000/01/rdf-schema#domain', aClass, null); // TODO Michael: Assuming string[] returned
+                subClasses.forEach((subClass) => {
+                    const range = store.getQuads(subClass.subject, 'http://www.w3.org/2000/01/rdf-schema#range', null, null);
+                    const isDataType = store.getQuads(subClass.subject, null, "http://www.w3.org/2002/07/owl#DatatypeProperty", null).length ? true : false;
+                    result.push(
+                        {
+                            uri: 'http://www.w3.org/2000/01/rdf-schema#domain',
+                            label: 'rdfs:subclass',
+                            domain: aClass,
+                            dataType: isDataType,
+                            range: range[0].object
+                        }
+                    );
+                });
+            });
+        return result;
     }
 
     static neologismId(id: string) {

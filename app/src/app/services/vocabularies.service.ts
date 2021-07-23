@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AbstractControl, AsyncValidatorFn, ValidationErrors } from '@angular/forms';
+import { AbstractControl, AsyncValidatorFn, FormBuilder, ValidationErrors, Validators } from '@angular/forms';
 
 import { Random } from 'meteor/random';
 import { MeteorObservable, zoneOperator } from 'meteor-rxjs';
@@ -12,6 +12,8 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import { SideBarNodeCreatorComponent } from '../core/node-creator.component';
 import { N3Codec } from '../mxgraph/N3Codec';
 import { environment } from './../../environments/environment';
+import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
+import { CreateVocabModalComponent } from '../home-dashboard/create-vocab-modal/create-vocab-modal.component';
 
 
 const callWithPromise = (method, ...myParameters) => new Promise((resolve, reject) => {
@@ -23,6 +25,7 @@ const callWithPromise = (method, ...myParameters) => new Promise((resolve, rejec
 
 @Injectable()
 export class VocabulariesService {
+
 
   private env = environment
   private _vocabCount = 0;
@@ -52,6 +55,8 @@ export class VocabulariesService {
 
   constructor(
     private messageService: NzMessageService,
+    private modalService: NzModalService,
+    private fb: FormBuilder,
   ) { }
 
   getVocabularies(): Observable<Ivocabulary[]> {
@@ -432,9 +437,56 @@ export class VocabulariesService {
       }
     )
   }
-
-  isEligibleForCreatingVocab() {
+  /**
+   * Imposing configurable vocabularies limit
+   * Targeted to guest users only
+   * @returns boolean
+   */
+  isEligibleForCreatingVocab(): Boolean {
     return (Meteor.user().emails[0].address === this.env.guestUserName && this.vocabCount < this.env.gMaxVocab);
   }
+
+  /**
+   * Open modal for new vocab form
+   */
+  openNewVocabForm(): NzModalRef {
+    return this.modalService.create({
+      nzTitle: 'Create new vocabulary',
+      nzContent: CreateVocabModalComponent,
+      nzComponentParams: {
+        validateForm: this.fb.group({
+          description: [''],
+          uri: [`http://w3id.org/neologism/{vocabname-in-lowercase}#`, [Validators.required]],
+          name: [null, [Validators.required]],
+          access: ['public', [Validators.required]],
+
+        })
+      },
+      nzFooter: null
+    });
+  }
+
+
+  /**
+ * Open modal for new vocab form
+ */
+  openImportVocabForm({name, uri, desc}): NzModalRef {
+    return this.modalService.create({
+      nzTitle: 'Create new vocabulary',
+      nzContent: CreateVocabModalComponent,
+      nzComponentParams: {
+        validateForm: this.fb.group({
+          description: [desc],
+          uri: [{ value: uri, disabled: true }],
+          name: [{ value: `${name}`, disabled: true }, [Validators.required]],
+          access: ['public', [Validators.required]],
+
+        })
+      },
+      nzFooter: null
+    });
+  }
+
 }
+
 
