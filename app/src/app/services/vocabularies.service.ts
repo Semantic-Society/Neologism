@@ -113,6 +113,7 @@ export class VocabulariesService {
   addClass(vocabularyId: string, name: string, description: string, URI: string, position: { x: number, y: number } = { x: 0, y: 0 }, id?) {
     MeteorObservable.call('class.create', vocabularyId, name, description, URI, position, id).subscribe((response) => {
       // Handle success and response from server!
+
       this.messageService.success(SideBarNodeCreatorComponent.CLASS_ADD_MESSAGE);
     }, (err) => {
       console.log(err);
@@ -470,21 +471,40 @@ export class VocabulariesService {
   /**
  * Open modal for new vocab form
  */
-  openImportVocabForm({name, uri, desc}): NzModalRef {
+  openImportVocabForm({ name, uri, desc }): NzModalRef {
     return this.modalService.create({
       nzTitle: 'Create new vocabulary',
       nzContent: CreateVocabModalComponent,
       nzComponentParams: {
         validateForm: this.fb.group({
           description: [desc],
-          uri: [{ value: uri, disabled: true }],
-          name: [{ value: `${name}`, disabled: true }, [Validators.required]],
-          access: ['public', [Validators.required]],
+          uri: [{ value: uri, disabled: false }],
+          name: [{ value: `${name}`, disabled: false }, [Validators.required]],
 
         })
       },
       nzFooter: null
     });
+  }
+
+  /**
+   * Fills newly created vocabulary
+   * with processed and transformed
+   * imported rdf file
+   */
+  fillVocabularyWithData(data: any, id: string) {
+    data.classes.forEach(element => {
+      this.addClass(id, element.label, element.description, element.uri)
+    });
+
+    data.subclasses.forEach(element => {
+      const toClass = Classes.findOne({ name: element.domain })
+      if (element.type === PropertyType.Data) {
+        element.range = Classes.findOne({ name: element.range })._id
+      }
+      this.addProperty(toClass._id, element.label, element.description, element.uri, element.range, element.type, id)
+    });
+
   }
 
 }

@@ -20,7 +20,7 @@ import { VocabulariesService } from '../services/vocabularies.service';
   ]
 })
 export class RdfUploaderComponent implements OnInit {
-  
+
 
   uploading = false;
   fileList: NzUploadFile[] = [];
@@ -33,38 +33,37 @@ export class RdfUploaderComponent implements OnInit {
     const reader = new FileReader();
 
     reader.onload = e => {
-      console.log(e.target.result);
-     
+
       this.n3Util.deserialize(e.target.result,(store:Store)=>{
-        console.log()
-        const result= this.processImport(store)
-        console.log(result)
-       
-        const modal = this.vocabService.openImportVocabForm(result.meta)
-  
+        const importData= this.processImport(store)
+        console.log(importData)
+
+        const modal = this.vocabService.openImportVocabForm(importData.meta)
+
         // Return a result when closed
         modal.afterClose.subscribe((result) => {
-    
+
           if (!result || result.name === undefined)
             return;
-    
-    
+
+
           this.vocabService.createVocabulary(
             result.name,
             result.description,
             result.uri
           ).subscribe((response) => {
-            this.router.navigateByUrl('edit/' + response.vocabId);
+            this.vocabService.fillVocabularyWithData(importData,response.vocabId)
+            // this.router.navigateByUrl('edit/' + response.vocabId);
             // Handle success and response from server!
           }, (err) => {
             console.log(err);
             // Handle error
           });
         });
-    
-        
+
+
       })
-    
+
     };
     reader.readAsText(file as any);
 
@@ -72,7 +71,11 @@ export class RdfUploaderComponent implements OnInit {
     return false;
   };
 
-  
+  /**
+   *
+   * @param store
+   *
+   */
   processImport(store: Store) {
     const meta= this.n3Util.getMeta(store);
     const classess=this.n3Util.getClasses(store);
@@ -90,5 +93,7 @@ export class RdfUploaderComponent implements OnInit {
 
   ngOnInit(): void {
   }
+
+  
 
 }

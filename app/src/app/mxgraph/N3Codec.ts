@@ -176,7 +176,7 @@ export class N3Codec {
             });
     }
 
-    getMeta(store: Store) : {name:string, uri:string,desc:string}{
+    getMeta(store: Store): { name: string, uri: string, desc: string } {
 
         const quad = store.getQuads(null, namedNode('http://purl.org/dc/terms/title'), null, null)[0]
         return {
@@ -211,13 +211,16 @@ export class N3Codec {
                 subClasses.forEach((subClass) => {
                     const range = store.getQuads(subClass.subject, 'http://www.w3.org/2000/01/rdf-schema#range', null, null);
                     const isDataType = store.getQuads(subClass.subject, null, "http://www.w3.org/2002/07/owl#DatatypeProperty", null).length ? true : false;
+                    const rangeLabel=range[0].object.value.split('#')[1]
+                    const propLabel=subClass.subject.value.split('#')[1]
                     result.push(
                         {
-                            uri: 'http://www.w3.org/2000/01/rdf-schema#domain',
-                            label: 'rdfs:subclass',
+                            uri: subClass.subject.value,
+                            label: propLabel,
                             domain: aClass,
-                            dataType: isDataType,
-                            range: range[0].object
+                            description: "",
+                            type: isDataType ? PropertyType.Data : PropertyType.Object,
+                            range: rangeLabel
                         }
                     );
                 });

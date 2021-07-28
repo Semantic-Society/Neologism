@@ -110,12 +110,22 @@ Meteor.methods({
     assertUser();
     // TODO (#183): Sanitize
     // currently: pseudo permission check via only being able to remove documents where the current user is also an author
+    const vocab = Vocabularies.findOne({ _id: vocabId, creator: this.userId });
     Vocabularies.remove({ _id: vocabId, creator: this.userId });
+    vocab.classes.forEach(classId => {
+      const classa = Classes.findOne({ _id: classId })
+      Classes.remove({ _id: classId })
+      classa.properties.forEach(propId => {
+        Properties.remove({ _id: propId })
+      })
+      Properties.remove({ range: classId })
+    })
+
   },
-  'vocabulary.publish'(rdfTtl:string, vocabId: string) {
+  'vocabulary.publish'(rdfTtl: string, vocabId: string) {
     assertUser();
     // TODO (#183): Sanitize
-    publishVocabulary(rdfTtl,vocabId)
+    publishVocabulary(rdfTtl, vocabId)
   },
   'class.create'(vocabId, name, description, URI, position, _id?) {
     assertUser();
