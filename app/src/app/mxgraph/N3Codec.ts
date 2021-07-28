@@ -213,11 +213,12 @@ export class N3Codec {
                     const isDataType = store.getQuads(subClass.subject, null, "http://www.w3.org/2002/07/owl#DatatypeProperty", null).length ? true : false;
                     const rangeLabel=range[0].object.value.split('#')[1]
                     const propLabel=subClass.subject.value.split('#')[1]
+                    const domainLabel=aClass.value.split('#')[1]
                     result.push(
                         {
                             uri: subClass.subject.value,
                             label: propLabel,
-                            domain: aClass,
+                            domain: domainLabel,
                             description: "",
                             type: isDataType ? PropertyType.Data : PropertyType.Object,
                             range: rangeLabel

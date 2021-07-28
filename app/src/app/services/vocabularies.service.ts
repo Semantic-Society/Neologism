@@ -502,6 +502,7 @@ export class VocabulariesService {
       if (element.type === PropertyType.Data) {
         element.range = Classes.findOne({ name: element.range })._id
       }
+      element.domain = toClass._id
       this.addProperty(toClass._id, element.label, element.description, element.uri, element.range, element.type, id)
     });
 
