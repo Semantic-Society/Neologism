@@ -127,17 +127,15 @@ Meteor.methods({
     // TODO (#183): Sanitize
     publishVocabulary(rdfTtl, vocabId)
   },
-  'class.create'(vocabId, name, description, URI, position, _id?) {
+  'class.create'(vocabId, vertexType, name, description, URI, position, _id) {
     assertUser();
     // TODO (#183): Sanitize
     var classIdO
     // checking for Id indicates that it is a DataType Vertex
     // where the id for prop and vertex are identical
-    if (_id) {
-      classIdO = Classes.insert({ _id, name, isDataTypeVertex: true, description, URI, properties: [], position, skos: { closeMatch: [], exactMatch: [] } });
-    } else {
-      classIdO = Classes.insert({ name, isDataTypeVertex: false, description, URI, properties: [], position, skos: { closeMatch: [], exactMatch: [] } });
-    }
+      classIdO = Classes.insert({ _id, name, isDataTypeVertex: vertexType, description, URI, properties: [], position, skos: { closeMatch: [], exactMatch: [] } });
+  
+    
 
     classIdO.subscribe((classID) =>
       Vocabularies.update(

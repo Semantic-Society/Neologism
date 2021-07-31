@@ -130,7 +130,7 @@ export class RecommenderComponent implements OnInit {
   }
 
   addToGraph() {
-    this.vocabService.addClass(this.vocabID, this.selectedRecommendation.label, this.selectedRecommendation.comment, this.selectedRecommendation.uri);
+    this.vocabService.addClass(this.vocabID, this.selectedRecommendation.label, this.selectedRecommendation.comment, this.selectedRecommendation.uri).subscribe(res=>"");
     // console.log('recommenderComponent -> addToGraph:', this.selectedRecommendation.uri, this.selectedRecommendation.label, this.selectedRecommendation.creator);
     // this.mx.insertClass(this.selectedRecommendation.uri, this.selectedRecommendation.label, this.selectedRecommendation.creator);
     // this.mx.selectClass(this.selectedRecommendation.uri);

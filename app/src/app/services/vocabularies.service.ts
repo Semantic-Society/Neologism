@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { AbstractControl, AsyncValidatorFn, FormBuilder, ValidationErrors, Validators } from '@angular/forms';
-
 import { Random } from 'meteor/random';
 import { MeteorObservable, zoneOperator } from 'meteor-rxjs';
 import { combineLatest, empty, Observable, of, throwError, timer } from 'rxjs';
@@ -27,6 +26,7 @@ const callWithPromise = (method, ...myParameters) => new Promise((resolve, rejec
 export class VocabulariesService {
 
 
+  public viewCenter: { x: number, y: number } = { x: 0, y: 0 };
   private env = environment
   private _vocabCount = 0;
   public get vocabCount() {
@@ -108,16 +108,17 @@ export class VocabulariesService {
         console.log(err);
         // Handle error
       });
+
   }
 
-  addClass(vocabularyId: string, name: string, description: string, URI: string, position: { x: number, y: number } = { x: 0, y: 0 }, id?) {
-    MeteorObservable.call('class.create', vocabularyId, name, description, URI, position, id).subscribe((response) => {
-      // Handle success and response from server!
-
-      this.messageService.success(SideBarNodeCreatorComponent.CLASS_ADD_MESSAGE);
-    }, (err) => {
-      console.log(err);
-    });
+  addClass(vocabularyId: string, name: string, description: string, URI: string, position: { x: number, y: number } = this.viewCenter, vertexType = false) {
+    const id = this.createMeteorNewId()
+    return MeteorObservable.call('class.create', vocabularyId, vertexType, name, description, URI, position, id)
+      .pipe(
+        take(1),
+        tap((response) => this.messageService.success(SideBarNodeCreatorComponent.CLASS_ADD_MESSAGE))
+        , map(resp => id)
+      )
   }
 
   updateClass(classID: string, URI: string, name: string, description: string) {
@@ -154,16 +155,16 @@ export class VocabulariesService {
 
   addProperty(toClass: meteorID, name: string, description: string, URI: string, range: string,
     type: string, vocabID: string) {
-    let _id;
     if (type == PropertyType.Data) {
-      _id = Random.id();
-      this.addClass(vocabID, range, description = PropertyType.Data, URI, undefined, _id);
-      MeteorObservable.call('property.create', toClass, { name, description, URI, range, type, _id })
-        .subscribe((_response) => {
-          // Handle success and response from server!
-        }, (err) => {
-          console.log(err);
-        });
+      this.addClass(vocabID, range, description = PropertyType.Data, URI, undefined, true).subscribe(classId => {
+        MeteorObservable.call('property.create', toClass, { name, description, URI, range, type, _id: classId })
+          .subscribe((_response) => {
+            // Handle success and response from server!
+          }, (err) => {
+            console.log(err);
+          });
+      })
+
     } else {
       MeteorObservable.call('property.create', toClass, { name, description, URI, range, type })
         .subscribe((_response) => {
@@ -493,19 +494,32 @@ export class VocabulariesService {
    * imported rdf file
    */
   fillVocabularyWithData(data: any, id: string) {
+    let tasks$ = []
     data.classes.forEach(element => {
-      this.addClass(id, element.label, element.description, element.uri)
+      tasks$.push(this.addClass(id, element.label, element.description, element.uri))
     });
 
-    data.subclasses.forEach(element => {
-      const toClass = Classes.findOne({ name: element.domain })
-      if (element.type === PropertyType.Data) {
-        element.range = Classes.findOne({ name: element.range })._id
-      }
-      element.domain = toClass._id
-      this.addProperty(toClass._id, element.label, element.description, element.uri, element.range, element.type, id)
-    });
+    combineLatest(tasks$).subscribe((res) => {
+      res.forEach((id, index) => {
+        data.classes[index]._id = id
+      });
+      data.subclasses.forEach(element => {
 
+        const domainClass = data.classes.find(ele => ele.label == element.domain)
+        if (element.type === PropertyType.Object) {
+          element.range = data.classes.find(ele => ele.label == element.range)._id
+        }
+        this.addProperty(domainClass._id, element.label, element.description, element.uri, element.range, element.type, id)
+
+      });
+    })
+
+
+
+  }
+
+  createMeteorNewId(): string {
+    return Random.id()
   }
 
 }

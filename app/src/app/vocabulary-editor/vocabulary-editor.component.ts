@@ -161,7 +161,7 @@ export class VocabularyEditorComponent implements OnInit {
   }
 
   addClass(){
-    this.vocabService.addClass(this.vocabID, this.newClassC.name, this.newClassC.description, this.newClassC.URI);
+    this.vocabService.addClass(this.vocabID, this.newClassC.name, this.newClassC.description, this.newClassC.URI).subscribe(res=>"");
     this.newClass = new VocabClass();
     this.close()
   }
@@ -225,7 +225,7 @@ export class VocabularyEditorComponent implements OnInit {
 
   addEditClass() {
     console.log(this.newClass);
-    this.vocabService.addClass(this.vocabID, this.newClass.name, this.newClass.description, this.newClass.URI);
+    this.vocabService.addClass(this.vocabID, this.newClass.name, this.newClass.description, this.newClass.URI).subscribe(res=>"");
     this.newClass = this.emptyClass;
   }
 
