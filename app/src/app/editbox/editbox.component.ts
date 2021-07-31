@@ -41,7 +41,7 @@ export class EditboxComponent implements OnInit, OnChanges {
   protected propertyRecommendations: Observable<{ comment: string; label: string; uri: string; range: string; }[]>;
 
   // TODO (184): as this is an observable, does it need @Input?
-  @Input() selectedClassID: string;
+  @Input() selectedVertex: any;
   @Input() uriPrefix: string;
   /**
    * If more classinfo is needed, it can be fetched in ngOnInit below.
@@ -94,7 +94,7 @@ export class EditboxComponent implements OnInit, OnChanges {
       map((classes) => classes.map((aclass) => ({ _id: aclass._id, name: aclass.name })))
     );
 
-    this.classToUpdate = this.vocabService.getClassWithProperties(this.vocabID, of(this.selectedClassID));
+    this.classToUpdate = this.vocabService.getClassWithProperties(this.vocabID, of(this.selectedVertex.id));
 
   }
 
@@ -113,7 +113,7 @@ export class EditboxComponent implements OnInit, OnChanges {
 
     this.editedClass = this.editboxService.getUndefinedClass();
 
-    const classID: string = input.selectedClassID.currentValue.id;
+    const classID: string = input.selectedVertex.currentValue.id;
 
     if (!classID) {
       return;
@@ -173,7 +173,7 @@ export class EditboxComponent implements OnInit, OnChanges {
     this.contextmenu_class = true;
   }
   addRecommendedProperyToGraph(rec: IClassProperty) {
-    this.editboxService.addRecommendedProperyToGraph(rec, this.selectedClassID, this.vocabID);
+    this.editboxService.addRecommendedProperyToGraph(rec, this.selectedVertex.id, this.vocabID);
   }
 
 
@@ -182,7 +182,7 @@ export class EditboxComponent implements OnInit, OnChanges {
     if (index) {
       this.formProp.controls['URI'].setValue(`${this.uriPrefix}${encodeURIComponent(this.formProp.value.name.toLocaleLowerCase())}`);
     }
-    this.vocabService.addProperty(this.selectedClassID, this.formProp.value.name, this.formProp.value.description, this.formProp.value.URI, this.formProp.value.range, type, this.vocabID);
+    this.vocabService.addProperty(this.selectedVertex.id, this.formProp.value.name, this.formProp.value.description, this.formProp.value.URI, this.formProp.value.range, type, this.vocabID);
     formDirective.resetForm();
     this.formProp.reset();
   }
@@ -197,13 +197,13 @@ export class EditboxComponent implements OnInit, OnChanges {
   updateEdit() {
 
     if (this.editedClass.name) {
-      this.vocabService.updateClassName(this.selectedClassID, this.editedClass.name);
+      this.vocabService.updateClassName(this.selectedVertex.id, this.editedClass.name);
     }
     if (this.editedClass.description) {
-      this.vocabService.updateClassDescription(this.selectedClassID, this.editedClass.description);
+      this.vocabService.updateClassDescription(this.selectedVertex.id, this.editedClass.description);
     }
     if (this.editedClass.URI) {
-      this.vocabService.updateClassURI(this.selectedClassID, this.editedClass.URI);
+      this.vocabService.updateClassURI(this.selectedVertex.id, this.editedClass.URI);
     }
     this.cancelEdit();
   }
@@ -213,7 +213,7 @@ export class EditboxComponent implements OnInit, OnChanges {
       nzTitle: 'Are you sure delete this class?',
       nzOkText: 'Yes',
       nzOkType: 'danger',
-      nzOnOk: () => this.editboxService.deleteClass(this.selectedClassID),
+      nzOnOk: () => this.editboxService.deleteClass(this.selectedVertex.id),
       nzCancelText: 'No',
       nzOnCancel: () => console.log('Cancel')
     });
