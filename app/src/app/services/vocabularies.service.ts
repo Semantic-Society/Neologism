@@ -449,8 +449,9 @@ export class VocabulariesService {
   }
 
   /**
-   * Open modal for new vocab form
-   */
+    * Creates and initializes modal form
+    * for new vocabulary instance
+  */
   openNewVocabForm(): NzModalRef {
     return this.modalService.create({
       nzTitle: 'Create new vocabulary',
@@ -470,7 +471,8 @@ export class VocabulariesService {
 
 
   /**
- * Open modal for new vocab form
+ * Creates and initializes modal form
+ * for new vocabulary instance on Import
  */
   openImportVocabForm({ name, uri, desc }): NzModalRef {
     return this.modalService.create({
@@ -513,8 +515,6 @@ export class VocabulariesService {
 
       });
     })
-
-
 
   }
 

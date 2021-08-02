@@ -40,7 +40,7 @@ export class RdfUploaderComponent implements OnInit {
 
         const modal = this.vocabService.openImportVocabForm(importData.meta)
 
-        // Return a result when closed
+        // Returns a result when closed
         modal.afterClose.subscribe((result) => {
 
           if (!result || result.name === undefined)
@@ -53,11 +53,9 @@ export class RdfUploaderComponent implements OnInit {
             result.uri
           ).subscribe((response) => {
             this.vocabService.fillVocabularyWithData(importData,response.vocabId)
-            // this.router.navigateByUrl('edit/' + response.vocabId);
-            // Handle success and response from server!
+            this.router.navigateByUrl('edit/' + response.vocabId);
           }, (err) => {
             console.log(err);
-            // Handle error
           });
         });
 
