@@ -59,6 +59,7 @@ import {DupURIValidator } from './shared/DupURIValidator'
 import { BatchRecommenderComponent } from './batchRecommender/batchRecommender.component';
 import { SpellCheckerModule } from 'ngx-spellchecker';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { RdfUploaderComponent } from './rdf-uploader/rdf-uploader.component';
 registerLocaleData(en);
 
 
@@ -86,7 +87,8 @@ registerLocaleData(en);
     ListEditorComponent,
     RemoveUserModalComponent,
     PropertyEditModal,
-    DupURIValidator
+    DupURIValidator,
+    RdfUploaderComponent
   ],
   imports: [
     AccountsModule,

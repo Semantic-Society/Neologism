@@ -7,23 +7,11 @@ import { NzModalRef } from 'ng-zorro-antd/modal';
   templateUrl: './create-vocab-modal.component.html',
   styleUrls: ['./create-vocab-modal.component.scss']
 })
-export class CreateVocabModalComponent implements OnInit {
+export class CreateVocabModalComponent {
 
-  validateForm: FormGroup;
+  @Input()validateForm: FormGroup;
 
-  constructor( private modal: NzModalRef,private fb: FormBuilder) { }
-
-
-
-  ngOnInit(): void {
-    this.validateForm = this.fb.group({
-      description: [''],
-      uri: [`http://w3id.org/neologism/{vocabname-in-lowercase}#`, [Validators.required]],
-      name: [null, [Validators.required]],
-      access: ['public', [Validators.required]],
-    
-    });
-  }
+  constructor( private modal: NzModalRef) { }
 
   closeModal(): void {
     for (const i in this.validateForm.controls) {

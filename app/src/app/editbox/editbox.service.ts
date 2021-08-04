@@ -115,7 +115,7 @@ export class EditboxService {
                 }
             }
 
-            this.vocabService.addClass(vocabID, className, 'no description yet', rec.range);
+            this.vocabService.addClass(vocabID, className, 'no description yet', rec.range).subscribe(res=>"");
         }
     }
 

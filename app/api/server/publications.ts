@@ -22,7 +22,16 @@ import { Classes, Properties, Users, Vocabularies } from '../collections';
                         { fields: { profile: 1, 'emails.address': 1 } }
                     );
                 }
-            } as PublishCompositeConfig1<Ivocabulary, Iuser>
+            } as PublishCompositeConfig1<Ivocabulary, Iuser>,
+              // Get classes
+              {
+                find: (vocab) => {
+                    // Called for each top level document. Top level document is passed
+                    // in as an argument.
+                    // Must return a cursor of second tier documents.
+                    return Classes.collection.find({ _id: { $in: vocab.classes } });
+                }
+            } as PublishCompositeConfig1<Ivocabulary, Iclass>,
         ]
     };
 

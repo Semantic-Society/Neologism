@@ -1,16 +1,19 @@
 import { Injectable } from '@angular/core';
-import { AbstractControl, AsyncValidatorFn, ValidationErrors } from '@angular/forms';
-
+import { AbstractControl, AsyncValidatorFn, FormBuilder, ValidationErrors, Validators } from '@angular/forms';
 import { Random } from 'meteor/random';
 import { MeteorObservable, zoneOperator } from 'meteor-rxjs';
 import { combineLatest, empty, Observable, of, throwError, timer } from 'rxjs';
-import { catchError, debounceTime, distinctUntilChanged, filter, flatMap, map, switchMap, take } from 'rxjs/operators';
+import { catchError, debounceTime, distinctUntilChanged, filter, flatMap, map, switchMap, take, tap } from 'rxjs/operators';
 
 import { Classes, Properties, Users, Vocabularies } from '../../../api/collections';
 import { Iclass, Iproperty, Ivocabulary, PropertyType, meteorID, IClassWithProperties } from '../../../api/models';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { SideBarNodeCreatorComponent } from '../core/node-creator.component';
 import { N3Codec } from '../mxgraph/N3Codec';
+import { environment } from './../../environments/environment';
+import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
+import { CreateVocabModalComponent } from '../home-dashboard/create-vocab-modal/create-vocab-modal.component';
+
 
 const callWithPromise = (method, ...myParameters) => new Promise((resolve, reject) => {
   Meteor.call(method, ...myParameters, (err, res) => {
@@ -21,6 +24,17 @@ const callWithPromise = (method, ...myParameters) => new Promise((resolve, rejec
 
 @Injectable()
 export class VocabulariesService {
+
+
+  public viewCenter: { x: number, y: number } = { x: 0, y: 0 };
+  private env = environment
+  private _vocabCount = 0;
+  public get vocabCount() {
+    return this._vocabCount;
+  }
+  public set vocabCount(value) {
+    this._vocabCount = value;
+  }
 
   /**
    * func for wrapping minimongo query observable for 
@@ -41,6 +55,8 @@ export class VocabulariesService {
 
   constructor(
     private messageService: NzMessageService,
+    private modalService: NzModalService,
+    private fb: FormBuilder,
   ) { }
 
   getVocabularies(): Observable<Ivocabulary[]> {
@@ -92,15 +108,17 @@ export class VocabulariesService {
         console.log(err);
         // Handle error
       });
+
   }
 
-  addClass(vocabularyId: string, name: string, description: string, URI: string, position: { x: number, y: number } = { x: 0, y: 0 }, id?) {
-    MeteorObservable.call('class.create', vocabularyId, name, description, URI, position, id).subscribe((response) => {
-      // Handle success and response from server!
-      this.messageService.success(SideBarNodeCreatorComponent.CLASS_ADD_MESSAGE);
-    }, (err) => {
-      console.log(err);
-    });
+  addClass(vocabularyId: string, name: string, description: string, URI: string, position: { x: number, y: number } = this.viewCenter, vertexType = false) {
+    const id = this.createMeteorNewId()
+    return MeteorObservable.call('class.create', vocabularyId, vertexType, name, description, URI, position, id)
+      .pipe(
+        take(1),
+        tap((response) => this.messageService.success(SideBarNodeCreatorComponent.CLASS_ADD_MESSAGE))
+        , map(resp => id)
+      )
   }
 
   updateClass(classID: string, URI: string, name: string, description: string) {
@@ -137,16 +155,16 @@ export class VocabulariesService {
 
   addProperty(toClass: meteorID, name: string, description: string, URI: string, range: string,
     type: string, vocabID: string) {
-    let _id;
     if (type == PropertyType.Data) {
-      _id = Random.id();
-      this.addClass(vocabID, range, description = PropertyType.Data, URI, undefined, _id);
-      MeteorObservable.call('property.create', toClass, { name, description, URI, range, type, _id })
-        .subscribe((_response) => {
-          // Handle success and response from server!
-        }, (err) => {
-          console.log(err);
-        });
+      this.addClass(vocabID, range, description = PropertyType.Data, URI, undefined, true).subscribe(classId => {
+        MeteorObservable.call('property.create', toClass, { name, description, URI, range, type, _id: classId })
+          .subscribe((_response) => {
+            // Handle success and response from server!
+          }, (err) => {
+            console.log(err);
+          });
+      })
+
     } else {
       MeteorObservable.call('property.create', toClass, { name, description, URI, range, type })
         .subscribe((_response) => {
@@ -349,7 +367,7 @@ export class VocabulariesService {
   }
 
   // gets first email address for the user if any
-  getEmailAddress(userId: string):string {
+  getEmailAddress(userId: string): string {
     try {
       const user = Users.findOne({
         _id: userId
@@ -421,7 +439,89 @@ export class VocabulariesService {
       }
     )
   }
+  /**
+   * Imposing configurable vocabularies limit
+   * Targeted to guest users only
+   * @returns boolean
+   */
+  isEligibleForCreatingVocab(): Boolean {
+    return (Meteor.user().emails[0].address === this.env.guestUserName && this.vocabCount < this.env.gMaxVocab);
+  }
 
+  /**
+    * Creates and initializes modal form
+    * for new vocabulary instance
+  */
+  openNewVocabForm(): NzModalRef {
+    return this.modalService.create({
+      nzTitle: 'Create new vocabulary',
+      nzContent: CreateVocabModalComponent,
+      nzComponentParams: {
+        validateForm: this.fb.group({
+          description: [''],
+          uri: [`http://w3id.org/neologism/{vocabname-in-lowercase}#`, [Validators.required]],
+          name: [null, [Validators.required]],
+          access: ['public', [Validators.required]],
+
+        })
+      },
+      nzFooter: null
+    });
+  }
+
+
+  /**
+ * Creates and initializes modal form
+ * for new vocabulary instance on Import
+ */
+  openImportVocabForm({ name, uri, desc }): NzModalRef {
+    return this.modalService.create({
+      nzTitle: 'Create new vocabulary',
+      nzContent: CreateVocabModalComponent,
+      nzComponentParams: {
+        validateForm: this.fb.group({
+          description: [desc],
+          uri: [{ value: uri, disabled: false }],
+          name: [{ value: `${name}`, disabled: false }, [Validators.required]],
+
+        })
+      },
+      nzFooter: null
+    });
+  }
+
+  /**
+   * Fills newly created vocabulary
+   * with processed and transformed
+   * imported rdf file
+   */
+  fillVocabularyWithData(data: any, id: string) {
+    let tasks$ = []
+    data.classes.forEach(element => {
+      tasks$.push(this.addClass(id, element.label, element.description, element.uri))
+    });
+
+    combineLatest(tasks$).subscribe((res) => {
+      res.forEach((id, index) => {
+        data.classes[index]._id = id
+      });
+      data.subclasses.forEach(element => {
+
+        const domainClass = data.classes.find(ele => ele.label == element.domain)
+        if (element.type === PropertyType.Object) {
+          element.range = data.classes.find(ele => ele.label == element.range)._id
+        }
+        this.addProperty(domainClass._id, element.label, element.description, element.uri, element.range, element.type, id)
+
+      });
+    })
+
+  }
+
+  createMeteorNewId(): string {
+    return Random.id()
+  }
 
 }
+
 

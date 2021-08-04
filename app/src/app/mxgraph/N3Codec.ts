@@ -1,9 +1,15 @@
-import { DataFactory, Writer, Quad } from 'n3';
+import { stringify } from '@angular/compiler/src/util';
+import { Injectable } from '@angular/core';
+import { DataFactory, Writer, Quad, Parser, Store, termToId } from 'n3';
 const { namedNode, literal, quad } = DataFactory
 import { Vocabularies, Users } from '../../../api/collections';
 import { IClassWithProperties, Iuser, PropertyType, } from '../../../api/models'
-export class N3Codec {
 
+@Injectable({
+    providedIn: 'root',
+})
+export class N3Codec {
+    parser = new Parser();
 
     public static neoPrefixes = {
         rdf: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
@@ -13,7 +19,7 @@ export class N3Codec {
         purl: 'http://purl.org/dc/terms/'
     }
 
-    public static serialize(id, classesWithProps, callBack) {
+    public static serialize(id, classesWithProps, respHandler) {
 
         try {
             const vocabId = id || null
@@ -143,10 +149,10 @@ export class N3Codec {
             writer.addQuads(quads)
             writer.end((error, result) => {
                 if (error) {
-                    console.error("error")
+                    console.error(error)
                     return;
                 }
-                callBack(result)
+                respHandler(result)
                 return;
             })
         } catch (error) {
@@ -154,7 +160,71 @@ export class N3Codec {
             return;
         }
     }
-    static neologismId(id: string) {
-        return id ? new URL(id, 'neo://query/').toString() : null;
+
+    deserialize(quads: String | any, respHandler): void {
+        const list: Quad[] = []
+        this.parser.parse(
+            quads,
+            (error, quad: Quad, prefixes) => {
+                if (quad)
+                    list.push(quad)
+                else {
+                    respHandler(new Store(list))
+                }
+
+            });
     }
+
+    getMeta(store: Store): { name: string, uri: string, desc: string } {
+
+        return {
+            name: store.getQuads(null, namedNode('http://purl.org/dc/terms/title'), null, null)[0].object.value,
+            uri: store.getQuads(null, null, namedNode('http://www.w3.org/2002/07/owl#Ontology'), null)[0].subject.value,
+            desc: store.getQuads(null, namedNode('http://purl.org/dc/terms/description'), null, null)[0].object.value,
+        }
+
+    }
+
+    getClasses(store: Store) {
+        return store.getQuads(null, namedNode('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'), namedNode('http://www.w3.org/2000/01/rdf-schema#Class'), null)
+            .map((triple) => {
+                const subject = triple.subject;
+                const labels = store.getQuads(subject, namedNode('http://www.w3.org/2000/01/rdf-schema#label'), null, null);
+                const oneLabel = labels[0].object.value
+                const description = store.getQuads(subject, namedNode('http://www.w3.org/2000/01/rdf-schema#comment'), null, null)[0].object.value
+                return {
+                    uri: subject.value,
+                    label: oneLabel || subject,
+                    description: description
+                };
+            });
+    }
+
+    getSubClassRelations(store: Store): Array<{ uri: string; label: string; domain: string; range: string; }> {
+        const result = [];
+        store.getQuads(null, namedNode('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'), namedNode('http://www.w3.org/2000/01/rdf-schema#Class'), null)
+            .forEach((triple) => {
+                const aClass = triple.subject;
+                const subClasses = store.getQuads(null, 'http://www.w3.org/2000/01/rdf-schema#domain', aClass, null);
+                subClasses.forEach((subClass) => {
+                    const range = store.getQuads(subClass.subject, 'http://www.w3.org/2000/01/rdf-schema#range', null, null);
+                    const isDataType = store.getQuads(subClass.subject, null, "http://www.w3.org/2002/07/owl#DatatypeProperty", null).length ? true : false;
+                    const rangeLabel = range[0].object.value.split('#')[1]
+                    const propLabel = subClass.subject.value.split('#')[1]
+                    const domainLabel = aClass.value.split('#')[1]
+                    result.push(
+                        {
+                            uri: subClass.subject.value,
+                            label: propLabel,
+                            domain: domainLabel,
+                            description: "" , // TODO: Fix export to include comments
+                            type: isDataType ? PropertyType.Data : PropertyType.Object,
+                            range: rangeLabel
+                        }
+                    );
+                });
+            });
+        return result;
+    }
+
 }

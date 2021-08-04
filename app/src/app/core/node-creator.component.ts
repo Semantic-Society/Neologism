@@ -63,7 +63,7 @@ checkWord(word:string){
   addClass() {
     // centering new class position on creation
     const pos = this.graphService.viewCenter()
-    this.vocabService.addClass(this.vocabID, this.createClassForm.controls['name'].value, this.createClassForm.controls['description'].value, this.createClassForm.controls['URI'].value, pos);
+    this.vocabService.addClass(this.vocabID, this.createClassForm.controls['name'].value, this.createClassForm.controls['description'].value, this.createClassForm.controls['URI'].value, pos).subscribe(res=>"");
     this.createClassForm.reset()
     this.resetSidebarState()
   }
