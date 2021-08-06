@@ -38,8 +38,12 @@ and might interact with a recommender to improve the quality of drafted vocabula
 
 ## Installation
 
-__Easy usage via Docker:__
-1.  Navigate to frontend/
+__Easy usage via Docker Image:__
+1.  Navigate to app/
+2. `docker-compose up`
+
+__Easy usage via Docker Building Image on Local:__
+1.  Navigate to app/
 2. `docker-compose build`
 3. `docker-compose up`
 

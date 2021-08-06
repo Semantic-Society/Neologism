@@ -5,7 +5,6 @@
 FROM ubuntu
 
 
-ARG METEOR_CLIENT_CONN_URL
 
 # Meteor version to build for; see ../build.sh
 ENV METEOR_VERSION 2.2

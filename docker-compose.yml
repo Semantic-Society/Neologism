@@ -4,15 +4,12 @@ services:
 
   neologism:
     container_name: neologism_app
-    image: registry.git.rwth-aachen.de/neologism/neologism2:latest
+    image: ghcr.io/semantic-society/neologism/neologism2:latest
     # build creates a local docker container, to use the image comment it out
     build:
       context: .
       dockerfile: Dockerfile
-      args:
-        # This is variable is use to configure meteor-client bundle 
-        METEOR_CLIENT_CONN_URL: ${METEOR_CLIENT_CONN_URL:-http://localhost:3000}
-
+      
     depends_on:
       - mongo
     environment:
@@ -20,7 +17,8 @@ services:
       MONGO_URL: mongodb://mongo:27017/meteor
       PORT: 3000
       METEOR_SETTINGS: '{ "storageLocation":"/etc/neologism/uploads/vocabularies" }'
-
+      NEO_GUSER:
+      NEO_GPASS:
   mongo:
     container_name: neologism_db
     image: mongo:latest
