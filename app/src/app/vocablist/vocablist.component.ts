@@ -95,7 +95,7 @@ export class VocablistComponent implements OnInit {
           });
         });
         // allProps created with Object.create(null);
-        // tslint:disable-next-line:forin
+        // eslint-disable-next-line guard-for-in
         for (const prop in allProps) {
           rdf += prop + a + property + ' .\n';
         }
@@ -119,7 +119,7 @@ export class VocablistComponent implements OnInit {
 
 }
 
-// tslint:disable-next-line:max-classes-per-file
+// eslint-disable-next-line max-classes-per-file
 // export class VocabularyDataSource extends DataSource<any> {
 //   constructor() {
 //     super();

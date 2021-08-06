@@ -52,7 +52,7 @@ export function InjectUser(propName?: string): (cls: any) => any {
  * A service to use as auth guard on the route.
  *
  */
-// tslint:disable-next-line:max-classes-per-file
+// eslint-disable-next-line max-classes-per-file
 @Injectable()
 export class AuthGuard implements CanActivate {
   canActivate(): Observable<boolean> {

@@ -1,0 +1,99 @@
+{
+  "root": true,
+  "ignorePatterns": [
+    "projects/**/*"
+  ],
+  "overrides": [
+    {
+      "files": [
+        "*.ts"
+      ],
+      "parserOptions": {
+        "project": [
+          "tsconfig.json",
+          "e2e/tsconfig.json"
+        ],
+        "createDefaultProgram": true
+      },
+      "extends": [
+        "plugin:@angular-eslint/ng-cli-compat",
+        "plugin:@angular-eslint/ng-cli-compat--formatting-add-on",
+        "plugin:@angular-eslint/template/process-inline-templates"
+      ],
+      "plugins": [
+        "eslint-plugin-rxjs"
+      ],
+      "rules": {
+        "@angular-eslint/component-selector": [
+          "error",
+          {
+            "type": "element",
+            "prefix": "app",
+            "style": "kebab-case"
+          }
+        ],
+        "@angular-eslint/directive-selector": [
+          "error",
+          {
+            "type": "attribute",
+            "prefix": "app",
+            "style": "camelCase"
+          }
+        ],
+        "@typescript-eslint/array-type": [
+          "error",
+          {
+            "default": "array"
+          }
+        ],
+        "@typescript-eslint/consistent-type-definitions": "error",
+        "@typescript-eslint/dot-notation": "off",
+        "@typescript-eslint/explicit-member-accessibility": [
+          "off",
+          {
+            "accessibility": "explicit"
+          }
+        ],
+        "@typescript-eslint/no-var-requires": "error",
+        "brace-style": [
+          "error",
+          "1tbs"
+        ],
+        "curly": "off",
+        "dot-notation": "off",
+        "id-blacklist": "off",
+        "id-match": "off",
+        "indent": "error",
+        "max-classes-per-file": [
+          "error",
+          1
+        ],
+        "max-len": [
+          "off",
+          {
+            "code": 140
+          }
+        ],
+        "no-empty-function": "off",
+        "no-shadow": "error",
+        "no-underscore-dangle": "off",
+        "no-unused-expressions": "error",
+        "no-use-before-define": "off",
+        "quotes": "error",
+        "rxjs/no-subject-unsubscribe": "error",
+        "semi": "error",
+        "space-before-function-paren": "off",
+        "valid-typeof": "error"
+      }
+    },
+    {
+      "files": [
+        "*.html"
+      ],
+      "extends": [
+        "plugin:@angular-eslint/template/recommended"
+      ],
+      "rules": {}
+    }
+  ]
+}

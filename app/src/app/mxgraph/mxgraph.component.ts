@@ -295,7 +295,7 @@ export class MxgraphComponent implements OnInit, OnDestroy {
 
     // We used Object.create(null) to make grouped. So, it does not have any non-own properties.
     // in fact, it does not have hasOwnProperty
-    // tslint:disable-next-line:forin
+    // eslint-disable-next-line guard-for-in
     for (const key in grouped) {
       // if (grouped.hasOwnProperty(key)) {
       const group: {
