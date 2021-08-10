@@ -6,15 +6,15 @@
     "ng": "ng",
     "start": "ng serve --open",
     "build": "ng build",
-    "prod": "ng build --prod",
+    "prod": "ng build --configuration production",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "api": "cd api && meteor --settings env.local.json",
+    "api": "cd api && ROOT_URL=http://localhost meteor --settings env.local.json",
     "api:reset": "cd api && meteor reset",
     "debug": "cd api && meteor debug --inspect-brk=9229",
-    "meteor-client:bundle": "meteor-client bundle -s api",
-    "meteor-client:bundle-server": "meteor-client bundle --url /api -s api"
+    "meteor-client:bundle": "ROOT_URL=http://localhost/api && meteor-client bundle --url ${METEOR_BUNDLER_URL:-http://localhost/api} -s api",
+    "meteor-client:bundle-server": "meteor-client bundle --url ${METEOR_BUNDLER_URL:-http://localhost:3000} -s api"
   },
   "private": true,
   "dependencies": {

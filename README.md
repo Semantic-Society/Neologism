@@ -47,6 +47,12 @@ __Easy usage via Docker Building Image on Local:__
 2. `docker-compose build`
 3. `docker-compose up`
 
+__Deploy Instructions:__
+1. Navigate to app/
+2. set ENV METEOR_CLIENT_CONN_URL=${server-host-url}/api && ROOT_URL=${server-host-url}
+3. `docker-compose build`
+4. `docker-compose up`
+
 __Local setup:__
 1. Clone the repository
 2. Install meteor using curl https://install.meteor.com/ | sh
