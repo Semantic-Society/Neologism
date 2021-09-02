@@ -13,8 +13,8 @@
     "api": "cd api && ROOT_URL=http://localhost meteor --settings env.local.json",
     "api:reset": "cd api && meteor reset",
     "debug": "cd api && meteor debug --inspect-brk=9229",
-    "meteor-client:bundle": "ROOT_URL=http://localhost/api && meteor-client bundle --url ${METEOR_BUNDLER_URL:-http://localhost/api} -s api",
-    "meteor-client:bundle-server": "meteor-client bundle --url ${METEOR_BUNDLER_URL:-http://localhost:3000} -s api"
+    "meteor-client:bundle": "ROOT_URL=http://localhost/api METEOR_BUNDLER_URL=http://localhost/api meteor-client bundle --url ${METEOR_BUNDLER_URL} -s api",
+    "meteor-client:bundle-server": "meteor-client bundle --url ${METEOR_BUNDLER_URL} -s api"
   },
   "private": true,
   "dependencies": {

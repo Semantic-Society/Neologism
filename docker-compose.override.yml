@@ -5,7 +5,9 @@ services:
   neologism:
     container_name: neologism_app
     ports:
+      - '3000:3000'
       - '80:80'
+      - '3001:3001'
     volumes: 
       - uploads:/etc/neologism/uploads/vocabularies
   
