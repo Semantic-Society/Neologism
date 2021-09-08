@@ -11,11 +11,11 @@ services:
       dockerfile: Dockerfile
       args:
         # This is variable is use to configure meteor-client bundle 
-        METEOR_CLIENT_CONN_URL: ${METEOR_CLIENT_CONN_URL:-http://localhost/api}      
+        METEOR_CLIENT_CONN_URL: http://localhost/api      
     depends_on:
       - mongo
     environment:
-      ROOT_URL: ${ROOT_URL:-http://localhost}
+      ROOT_URL: http://localhost
       MONGO_URL: mongodb://mongo:27017/meteor
       CROOT_URL: ${CROOT_URL:-http://localhost:3000}
       CDDP_URL: ${CDDP_URL:-http://localhost:3000}

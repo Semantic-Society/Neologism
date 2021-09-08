@@ -41,16 +41,16 @@ and might interact with a recommender to improve the quality of drafted vocabula
 __Easy usage via Docker Image:__
 1.  Navigate to app/
 2. `docker-compose up`
-
+<!-- 
 __Easy usage via Docker Building Image on Local:__
 1.  Navigate to app/
 2. `docker-compose build`
-3. `docker-compose up`
+3. `docker-compose up` -->
 
-__Deploy Instructions:__
+__Deploy Instructions Local + Anywhere:__
 1. Navigate to app/
 2. set ENV METEOR_CLIENT_CONN_URL=${server-host-url}/api && ROOT_URL=${server-host-url}
-3. `docker-compose build`
+3. set the environnement var CROOT_URL=http://{server-url}:3000 and CDDP_URL=http://{server-url}:3000 in docker-compose-yml (server-url=localhost on local)
 4. `docker-compose up`
 
 __Local setup:__

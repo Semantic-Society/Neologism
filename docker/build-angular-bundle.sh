@@ -14,6 +14,6 @@ ROOT_URL=$METEOR_CLIENT_CONN_URL METEOR_BUNDLER_URL=$METEOR_CLIENT_CONN_URL  met
 
 printf "\n[-] Building Angular bundle...\n\n"
 
-meteor npm run build
+meteor npm run prod
 
 cp -R dist/* $APP_BUNDLE_FOLDER/client
