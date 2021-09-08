@@ -1,7 +1,11 @@
 
 #!/bin/bash
 
+set -o errexit
+
 #replacing bundle url with client
+
+printf "\n[-] Running Entry Point Script...\n\n"
 echo $CDDP_URL
 echo $CROOT_URL
 
