@@ -2,3 +2,6 @@
 **/node_modules
 app/dist
 app/api/dist
+.meteor/local
+packages/*/.build*
+node_modules
