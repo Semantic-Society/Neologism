@@ -12,11 +12,9 @@ fi
 # Poll until we can successfully connect to MongoDB
 source ./connect-to-mongo.sh
 
-echo 'Starting app...'
-cd $APP_BUNDLE_FOLDER/api/bundle
+# echo 'Starting app...'
+# cd $APP_BUNDLE_FOLDER/api/bundle
 
 # service nginx start
-
 # node main.js
-
-exec "$@"
+exec /usr/bin/supervisord -c /etc/supervisord.conf

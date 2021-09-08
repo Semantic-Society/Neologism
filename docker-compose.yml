@@ -17,6 +17,8 @@ services:
     environment:
       ROOT_URL: ${ROOT_URL:-http://localhost}
       MONGO_URL: mongodb://mongo:27017/meteor
+      CROOT_URL: ${CROOT_URL:-http://localhost/api}
+      CDDP_URL: ${CDDP_URL:-http://localhost/api}
       PORT: 3000
       METEOR_SETTINGS: '{ "storageLocation":"/etc/neologism/uploads/vocabularies" }'
       HTTP_FORWARDED_COUNT: 1

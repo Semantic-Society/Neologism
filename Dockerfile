@@ -106,10 +106,14 @@ COPY --from=1 $SCRIPTS_FOLDER $SCRIPTS_FOLDER/
 # Copy in app bundle with the built and installed dependencies from the previous image
 COPY --from=1 $APP_BUNDLE_FOLDER/api/bundle $APP_BUNDLE_FOLDER/api/bundle/
 
+COPY $APP_BUNDLE_FOLDER/api/bundle/programs/web.browser /usr/share/nginx/html
+
 COPY --from=1 $APP_BUNDLE_FOLDER/client/neologism /usr/share/nginx/html
 
 COPY $SCRIPTS_FOLDER/config/supervisord.conf /etc/
 
 COPY $SCRIPTS_FOLDER/config/nginx.default.conf /etc/nginx/conf.d/default.conf
 
-ENTRYPOINT /usr/bin/supervisord -c /etc/supervisord.conf
+# ENTRYPOINT "bin/startup.sh && /usr/bin/supervisord -c /etc/supervisord.conf"
+
+ENTRYPOINT "entrypoint.sh"
