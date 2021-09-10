@@ -38,7 +38,7 @@ and might interact with a recommender to improve the quality of drafted vocabula
 
 ## Installation
 
-__Easy usage via Docker Image:__
+__Easy usage via Docker Image Build:__
 1.  Navigate to app/
 2. `docker-compose up`
 <!-- 
@@ -47,16 +47,16 @@ __Easy usage via Docker Building Image on Local:__
 2. `docker-compose build`
 3. `docker-compose up` -->
 
-__Deploy Instructions Local + Anywhere:__
-1. Navigate to app/
-2. set ENV METEOR_CLIENT_CONN_URL=${server-host-url}/api && ROOT_URL=${server-host-url}
-3. set the environnement var CROOT_URL=http://{server-url}:3000 and CDDP_URL=http://{server-url}:3000 in docker-compose-yml (server-url=localhost on local)
-4. `docker-compose up`
+__Deploy via Docker Image Run Instructions Local:__
+1. Make sure Port 80, 3000, 3001 are free
+2. Navigate to app/
+3. set the environnement vars CROOT_URL=http://{server-url}:3000 and CDDP_URL=http://{server-url}:3000 in docker-compose-yml
+4. exec `docker-compose up`
 
 __Local setup:__
 1. Clone the repository
 2. Install meteor using curl https://install.meteor.com/ | sh
-3. Install node version to 12.20.1 with compatible npm
+3. Install node version (check versions below)
 4. Install /Download nginx for CORS (Linux: `sudo apt-get install nginx` Arch: `sudo pacman -S nginx` Windows: http://nginx.org/en/docs/windows.html) (On Windows move the folder to C:\)
 5. Create a `sites-enabled` folder inside the nginx folder (Linux: /etc/nginx/sites-enabled).
 6. Put the [neologism.com](nginx/neologism.com) file inside this folder.
@@ -72,13 +72,14 @@ http {
 }
 
 ```
-8. Run `npm i` in the frontend subfolder
-9. Run `npm i` in frontend/api
-10. Run `npm run meteor-client:bundle` in the frontend subfolder
-11. Navigate to frontend
-12. Run `npm run api` to start a local meteor server (running on http://localhost:3000/ with a connection to a local mongodb at port 3001).
-13. Run `npm run start` for a dev server. Navigate to http://localhost:4200/. The app will automatically reload if you change any of the source files.
-14. Optional: If you need to run the recommender, install an AddOn for your browser to allow CORS, as configurations need to be done
+8. Run `npm i` in the app subfolder
+9. Run `npm i` in app/api
+10. set ENV variable as shown in example.env file in the app root
+11. Run `npm run meteor-client:bundle` in the app subfolder
+12. Navigate to app
+13. Run `npm run api` to start a local meteor server (running on http://localhost:3000/ with a connection to a local mongodb at port 3001).
+14. Run `npm run start` for a dev server. Navigate to http://localhost:4200/. The app will automatically reload if you change any of the source files.
+15. Optional: If you need to run the recommender, install an AddOn for your browser to allow CORS, as configurations need to be done
 
 __TEST IF THE RECOMMENDER WORKS PROPERLY__
 
@@ -93,9 +94,9 @@ __NOTE:__
 
 
 __Major Versions:__
-- Angular 9
-- Meteor 1.12
-- Node 12.20.0
+- Angular 12.0.4
+- Meteor 2.2
+- Node 14.17.0
 
 __Troubleshooting:__
 - check if node version compatibility for front and api
