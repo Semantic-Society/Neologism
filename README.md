@@ -8,7 +8,7 @@ An RDF export allows quick bootstrapping of any other Semantic Web tool.
 ## Usage (Live Demo)
 
 We provide a [live demo version](http://cloud33.dbis.rwth-aachen.de/dashboard) of Neologism 2.0, which can be used as a guest without registration.
-Additionally, [this short video](https://youtu.be/5IwOZ8eqoKE) shows the vocabulary creation and exporting process, including a subsequent editing in WebProtégé.
+Additionally, [this short video](https://youtu.be/5IwOZ8eqoKE) shows the vocabulary creation and exporting process, including subsequent editing in WebProtégé.
 
 ![img.png](screenshot01.png)
 
@@ -76,8 +76,8 @@ http {
 9. Run `npm i` in app/api
 10. set ENV variable as shown in example.env file in the app root
 11. Run `npm run meteor-client:bundle` in the app subfolder
-12. Navigate to app
-13. Run `npm run api` to start a local meteor server (running on http://localhost:3000/ with a connection to a local mongodb at port 3001).
+12. Navigate to the app
+13. Run `npm run api` to start a local meteor server (running on http://localhost:3000/ with a connection to a local MongoDB at port 3001).
 14. Run `npm run start` for a dev server. Navigate to http://localhost:4200/. The app will automatically reload if you change any of the source files.
 15. Optional: If you need to run the recommender, install an AddOn for your browser to allow CORS, as configurations need to be done
 
@@ -86,10 +86,10 @@ __TEST IF THE RECOMMENDER WORKS PROPERLY__
 - Run `curl -v -d @test-recommender-request.json http://localhost:8080/recommender/batchRecommender -H "Content-Type:application/json"` and inspect the result.
 
 __DISCLAIMER:__
-Steps above are valid to run in Ubuntu focal
+The steps above are valid to run in Ubuntu focal
 
 __NOTE:__
-- Initially & every time you make a change to the server code (which affects the client side code), rebundle the meteor client side code by running `npm run meteor-client:bundle`.
+- Initially & every time you make a change to the server code (which affects the client-side code), rebundle the meteor client-side code by running `npm run meteor-client:bundle`.
 - Find more details for the Angular/Meteor integration here: https://github.com/Urigo/angular-meteor/tree/master/examples/AngularCLI
 
 
