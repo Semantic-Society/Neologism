@@ -50,7 +50,7 @@ __Easy usage via Docker Building Image on Local:__
 __Deploy via Docker Image Run Instructions Local:__
 1. Make sure Port 80, 3000, 3001 are free
 2. Navigate to app/
-3. set the environnement vars CROOT_URL=http://{server-url}:3000 and CDDP_URL=http://{server-url}:3000 in docker-compose-yml
+3. set the environnement vars `CROOT_URL=http://{server-url}:3000` and `CDDP_URL=http://{server-url}:3000` in docker-compose-yml
 4. exec `docker-compose up`
 
 __Local setup:__
