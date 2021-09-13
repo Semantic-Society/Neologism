@@ -96,7 +96,8 @@ RUN apk --no-cache add \
 	bash \
 	ca-certificates \
 	nginx \
-	supervisor
+	supervisor \
+	mongodb-tools
 
 RUN mkdir -p /run/nginx
 

@@ -12,6 +12,10 @@ source ./startup.sh
 # Poll until we can successfully connect to MongoDB
 source ./connect-to-mongo.sh
 
+# seed data into MongoDB
+# source ./mongoseed.sh
+
+
 # echo 'Starting app...'
 # cd $APP_BUNDLE_FOLDER/api/bundle
 

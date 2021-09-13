@@ -16,7 +16,7 @@ services:
       - mongo
     environment:
       ROOT_URL: http://localhost
-      MONGO_URL: mongodb://mongo:27017/meteor
+      MONGO_URL: mongodb://mongo:27017
       CROOT_URL: ${CROOT_URL:-http://localhost:3000}
       CDDP_URL: ${CDDP_URL:-http://localhost:3000}
       PORT: 3000
