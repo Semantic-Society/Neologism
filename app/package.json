@@ -8,13 +8,13 @@
     "build": "ng build",
     "prod": "ng build --configuration production",
     "test": "ng test",
-    "lint": "ng lint",
+    "lint": "ng lint neologism",
     "e2e": "ng e2e",
     "api": "cd api && meteor --settings settings.json",
     "api:reset": "cd api && meteor reset",
     "debug": "cd api && meteor debug --inspect-brk=9229",
-    "meteor-client:bundle": "meteor-client bundle --url ${METEOR_BUNDLER_URL} -s api",
-    "meteor-client:bundle-server": "meteor-client bundle --url ${METEOR_BUNDLER_URL} -s api"
+    "meteor-client:bundle": "meteor-client bundle -s api",
+    "meteor-client:bundle-prod": "meteor-client bundle --url ${METEOR_BUNDLER_URL} -s api"
   },
   "private": true,
   "dependencies": {

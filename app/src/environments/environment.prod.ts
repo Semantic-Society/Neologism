@@ -2,7 +2,7 @@ export const environment = {
   production: true,
   recommender:{
     base: "/recommender/batchRecommender",
-    port: '80',
+    port: '',
   } ,
   guestUserName: window["env"]["guser"] || "guest",
   guestPassword: window["env"]["gpass"] || "12345",

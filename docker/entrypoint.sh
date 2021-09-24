@@ -13,7 +13,7 @@ source ./startup.sh
 source ./connect-to-mongo.sh
 
 # seed data into MongoDB
-# source ./mongoseed.sh
+source ./mongoseed.sh
 
 
 # echo 'Starting app...'
