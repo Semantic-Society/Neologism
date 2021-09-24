@@ -4,15 +4,15 @@ import { Meteor } from 'meteor/meteor';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-  constructor( private router: Router) {}
+    constructor( private router: Router) {}
 
-  canActivate(): boolean {
-    let canActivate: boolean = (Meteor.userId()) ? true : false;
+    canActivate(): boolean {
+        const canActivate: boolean = (Meteor.userId()) ? true : false;
 
-    if (!canActivate) {
-      this.router.navigate(['/login']);
+        if (!canActivate) {
+            this.router.navigate(['/login']);
+        }
+
+        return canActivate;
     }
-
-    return canActivate;
-  }
 }

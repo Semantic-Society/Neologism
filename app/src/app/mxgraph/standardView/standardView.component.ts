@@ -5,9 +5,9 @@ import { Iclass } from '../../../../api/models';
 import { VocabulariesService } from '../../services/vocabularies.service';
 import {IClassWithProperties } from '../../../../api/models';
 @Component({
-  selector: 'app-standardview',
-  templateUrl: './standardView.component.html',
-  styleUrls: ['./standardView.component.css']
+    selector: 'app-standardview',
+    templateUrl: './standardView.component.html',
+    styleUrls: ['./standardView.component.css']
 })
 
 export class StandardViewComponent implements OnInit, OnDestroy {

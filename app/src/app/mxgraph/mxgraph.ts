@@ -22,7 +22,7 @@ export class MxgraphService {
     transactionSelection;
     selection$: Observable<string>;
     wnd: any;
-    edgeSelection$: Observable<{ domainClazzID: string; edgeID: string , isDataTypeProp: boolean}>;
+    edgeSelection$: Observable<{ domainClazzID: string; edgeID: string ; isDataTypeProp: boolean}>;
 
     tb: m.mxToolbar;
     // public codec: N3Codec;
@@ -56,7 +56,7 @@ export class MxgraphService {
         const edgeStyle = this.graph.stylesheet.getDefaultEdgeStyle();
         edgeStyle[MxgraphService.mx.mxConstants.STYLE_FILLCOLOR] = '#FFFFFF';
         edgeStyle[MxgraphService.mx.mxConstants.STYLE_LABEL_BACKGROUNDCOLOR] = '#FFFFFF';
-        let style = new Object();
+        const style = new Object();
         style[MxgraphService.mx.mxConstants.STYLE_SHAPE] = MxgraphService.mx.mxConstants.SHAPE_RECTANGLE;
         style[MxgraphService.mx.mxConstants.STYLE_DASHED] = 1;
         style[MxgraphService.mx.mxConstants.STYLE_STROKECOLOR] = '#000000';
@@ -159,7 +159,7 @@ export class MxgraphService {
         // TODO (186): Check if multiple listener on same event creating UI flow disturbances
         this.selection$ = new Observable<string>((observer) => {
             const handler = (sender, evt) => {
-                var cell = evt.getProperty("cell"); // cell may be null
+                const cell = evt.getProperty('cell'); // cell may be null
                 if (cell != null && cell.vertex) {
 
                     if (cell.style === 'Dashed') {
@@ -175,7 +175,7 @@ export class MxgraphService {
             return () => this.graph.getSelectionModel().removeListener(handler);
         }).pipe(distinctUntilChanged());
 
-        this.edgeSelection$ = new Observable<{ domainClazzID: string; edgeID: string, isDataTypeProp: boolean }>((observer) => {
+        this.edgeSelection$ = new Observable<{ domainClazzID: string; edgeID: string; isDataTypeProp: boolean }>((observer) => {
             const handler = (selectionModel: m.mxGraphSelectionModel, evt: m.mxEventObject) => {
                 const values = selectionModel.cells
                     .filter((cell) => cell.edge)
@@ -261,7 +261,7 @@ export class MxgraphService {
     // }
 
     public startTransaction() {
-        this.model.beginUpdate() 
+        this.model.beginUpdate();
         this.transactionSelection = this.graph.getSelectionModel().cells.map((cell) => cell.getId());
     }
 
@@ -322,6 +322,7 @@ export class MxgraphService {
 
     /**
      * Inserts a new class into the graph
+     *
      * @param id The internal ID of the class
      * @param label The label to show in the rendering
      * @param x The x offset of the new class. Middle of screen by default.
@@ -339,6 +340,7 @@ export class MxgraphService {
 
     /**
      * Inserts a new class into the graph
+     *
      * @param id The internal ID of the class
      * @param label The label to show in the rendering
      * @param x The x offset of the new class. Middle of screen by default.
@@ -355,6 +357,7 @@ export class MxgraphService {
 
     /**
      * Inserts a new property into the graph
+     *
      * @param subject The internal id of the property's domain
      * @param predicateID The internal id of the property itself
      * @param predicateLabel The label to display on the edge
@@ -437,7 +440,7 @@ export class MxgraphService {
         return this.selection$;
     }
 
-    public currentEdgeSelection(): Observable<{ domainClazzID: string; edgeID: string, isDataTypeProp: boolean }> {
+    public currentEdgeSelection(): Observable<{ domainClazzID: string; edgeID: string; isDataTypeProp: boolean }> {
         return this.edgeSelection$;
     }
 
@@ -479,7 +482,7 @@ export class MxgraphService {
 
     private initializeToolBar() {
 
-        let content = document.createElement('div');
+        const content = document.createElement("div");
         content.style.padding = '4px';
 
         this.tb = new MxgraphService.mx.mxToolbar(content);
@@ -497,16 +500,16 @@ export class MxgraphService {
         });
 
         this.tb.addItem('Print', '/assets/images/print32.png', (evt) => {
-            let preview = new MxgraphService.mx.mxPrintPreview(this.graph, 1);
+            const preview = new MxgraphService.mx.mxPrintPreview(this.graph, 1);
             preview.open();
         });
 
         this.tb.addItem('Poster Print', '/assets/images/press32.png', (evt) => {
-            let pageCount = MxgraphService.mx.mxUtils.prompt('Enter maximum page count', '1');
+            const pageCount = MxgraphService.mx.mxUtils.prompt("Enter maximum page count", "1");
 
             if (pageCount != null) {
-                var scale = MxgraphService.mx.mxUtils.getScaleForPageCount(Number(pageCount), this.graph);
-                var preview = new MxgraphService.mx.mxPrintPreview(this.graph, scale);
+                const scale = MxgraphService.mx.mxUtils.getScaleForPageCount(Number(pageCount), this.graph);
+                const preview = new MxgraphService.mx.mxPrintPreview(this.graph, scale);
                 preview.open();
             }
         });

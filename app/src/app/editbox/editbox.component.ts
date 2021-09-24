@@ -15,15 +15,15 @@ import { HttpClient } from '@angular/common/http';
 
 
 @Component({
-  selector: 'app-editbox',
-  templateUrl: './editbox.component.html',
-  styleUrls: ['./editbox.component.css'],
-  providers: [SpellCheckerService]
+    selector: 'app-editbox',
+    templateUrl: './editbox.component.html',
+    styleUrls: ['./editbox.component.css'],
+    providers: [SpellCheckerService]
 })
 
 export class EditboxComponent implements OnInit, OnChanges {
 
-  constructor(
+    constructor(
     private vocabService: VocabulariesService,
     private recommender: RecommendationService,
     private sidebarService: SideBarStateService,
@@ -32,13 +32,13 @@ export class EditboxComponent implements OnInit, OnChanges {
     private spellCheckerService: SpellCheckerService,
     private modal: NzModalService,
     private httpClient: HttpClient) {
-  }
+    }
 
   // protected alreadyThere: Array<{ comment: string; label: string; uri: string; range: string; }> = [];
-  protected alreadyThere$: Observable<{ comment: string; label: string; uri: string; range: string; }[]>;
+  protected alreadyThere$: Observable<{ comment: string; label: string; uri: string; range: string }[]>;
 
   // protected propertyRecommendations: Array<{ comment: string; label: string; uri: string; range: string; }> = [];
-  protected propertyRecommendations: Observable<{ comment: string; label: string; uri: string; range: string; }[]>;
+  protected propertyRecommendations: Observable<{ comment: string; label: string; uri: string; range: string }[]>;
 
   // TODO (184): as this is an observable, does it need @Input?
   @Input() selectedVertex: any;
@@ -46,7 +46,7 @@ export class EditboxComponent implements OnInit, OnChanges {
   /**
    * If more classinfo is needed, it can be fetched in ngOnInit below.
    */
-  classInfo$: Observable<{ label: string, description: string; url: string }>;
+  classInfo$: Observable<{ label: string; description: string; url: string }>;
 
   // TODO (184): strictly speaking, this component does not need this as it only needs access to classes and properties.
   // However, more fine grained methods in the VocabulariesService are not yet implemented.
@@ -63,15 +63,15 @@ export class EditboxComponent implements OnInit, OnChanges {
   };
 
   protected emptyClass = {
-    name: '',
-    URI: '',
-    description: ''
+      name: '',
+      URI: '',
+      description: ''
   };
   readonly xsdDataTypes = xsdDataTypes;
 
   protected classToUpdate: Observable<IClassWithProperties>;
   public editToggle = false;
-  protected rangeOptions: Observable<{ _id: string, name: string }[]>;
+  protected rangeOptions: Observable<{ _id: string; name: string }[]>;
   public suggestions_class: string[];
   public suggestions_property: string[];
   contextmenu_class = false;
@@ -81,158 +81,154 @@ export class EditboxComponent implements OnInit, OnChanges {
   oldClassID: string;
 
   ngOnInit() {
-    this.uriPrefix = (this.uriPrefix.search(/^(.*)#$/) == -1) ? `${this.uriPrefix}#` : `${this.uriPrefix}`;
-    this.formProp = this.fb.group({
-      name: ['', Validators.required],
-      URI: [`${this.uriPrefix}`],
-      range: ['', Validators.required],
-      description: [''],
+      this.uriPrefix = (this.uriPrefix.search(/^(.*)#$/) == -1) ? `${this.uriPrefix}#` : `${this.uriPrefix}`;
+      this.formProp = this.fb.group({
+          name: ['', Validators.required],
+          URI: [`${this.uriPrefix}`],
+          range: ['', Validators.required],
+          description: [''],
 
-    });
+      });
 
-    this.rangeOptions = this.vocabService.getClasses(this.vocabID).pipe(
-      map((classes) => classes.map((aclass) => ({ _id: aclass._id, name: aclass.name })))
-    );
+      this.rangeOptions = this.vocabService.getClasses(this.vocabID).pipe(
+          map((classes) => classes.map((aclass) => ({ _id: aclass._id, name: aclass.name })))
+      );
 
-    this.classToUpdate = this.vocabService.getClassWithProperties(this.vocabID, of(this.selectedVertex.id));
+      this.classToUpdate = this.vocabService.getClassWithProperties(this.vocabID, of(this.selectedVertex.id));
 
   }
 
   public buildForm(rec: IClassProperties): FormGroup {
-    return this.fb.group({
-      id: [rec.id, Validators.required],
-      name: [rec.label, Validators.required],
-      uri: [rec.uri, Validators.required],
-      range: [rec.range, Validators.required],
-      rangeId: [rec.rangeId, Validators.required],
-      comment: [rec.comment],
+      return this.fb.group({
+          id: [rec.id, Validators.required],
+          name: [rec.label, Validators.required],
+          uri: [rec.uri, Validators.required],
+          range: [rec.range, Validators.required],
+          rangeId: [rec.rangeId, Validators.required],
+          comment: [rec.comment],
 
-    });
+      });
   }
   ngOnChanges(input) {
 
-    this.editedClass = this.editboxService.getUndefinedClass();
+      this.editedClass = this.editboxService.getUndefinedClass();
 
-    const classID: string = input.selectedVertex.currentValue.id;
+      const classID: string = input.selectedVertex.currentValue.id;
 
-    if (!classID) {
-      return;
-    }
+      if (!classID) {
+          return;
+      }
 
-    // we get several small pieces of info from the class. multicast is likely a good idea, but did not get it working.
-    this.classInfo$ = this.editboxService.createClassInfoObj(this.vocabID, classID);
+      // we get several small pieces of info from the class. multicast is likely a good idea, but did not get it working.
+      this.classInfo$ = this.editboxService.createClassInfoObj(this.vocabID, classID);
 
-    // actually already refacored (in editbox service) but very hard to test as the
-    // recommender service always returns an empty array, bug ?
-    this.propertyRecommendations = this.editboxService.getClass$(this.vocabID, classID)
-      .pipe(
-        switchMap((theclass) => {
-          return this.recommender.propertyRecommendation(theclass.URI).pipe(
-            tap(as => console.log(as, 'recommendations')),
-            combineLatest(this.alreadyThere$, (recommendations, alreadys) => {
-              const newReccommendations = [];
-              recommendations.forEach((recommendation) => {
-                //       // TODO (184): is there a better way in JS?
-                if (!alreadys.some((already) => {
-                  return already.uri === recommendation.uri;
-                })) {
-                  // the property is not there yet
-                  newReccommendations.push(recommendation);
-                }
-              });
-              return newReccommendations;
-            })
+      // actually already refacored (in editbox service) but very hard to test as the
+      // recommender service always returns an empty array, bug ?
+      this.propertyRecommendations = this.editboxService.getClass$(this.vocabID, classID)
+          .pipe(
+              switchMap((theclass) => this.recommender.propertyRecommendation(theclass.URI).pipe(
+                  tap(as => console.log(as, "recommendations")),
+                  combineLatest(this.alreadyThere$, (recommendations, alreadys) => {
+                      const newReccommendations = [];
+                      recommendations.forEach((recommendation) => {
+                          //       // TODO (184): is there a better way in JS?
+                          if (!alreadys.some((already) => already.uri === recommendation.uri)) {
+                              // the property is not there yet
+                              newReccommendations.push(recommendation);
+                          }
+                      });
+                      return newReccommendations;
+                  })
+              )),
+              startWith([]),
           );
-        }),
-        startWith([]),
-      );
 
 
   }
   checkWordProperty(word: string) {
 
-    this.httpClient.get(this.fileURL, { responseType: 'text' }).subscribe((res: any) => {
-      const dictionary = this.spellCheckerService.getDictionary(res);
+      this.httpClient.get(this.fileURL, { responseType: 'text' }).subscribe((res: any) => {
+          const dictionary = this.spellCheckerService.getDictionary(res);
 
-      this.suggestions_property = dictionary.getSuggestions(word);
-    });
+          this.suggestions_property = dictionary.getSuggestions(word);
+      });
 
 
-    this.contextmenu_class = true;
+      this.contextmenu_class = true;
   }
 
   checkWordClass(word: string) {
 
-    this.httpClient.get(this.fileURL, { responseType: 'text' }).subscribe((res: any) => {
-      const dictionary = this.spellCheckerService.getDictionary(res);
+      this.httpClient.get(this.fileURL, { responseType: 'text' }).subscribe((res: any) => {
+          const dictionary = this.spellCheckerService.getDictionary(res);
 
-      this.suggestions_class = dictionary.getSuggestions(word);
-    });
+          this.suggestions_class = dictionary.getSuggestions(word);
+      });
 
 
-    this.contextmenu_class = true;
+      this.contextmenu_class = true;
   }
   addRecommendedProperyToGraph(rec: IClassProperty) {
-    this.editboxService.addRecommendedProperyToGraph(rec, this.selectedVertex.id, this.vocabID);
+      this.editboxService.addRecommendedProperyToGraph(rec, this.selectedVertex.id, this.vocabID);
   }
 
 
   addProperty(formDirective: FormGroupDirective, index: number) {
-    const type = (index === 0) ? PropertyType.Object : PropertyType.Data;
-    if (index) {
-      this.formProp.controls['URI'].setValue(`${this.uriPrefix}${encodeURIComponent(this.formProp.value.name.toLocaleLowerCase())}`);
-    }
-    this.vocabService.addProperty(this.selectedVertex.id, this.formProp.value.name, this.formProp.value.description, this.formProp.value.URI, this.formProp.value.range, type, this.vocabID);
-    formDirective.resetForm();
-    this.formProp.reset();
+      const type = (index === 0) ? PropertyType.Object : PropertyType.Data;
+      if (index) {
+          this.formProp.controls['URI'].setValue(`${this.uriPrefix}${encodeURIComponent(this.formProp.value.name.toLocaleLowerCase())}`);
+      }
+      this.vocabService.addProperty(this.selectedVertex.id, this.formProp.value.name, this.formProp.value.description, this.formProp.value.URI, this.formProp.value.range, type, this.vocabID);
+      formDirective.resetForm();
+      this.formProp.reset();
   }
 
 
 
   cancelEdit() {
-    this.editToggle = false;
-    this.editedClass = this.editboxService.getUndefinedClass();
+      this.editToggle = false;
+      this.editedClass = this.editboxService.getUndefinedClass();
   }
 
   updateEdit() {
 
-    if (this.editedClass.name) {
-      this.vocabService.updateClassName(this.selectedVertex.id, this.editedClass.name);
-    }
-    if (this.editedClass.description) {
-      this.vocabService.updateClassDescription(this.selectedVertex.id, this.editedClass.description);
-    }
-    if (this.editedClass.URI) {
-      this.vocabService.updateClassURI(this.selectedVertex.id, this.editedClass.URI);
-    }
-    this.cancelEdit();
+      if (this.editedClass.name) {
+          this.vocabService.updateClassName(this.selectedVertex.id, this.editedClass.name);
+      }
+      if (this.editedClass.description) {
+          this.vocabService.updateClassDescription(this.selectedVertex.id, this.editedClass.description);
+      }
+      if (this.editedClass.URI) {
+          this.vocabService.updateClassURI(this.selectedVertex.id, this.editedClass.URI);
+      }
+      this.cancelEdit();
   }
 
   showDeleteConfirm(): void {
-    this.modal.confirm({
-      nzTitle: 'Are you sure delete this class?',
-      nzOkText: 'Yes',
-      nzOkType: 'danger',
-      nzOnOk: () => this.editboxService.deleteClass(this.selectedVertex.id),
-      nzCancelText: 'No',
-      nzOnCancel: () => console.log('Cancel')
-    });
+      this.modal.confirm({
+          nzTitle: 'Are you sure delete this class?',
+          nzOkText: 'Yes',
+          nzOkType: 'danger',
+          nzOnOk: () => this.editboxService.deleteClass(this.selectedVertex.id),
+          nzCancelText: 'No',
+          nzOnCancel: () => console.log('Cancel')
+      });
   }
 
   listenerPropNameChange($event) {
-    this.formProp.controls['URI'].setValue(`${this.uriPrefix}${encodeURIComponent($event.target.value.toLocaleLowerCase())}`);
+      this.formProp.controls['URI'].setValue(`${this.uriPrefix}${encodeURIComponent($event.target.value.toLocaleLowerCase())}`);
 
   }
 
   listenerClassNameChange(value: string) {
-    this.editedClass.URI = `${this.uriPrefix}${encodeURIComponent(value.toLocaleLowerCase())}`;
+      this.editedClass.URI = `${this.uriPrefix}${encodeURIComponent(value.toLocaleLowerCase())}`;
   }
 
   resetSidebarState() {
-    this.sidebarService.changeSidebarToDefault();
+      this.sidebarService.changeSidebarToDefault();
   }
 
   toggleEdit() {
-    this.editToggle = !this.editToggle;
+      this.editToggle = !this.editToggle;
   }
 }

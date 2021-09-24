@@ -6,23 +6,23 @@ import { By } from '@angular/platform-browser';
 import { BatchRecommenderComponent } from './batchRecommender.component';
 
 describe('BatchRecommenderComponent', () => {
-  let component: BatchRecommenderComponent;
-  let fixture: ComponentFixture<BatchRecommenderComponent>;
+    let component: BatchRecommenderComponent;
+    let fixture: ComponentFixture<BatchRecommenderComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [ BatchRecommenderComponent ]
-    })
-    .compileComponents();
-  }));
+    beforeEach(waitForAsync(() => {
+        TestBed.configureTestingModule({
+            declarations: [ BatchRecommenderComponent ]
+        })
+            .compileComponents();
+    }));
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(BatchRecommenderComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+    beforeEach(() => {
+        fixture = TestBed.createComponent(BatchRecommenderComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+    });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+    it('should create', () => {
+        expect(component).toBeTruthy();
+    });
 });

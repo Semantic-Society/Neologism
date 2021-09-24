@@ -9,13 +9,13 @@ import { NzAutocompleteModule } from 'ng-zorro-antd/auto-complete';
 import { VocabulariesService } from '../../services/vocabularies.service';
 
 @Component({
-  selector: 'app-update-prop-modal',
-  templateUrl: './property-edit.component.html',
-  providers: [SpellCheckerService]
+    selector: 'app-update-prop-modal',
+    templateUrl: './property-edit.component.html',
+    providers: [SpellCheckerService]
 })
 export class PropertyEditModal implements OnInit {
 
-  constructor(private modal: NzModalRef,
+    constructor(private modal: NzModalRef,
     private spellCheckerService: SpellCheckerService,
     private httpClient: HttpClient,
     private vocabService: VocabulariesService) { }
@@ -37,84 +37,84 @@ export class PropertyEditModal implements OnInit {
   selectedProp: string;
 
   ngOnInit() {
-    this.propList = [];
-    this.propListName = [];
-    this.propListString.split(',').forEach(key => {
-      const prop = Properties.findOne({ _id: key });
-      this.propList.push(prop);
-    });
-    this.classes = Classes.find({ isDataTypeVertex: false }).fetch();
-    this.prop = this.propList[0];
-    this.selectedProp = this.prop._id;
-    this.isDataTypeProp = this.prop.type === PropertyType.Data;
+      this.propList = [];
+      this.propListName = [];
+      this.propListString.split(',').forEach(key => {
+          const prop = Properties.findOne({ _id: key });
+          this.propList.push(prop);
+      });
+      this.classes = Classes.find({ isDataTypeVertex: false }).fetch();
+      this.prop = this.propList[0];
+      this.selectedProp = this.prop._id;
+      this.isDataTypeProp = this.prop.type === PropertyType.Data;
   }
 
   closeModal(): void {
 
-    if (this.prop.type === PropertyType.Data) {
+      if (this.prop.type === PropertyType.Data) {
 
-      this.prop.URI = `http://www.w3.org/2001/XMLSchema#${this.prop.rangeName}`;
-      this.vocabService.updateClassName(this.prop._id, this.prop.rangeName);
-      this.vocabService.updateClassURI(this.prop._id, this.prop.URI);
+          this.prop.URI = `http://www.w3.org/2001/XMLSchema#${this.prop.rangeName}`;
+          this.vocabService.updateClassName(this.prop._id, this.prop.rangeName);
+          this.vocabService.updateClassURI(this.prop._id, this.prop.URI);
 
-      MeteorObservable.call('property.update', this.prop._id, this.prop.name, this.prop.description, this.prop.URI, this.prop._id).subscribe((response) => {
-        // Handle success and response from server!
-        console.log('updated');
+          MeteorObservable.call('property.update', this.prop._id, this.prop.name, this.prop.description, this.prop.URI, this.prop._id).subscribe((response) => {
+              // Handle success and response from server!
+              console.log('updated');
 
-      }, (err) => {
-        console.log(err);
-      });
-    } else {
-      MeteorObservable.call('property.update', this.prop._id, this.prop.name, this.prop.description, this.prop.URI, this.prop.range).subscribe((response) => {
-        // Handle success and response from server!
-        console.log('updated');
+          }, (err) => {
+              console.log(err);
+          });
+      } else {
+          MeteorObservable.call('property.update', this.prop._id, this.prop.name, this.prop.description, this.prop.URI, this.prop.range).subscribe((response) => {
+              // Handle success and response from server!
+              console.log('updated');
 
-      }, (err) => {
-        console.log(err);
-      });
-    }
+          }, (err) => {
+              console.log(err);
+          });
+      }
 
-    this.modal.destroy();
+      this.modal.destroy();
   }
 
   checkWord(word: string) {
 
-    this.httpClient.get(this.fileURL, { responseType: 'text' }).subscribe((res: any) => {
-      const dictionary = this.spellCheckerService.getDictionary(res);
-      this.suggestions = dictionary.getSuggestions(word);
-    });
+      this.httpClient.get(this.fileURL, { responseType: 'text' }).subscribe((res: any) => {
+          const dictionary = this.spellCheckerService.getDictionary(res);
+          this.suggestions = dictionary.getSuggestions(word);
+      });
 
-    this.contextmenu = true;
+      this.contextmenu = true;
   }
 
 
   deleteProp(): void {
 
-    if (this.prop.type === PropertyType.Data) {
-      MeteorObservable.call('property.delete', this.prop._id, this.propSourceNodeId).subscribe((response) => {
-        // Handle success and response from server!
-      }, (err) => {
-        console.log(err);
-      });
+      if (this.prop.type === PropertyType.Data) {
+          MeteorObservable.call('property.delete', this.prop._id, this.propSourceNodeId).subscribe((response) => {
+              // Handle success and response from server!
+          }, (err) => {
+              console.log(err);
+          });
 
-      MeteorObservable.call('classes.delete', this.prop._id).subscribe((response) => {
-        // Handle success and response from server!
-      }, (err) => {
-        console.log(err);
-      });
-    } else {
-      MeteorObservable.call('property.delete', this.prop._id, this.propSourceNodeId).subscribe((response) => {
-        // Handle success and response from server!
-      }, (err) => {
-        console.log(err);
-      });
-    }
-    this.modal.destroy();
+          MeteorObservable.call('classes.delete', this.prop._id).subscribe((response) => {
+              // Handle success and response from server!
+          }, (err) => {
+              console.log(err);
+          });
+      } else {
+          MeteorObservable.call('property.delete', this.prop._id, this.propSourceNodeId).subscribe((response) => {
+              // Handle success and response from server!
+          }, (err) => {
+              console.log(err);
+          });
+      }
+      this.modal.destroy();
   }
 
   propChange(_id: string) {
-    this.prop = this.propList.find(x => x._id == _id);
-    this.isDataTypeProp = this.prop.type === PropertyType.Data;
+      this.prop = this.propList.find(x => x._id == _id);
+      this.isDataTypeProp = this.prop.type === PropertyType.Data;
   }
 
 

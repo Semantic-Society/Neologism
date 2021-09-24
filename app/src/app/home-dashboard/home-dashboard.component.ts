@@ -5,77 +5,77 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { VocabulariesService } from '../services/vocabularies.service';
 
 @Component({
-  selector: 'app-home-dashboard',
-  templateUrl: './home-dashboard.component.html',
-  styleUrls: ['./home-dashboard.component.scss']
+    selector: 'app-home-dashboard',
+    templateUrl: './home-dashboard.component.html',
+    styleUrls: ['./home-dashboard.component.scss']
 })
 
 export class HomeDashboardComponent implements OnInit {
 
   isCollapsed = false;
   triggerTemplate = null;
-  loggedInUser: Meteor.User
+  loggedInUser: Meteor.User;
   @ViewChild('trigger', { static: true }) customTrigger: TemplateRef<void>;
-  private vocabCount: Number = 0
+  private vocabCount: Number = 0;
   constructor(
     private router: Router,
     private vocabService: VocabulariesService,
-   ) {
+  ) {
 
   }
 
   /** custom trigger can be TemplateRef **/
   changeTrigger(): void {
-    this.triggerTemplate = this.customTrigger;
+      this.triggerTemplate = this.customTrigger;
   }
 
   ngOnInit() {
-    Tracker.autorun(() => {
-      this.loggedInUser = Meteor.user()
+      Tracker.autorun(() => {
+          this.loggedInUser = Meteor.user();
 
 
-    })
+      });
 
   }
 
   onLogout(): void {
-    Meteor.logout();
-    this.router.navigateByUrl('/login')
+      Meteor.logout();
+      this.router.navigateByUrl('/login');
   }
 
   createVocabulary(): void {
-    let eligible = this.vocabService.isEligibleForCreatingVocab()
+      const eligible = this.vocabService.isEligibleForCreatingVocab();
 
-    if (!eligible)
-      return;
+      if (!eligible)
+          return;
 
-    const modal = this.vocabService.openNewVocabForm()
+      const modal = this.vocabService.openNewVocabForm();
 
-    // Return a result when closed
-    modal.afterClose.subscribe((result) => {
+      // Return a result when closed
+      modal.afterClose.subscribe((result) => {
 
-      if (!result || result.name === undefined)
-        return;
+          if (!result || result.name === undefined)
+              return;
 
 
-      this.vocabService.createVocabulary(
-        result.name,
-        result.description,
-        result.uri
-      ).subscribe((response) => {
-        this.router.navigateByUrl('edit/' + response.vocabId);
-        // Handle success and response from server!
-      }, (err) => {
-        console.log(err);
-        // Handle error
+          this.vocabService.createVocabulary(
+              result.name,
+              result.description,
+              result.uri
+          ).subscribe((response) => {
+              this.router.navigateByUrl('edit/' + response.vocabId);
+              // Handle success and response from server!
+          }, (err) => {
+              console.log(err);
+              // Handle error
+          });
       });
-    });
 
   }
 
   updateListLength(count: number) {
-    this.vocabCount = count
-    this.vocabService.vocabCount = count
+      this.vocabCount = count;
+      this.vocabService.vocabCount = count;
 
   }
 

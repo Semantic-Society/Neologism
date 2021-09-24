@@ -36,12 +36,12 @@ const MATERIAL_MODULES = [
     MatTabsModule,
     MatToolbarModule,
     MatTooltipModule,
-  ];
-  
-  
+];
+
+
   @NgModule({
-    imports: MATERIAL_MODULES,
-    exports: MATERIAL_MODULES
+      imports: MATERIAL_MODULES,
+      exports: MATERIAL_MODULES
   })
-  
-  export class NeologismMaterialModule { }
+
+export class NeologismMaterialModule { }

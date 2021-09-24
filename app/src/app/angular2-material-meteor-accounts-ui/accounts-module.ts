@@ -15,29 +15,29 @@ import { SignupDialog } from './signupDialog/signup-dialog';
 import { ValidationService } from './validation.service';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MatButtonModule,
-    MatIconModule,
-    MatInputModule,
-    MatMenuModule,
-    MatDialogModule,
-    BrowserAnimationsModule
-  ],
-  declarations: [
-    LoginButtons,
-    LoginDialog,
-    SignupDialog
-  ],
-  providers: [
-    AuthGuard,
-    ValidationService
-  ],
-  exports: [
-    LoginButtons
-  ]
+    imports: [
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        MatButtonModule,
+        MatIconModule,
+        MatInputModule,
+        MatMenuModule,
+        MatDialogModule,
+        BrowserAnimationsModule
+    ],
+    declarations: [
+        LoginButtons,
+        LoginDialog,
+        SignupDialog
+    ],
+    providers: [
+        AuthGuard,
+        ValidationService
+    ],
+    exports: [
+        LoginButtons
+    ]
 })
 export class AccountsModule {
 }
