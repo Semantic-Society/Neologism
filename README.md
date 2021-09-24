@@ -36,7 +36,7 @@ and might interact with a recommender to improve the quality of drafted vocabula
 
 ![neologism architecture](assets/NeologismArchitecture.png "Neologism architecture")
 
-## Installation
+## Getting Started
 
 __Easy usage via Docker Image Build:__
 1.  Navigate to app/
@@ -52,6 +52,9 @@ __Deploy via Docker Image Run Instructions Local:__
 2. Navigate to app/
 3. set the environnement vars `CROOT_URL: http://{server-url}:3000` and `CDDP_URL: http://{server-url}:3000` in docker-compose-yml
 4. exec `docker-compose up`
+
+##### Note:
+To disable account creation please update the var with `METEOR_SETTINGS: '{ "storageLocation":"/etc/neologism/uploads/vocabularies","accountCreation" :"true" }'` in docker-compose-yml
 
 __Local setup:__
 1. Clone the repository
