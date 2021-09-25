@@ -45,7 +45,7 @@ interface IDetails {
 export class RecommendationService {
 
     /** Neologism recommendation service endpoint base path */
-     static baseUrl = `${environment.recommender.base}` + ((environment.recommender.port == '') ? '/recommender/' : `:${environment.recommender.port}/recommender/`);
+     static baseUrl = `${environment.recommender.base}` + ((environment.production) ? '' : `:${environment.recommender.port}/recommender/`);
 
      classReq: Subject<{ queryGraph: string; queryTerm: string }>;
      classResp: Subject<{

@@ -1,13 +1,7 @@
-import { TypeDecorator, Injectable } from '@angular/core';
-import {CanActivate} from '@angular/router';
+import { TypeDecorator } from '@angular/core';
 import {Meteor} from 'meteor/meteor';
 import {Tracker} from 'meteor/tracker';
-import {Observable, Observer} from 'rxjs';
-
-class InjectUserAnnotation {
-    constructor(public propName: string = 'user') {
-    }
-}
+import { InjectUserAnnotation } from './InjectUserAnnotation';
 
 export function InjectUser(propName?: string): (cls: any) => any {
     const annInstance = new InjectUserAnnotation(propName);
@@ -48,22 +42,4 @@ export function InjectUser(propName?: string): (cls: any) => any {
     return TypeDecorator;
 }
 
-/**
- * A service to use as auth guard on the route.
- *
- */
-// eslint-disable-next-line max-classes-per-file
-@Injectable()
-export class AuthGuard implements CanActivate {
-    canActivate(): Observable<boolean> {
-        return Observable.create((observer: Observer<boolean>) => {
-            Tracker.autorun((c) => {
-                if (!Meteor.loggingIn()) {
-                    observer.next(!!Meteor.user());
-                    observer.complete();
-                    c.stop();
-                }
-            });
-        });
-    }
-}
+
