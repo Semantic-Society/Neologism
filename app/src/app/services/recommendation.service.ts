@@ -142,21 +142,6 @@ export class RecommendationService {
          ).subscribe(this.propsResp);
      }
 
-     // /**
-     //  * Generates optimization and completion recommendations for RDF vocabularies
-     //  * @param queryGraph Turtle encoded context graph. May include (exactly one) neologism query term.
-     //  * @param queryTerm Optional clear text query string. Appended as neo query iri to graph.
-     //  */
-     // classRecommendation(queryGraph: string, queryTerm?: string) {
-     //     if (queryTerm)
-     //         queryGraph += ` <neo://query/${queryTerm}> a <http://www.w3.org/2000/01/rdf-schema#Class> .`;
-
-     //     queryGraph = encodeURIComponent(queryGraph);
-
-     //     this.classReq.next({ queryGraph, queryTerm });
-     //     return this.classResp.asObservable();
-     // }
-
      /**
       * Generates optimization and completion recommendations for RDF vocabularies
       *
@@ -182,7 +167,7 @@ export class RecommendationService {
      }
 
      batchRecommendationsForClasses(batchQuery: BatchQuery): Observable<BatchRecommendations> {
-         return VocabulariesService.wrapFunkyObservables(this._http.post(RecommendationService.baseUrl + 'batchRecommender',
+         return VocabulariesService.wrapFunkyObservables(this._http.post(RecommendationService.baseUrl,
              {
                  properties: batchQuery.properties,
                  domain: batchQuery.domain,
