@@ -97,7 +97,8 @@ http {
 4. Install node modules using `npm i` in app and subfolder api
 5. Set ENV variable as shown in example.env file in the app root
 6. Run `npm run meteor-client:bundle` in the app folder
-7. Navigate to the app
+7. Import guest user document generated using cmd `node generateCredentials.js  guest@neologism.com 12345`  in the app/utils folder using any mongodb interface
+8. Navigate to the app
 10. Run `npm run api` to start a local meteor server (running on http://localhost:3000/ with a connection to a local MongoDB at port 3001).
 11. Run `npm run start` for a dev server. Navigate to http://localhost:4200/. The app will automatically reload if you change any of the source files.
 12. Optional: If you need to run the recommender, install an AddOn for your browser to allow CORS, as configurations need to be done
