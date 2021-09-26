@@ -37,33 +37,34 @@ and might interact with a recommender to improve the quality of drafted vocabula
 ![neologism architecture](assets/NeologismArchitecture.png "Neologism architecture")
 
 ## Getting Started
-
+<!-- 
 __Easy usage via Docker Image Build:__
 1.  Navigate to app/
 2. `docker-compose up`
-<!-- 
 __Easy usage via Docker Building Image on Local:__
 1.  Navigate to app/
 2. `docker-compose build`
 3. `docker-compose up` -->
 
 __Deploy via Docker Image Run Instructions Local:__
-1. Make sure Port 80, 3000, 3001 are free
-2. Navigate to app/
-3. set the environnement vars `CROOT_URL: http://{server-url}:3000` and `CDDP_URL: http://{server-url}:3000` in docker-compose-yml
-4. exec `docker-compose up`
+
+Default Ports to be used: 80, 3000, 3001.
+
+1. Navigate to app/
+2. set the environnement vars `CROOT_URL: http://{server-url}:3000` and `CDDP_URL: http://{server-url}:3000` in docker-compose-yml
+3. exec `docker-compose up`
 
 ##### Note:
-To disable account creation please update the var with `METEOR_SETTINGS: '{ "storageLocation":"/etc/neologism/uploads/vocabularies","accountCreation" :"true" }'` in docker-compose-yml
+To disable signup/register please update the var with `accountCreation: false` on the string `METEOR_SETTINGS: '{ "storageLocation":"/etc/neologism/uploads/vocabularies","accountCreation" :"true" }'` in docker-compose-yml
 
 __Local setup:__
-1. Clone the repository
-2. Install meteor using curl https://install.meteor.com/ | sh
-3. Install node version (check versions below)
-4. Install /Download nginx for CORS (Linux: `sudo apt-get install nginx` Arch: `sudo pacman -S nginx` Windows: http://nginx.org/en/docs/windows.html) (On Windows move the folder to C:\)
-5. Create a `sites-enabled` folder inside the nginx folder (Linux: /etc/nginx/sites-enabled).
-6. Put the [neologism.com](nginx/neologism.com) file inside this folder.
-7. Edit the `nginx.conf` file by including the path of the sites-enabled folder. For Windows the path to the .com file: 
+
+Installations required: 
+
+- [Meteor, Node](https://docs.meteor.com/install.html). Otherwise tested versions can be found in below sections.
+- Install /Download nginx for CORS (Linux: `sudo apt-get install nginx` Arch: `sudo pacman -S nginx` Windows: http://nginx.org/en/docs/windows.html) (On Windows move the folder to C:\)
+<!--
+- Edit the `nginx.conf` file by including the path of the sites-enabled folder. For Windows the path to the .com file: 
 
 ```
 {
@@ -75,14 +76,32 @@ http {
 }
 
 ```
-8. Run `npm i` in the app subfolder
-9. Run `npm i` in app/api
-10. set ENV variable as shown in example.env file in the app root
-11. Run `npm run meteor-client:bundle` in the app subfolder
-12. Navigate to the app
-13. Run `npm run api` to start a local meteor server (running on http://localhost:3000/ with a connection to a local MongoDB at port 3001).
-14. Run `npm run start` for a dev server. Navigate to http://localhost:4200/. The app will automatically reload if you change any of the source files.
-15. Optional: If you need to run the recommender, install an AddOn for your browser to allow CORS, as configurations need to be done
+-->
+
+1. Clone the repository
+2. Create env.js file in `app/src/assets/env.js`. This sets the guest user credentials: Please paste the default configuration code:
+
+```
+(function(window) {
+    window["env"] = window["env"] || {};
+  
+    // Environment variables
+    window["env"]["guser"] = "guest@neologism.com";
+    window["env"]["gpass"] = "12345";
+    window["env"]["gMaxlength"] = "2";
+  })(this);
+```
+
+3. Create a `sites-enabled` folder inside the nginx folder (Linux: /etc/nginx/sites-enabled).
+4. Put the [neologism.com](nginx/neologism.com) file inside this folder.
+4. Install node modules using `npm i` in app and subfolder api
+5. Set ENV variable as shown in example.env file in the app root
+6. Run `npm run meteor-client:bundle` in the app folder
+7. Import guest user document generated using cmd `node generateCredentials.js  guest@neologism.com 12345`  in the app/utils folder using any mongodb interface
+8. Navigate to the app
+10. Run `npm run api` to start a local meteor server (running on http://localhost:3000/ with a connection to a local MongoDB at port 3001).
+11. Run `npm run start` for a dev server. Navigate to http://localhost:4200/. The app will automatically reload if you change any of the source files.
+12. Optional: If you need to run the recommender, install an AddOn for your browser to allow CORS, as configurations need to be done
 
 __TEST IF THE RECOMMENDER WORKS PROPERLY__
 
