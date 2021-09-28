@@ -22,6 +22,6 @@ export class ValidationService {
     }
 
     static passwordValidator(control) {
-            return null;
+        return null;
     }
 }

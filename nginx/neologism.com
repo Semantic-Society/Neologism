@@ -30,11 +30,12 @@ server {
 
     location /api {
             proxy_pass http://127.0.0.1:3000/;
+            proxy_redirect off;
             proxy_http_version 1.1;
-            proxy_set_header Upgrade $http_upgrade; #for websockets
-            proxy_set_header Connection $connection_upgrade;
-            proxy_set_header X-Forwarded-For $remote_addr;
-            proxy_set_header Host $host;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for; 
+            proxy_set_header Host $http_host; 
+            proxy_set_header Upgrade $http_upgrade; 
+            proxy_set_header Connection "upgrade";
   }
      location /recommender/batchRecommender {
             proxy_pass http://127.0.0.1:8080/recommender/batchRecommender;

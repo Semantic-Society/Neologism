@@ -3,8 +3,8 @@ import { SideBarStateService } from './sidebar-state.service';
 
 @NgModule({
 
-  providers: [
-      SideBarStateService
-  ],
+    providers: [
+        SideBarStateService
+    ],
 })
 export class StateServiceModule {}

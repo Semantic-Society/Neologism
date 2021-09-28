@@ -3,9 +3,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 
 @Component({
-  selector: 'app-create-vocab-modal',
-  templateUrl: './create-vocab-modal.component.html',
-  styleUrls: ['./create-vocab-modal.component.scss']
+    selector: 'app-create-vocab-modal',
+    templateUrl: './create-vocab-modal.component.html',
+    styleUrls: ['./create-vocab-modal.component.scss']
 })
 export class CreateVocabModalComponent {
 
@@ -14,20 +14,20 @@ export class CreateVocabModalComponent {
   constructor( private modal: NzModalRef) { }
 
   closeModal(): void {
-    for (const i in this.validateForm.controls) {
-      this.validateForm.controls[i].markAsDirty();
-      this.validateForm.controls[i].updateValueAndValidity();
-    }
+      for (const i in this.validateForm.controls) {
+          this.validateForm.controls[i].markAsDirty();
+          this.validateForm.controls[i].updateValueAndValidity();
+      }
 
-    this.modal.destroy(this.validateForm.value);
+      this.modal.destroy(this.validateForm.value);
   }
 
   cancelModal(e: MouseEvent){
-    e.preventDefault();
-    this.modal.destroy(null)
+      e.preventDefault();
+      this.modal.destroy(null);
   }
-  change(value:string){    
-    this.validateForm.controls['uri'].setValue(`http://w3id.org/neologism/${encodeURIComponent(value.toLocaleLowerCase())}#`)
+  change(value: string){
+      this.validateForm.controls['uri'].setValue(`http://w3id.org/neologism/${encodeURIComponent(value.toLocaleLowerCase())}#`);
 
- }
+  }
 }

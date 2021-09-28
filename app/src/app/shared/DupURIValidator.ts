@@ -19,7 +19,7 @@ export class DupURIValidator implements Validator {
     }
 
     validate(c: FormControl) {
-        console.log(c.value)
+        console.log(c.value);
         return this.validator(c);
     }
 

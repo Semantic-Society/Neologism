@@ -65,65 +65,65 @@ registerLocaleData(en);
 
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    HomeDashboardComponent,
-    LoginPageComponent,
-    VocabularyListComponent,
-    MxgraphComponent,
-    EditboxComponent,
-    MetadataComponent,
-    RecommenderComponent,
-    StandardViewComponent,
-    BatchRecommenderComponent,
-    TruncatedTextComponentComponent,
-    VocablistComponent,
-    AddUserModalComponent,
-    SideBarNodeCreatorComponent,
-    CreateVocabModalComponent,
-    VocabularyEditorComponent,
-    SearchVocabulariesAutocompleteComponent,
-    MxGraphEditorComponent,
-    ListEditorComponent,
-    RemoveUserModalComponent,
-    PropertyEditModal,
-    DupURIValidator,
-    RdfUploaderComponent
-  ],
-  imports: [
-    AccountsModule,
-    BrowserModule,
-    FormsModule,
-    HttpClientModule,
-    ReactiveFormsModule,
-    NeologismMaterialModule,
-    BrowserAnimationsModule,
-    SpellCheckerModule,
-    RoutingModule,
-    StateServiceModule,
-    NGZorrModule,
-    NzButtonModule,
-    MatSnackBarModule,
-  ],
-  providers: [
-    LoginAuthGuard,
-    AuthGuard,
-    RecommendationService,
-    EditboxService,
-    EditComponentService,
-    VocabulariesService,
-    VocabularyEditorService,
-    AccessManagement,
-    NzDrawerService,
-    { provide: NZ_I18N, useValue: en_US },
-  ],
-  bootstrap: [AppComponent],
+    declarations: [
+        AppComponent,
+        HomeDashboardComponent,
+        LoginPageComponent,
+        VocabularyListComponent,
+        MxgraphComponent,
+        EditboxComponent,
+        MetadataComponent,
+        RecommenderComponent,
+        StandardViewComponent,
+        BatchRecommenderComponent,
+        TruncatedTextComponentComponent,
+        VocablistComponent,
+        AddUserModalComponent,
+        SideBarNodeCreatorComponent,
+        CreateVocabModalComponent,
+        VocabularyEditorComponent,
+        SearchVocabulariesAutocompleteComponent,
+        MxGraphEditorComponent,
+        ListEditorComponent,
+        RemoveUserModalComponent,
+        PropertyEditModal,
+        DupURIValidator,
+        RdfUploaderComponent
+    ],
+    imports: [
+        AccountsModule,
+        BrowserModule,
+        FormsModule,
+        HttpClientModule,
+        ReactiveFormsModule,
+        NeologismMaterialModule,
+        BrowserAnimationsModule,
+        SpellCheckerModule,
+        RoutingModule,
+        StateServiceModule,
+        NGZorrModule,
+        NzButtonModule,
+        MatSnackBarModule,
+    ],
+    providers: [
+        LoginAuthGuard,
+        AuthGuard,
+        RecommendationService,
+        EditboxService,
+        EditComponentService,
+        VocabulariesService,
+        VocabularyEditorService,
+        AccessManagement,
+        NzDrawerService,
+        { provide: NZ_I18N, useValue: en_US },
+    ],
+    bootstrap: [AppComponent],
 })
 export class AppModule { }
 
 platformBrowserDynamic().bootstrapModule(AppModule).then(moduleRef => {
-  const applicationRef = moduleRef.injector.get(ApplicationRef);
-  const componentRef = applicationRef.components[0];
-  // allows to run `ng.profiler.timeChangeDetection();`
-  enableDebugTools(componentRef);
+    const applicationRef = moduleRef.injector.get(ApplicationRef);
+    const componentRef = applicationRef.components[0];
+    // allows to run `ng.profiler.timeChangeDetection();`
+    enableDebugTools(componentRef);
 }).catch(err => window['console'].error(err));

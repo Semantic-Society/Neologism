@@ -54,15 +54,15 @@ export class EditboxService {
         let existing_properties = [];
         return this.getClass$(vocabID, classID)
             .pipe(
-                tap(theClass => { existing_properties = this.extractClassProperties(theClass); }),
+                tap(theClass => {
+                    existing_properties = this.extractClassProperties(theClass);
+                }),
                 switchMap((theClass) => this.recommender.propertyRecommendation(theClass.URI)),
                 // props_reco are the new property recommendation and xting_props are the existing ones
                 map(reommendations => this.mergeOldandNewRecommendations(reommendations, existing_properties)),
                 take(1),
                 filter(Boolean),
-                tap(recommendations => {
-                    return this.property_recommendations.next([recommendations]);
-                })
+                tap(recommendations => this.property_recommendations.next([recommendations]))
             );
 
     }
@@ -121,16 +121,14 @@ export class EditboxService {
 
     private extractClassProperties(theClass: IClassWithProperties) {
         return theClass.properties
-            .map(property => {
-                return {
-                    id: property._id,
-                    comment: property.description,
-                    label: property.name,
-                    uri: property.URI,
-                    range: property.range.name,
-                    rangeId: property.range._id
-                };
-            });
+            .map(property => ({
+                id: property._id,
+                comment: property.description,
+                label: property.name,
+                uri: property.URI,
+                range: property.range.name,
+                rangeId: property.range._id
+            }));
     }
 
     private extractClassInfo(theClass: IClassWithProperties): IClassInfo {

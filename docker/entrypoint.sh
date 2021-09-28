@@ -5,18 +5,20 @@ set -o errexit
 cd $SCRIPTS_FOLDER
 
 # Source an init script that a child image may have added
-if [ -x ./startup.sh ]; then
-	source ./startup.sh
-fi
+# if [ -x ./startup.sh ]; then
+source ./startup.sh
+# fi
 
 # Poll until we can successfully connect to MongoDB
 source ./connect-to-mongo.sh
 
-echo 'Starting app...'
-cd $APP_BUNDLE_FOLDER/api/bundle
+# seed data into MongoDB
+source ./mongoseed.sh
+
+
+# echo 'Starting app...'
+# cd $APP_BUNDLE_FOLDER/api/bundle
 
 # service nginx start
-
 # node main.js
-
-exec "$@"
+exec /usr/bin/supervisord -c /etc/supervisord.conf

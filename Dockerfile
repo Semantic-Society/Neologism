@@ -96,7 +96,8 @@ RUN apk --no-cache add \
 	bash \
 	ca-certificates \
 	nginx \
-	supervisor
+	supervisor \
+	mongodb-tools
 
 RUN mkdir -p /run/nginx
 
@@ -108,8 +109,12 @@ COPY --from=1 $APP_BUNDLE_FOLDER/api/bundle $APP_BUNDLE_FOLDER/api/bundle/
 
 COPY --from=1 $APP_BUNDLE_FOLDER/client/neologism /usr/share/nginx/html
 
+COPY --from=1 $APP_BUNDLE_FOLDER/api/bundle/programs/web.browser /usr/share/nginx/html
+
 COPY $SCRIPTS_FOLDER/config/supervisord.conf /etc/
 
 COPY $SCRIPTS_FOLDER/config/nginx.default.conf /etc/nginx/conf.d/default.conf
 
-ENTRYPOINT /usr/bin/supervisord -c /etc/supervisord.conf
+# ENTRYPOINT "bin/startup.sh && /usr/bin/supervisord -c /etc/supervisord.conf"
+
+ENTRYPOINT $SCRIPTS_FOLDER/entrypoint.sh

@@ -13,62 +13,62 @@ export class VocabularyEditorService {
      _visibleEditDrawer: BehaviorSubject<Boolean> = new BehaviorSubject(false);
      _visibleSearchDrawer: BehaviorSubject<Boolean> = new BehaviorSubject(false);
 
-    constructor() {
-    }
+     constructor() {
+     }
 
-    get visibleCreatDrawer(): Observable<Boolean> {
-        return this._visibleCreateDrawer
-            .asObservable()
-    }
+     get visibleCreatDrawer(): Observable<Boolean> {
+         return this._visibleCreateDrawer
+             .asObservable();
+     }
 
-    get visibleSearchDrawer(): Observable<Boolean> {
-        return this._visibleSearchDrawer
-            .asObservable()
-    }
+     get visibleSearchDrawer(): Observable<Boolean> {
+         return this._visibleSearchDrawer
+             .asObservable();
+     }
 
-    get visibleEditorDrawer(): Observable<Boolean> {
-        return this._visibleEditDrawer
-            .asObservable();
-    }
+     get visibleEditorDrawer(): Observable<Boolean> {
+         return this._visibleEditDrawer
+             .asObservable();
+     }
 
-    get vocabularyId(): string {
-        return this.selected_vocabularyId.getValue();
-    }
+     get vocabularyId(): string {
+         return this.selected_vocabularyId.getValue();
+     }
 
-    get classes(): any {
-        return this._classes.getValue();
-    }
+     get classes(): any {
+         return this._classes.getValue();
+     }
 
-    setClasses(classes: Observable<any>){
-        this._classes.next(classes);
-    }
+     setClasses(classes: Observable<any>){
+         this._classes.next(classes);
+     }
 
-    setVocabularyId(vocabularyId: string){
-        this.selected_vocabularyId.next(vocabularyId);
-    }
+     setVocabularyId(vocabularyId: string){
+         this.selected_vocabularyId.next(vocabularyId);
+     }
 
-    setSearchDrawer(visible: boolean) {
-        if(this.allowEditing)
-            this._visibleSearchDrawer.next(visible);
-    }
+     setSearchDrawer(visible: boolean) {
+         if(this.allowEditing)
+             this._visibleSearchDrawer.next(visible);
+     }
 
-    setAddDrawer(visible: boolean) {
-        console.log(this.allowEditing)
-        if(this.allowEditing)
-            this._visibleCreateDrawer.next(visible);
-    }
+     setAddDrawer(visible: boolean) {
+         console.log(this.allowEditing);
+         if(this.allowEditing)
+             this._visibleCreateDrawer.next(visible);
+     }
 
-    setEditorDrawer(visible: boolean) {
-        console.log(this.allowEditing)
-        if(this.allowEditing)
-            this._visibleEditDrawer.next(visible);
-    }
+     setEditorDrawer(visible: boolean) {
+         console.log(this.allowEditing);
+         if(this.allowEditing)
+             this._visibleEditDrawer.next(visible);
+     }
 
-    clear() {
-        this._classes.next(null);
-        this.selected_vocabularyId.next(null);
-        this.classSub.unsubscribe();
-    }
+     clear() {
+         this._classes.next(null);
+         this.selected_vocabularyId.next(null);
+         this.classSub.unsubscribe();
+     }
 
 
 }

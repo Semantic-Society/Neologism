@@ -6,15 +6,15 @@
     "ng": "ng",
     "start": "ng serve --open",
     "build": "ng build",
-    "prod": "ng build --prod",
+    "prod": "ng build --configuration production",
     "test": "ng test",
-    "lint": "ng lint",
+    "lint": "ng lint neologism",
     "e2e": "ng e2e",
-    "api": "cd api && meteor --settings env.local.json",
+    "api": "cd api && meteor --settings settings.json",
     "api:reset": "cd api && meteor reset",
     "debug": "cd api && meteor debug --inspect-brk=9229",
     "meteor-client:bundle": "meteor-client bundle -s api",
-    "meteor-client:bundle-server": "meteor-client bundle --url ${npm_config_root_url:-http://localhost:3000} -s api"
+    "meteor-client:bundle-prod": "meteor-client bundle --url ${METEOR_BUNDLER_URL} -s api"
   },
   "private": true,
   "dependencies": {
@@ -44,6 +44,11 @@
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~12.0.3",
+    "@angular-eslint/builder": "12.3.1",
+    "@angular-eslint/eslint-plugin": "12.3.1",
+    "@angular-eslint/eslint-plugin-template": "12.3.1",
+    "@angular-eslint/schematics": "12.3.1",
+    "@angular-eslint/template-parser": "12.3.1",
     "@angular/cli": "^12.0.3",
     "@angular/compiler": "^12.0.3",
     "@angular/compiler-cli": "^12.0.3",
@@ -56,6 +61,9 @@
     "@types/meteor-publish-composite": "0.0.35",
     "@types/n3": "^1.10.0",
     "@types/node": "^12.11.1",
+    "@typescript-eslint/eslint-plugin": "4.28.2",
+    "@typescript-eslint/parser": "4.28.2",
+    "eslint": "^7.26.0",
     "jasmine-core": "~3.6.0",
     "jasmine-spec-reporter": "~5.0.0",
     "karma": "~6.3.3",
@@ -67,6 +75,10 @@
     "nz-tslint-rules": "^0.901.2",
     "protractor": "^7.0.0",
     "tslint": "~6.1.0",
-    "typescript": "4.2.4"
+    "typescript": "4.2.4",
+    "eslint-plugin-import": "2.23.4",
+    "eslint-plugin-jsdoc": "36.0.6",
+    "eslint-plugin-prefer-arrow": "1.2.3",
+    "eslint-plugin-rxjs": "3.3.5"
   }
 }

@@ -3,10 +3,10 @@ import { VocabulariesService } from '../services/vocabularies.service';
 import { Iclass, Iproperty, Ivocabulary, meteorID } from '../../../api/models';
 import { Meteor } from 'meteor/meteor';
 @Component({
-  encapsulation: ViewEncapsulation.None,
-  selector: 'search-vocabularies-autocomplete',
-  templateUrl: './search-vocabularies-autocomplete.component.html',
-  styleUrls: ['./search-vocabularies-autocomplete.component.scss']
+    encapsulation: ViewEncapsulation.None,
+    selector: 'search-vocabularies-autocomplete',
+    templateUrl: './search-vocabularies-autocomplete.component.html',
+    styleUrls: ['./search-vocabularies-autocomplete.component.scss']
 })
 export class SearchVocabulariesAutocompleteComponent implements OnInit {
   @Input() width: string;
@@ -16,17 +16,17 @@ export class SearchVocabulariesAutocompleteComponent implements OnInit {
   constructor(private vocabService: VocabulariesService) { }
 
   ngOnInit() {
-    this.vocabs = [];
+      this.vocabs = [];
   }
 
 
   onChange($event: Event): void {
-    const value = ($event.target as HTMLInputElement).value;
-    if (!value) {
-      this.vocabs = [];
-    } else {
-      this.vocabs = this.vocabService.searchVocabByName(value, Meteor.userId())
-    }
+      const value = ($event.target as HTMLInputElement).value;
+      if (!value) {
+          this.vocabs = [];
+      } else {
+          this.vocabs = this.vocabService.searchVocabByName(value, Meteor.userId());
+      }
   }
 }
 

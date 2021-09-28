@@ -8,36 +8,36 @@ import { MatInputModule } from '@angular/material/input';
 import { MatMenuModule } from '@angular/material/menu';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { AuthGuard } from './annotations';
+import { AuthGuard } from "./AuthGuard";
 import { LoginButtons } from './loginButton/login-buttons';
 import { LoginDialog } from './loginDialog/login-dialog';
 import { SignupDialog } from './signupDialog/signup-dialog';
 import { ValidationService } from './validation.service';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MatButtonModule,
-    MatIconModule,
-    MatInputModule,
-    MatMenuModule,
-    MatDialogModule,
-    BrowserAnimationsModule
-  ],
-  declarations: [
-    LoginButtons,
-    LoginDialog,
-    SignupDialog
-  ],
-  providers: [
-    AuthGuard,
-    ValidationService
-  ],
-  exports: [
-    LoginButtons
-  ]
+    imports: [
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        MatButtonModule,
+        MatIconModule,
+        MatInputModule,
+        MatMenuModule,
+        MatDialogModule,
+        BrowserAnimationsModule
+    ],
+    declarations: [
+        LoginButtons,
+        LoginDialog,
+        SignupDialog
+    ],
+    providers: [
+        AuthGuard,
+        ValidationService
+    ],
+    exports: [
+        LoginButtons
+    ]
 })
 export class AccountsModule {
 }
