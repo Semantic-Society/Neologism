@@ -282,13 +282,21 @@ export class MxgraphComponent implements OnInit, OnDestroy {
       });
 
   }// end ngOnInit
+
+
+  /**
+   * Method takes in class with props
+   * reduces into a new group of props 
+   * @param c 
+   * @returns 
+   */
   mergeProperties(c: IClassWithProperties): IMergedPropertiesClass {
       // only takes the necessary parts
       const withMergedProps: IMergedPropertiesClass = { _id: c._id, properties: [], name: c.name };
       // merge the properties and fill.
       // TODO (184): is this better solved with a ES6 Map?
       const grouped = c.properties.reduce(
-          (groups, x, ignored) => {
+          (groups, x) => {
               (groups[x.range._id] = groups[x.range._id] || []).push(x);
               return groups;
           }, Object.create(null));
@@ -306,12 +314,12 @@ export class MxgraphComponent implements OnInit, OnDestroy {
       }[] = grouped[key];
           // join names
           const nameList: string[] = group.reduce<string[]>(
-              (combinedNameAcc, prop, ignores) => {
+              (combinedNameAcc, prop) => {
                   combinedNameAcc.push(prop.name);
                   return combinedNameAcc;
               }, []);
           const keyList: string[] = group.reduce<string[]>(
-              (combinedNameAcc, prop, ignores) => {
+              (combinedNameAcc, prop) => {
                   combinedNameAcc.push(prop._id);
                   return combinedNameAcc;
               }, []);
