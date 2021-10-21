@@ -297,7 +297,12 @@ export class MxgraphComponent implements OnInit, OnDestroy {
       // TODO (184): is this better solved with a ES6 Map?
       const grouped = c.properties.reduce(
           (groups, x) => {
-              (groups[x.range._id] = groups[x.range._id] || []).push(x);
+              if(x.type==PropertyType.Data){
+                (groups[x._id] = groups[x._id] || []).push(x);
+              }else{
+                (groups[x.range._id] = groups[x.range._id] || []).push(x);
+              }
+              
               return groups;
           }, Object.create(null));
 
