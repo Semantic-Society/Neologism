@@ -36,7 +36,6 @@ export class RdfUploaderComponent implements OnInit {
 
           this.n3Util.deserialize(e.target.result,(store: Store)=>{
               const importData= this.processImport(store);
-              console.log(importData);
 
               const modal = this.vocabService.openImportVocabForm(importData.meta);
 

@@ -16,7 +16,8 @@ export class N3Codec {
         rdfs: 'http://www.w3.org/2000/01/rdf-schema#',
         owl: 'http://www.w3.org/2002/07/owl#',
         xmlns: 'http://www.w3.org/2001/XMLSchema#',
-        purl: 'http://purl.org/dc/terms/'
+        purl: 'http://purl.org/dc/terms/',
+        coord: 'http://example.org/coord/'
     };
 
     public static serialize(id, classesWithProps, respHandler) {
@@ -82,6 +83,40 @@ export class N3Codec {
             const objectProps = Object.create(null);
             const dataProps = Object.create(null);
 
+            if(classes!=[]){
+                quads.push(
+                    quad(
+                    namedNode('http://example.org/coord/hasX'),
+                    namedNode('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'),
+                    namedNode('http://www.w3.org/2002/07/owl#DatatypeProperty')
+                ),
+                quad(
+                    namedNode('http://example.org/coord/hasX'),
+                    namedNode('http://www.w3.org/2000/01/rdf-schema#domain'),
+                    namedNode('http://www.w3.org/2000/01/rdf-schema#Class')
+                ),
+                quad(
+                    namedNode('http://example.org/coord/hasX'),
+                    namedNode('http://www.w3.org/2000/01/rdf-schema#range'),
+                    namedNode('http://www.w3.org/2001/XMLSchema#decimal')
+                ),
+                    quad(
+                    namedNode('http://example.org/coord/hasY'),
+                    namedNode('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'),
+                    namedNode('http://www.w3.org/2002/07/owl#DatatypeProperty')
+                ),
+                quad(
+                    namedNode('http://example.org/coord/hasY'),
+                    namedNode('http://www.w3.org/2000/01/rdf-schema#domain'),
+                    namedNode('http://www.w3.org/2000/01/rdf-schema#Class')
+                ),
+                quad(
+                    namedNode('http://example.org/coord/hasY'),
+                    namedNode('http://www.w3.org/2000/01/rdf-schema#range'),
+                    namedNode('http://www.w3.org/2001/XMLSchema#decimal')
+                ),
+                )
+            }
             classes.forEach((clazz) => {
 
                 quads.push(quad(
@@ -126,6 +161,16 @@ export class N3Codec {
                         ));
                     }
 
+                    quads.push(quad(
+                        namedNode(prop.URI),
+                        namedNode('http://example.org/coord/hasX'),
+                        namedNode(`${clazz.position.x}`)
+                    ),
+                    quad(
+                        namedNode(prop.URI),
+                        namedNode('http://example.org/coord/hasY'),
+                        namedNode(`${clazz.position.y}`)
+                    ));
 
 
                 });
