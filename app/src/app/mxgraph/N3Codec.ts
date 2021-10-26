@@ -137,7 +137,18 @@ export class N3Codec {
                     namedNode(clazz.URI),
                     namedNode('http://www.w3.org/2000/01/rdf-schema#comment'),
                     literal(clazz.description)
+                ),
+                quad(
+                    namedNode(clazz.URI),
+                    namedNode('http://example.org/coord/hasX'),
+                    namedNode(`${clazz.position.x}`)
+                ),quad(
+                    namedNode(clazz.URI),
+                    namedNode('http://example.org/coord/hasY'),
+                    namedNode(`${clazz.position.y}`)
                 ));
+
+            
 
                 clazz.properties.forEach((prop) => {
                     quads.push(quad(
@@ -161,16 +172,7 @@ export class N3Codec {
                         ));
                     }
 
-                    quads.push(quad(
-                        namedNode(prop.URI),
-                        namedNode('http://example.org/coord/hasX'),
-                        namedNode(`${clazz.position.x}`)
-                    ),
-                    quad(
-                        namedNode(prop.URI),
-                        namedNode('http://example.org/coord/hasY'),
-                        namedNode(`${clazz.position.y}`)
-                    ));
+                   
 
 
                 });
