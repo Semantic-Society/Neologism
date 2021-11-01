@@ -208,6 +208,7 @@ export class MxgraphService {
 
 
         this.initializeToolBar();
+        
 
     }
 

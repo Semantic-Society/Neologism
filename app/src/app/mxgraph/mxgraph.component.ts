@@ -1,30 +1,19 @@
 import {
-    AfterViewInit,
     Component,
     ElementRef,
     HostListener,
-    NgZone,
     OnDestroy,
     OnInit,
     ViewChild,
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { mxgraph as m } from 'mxgraph';
-import { from, Observable, of, Subscription } from 'rxjs';
+import { Observable, Subject, Subscription } from 'rxjs';
 import {
-    auditTime,
-    catchError,
-    combineLatest,
     debounceTime,
-    defaultIfEmpty,
     distinctUntilChanged,
-    filter,
     map,
     startWith,
-    take,
-    tap,
-    timeout,
-    timeoutWith,
+    takeUntil,
 } from 'rxjs/operators';
 
 import { MxgraphService } from './mxgraph';
@@ -47,7 +36,6 @@ import {
 } from '../services/state-services/sidebar-state.service';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { PropertyEditModal } from './property-edit-form/property-edit.component';
-import { Classes } from '../../../api/collections';
 import { RecommendationService } from '../services/recommendation.service';
 import { MeteorObservable, zoneOperator } from 'meteor-rxjs';
 import { BatchRecommendations } from '../services/BatchRecommendations';
@@ -70,6 +58,7 @@ interface IMergedPropertiesClass {
 })
 
 export class MxgraphComponent implements OnInit, OnDestroy {
+    private ngUnsubscribe: Subject<boolean> = new Subject()
     editMode: Observable<SidebarChange>; // type SidebarChange = 'default' | 'edit' | 'recommend'
     currentSelection: meteorID;
     currentSelectionSub: Subscription;
@@ -82,8 +71,8 @@ export class MxgraphComponent implements OnInit, OnDestroy {
     vocabularySub: Subscription;
 
     @ViewChild('view', { static: true }) mxGraphView: ElementRef;
-    @ViewChild('dEmptyGraph', { static: true })
-    showDialogForEmptyGraph: ElementRef;
+
+    @ViewChild('dEmptyGraph', { static: true }) showDialogForEmptyGraph: ElementRef;
 
     mx: MxgraphService;
     vocabID: string;
@@ -126,7 +115,7 @@ export class MxgraphComponent implements OnInit, OnDestroy {
         this.sideBarState.changeSidebarToDefault();
 
         this.currentEdgeSelectionSub = this.mx
-            .currentEdgeSelection()
+            .currentEdgeSelection().pipe(takeUntil(this.ngUnsubscribe))
             .subscribe((edgeSelection) => {
                 if (edgeSelection != null) {
                     const modal = this.modalService.create({
@@ -165,7 +154,7 @@ export class MxgraphComponent implements OnInit, OnDestroy {
 
         this.currentSelectionSub = this.mx
             .currentSelection()
-            .pipe(
+            .pipe(takeUntil(this.ngUnsubscribe),
                 map((classSelection) => {
                     if (classSelection !== null) {
                         return classSelection;
@@ -181,58 +170,17 @@ export class MxgraphComponent implements OnInit, OnDestroy {
                 this.currentSelection = selection;
             });
 
-        // TODO (186): It looks like this currently leaks observables.
-        // this.mx
-        //   .deleteRequestObservable()
-        //   .pipe(
-        //     combineLatest(
-        //       this.mx.currentEdgeSelection(),
-        //       this.mx.currentSelection(),
-        //       (keyevent, edgeSel, nodeSel) => ({
-        //         key: keyevent,
-        //         edge: edgeSel,
-        //         node: nodeSel,
-        //       })
-        //     ),
-        //     filter(
-        //       (possibleDelReq) =>
-        //         possibleDelReq.key !== null &&
-        //         (possibleDelReq.edge !== null || possibleDelReq.node !== null)
-        //     )
-        //   )
-        //   .subscribe((deleteRequest) => {
-        //     console.log(
-        //       "delete key presses seem to be not deatlh correctly atm. Pressing the del key multiple times and then clicking nodes, fires delete events still."
-        //     );
-        //     if (deleteRequest.edge !== null) {
-        //       // this.vocabService.deleteProperty();
-        //       console.log("delete edge ", deleteRequest.edge);
-        //     }
-        //     if (deleteRequest.node !== null) {
-        //       console.log("delete node", deleteRequest.node);
-        //     }
-        //   });
 
         this.vocabularySub = this.vocabService
             .getVocabulary(this.vocabID)
-            .pipe(
-                map((vocab, index) => {
+            .pipe(takeUntil(this.ngUnsubscribe),
+                map((vocab) => {
                     let emailAddress = '';
                     vocab.authors.forEach(
                         (author) =>
                             (emailAddress += this.vocabService.getEmailAddress(author) + ' ')
                     );
-                    const newVocab = {} as IvocabularyExtended;
-                    newVocab._id = vocab._id;
-                    newVocab.authorsEmailAddress = emailAddress;
-                    newVocab.authors = vocab.authors;
-                    newVocab.classes = vocab.classes;
-                    newVocab.description = vocab.description;
-                    newVocab.domain = vocab.domain;
-                    newVocab.name = vocab.name;
-                    newVocab.public = vocab.public;
-                    newVocab.uriPrefix = vocab.uriPrefix;
-                    return newVocab;
+                    return this.transformVocab(vocab, emailAddress);
                 })
             )
             .subscribe(
@@ -248,10 +196,17 @@ export class MxgraphComponent implements OnInit, OnDestroy {
         this.classes.pipe(
             startWith([]),
             debounceTime(1000),
+            takeUntil(this.ngUnsubscribe)
         ).subscribe((cs) => {
             if (!cs.length) {
-                this.showDialogForEmptyGraph.nativeElement.showModal();
-                return;
+                try {
+                    this.showDialogForEmptyGraph.nativeElement.showModal();
+                } catch (e) {
+                    // console.log(e)
+                }
+                finally {
+                    return;
+                }
             }
             this.mx.startTransaction();
 
@@ -296,6 +251,20 @@ export class MxgraphComponent implements OnInit, OnDestroy {
 
     }// end ngOnInit
 
+    private transformVocab(vocab: Ivocabulary, emailAddress: string) {
+        const newVocab = {} as IvocabularyExtended;
+        newVocab._id = vocab._id;
+        newVocab.authorsEmailAddress = emailAddress;
+        newVocab.authors = vocab.authors;
+        newVocab.classes = vocab.classes;
+        newVocab.description = vocab.description;
+        newVocab.domain = vocab.domain;
+        newVocab.name = vocab.name;
+        newVocab.public = vocab.public;
+        newVocab.uriPrefix = vocab.uriPrefix;
+        return newVocab;
+    }
+
     clearQueryParam() {
         this.router.navigate(
             ['.'],
@@ -305,9 +274,9 @@ export class MxgraphComponent implements OnInit, OnDestroy {
 
     /**
      * Method takes in class with props
-     * reduces into a new group of props 
-     * @param c 
-     * @returns 
+     * reduces into a new group of props
+     * @param c
+     * @returns
      */
     mergeProperties(c: IClassWithProperties): IMergedPropertiesClass {
         // only takes the necessary parts
@@ -407,10 +376,10 @@ export class MxgraphComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
+        this.ngUnsubscribe.next(true);
+        this.ngUnsubscribe.complete();
         this.mx.destroy();
-        this.currentSelectionSub.unsubscribe();
-        this.vocabularySub.unsubscribe();
-        this.currentEdgeSelectionSub.unsubscribe();
+
     }
 
 }
