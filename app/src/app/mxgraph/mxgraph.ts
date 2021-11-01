@@ -9,6 +9,14 @@ type Predicates = Map<string, Set<string>>;
 // export interface IUserObject { url: string; label: string; creator: string; }
 
 export class MxgraphService {
+    executeLayout() {
+        var layout = new MxgraphService.mx.mxCircleLayout(this.graph);
+        const { x, y } = this.viewCenter()
+        layout.x0 = x
+        layout.y0 = y
+        layout.moveCircle = true;
+        layout.execute(this.canvas)
+    }
 
     static mx: typeof m = require('mxgraph')({
         mxImageBasePath: 'mxgraph/images',
@@ -22,7 +30,7 @@ export class MxgraphService {
     transactionSelection;
     selection$: Observable<string>;
     wnd: any;
-    edgeSelection$: Observable<{ domainClazzID: string; edgeID: string ; isDataTypeProp: boolean}>;
+    edgeSelection$: Observable<{ domainClazzID: string; edgeID: string; isDataTypeProp: boolean }>;
 
     tb: m.mxToolbar;
     // public codec: N3Codec;
@@ -33,6 +41,7 @@ export class MxgraphService {
         private container: HTMLDivElement,
         //  toolbarContainer: HTMLElement,
     ) {
+
         if (!MxgraphService.mx.mxClient.isBrowserSupported()) MxgraphService.mx.mxUtils.error('Browser is not supported!', 200, false);
 
         this.graph = new MxgraphService.mx.mxGraph(container);          // Create the graph inside the given container
@@ -421,9 +430,9 @@ export class MxgraphService {
     // }
 
     destroy() {
-        this.graph.destroy();
-        this.tb.destroy();
-        this.wnd.destroy();
+            this.graph.destroy();
+            this.tb.destroy();
+            this.wnd.destroy();
     }
 
     /** Highlight cell in graph by its ID */
@@ -480,6 +489,21 @@ export class MxgraphService {
         });
     }
 
+    public saveLayout(funct: (ids: string[], dx: number, dy: number) => void){
+
+            Object.keys(this.model.cells).map(cellid => {
+                if(this.model.cells[cellid].vertex){
+                    const ids: string= this.model.cells[cellid].getId()
+                    const dx: number = this.model?.cells[cellid].geometry.x || 0 
+                    const dy: number = this.model?.cells[cellid].geometry.y || 0
+        
+                    funct([ids], dx, dy);
+                }
+          
+          });
+                
+    
+    }
     private initializeToolBar() {
 
         const content = document.createElement("div");

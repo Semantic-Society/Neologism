@@ -52,7 +52,7 @@ export class RdfUploaderComponent implements OnInit {
                       result.uri
                   ).subscribe((response) => {
                       this.vocabService.fillVocabularyWithData(importData,response.vocabId);
-                      this.router.navigateByUrl('edit/' + response.vocabId);
+                      this.router.navigate(['edit/' + response.vocabId],{ queryParams: { layout: 'true' } });
                   }, (err) => {
                       console.log(err);
                   });
