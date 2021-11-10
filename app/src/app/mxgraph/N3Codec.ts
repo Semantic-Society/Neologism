@@ -1,4 +1,3 @@
-import { stringify } from '@angular/compiler/src/util';
 import { Injectable } from '@angular/core';
 import { DataFactory, Writer, Quad, Parser, Store, termToId } from 'n3';
 const { namedNode, literal, quad } = DataFactory;
@@ -17,7 +16,7 @@ export class N3Codec {
         owl: 'http://www.w3.org/2002/07/owl#',
         xmlns: 'http://www.w3.org/2001/XMLSchema#',
         purl: 'http://purl.org/dc/terms/',
-        coord: 'http://example.org/coord/'
+        proxivocab: 'http://example.org/proxivocab/'
     };
 
     public static serialize(id, classesWithProps, respHandler) {
@@ -45,6 +44,7 @@ export class N3Codec {
 
 
             let classes: IClassWithProperties[] = classesWithProps;
+            const dataTypeProps = classes.filter((classs) => classs.isDataTypeVertex);
             classes = classes.filter((classs) => !classs.isDataTypeVertex);
             const creator: Iuser = (vocab.creator) ? Users.findOne({ _id: vocab.creator }, { fields: { emails: 1 } }) : null;
             const quads: Quad[] = [];
@@ -83,40 +83,6 @@ export class N3Codec {
             const objectProps = Object.create(null);
             const dataProps = Object.create(null);
 
-            if(classes!=[]){
-                quads.push(
-                    quad(
-                    namedNode('http://example.org/coord/hasX'),
-                    namedNode('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'),
-                    namedNode('http://www.w3.org/2002/07/owl#DatatypeProperty')
-                ),
-                quad(
-                    namedNode('http://example.org/coord/hasX'),
-                    namedNode('http://www.w3.org/2000/01/rdf-schema#domain'),
-                    namedNode('http://www.w3.org/2000/01/rdf-schema#Class')
-                ),
-                quad(
-                    namedNode('http://example.org/coord/hasX'),
-                    namedNode('http://www.w3.org/2000/01/rdf-schema#range'),
-                    namedNode('http://www.w3.org/2001/XMLSchema#decimal')
-                ),
-                    quad(
-                    namedNode('http://example.org/coord/hasY'),
-                    namedNode('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'),
-                    namedNode('http://www.w3.org/2002/07/owl#DatatypeProperty')
-                ),
-                quad(
-                    namedNode('http://example.org/coord/hasY'),
-                    namedNode('http://www.w3.org/2000/01/rdf-schema#domain'),
-                    namedNode('http://www.w3.org/2000/01/rdf-schema#Class')
-                ),
-                quad(
-                    namedNode('http://example.org/coord/hasY'),
-                    namedNode('http://www.w3.org/2000/01/rdf-schema#range'),
-                    namedNode('http://www.w3.org/2001/XMLSchema#decimal')
-                ),
-                )
-            }
             classes.forEach((clazz) => {
 
                 quads.push(quad(
@@ -124,31 +90,31 @@ export class N3Codec {
                     namedNode('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'),
                     namedNode('http://www.w3.org/2000/01/rdf-schema#Class')
                 ),
-                quad(
-                    namedNode(clazz.URI),
-                    namedNode('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'),
-                    namedNode('http://www.w3.org/2002/07/owl#Class')
-                ), quad(
-                    namedNode(clazz.URI),
-                    namedNode('http://www.w3.org/2000/01/rdf-schema#label'),
-                    literal(clazz.name)
-                ),
-                quad(
-                    namedNode(clazz.URI),
-                    namedNode('http://www.w3.org/2000/01/rdf-schema#comment'),
-                    literal(clazz.description)
-                ),
-                quad(
-                    namedNode(clazz.URI),
-                    namedNode('http://example.org/coord/hasX'),
-                    namedNode(`${clazz.position.x}`)
-                ),quad(
-                    namedNode(clazz.URI),
-                    namedNode('http://example.org/coord/hasY'),
-                    namedNode(`${clazz.position.y}`)
-                ));
+                    quad(
+                        namedNode(clazz.URI),
+                        namedNode('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'),
+                        namedNode('http://www.w3.org/2002/07/owl#Class')
+                    ), quad(
+                        namedNode(clazz.URI),
+                        namedNode('http://www.w3.org/2000/01/rdf-schema#label'),
+                        literal(clazz.name)
+                    ),
+                    quad(
+                        namedNode(clazz.URI),
+                        namedNode('http://www.w3.org/2000/01/rdf-schema#comment'),
+                        literal(clazz.description)
+                    ),
+                    quad(
+                        namedNode(clazz.URI),
+                        namedNode('http://example.org/proxivocab/hasX'),
+                        namedNode(`${clazz.position.x}`)
+                    ), quad(
+                        namedNode(clazz.URI),
+                        namedNode('http://example.org/proxivocab/hasY'),
+                        namedNode(`${clazz.position.y}`)
+                    ));
 
-            
+
 
                 clazz.properties.forEach((prop) => {
                     quads.push(quad(
@@ -165,18 +131,28 @@ export class N3Codec {
                         ));
                     } else {
                         dataProps[prop.URI] = prop.URI;
+                        let temp = dataTypeProps.filter(prop1 => prop1._id == prop._id)
                         quads.push(quad(
                             namedNode(prop.URI),
                             namedNode('http://www.w3.org/2000/01/rdf-schema#range'),
                             namedNode(`http://www.w3.org/2001/XMLSchema#${prop.range as unknown as string}`)
+                        ), quad(
+                            namedNode(prop.URI),
+                            namedNode('http://example.org/proxivocab/hasX'),
+                            namedNode(`${temp[0].position.x}`)
+                        ), quad(
+                            namedNode(prop.URI),
+                            namedNode('http://example.org/proxivocab/hasY'),
+                            namedNode(`${temp[0].position.y}`)
                         ));
                     }
 
-                   
+
 
 
                 });
             });
+
             for (const propURI in objectProps) {
                 quads.push(quad(
                     namedNode(propURI),
@@ -192,6 +168,7 @@ export class N3Codec {
                     namedNode('http://www.w3.org/2002/07/owl#DatatypeProperty')
                 ));
             }
+
             writer.addQuads(quads);
             writer.end((error, result) => {
                 if (error) {
@@ -263,7 +240,7 @@ export class N3Codec {
                             uri: subClass.subject.value,
                             label: propLabel,
                             domain: domainLabel,
-                            description: "" , // TODO: Fix export to include comments
+                            description: "", // TODO: Fix export to include comments
                             type: isDataType ? PropertyType.Data : PropertyType.Object,
                             range: rangeLabel
                         }
