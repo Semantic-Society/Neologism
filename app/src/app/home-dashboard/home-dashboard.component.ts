@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { CreateVocabModalComponent } from './create-vocab-modal/create-vocab-modal.component';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { VocabulariesService } from '../services/vocabularies.service';
+import { Meteor } from 'meteor/meteor';
 
 @Component({
     selector: 'app-home-dashboard',
