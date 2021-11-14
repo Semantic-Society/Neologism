@@ -58,6 +58,7 @@ import { DupURIValidator } from './shared/DupURIValidator'
 import { BatchRecommenderComponent } from './batchRecommender/batchRecommender.component';
 import { SpellCheckerModule } from 'ngx-spellchecker';
 import { RdfUploaderComponent } from './rdf-uploader/rdf-uploader.component';
+import { NgModule } from '@angular/core';
 registerLocaleData(en);
 
 
