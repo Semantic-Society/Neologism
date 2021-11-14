@@ -1,8 +1,7 @@
 // Angular Core
 import { HttpClientModule } from '@angular/common/http';
-import { ApplicationRef, NgModule, } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { BrowserModule, enableDebugTools } from '@angular/platform-browser';
+import { BrowserModule } from '@angular/platform-browser';
 
 // Angular Material
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -58,7 +57,6 @@ import { PropertyEditModal } from './mxgraph/property-edit-form/property-edit.co
 import { DupURIValidator } from './shared/DupURIValidator'
 import { BatchRecommenderComponent } from './batchRecommender/batchRecommender.component';
 import { SpellCheckerModule } from 'ngx-spellchecker';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { RdfUploaderComponent } from './rdf-uploader/rdf-uploader.component';
 registerLocaleData(en);
 

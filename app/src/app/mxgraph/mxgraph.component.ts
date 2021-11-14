@@ -90,6 +90,7 @@ export class MxgraphComponent implements OnInit, OnDestroy {
             this.sideBarState.changeBySelection(null);
         }
     }
+    
 
     constructor(
         private route: ActivatedRoute,
