@@ -63,3 +63,4 @@ chromiumprofile
 !.vscode/extensions.json
 app/src/assets/env.js
 app/api/env.local.json
+app/.angular/cache

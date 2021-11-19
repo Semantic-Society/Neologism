@@ -16,7 +16,7 @@ export class N3Codec {
         owl: 'http://www.w3.org/2002/07/owl#',
         xmlns: 'http://www.w3.org/2001/XMLSchema#',
         purl: 'http://purl.org/dc/terms/',
-        proxivocab: 'http://example.org/proxivocab/'
+        proxivocab: 'http://hussain.ali.gitlab.io/vocab-proximity/'
     };
 
     public static serialize(id, classesWithProps, respHandler) {
@@ -106,12 +106,12 @@ export class N3Codec {
                     ),
                     quad(
                         namedNode(clazz.URI),
-                        namedNode('http://example.org/proxivocab/hasX'),
-                        namedNode(`${clazz.position.x}`)
+                        namedNode('http://hussain.ali.gitlab.io/vocab-proximity/hasX'),
+                        literal(`${clazz.position.x}`,'xsd:decimal')
                     ), quad(
                         namedNode(clazz.URI),
-                        namedNode('http://example.org/proxivocab/hasY'),
-                        namedNode(`${clazz.position.y}`)
+                        namedNode('http://hussain.ali.gitlab.io/vocab-proximity/hasY'),
+                        literal(`${clazz.position.y}`,'xsd:decimal')
                     ));
 
 
@@ -138,12 +138,12 @@ export class N3Codec {
                             namedNode(`http://www.w3.org/2001/XMLSchema#${prop.range as unknown as string}`)
                         ), quad(
                             namedNode(prop.URI),
-                            namedNode('http://example.org/proxivocab/hasX'),
-                            namedNode(`${temp[0].position.x}`)
+                            namedNode('http://hussain.ali.gitlab.io/vocab-proximity/hasX'),
+                            literal(`${temp[0].position.x}`,'xsd:decimal')
                         ), quad(
                             namedNode(prop.URI),
-                            namedNode('http://example.org/proxivocab/hasY'),
-                            namedNode(`${temp[0].position.y}`)
+                            namedNode('http://hussain.ali.gitlab.io/vocab-proximity/hasY'),
+                            literal(`${temp[0].position.y}`,'xsd:decimal')
                         ));
                     }
 
