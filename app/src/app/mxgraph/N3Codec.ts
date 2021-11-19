@@ -106,11 +106,11 @@ export class N3Codec {
                     quad(
                         namedNode(clazz.URI),
                         namedNode('http://hussain.ali.gitlab.io/vocab-proximity/hasX'),
-                        literal(`${clazz.position.x}`,'xsd:decimal')
+                        literal(clazz.position.x)
                     ), quad(
                         namedNode(clazz.URI),
                         namedNode('http://hussain.ali.gitlab.io/vocab-proximity/hasY'),
-                        literal(`${clazz.position.y}`,'xsd:decimal')
+                        literal(clazz.position.y)
                     ));
 
 
@@ -138,11 +138,11 @@ export class N3Codec {
                         ), quad(
                             namedNode(prop.URI),
                             namedNode('http://hussain.ali.gitlab.io/vocab-proximity/hasX'),
-                            literal(`${temp[0].position.x}`,'xsd:decimal')
+                            literal(temp[0].position.x)
                         ), quad(
                             namedNode(prop.URI),
                             namedNode('http://hussain.ali.gitlab.io/vocab-proximity/hasY'),
-                            literal(`${temp[0].position.y}`,'xsd:decimal')
+                            literal(temp[0].position.y)
                         ));
                     }
 
