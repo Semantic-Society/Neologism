@@ -93,6 +93,11 @@ export class N3Codec {
                         namedNode(clazz.URI),
                         namedNode('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'),
                         namedNode('http://www.w3.org/2002/07/owl#Class')
+                    ),
+                    quad(
+                        namedNode(clazz.URI),
+                        namedNode('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'),
+                        namedNode('http://hussain.ali.gitlab.io/vocab-proximity/hasCoordinates')
                     ), quad(
                         namedNode(clazz.URI),
                         namedNode('http://www.w3.org/2000/01/rdf-schema#label'),
