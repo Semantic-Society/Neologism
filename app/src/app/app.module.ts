@@ -1,8 +1,7 @@
 // Angular Core
 import { HttpClientModule } from '@angular/common/http';
-import { ApplicationRef, NgModule, } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { BrowserModule, enableDebugTools } from '@angular/platform-browser';
+import { BrowserModule } from '@angular/platform-browser';
 
 // Angular Material
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -23,7 +22,7 @@ import { MxgraphComponent } from './mxgraph/mxgraph.component';
 import { StandardViewComponent } from './mxgraph/standardView/standardView.component';
 import { RecommenderComponent } from './recommender/recommender.component';
 import { VocablistComponent } from './vocablist/vocablist.component';
-import {SideBarNodeCreatorComponent} from './core/node-creator.component'
+import { SideBarNodeCreatorComponent } from './core/node-creator.component'
 // Pipes
 import { TruncatedTextComponentComponent } from './truncated-text-component/truncated-text-component.component';
 import { NeologismMaterialModule } from './app.material.module';
@@ -55,11 +54,11 @@ import { EditComponentService } from './vocabulary-editor/edit.component.service
 import { RemoveUserModalComponent } from './vocablist/components/remove-user-modal/remove-user-modal.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { PropertyEditModal } from './mxgraph/property-edit-form/property-edit.component';
-import {DupURIValidator } from './shared/DupURIValidator'
+import { DupURIValidator } from './shared/DupURIValidator'
 import { BatchRecommenderComponent } from './batchRecommender/batchRecommender.component';
 import { SpellCheckerModule } from 'ngx-spellchecker';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { RdfUploaderComponent } from './rdf-uploader/rdf-uploader.component';
+import { NgModule } from '@angular/core';
 registerLocaleData(en);
 
 
@@ -121,9 +120,3 @@ registerLocaleData(en);
 })
 export class AppModule { }
 
-platformBrowserDynamic().bootstrapModule(AppModule).then(moduleRef => {
-    const applicationRef = moduleRef.injector.get(ApplicationRef);
-    const componentRef = applicationRef.components[0];
-    // allows to run `ng.profiler.timeChangeDetection();`
-    enableDebugTools(componentRef);
-}).catch(err => window['console'].error(err));
