@@ -15,7 +15,8 @@ export class N3Codec {
         rdfs: 'http://www.w3.org/2000/01/rdf-schema#',
         owl: 'http://www.w3.org/2002/07/owl#',
         purl: 'http://purl.org/dc/terms/',
-        proxivocab: 'http://hussain.ali.gitlab.io/vocab-proximity/'
+        proxivocab: 'http://hussain.ali.gitlab.io/vocab-proximity/',
+        // base: 'http://w3id.org/neologism/'
     };
 
     public static serialize(id, classesWithProps, respHandler) {
@@ -25,7 +26,7 @@ export class N3Codec {
             let name = ""
 
             const writer = new Writer({
-                prefixes: N3Codec.neoPrefixes
+                prefixes: N3Codec.neoPrefixes,
             });
 
             const vocab = Vocabularies.findOne({ _id: vocabId }) || null;
@@ -121,14 +122,18 @@ export class N3Codec {
 
 
                 clazz.properties.forEach((prop) => {
-                    quads.push(quad(
-                        namedNode(prop.URI),
-                        namedNode('http://www.w3.org/2000/01/rdf-schema#domain'),
-                        namedNode(clazz.URI)
-                    ));
+
                     if (prop.type === PropertyType.Object) {
                         objectProps[prop.URI] = prop.URI;
                         quads.push(quad(
+                            namedNode(prop.URI),
+                            namedNode('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'),
+                            namedNode('http://www.w3.org/2002/07/owl#ObjectProperty')
+                        ), quad(
+                            namedNode(prop.URI),
+                            namedNode('http://www.w3.org/2000/01/rdf-schema#domain'),
+                            namedNode(clazz.URI)
+                        ), quad(
                             namedNode(prop.URI),
                             namedNode('http://www.w3.org/2000/01/rdf-schema#range'),
                             namedNode(prop.range.URI)
@@ -137,6 +142,14 @@ export class N3Codec {
                         dataProps[prop.URI] = prop.URI;
                         let temp = dataTypeProps.filter(prop1 => prop1._id == prop._id)
                         quads.push(quad(
+                            namedNode(prop.URI),
+                            namedNode('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'),
+                            namedNode('http://www.w3.org/2002/07/owl#DatatypeProperty')
+                        ), quad(
+                            namedNode(prop.URI),
+                            namedNode('http://www.w3.org/2000/01/rdf-schema#domain'),
+                            namedNode(clazz.URI)
+                        ), quad(
                             namedNode(prop.URI),
                             namedNode('http://www.w3.org/2000/01/rdf-schema#range'),
                             namedNode(`http://www.w3.org/2001/XMLSchema#${prop.range as unknown as string}`)
@@ -151,27 +164,8 @@ export class N3Codec {
                         ));
                     }
 
-
-
-
                 });
             });
-
-            for (const propURI in objectProps) {
-                quads.push(quad(
-                    namedNode(propURI),
-                    namedNode('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'),
-                    namedNode('http://www.w3.org/2002/07/owl#ObjectProperty')
-                ));
-            }
-
-            for (const propURI in dataProps) {
-                quads.push(quad(
-                    namedNode(propURI),
-                    namedNode('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'),
-                    namedNode('http://www.w3.org/2002/07/owl#DatatypeProperty')
-                ));
-            }
 
             writer.addQuads(quads);
             writer.end((error, result) => {
