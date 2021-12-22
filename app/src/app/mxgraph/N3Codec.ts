@@ -16,7 +16,6 @@ export class N3Codec {
         owl: 'http://www.w3.org/2002/07/owl#',
         purl: 'http://purl.org/dc/terms/',
         proxivocab: 'http://hussain.ali.gitlab.io/vocab-proximity/',
-        // base: 'http://w3id.org/neologism/'
     };
 
     public static serialize(id, classesWithProps, respHandler) {
