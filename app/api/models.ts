@@ -1,4 +1,5 @@
 import { Meteor } from 'meteor/meteor';
+import { Timestamp } from 'rxjs/internal/operators/timestamp';
 /**
  * These types are only to be used for communication between server and client.
  *
@@ -47,6 +48,7 @@ export interface Iclass {
     closeMatch: string[];
     exactMatch: string[];
   };
+  createdOn:Date;
 }
 
 export interface Iproperty {
@@ -57,6 +59,7 @@ export interface Iproperty {
   URI: string;
   range: meteorID;
   rangeName?: string;
+  createdOn:Date;
 }
 
 export interface IvocabularyExtended extends Ivocabulary {
@@ -76,6 +79,7 @@ export interface IClassWithProperties {
     type?: PropertyType;
     description: string;
     URI: string;
+    createdOn:Date;
     range: IClassWithProperties; // these MUST be in the same vocabulary!
   }>;
   position: {
@@ -86,6 +90,7 @@ export interface IClassWithProperties {
     closeMatch: string[];
     exactMatch: string[];
   };
+createdOn:Date;
 }
 
 export enum PropertyType {

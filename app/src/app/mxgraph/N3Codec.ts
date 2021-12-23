@@ -4,6 +4,9 @@ const { namedNode, literal, quad } = DataFactory;
 import { Vocabularies, Users } from '../../../api/collections';
 import { IClassWithProperties, Iuser, PropertyType, } from '../../../api/models'
 
+function formatTime(timeInMs){
+    return new Date(timeInMs).toISOString()
+}
 @Injectable({
     providedIn: 'root',
 })
@@ -116,7 +119,11 @@ export class N3Codec {
                         namedNode(clazz.URI),
                         namedNode('http://hussain.ali.gitlab.io/vocab-proximity/hasY'),
                         literal(clazz.position.y)
-                    ));
+                    ),quad(
+                            namedNode(clazz.URI),
+                            namedNode('http://hussain.ali.gitlab.io/vocab-proximity/hasTime'),
+                            literal(formatTime(clazz.createdOn))
+                        ));
 
 
 
@@ -135,8 +142,12 @@ export class N3Codec {
                         ), quad(
                             namedNode(prop.URI),
                             namedNode('http://www.w3.org/2000/01/rdf-schema#range'),
-                            namedNode(prop.range.URI)
-                        ));
+                            namedNode(prop.range.URI),
+                            ),quad(
+                            namedNode(prop.URI),
+                            namedNode('http://hussain.ali.gitlab.io/vocab-proximity/hasTime'),
+                            literal(formatTime(prop.createdOn)))
+                        );
                     } else {
                         dataProps[prop.URI] = prop.URI;
                         let temp = dataTypeProps.filter(prop1 => prop1._id == prop._id)
@@ -160,9 +171,13 @@ export class N3Codec {
                             namedNode(prop.URI),
                             namedNode('http://hussain.ali.gitlab.io/vocab-proximity/hasY'),
                             literal(temp[0].position.y)
-                        ));
-                    }
-
+                        )
+                        ,quad(
+                            namedNode(prop.URI),
+                            namedNode('http://hussain.ali.gitlab.io/vocab-proximity/hasTime'),
+                            literal(formatTime(temp[0].createdOn))
+                        )
+                        )}
                 });
             });
 
