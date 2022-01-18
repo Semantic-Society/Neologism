@@ -14,6 +14,8 @@ services:
         METEOR_CLIENT_CONN_URL: http://localhost/api      
     depends_on:
       - mongo
+    volumes:
+      - data:/data/uploads
     environment:
       ROOT_URL: http://localhost
       MONGO_URL: mongodb://mongo:27017/neologism
@@ -21,7 +23,7 @@ services:
       CROOT_URL: ${CROOT_URL:-http://localhost:3000}
       CDDP_URL: ${CDDP_URL:-http://localhost:3000}
       PORT: 3000
-      METEOR_SETTINGS: '{ "storageLocation":"/etc/neologism/uploads/vocabularies","accountCreation" :"false" }'
+      METEOR_SETTINGS: '{ "storageLocation":"/data/uploads/vocabularies","accountCreation" :"false" }'
       HTTP_FORWARDED_COUNT: 1
   mongo:
     container_name: neologism_db
@@ -39,4 +41,3 @@ services:
 
 volumes:
   data:
-  uploads:
