@@ -254,3 +254,11 @@ mat-form-field.description input {
 :host ::ng-deep nz-form-explain {
   color: rgb(103, 174, 255);
 }
+
+:host ::ng-deep .ant-descriptions-item-content {
+  color: white
+}
+
+:host ::ng-deep .ant-descriptions-title {
+  color: white
+}

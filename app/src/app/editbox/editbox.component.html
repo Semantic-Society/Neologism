@@ -3,204 +3,244 @@
   <nz-avatar nz-page-header-avatar nzSrc="../../../assets/default_node_image.gif">
   </nz-avatar>
   <nz-page-header-title>
-    <h3 class="sidebar-header neologism-sidebar-header" style="
+    <h6 class="sidebar-header neologism-sidebar-header" style="
     display: inline; white-space:pre-wrap;">
       Edit Your Selected Class Using Form Below
-    </h3>
+    </h6>
 
   </nz-page-header-title>
-  <nz-page-header-extra>
-    <button nz-button nzNoAnimation class="edit-icon-wrapper" (click)="toggleEdit()" *ngIf="!editToggle"><i nz-icon
-        nzType="edit" nzTheme="twotone"></i></button>
-  </nz-page-header-extra>
+
 </nz-page-header>
 
 <ng-container *ngIf="(classInfo$ | async) as classInfo ">
 
   <div *ngIf="selectedVertex">
-    <div *ngIf="editToggle" class="editbox-card">
-      <nz-form-item>
-        <nz-form-label nzFor="name">Class Name</nz-form-label><br>
-        <nz-form-control>
-          <input #editClassElem nz-input [(ngModel)]="editedClass.name"
-            (keyup)="listenerClassNameChange(editClassElem.value);checkWordClass(editClassElem.value)"
-            [ngModel]="classInfo.label" [nzAutocomplete]="autoClass">
-          <nz-autocomplete nzBackfill #autoClass>
-            <nz-auto-option *ngFor="let option of suggestions_class" [nzValue]="option" [nzLabel]="option">
-              {{ option }}
-            </nz-auto-option>
-          </nz-autocomplete>
-        </nz-form-control>
-      </nz-form-item>
-      <nz-form-item>
-        <nz-form-label nzFor="name">Class URI</nz-form-label>
-        <nz-form-control>
-          <input nz-input [(ngModel)]="editedClass.URI" [ngModel]="classInfo.url">
-        </nz-form-control>
-      </nz-form-item>
-      <nz-form-item>
-        <nz-form-label nzFor="name">About</nz-form-label><br>
-        <nz-form-control>
-          <nz-textarea-count [nzMaxCharacterCount]="256">
-            <textarea rows="2" #message placeholder="The class represents ..." [(ngModel)]="editedClass.description"
-              [ngModel]="classInfo.description" nz-input></textarea>
-          </nz-textarea-count>
-
-        </nz-form-control>
-      </nz-form-item>
-      <div class="button-group-edit ">
-        <button nz-button nzType="primary" (click)="updateEdit()">Update</button>
-        <button nz-button nzType="default" (click)="cancelEdit()">Cancel</button>
-      </div>
-    </div>
-
-    <div *ngIf="!editToggle">
-      <nz-form-item>
-        <nz-form-label nzFor="name">Class Name</nz-form-label><br>
-        <nz-form-control>
-          <input disabled nz-input nzRequired value="{{classInfo.label}}">
-        </nz-form-control>
-      </nz-form-item>
-      <nz-form-item>
-        <nz-form-label nzFor="name">Class URI</nz-form-label><br>
-        <nz-form-control>
-          <input nz-input disabled value="{{classInfo.url}}">
-        </nz-form-control>
-      </nz-form-item>
-      <nz-form-item>
-        <nz-form-label nzFor="name">About</nz-form-label><br>
-        <nz-form-control>
-          <nz-textarea-count [nzMaxCharacterCount]="256">
-            <textarea rows="2" disabled [ngModel]="classInfo.description" nz-input></textarea>
-          </nz-textarea-count>
-        </nz-form-control>
-      </nz-form-item>
-    </div>
-    <div class="button-group-edit">
-      <button nz-button nzType="danger" (click)="showDeleteConfirm()">Delete</button>
-    </div>
-
-    <nz-divider></nz-divider>
-
-    <nz-page-header >
-
-      <nz-page-header-title>
-        <h3 class="sidebar-header neologism-sidebar-header">
-          Add Property
-        </h3>
-
-      </nz-page-header-title>
-    </nz-page-header>
-
-    <div>
-      <nz-radio-group [(ngModel)]="formEnable">
-        <label nz-radio-button [nzValue]="'object'">Object Property</label>
-        <label nz-radio-button [nzValue]="'data'">Data Property</label>
-      </nz-radio-group>
-
-      <form [formGroup]="formProp" *ngIf="formEnable==='object'" (ngSubmit)="addProperty(formDirective,0)" nz-form
-        #formDirective="ngForm">
-
+    <div class="vocabDetailBox">
+      <div *ngIf="editToggle" class="editbox-card">
         <nz-form-item class="prop-input">
+          <nz-form-label nzFor="name">Class Name</nz-form-label><br>
           <nz-form-control>
-            <nz-form-label nzFor="name">Property Name</nz-form-label> <br>
-            <input nz-input placeholder="Name"
-              (keyup)="listenerPropNameChange($event);checkWordProperty(formProp.get('name').value)"
-              formControlName="name" required [nzAutocomplete]="autoProperty">
-            <nz-autocomplete nzBackfill #autoProperty>
-              <nz-auto-option *ngFor="let option of suggestions_property" [nzValue]="option" [nzLabel]="option">
+            <input #editClassElem nz-input [(ngModel)]="editedClass.name"
+              (keyup)="listenerClassNameChange(editClassElem.value);checkWordClass(editClassElem.value)"
+              [ngModel]="classInfo.label" [nzAutocomplete]="autoClass">
+            <nz-autocomplete nzBackfill #autoClass>
+              <nz-auto-option *ngFor="let option of suggestions_class" [nzValue]="option" [nzLabel]="option">
                 {{ option }}
               </nz-auto-option>
             </nz-autocomplete>
           </nz-form-control>
         </nz-form-item>
-
-
         <nz-form-item class="prop-input">
+          <nz-form-label nzFor="name">Class URI</nz-form-label>
           <nz-form-control>
-            <nz-form-label nzFor="URI">Property URI</nz-form-label> <br>
-            <input class="" nz-input placeholder="URI" formControlName="URI" required>
-            <nz-form-explain *ngIf="formProp.get('URI').hasError('invalidURI')">
-              URI is already in <strong>USE</strong>
-            </nz-form-explain>
+            <input nz-input [(ngModel)]="editedClass.URI" [ngModel]="classInfo.url">
           </nz-form-control>
         </nz-form-item>
-
-
         <nz-form-item class="prop-input">
+          <nz-form-label nzFor="name">About</nz-form-label><br>
           <nz-form-control>
-            <nz-form-label nzFor="description">About</nz-form-label> <br>
             <nz-textarea-count [nzMaxCharacterCount]="256">
-              <textarea rows="2" #message placeholder="Comment or Description" formControlName="description"
-                nz-input></textarea>
+              <textarea rows="2" #message placeholder="The class represents ..." [(ngModel)]="editedClass.description"
+                [ngModel]="classInfo.description" nz-input></textarea>
             </nz-textarea-count>
 
           </nz-form-control>
         </nz-form-item>
+      </div>
 
-        <nz-form-item class="class-dropdown">
-          <nz-form-control>
-            <nz-form-label nzFor="range">Target</nz-form-label> <br>
-            <nz-select nzShowSearch nzAllowClear placeholder="Range" formControlName="range" required>
-              <ng-container *ngFor="let c of rangeOptions | async">
-                <nz-option [nzValue]="c._id" [nzLabel]="c.name" [value]="c._id">
-                </nz-option>
-              </ng-container>
-            </nz-select>
-          </nz-form-control>
+      <div *ngIf="!editToggle">
 
-        </nz-form-item>
+        <nz-descriptions nzTitle="Class Info" nzSize="small"  nzBordered [nzColumn]="{ xxl: 1, xl: 1, lg:1, md: 1, sm: 1, xs: 1 }">
+          <nz-descriptions-item nzTitle="Name">{{classInfo.label}}</nz-descriptions-item>
+          <nz-descriptions-item nzTitle="URI">{{classInfo.url}}</nz-descriptions-item>
+          <nz-descriptions-item nzTitle="Comment">{{classInfo.description}}</nz-descriptions-item>
+          
+        </nz-descriptions>
+        
+      </div>
+      <div class="button-group-edit">
+        <div *ngIf="editToggle">
+          <button nz-button nzType="primary" (click)="updateEdit()">Update</button>
+          <button nz-button nzType="default" (click)="cancelEdit()">Cancel</button>
+          <button nz-button nzType="danger" (click)="showDeleteConfirm()">Delete</button>
+        </div>
 
-        <button nz-button nzType="default" type="submit" [disabled]="!formProp.valid">Add
-          Property</button>
+        <button nz-button nzNoAnimation (click)="toggleEdit()" *ngIf="!editToggle"><i nz-icon nzType="edit"
+            nzTheme="twotone"></i></button>
+      </div>
 
-      </form>
-      <form [formGroup]="formProp" *ngIf="formEnable==='data'" (ngSubmit)="addProperty(formDirective,1)" nz-form
-        #formDirective="ngForm">
+    </div>
 
-        <nz-form-item class="prop-input">
-          <nz-form-control>
-            <nz-form-label nzFor="name">Property Name</nz-form-label> <br>
-            <input nz-input placeholder="Name" formControlName="name" required>
-          </nz-form-control>
-        </nz-form-item>
+    <div class="addPropBox">
+      <div class="frmSelectBox">
+        <nz-select nzPlaceHolder="Choose type of Property" [(ngModel)]="selectedForm">
+          <nz-option [nzValue]="'object'" nzLabel="Object Property"></nz-option>
+          <nz-option [nzValue]="'data'" nzLabel="Data Property"></nz-option>
+          <nz-option [nzValue]="'subclass'" nzLabel="subClassOf"></nz-option>
+        </nz-select>
+      </div>
+
+      <div>
+        <div class="frmObjectProp">
+          <form [formGroup]="formProp" *ngIf="selectedForm==='object'" (ngSubmit)="addProperty(formDirective,0)" nz-form
+            #formDirective="ngForm">
+
+            <nz-form-item class="prop-input">
+              <nz-form-control>
+                <nz-form-label nzFor="name">Property Name</nz-form-label> <br>
+                <input nz-input placeholder="Name"
+                  (keyup)="listenerPropNameChange($event);checkWordProperty(formProp.get('name').value)"
+                  formControlName="name" required [nzAutocomplete]="autoProperty">
+                <nz-autocomplete nzBackfill #autoProperty>
+                  <nz-auto-option *ngFor="let option of suggestions_property" [nzValue]="option" [nzLabel]="option">
+                    {{ option }}
+                  </nz-auto-option>
+                </nz-autocomplete>
+              </nz-form-control>
+            </nz-form-item>
 
 
-        <nz-form-item class="prop-input" style="display: none;">
-          <nz-form-control>
-            <nz-form-label nzFor="URI">Property URI</nz-form-label> <br>
-            <input class="" nz-input placeholder="URI" formControlName="URI">
-          </nz-form-control>
-        </nz-form-item>
+            <nz-form-item class="prop-input">
+              <nz-form-control>
+                <nz-form-label nzFor="URI">Property URI</nz-form-label> <br>
+                <input class="" nz-input placeholder="URI" formControlName="URI" required>
+                <nz-form-explain *ngIf="formProp.get('URI').hasError('invalidURI')">
+                  URI is already in <strong>USE</strong>
+                </nz-form-explain>
+              </nz-form-control>
+            </nz-form-item>
 
 
-        <nz-form-item class="prop-input">
-          <nz-form-control>
-            <nz-form-label nzFor="description">About</nz-form-label> <br>
-            <nz-textarea-count [nzMaxCharacterCount]="256">
-              <textarea rows="2" #message placeholder="Comment or Description" formControlName="description"
-                nz-input></textarea>
-            </nz-textarea-count>
+            <nz-form-item class="prop-input">
+              <nz-form-control>
+                <nz-form-label nzFor="description">About</nz-form-label> <br>
+                <nz-textarea-count [nzMaxCharacterCount]="256">
+                  <textarea rows="2" #message placeholder="Comment or Description" formControlName="description"
+                    nz-input></textarea>
+                </nz-textarea-count>
 
-          </nz-form-control>
-        </nz-form-item>
-        <nz-form-item class="class-dropdown">
-          <nz-form-control>
-            <nz-form-label nzFor="range">Data Type</nz-form-label> <br>
-            <nz-select nzShowSearch nzAllowClear placeholder="Range" formControlName="range" required>
-              <ng-container *ngFor="let element of xsdDataTypes; let i = index">
-                <nz-option [nzValue]="element" [nzLabel]="'xsd:'+element" [value]="element">
-                </nz-option>
-              </ng-container>
-            </nz-select>
-          </nz-form-control>
+              </nz-form-control>
+            </nz-form-item>
 
-        </nz-form-item>
+            <nz-form-item class="class-dropdown">
+              <nz-form-control>
+                <nz-form-label nzFor="range">Target</nz-form-label> <br>
+                <nz-select nzShowSearch nzAllowClear placeholder="Range" formControlName="range" required>
+                  <ng-container *ngFor="let c of rangeOptions | async">
+                    <nz-option [nzValue]="c._id" [nzLabel]="c.name" [value]="c._id">
+                    </nz-option>
+                  </ng-container>
+                </nz-select>
+              </nz-form-control>
 
-        <button nz-button nzType="default" type="submit" [disabled]="!formProp.valid">Add
-          Property</button>
+            </nz-form-item>
 
-      </form>
+            <button nz-button nzType="default" type="submit" [disabled]="!formProp.valid">Add
+              Property</button>
+
+          </form>
+        </div>
+        <div class="frmDataProp">
+          <form [formGroup]="formProp" *ngIf="selectedForm==='data'" (ngSubmit)="addProperty(formDirective,1)" nz-form
+            #formDirective="ngForm">
+
+            <nz-form-item class="prop-input">
+              <nz-form-control>
+                <nz-form-label nzFor="name">Property Name</nz-form-label> <br>
+                <input nz-input placeholder="Name" formControlName="name" required>
+              </nz-form-control>
+            </nz-form-item>
+
+
+            <nz-form-item class="prop-input" style="display: none;">
+              <nz-form-control>
+                <nz-form-label nzFor="URI">Property URI</nz-form-label> <br>
+                <input class="" nz-input placeholder="URI" formControlName="URI">
+              </nz-form-control>
+            </nz-form-item>
+
+
+            <nz-form-item class="prop-input">
+              <nz-form-control>
+                <nz-form-label nzFor="description">About</nz-form-label> <br>
+                <nz-textarea-count [nzMaxCharacterCount]="256">
+                  <textarea rows="2" #message placeholder="Comment or Description" formControlName="description"
+                    nz-input></textarea>
+                </nz-textarea-count>
+
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item class="class-dropdown">
+              <nz-form-control>
+                <nz-form-label nzFor="range">Data Type</nz-form-label> <br>
+                <nz-select nzShowSearch nzAllowClear placeholder="Range" formControlName="range" required>
+                  <ng-container *ngFor="let element of xsdDataTypes; let i = index">
+                    <nz-option [nzValue]="element" [nzLabel]="'xsd:'+element" [value]="element">
+                    </nz-option>
+                  </ng-container>
+                </nz-select>
+              </nz-form-control>
+
+            </nz-form-item>
+
+            <button nz-button nzType="default" type="submit" [disabled]="!formProp.valid">Add
+              Property</button>
+
+          </form>
+        </div>
+        <div class="frmSubclassProp">
+          <form [formGroup]="formProp" *ngIf="selectedForm==='subclass'" (ngSubmit)="addProperty(formDirective,0)"
+            nz-form #formDirective="ngForm">
+
+            <nz-form-item class="prop-input">
+              <nz-form-control>
+                <nz-form-label nzFor="name">Property Name</nz-form-label> <br>
+                <input nz-input placeholder="Name" formControlName="name" value="'rdfs:subClassOf'">
+
+              </nz-form-control>
+            </nz-form-item>
+
+
+            <nz-form-item class="prop-input">
+              <nz-form-control>
+                <nz-form-label nzFor="URI">Property URI</nz-form-label> <br>
+                <input [disabled]="true" [nzValue]="'http://www.w3.org/2000/01/rdf-schema#subClassOf'" nz-input
+                  placeholder="URI" formControlName="URI" required>
+
+              </nz-form-control>
+            </nz-form-item>
+
+
+            <nz-form-item class="prop-input">
+              <nz-form-control>
+                <nz-form-label nzFor="description">About</nz-form-label> <br>
+                <nz-textarea-count [nzMaxCharacterCount]="256">
+                  <textarea rows="2" #message placeholder="Comment or Description" formControlName="description"
+                    nz-input></textarea>
+                </nz-textarea-count>
+
+              </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item class="class-dropdown">
+              <nz-form-control>
+                <nz-form-label nzFor="range">Target</nz-form-label> <br>
+                <nz-select nzShowSearch nzAllowClear placeholder="Range" formControlName="range" required>
+                  <ng-container *ngFor="let c of rangeOptions | async">
+                    <nz-option [nzValue]="c._id" [nzLabel]="c.name" [value]="c._id">
+                    </nz-option>
+                  </ng-container>
+                </nz-select>
+              </nz-form-control>
+
+            </nz-form-item>
+
+            <button nz-button nzType="default" type="submit" [disabled]="!formProp.valid">Add
+              Property</button>
+
+          </form>
+        </div>
+      </div>
     </div>
   </div>
 </ng-container>

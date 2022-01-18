@@ -12,6 +12,7 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { PropertyType, xsdDataTypes,IClassWithProperties} from './../../../api/models';
 import { SpellCheckerService } from 'ngx-spellchecker';
 import { HttpClient } from '@angular/common/http';
+import { NzSelectModule } from 'ng-zorro-antd/select';
 
 
 @Component({
@@ -54,7 +55,7 @@ export class EditboxComponent implements OnInit, OnChanges {
 
   formProp: FormGroup;
 
-  formEnable = 'data';
+  selectedForm = 'object';
 
   protected editedClass: {
     name: string;
