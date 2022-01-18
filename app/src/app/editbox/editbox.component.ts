@@ -12,7 +12,6 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { PropertyType, xsdDataTypes, IClassWithProperties } from './../../../api/models';
 import { SpellCheckerService } from 'ngx-spellchecker';
 import { HttpClient } from '@angular/common/http';
-import { NzSelectModule } from 'ng-zorro-antd/select';
 
 
 @Component({
@@ -99,17 +98,6 @@ export class EditboxComponent implements OnInit, OnChanges {
 
     }
 
-    public buildForm(rec: IClassProperties): FormGroup {
-        return this.fb.group({
-            id: [rec.id, Validators.required],
-            name: [rec.label, Validators.required],
-            uri: [rec.uri, Validators.required],
-            range: [rec.range, Validators.required],
-            rangeId: [rec.rangeId, Validators.required],
-            comment: [rec.comment],
-
-        });
-    }
     ngOnChanges(input) {
 
         this.editedClass = this.editboxService.getUndefinedClass();
@@ -146,6 +134,7 @@ export class EditboxComponent implements OnInit, OnChanges {
 
 
     }
+
     checkWordProperty(word: string) {
 
         this.httpClient.get(this.fileURL, { responseType: 'text' }).subscribe((res: any) => {
@@ -169,10 +158,10 @@ export class EditboxComponent implements OnInit, OnChanges {
 
         this.contextmenu_class = true;
     }
+
     addRecommendedProperyToGraph(rec: IClassProperty) {
         this.editboxService.addRecommendedProperyToGraph(rec, this.selectedVertex.id, this.vocabID);
     }
-
 
     addProperty(formDirective: FormGroupDirective, index: number) {
         const type = (index === 0) ? PropertyType.Object : PropertyType.Data;
@@ -184,8 +173,6 @@ export class EditboxComponent implements OnInit, OnChanges {
         this.formProp.reset();
 
     }
-
-
 
     cancelEdit() {
         this.editToggle = false;
@@ -237,10 +224,11 @@ export class EditboxComponent implements OnInit, OnChanges {
         this.editToggle = !this.editToggle;
     }
 
-    fnFillVal(selectedForm) {
-        console.log(selectedForm)
-        if (selectedForm === "subclass") {
+    fnFillVal($event) {
+
+        if ($event === "subclass") {
             this.formProp.controls['URI'].setValue(`http://www.w3.org/2000/01/rdf-schema#subClassOf`);
+            this.formProp.controls['name'].setValue(`rdfs:subClassOf`);
         }
         else {
             this.formProp.controls['URI'].setValue(`${this.uriPrefix}`);
