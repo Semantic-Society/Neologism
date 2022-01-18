@@ -262,3 +262,7 @@ mat-form-field.description input {
 :host ::ng-deep .ant-descriptions-title {
   color: white
 }
+
+.frmSelectBox{
+  margin: 5px 5px;
+}
