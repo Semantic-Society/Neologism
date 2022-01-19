@@ -74,9 +74,9 @@
     <div class="addPropBox">
       <div class="frmSelectBox">
         <nz-select nzSize="small" nzPlaceHolder="Choose type of Property" (ngModelChange)="fnFillVal($event)" [(ngModel)]="selectedForm">
-          <nz-option [nzValue]="'object'" nzLabel="Object Type"></nz-option>
-          <nz-option [nzValue]="'data'" nzLabel="Data Type"></nz-option>
-          <nz-option [nzValue]="'subclass'" nzLabel="subClassOf Type"></nz-option>
+          <nz-option [nzValue]="'object'" nzLabel="owl:ObjectProperty"></nz-option>
+          <nz-option [nzValue]="'data'" nzLabel="owl:DataProperty"></nz-option>
+          <nz-option [nzValue]="'subclass'" nzLabel="rdfs:subClassOf"></nz-option>
         </nz-select>
       </div>
 
@@ -182,7 +182,7 @@
           </form>
         </div>
         <div class="frmSubclassProp">
-          <form [formGroup]="formProp" *ngIf="selectedForm==='subclass'" (ngSubmit)="addProperty(formDirective,0)"
+          <form [formGroup]="formProp" *ngIf="selectedForm==='subclass'" (ngSubmit)="addProperty(formDirective,2)"
             nz-form #formDirective="ngForm">
 
             <nz-form-item class="prop-input">

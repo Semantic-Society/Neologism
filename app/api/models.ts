@@ -95,7 +95,14 @@ createdOn:Date;
 
 export enum PropertyType {
   Object = 'owl:ObjectProperty',
-  Data = 'owl:DatatypeProperty'
+  Data = 'owl:DatatypeProperty',
+  subclass = 'rdfs:subClassOf'
+}
+
+export enum PropertyType2 {
+  'owl:ObjectProperty',
+  'owl:DatatypeProperty',
+  'rdfs:subClassOf'
 }
 
 

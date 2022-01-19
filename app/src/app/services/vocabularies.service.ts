@@ -6,7 +6,7 @@ import { combineLatest, empty, Observable, of, throwError, timer } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, filter, flatMap, map, switchMap, take, tap } from 'rxjs/operators';
 
 import { Classes, Properties, Users, Vocabularies } from '../../../api/collections';
-import { Iclass, Iproperty, Ivocabulary, PropertyType, meteorID, IClassWithProperties } from '../../../api/models';
+import { Iclass, Iproperty, Ivocabulary, PropertyType, meteorID, IClassWithProperties, PropertyType2 } from '../../../api/models';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { SideBarNodeCreatorComponent } from '../core/node-creator.component';
 import { N3Codec } from '../mxgraph/N3Codec';
@@ -154,11 +154,11 @@ export class VocabulariesService {
       });
   }
 
-  addProperty(toClass: meteorID, name: string, description: string, URI: string, range: string,
+  addProperty(domainId: meteorID, name: string, description: string, URI: string, range: string,
       type: string, vocabID: string) {
-      if (type == PropertyType.Data) {
-          this.addClass(vocabID, range, description = PropertyType.Data, URI, undefined, true).subscribe(classId => {
-              MeteorObservable.call('property.create', toClass, { name, description, URI, range, type, _id: classId })
+      if (type==PropertyType2[1]) {
+          this.addClass(vocabID, range, description = PropertyType.Data, URI, undefined, true).subscribe(dummyRangeId => {
+              MeteorObservable.call('property.create', domainId, { name, description, URI, range, type, _id: dummyRangeId })
                   .subscribe((_response) => {
                       // Handle success and response from server!
                   }, (err) => {
@@ -167,7 +167,7 @@ export class VocabulariesService {
           });
 
       } else {
-          MeteorObservable.call('property.create', toClass, { name, description, URI, range, type })
+          MeteorObservable.call('property.create', domainId, { name, description, URI, range, type })
               .subscribe((_response) => {
                   // Handle success and response from server!
               }, (err) => {

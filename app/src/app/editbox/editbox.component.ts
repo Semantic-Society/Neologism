@@ -9,7 +9,7 @@ import { EditboxService } from './editbox.service';
 import { IClassProperties, IClassProperty } from '../models/editbox.model';
 import { FormArray, FormBuilder, FormControl, FormGroup, FormGroupDirective, Validators } from '@angular/forms';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { PropertyType, xsdDataTypes, IClassWithProperties } from './../../../api/models';
+import { PropertyType2, xsdDataTypes, IClassWithProperties } from './../../../api/models';
 import { SpellCheckerService } from 'ngx-spellchecker';
 import { HttpClient } from '@angular/common/http';
 
@@ -164,14 +164,12 @@ export class EditboxComponent implements OnInit, OnChanges {
     }
 
     addProperty(formDirective: FormGroupDirective, index: number) {
-        const type = (index === 0) ? PropertyType.Object : PropertyType.Data;
         if (index) {
             this.formProp.controls['URI'].setValue(`${this.uriPrefix}${encodeURIComponent(this.formProp.value.name.toLocaleLowerCase())}`);
         }
-        this.vocabService.addProperty(this.selectedVertex.id, this.formProp.value.name, this.formProp.value.description, this.formProp.value.URI, this.formProp.value.range, type, this.vocabID);
+        this.vocabService.addProperty(this.selectedVertex.id, this.formProp.value.name, this.formProp.value.description, this.formProp.value.URI, this.formProp.value.range, PropertyType2[index], this.vocabID);
         formDirective.resetForm();
         this.formProp.reset();
-
     }
 
     cancelEdit() {
