@@ -54,7 +54,7 @@ export class EditboxComponent implements OnInit, OnChanges {
 
     formProp: FormGroup;
 
-    selectedForm = 'subclass';
+    selectedForm = 'object';
 
     protected editedClass: {
         name: string;
@@ -230,6 +230,7 @@ export class EditboxComponent implements OnInit, OnChanges {
         }
         else {
             this.formProp.controls['URI'].setValue(`${this.uriPrefix}`);
+            this.formProp.controls['name'].setValue(``);
         }
     }
 }
