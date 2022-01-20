@@ -5,6 +5,7 @@ import { VocabulariesService } from '../services/vocabularies.service';
 import { of, Observable, BehaviorSubject } from 'rxjs';
 import { map, startWith, combineLatest, switchMap, tap, take, withLatestFrom, filter } from 'rxjs/operators';
 import { PropertyType ,IClassWithProperties} from "./../../../api/models";
+import { NzModalService } from 'ng-zorro-antd/modal';
 
 @Injectable()
 export class EditComponentService {
@@ -137,6 +138,7 @@ export class EditComponentService {
              url: theClass.URI
          };
      }
+
 
 
 }

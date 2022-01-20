@@ -23,7 +23,7 @@ export class PropertyEditModal implements OnInit {
   isDataTypeProp: boolean;
   propList: Iproperty[];
   propListName: string[];
-  propSourceNodeId: string;
+  domainClassId: string;
   public prop: Iproperty;
   readonly xsdDataTypes = xsdDataTypes;
 
@@ -39,10 +39,12 @@ export class PropertyEditModal implements OnInit {
   ngOnInit() {
       this.propList = [];
       this.propListName = [];
-      this.propListString.split(',').forEach(key => {
-          const prop = Properties.findOne({ _id: key });
-          this.propList.push(prop);
-      });
+      Classes.find({ _id: this.domainClassId }).fetch()[0]
+      .properties
+      .forEach(key => {
+        const prop = Properties.findOne({ _id: key });
+        this.propList.push(prop);
+    });
       this.classes = Classes.find({ isDataTypeVertex: false }).fetch();
       this.prop = this.propList[0];
       this.selectedProp = this.prop._id;
@@ -91,7 +93,7 @@ export class PropertyEditModal implements OnInit {
   deleteProp(): void {
 
       if (this.prop.type === PropertyType.Data) {
-          MeteorObservable.call('property.delete', this.prop._id, this.propSourceNodeId).subscribe((response) => {
+          MeteorObservable.call('property.delete', this.prop._id, this.domainClassId).subscribe((response) => {
               // Handle success and response from server!
           }, (err) => {
               console.log(err);
@@ -103,7 +105,7 @@ export class PropertyEditModal implements OnInit {
               console.log(err);
           });
       } else {
-          MeteorObservable.call('property.delete', this.prop._id, this.propSourceNodeId).subscribe((response) => {
+          MeteorObservable.call('property.delete', this.prop._id, this.domainClassId).subscribe((response) => {
               // Handle success and response from server!
           }, (err) => {
               console.log(err);

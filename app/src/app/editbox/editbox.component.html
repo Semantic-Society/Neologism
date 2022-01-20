@@ -2,14 +2,6 @@
 
   <nz-avatar nz-page-header-avatar nzSrc="../../../assets/default_node_image.gif">
   </nz-avatar>
-  <!-- <nz-page-header-title>
-    <h6 class="sidebar-header neologism-sidebar-header" style="
-    display: inline; white-space:pre-wrap;">
-      Edit Your Selected Class Using Form Below
-    </h6>
-
-  </nz-page-header-title> -->
-
 </nz-page-header>
 
 <ng-container *ngIf="(classInfo$ | async) as classInfo ">
@@ -64,9 +56,13 @@
           <button nz-button nzType="default" (click)="cancelEdit()">Cancel</button>
           <button nz-button nzType="danger" (click)="showDeleteConfirm()">Delete</button>
         </div>
-
-        <button nz-button nzNoAnimation (click)="toggleEdit()" *ngIf="!editToggle"><i nz-icon nzType="edit"
-            nzTheme="twotone"></i></button>
+<div *ngIf="!editToggle">
+  <button nz-button nzNoAnimation (click)="toggleEdit()" ><i nz-icon nzType="edit"
+    nzTheme="twotone"></i>Class</button>
+    <button nz-button nzNoAnimation (click)="fnEditClassProps()"><i nz-icon nzType="edit"
+      nzTheme="twotone"></i>Props</button>
+</div>
+       
       </div>
 
     </div>
@@ -78,6 +74,7 @@
           <nz-option [nzValue]="'data'" nzLabel="owl:DataProperty"></nz-option>
           <nz-option [nzValue]="'subclass'" nzLabel="rdfs:subClassOf"></nz-option>
         </nz-select>
+       
       </div>
 
       <div class="groupPropForms">

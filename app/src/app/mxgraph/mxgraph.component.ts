@@ -90,7 +90,7 @@ export class MxgraphComponent implements OnInit, OnDestroy {
             this.sideBarState.changeBySelection(null);
         }
     }
-    
+
 
     constructor(
         private route: ActivatedRoute,
@@ -119,37 +119,8 @@ export class MxgraphComponent implements OnInit, OnDestroy {
             .currentEdgeSelection().pipe(takeUntil(this.ngUnsubscribe))
             .subscribe((edgeSelection) => {
                 if (edgeSelection != null) {
-                    const modal = this.modalService.create({
-                        nzTitle: 'Actions on Property',
-                        nzContent: PropertyEditModal,
-                        nzComponentParams: {
-                            propListString: edgeSelection.edgeID,
-                            propSourceNodeId: edgeSelection.domainClazzID,
-                        },
-                        nzFooter: [
-                            {
-                                type: 'default',
-                                label: 'Cancel',
-                                onClick: (componentInstance) => {
-                                    modal.destroy();
-                                },
-                            },
-                            {
-                                type: 'primary',
-                                label: 'Update',
-                                onClick: (componentInstance) => {
-                                    componentInstance.closeModal();
-                                },
-                            },
-                            {
-                                type: 'danger',
-                                label: 'Delete',
-                                onClick: (componentInstance) => {
-                                    componentInstance.deleteProp();
-                                },
-                            },
-                        ],
-                    });
+                    let modal = null
+                    modal = this.openPropUpdateForm(edgeSelection, modal);
                 }
             });
 
@@ -251,6 +222,40 @@ export class MxgraphComponent implements OnInit, OnDestroy {
         });
 
     }// end ngOnInit
+
+    private openPropUpdateForm(edgeSelection: { domainClazzID: string; edgeID: string; isDataTypeProp: boolean; }, modal) {
+        return this.modalService.create({
+            nzTitle: 'Actions on Property',
+            nzContent: PropertyEditModal,
+            nzComponentParams: {
+                propListString: edgeSelection.edgeID,
+                domainClassId: edgeSelection.domainClazzID,
+            },
+            nzFooter: [
+                {
+                    type: 'default',
+                    label: 'Cancel',
+                    onClick: (componentInstance) => {
+                        modal.destroy();
+                    },
+                },
+                {
+                    type: 'primary',
+                    label: 'Update',
+                    onClick: (componentInstance) => {
+                        componentInstance.closeModal();
+                    },
+                },
+                {
+                    type: 'danger',
+                    label: 'Delete',
+                    onClick: (componentInstance) => {
+                        componentInstance.deleteProp();
+                    },
+                },
+            ],
+        });
+    }
 
     private transformVocab(vocab: Ivocabulary, emailAddress: string) {
         const newVocab = {} as IvocabularyExtended;

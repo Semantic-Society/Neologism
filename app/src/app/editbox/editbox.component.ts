@@ -6,12 +6,14 @@ import { RecommendationService } from '../services/recommendation.service';
 import { VocabulariesService } from '../services/vocabularies.service';
 import { SideBarStateService } from '../services/state-services/sidebar-state.service';
 import { EditboxService } from './editbox.service';
-import { IClassProperties, IClassProperty } from '../models/editbox.model';
-import { FormArray, FormBuilder, FormControl, FormGroup, FormGroupDirective, Validators } from '@angular/forms';
-import { NzModalService } from 'ng-zorro-antd/modal';
+import {  IClassProperty } from '../models/editbox.model';
+import {  FormBuilder,  FormGroup, FormGroupDirective, Validators } from '@angular/forms';
+
 import { PropertyType2, xsdDataTypes, IClassWithProperties } from './../../../api/models';
 import { SpellCheckerService } from 'ngx-spellchecker';
 import { HttpClient } from '@angular/common/http';
+import { PropertyEditModal } from '../mxgraph/property-edit-form/property-edit.component';
+import { NzModalService } from 'ng-zorro-antd/modal';
 
 
 @Component({
@@ -24,6 +26,7 @@ import { HttpClient } from '@angular/common/http';
 export class EditboxComponent implements OnInit, OnChanges {
 
     constructor(
+        private modalService: NzModalService,
         private vocabService: VocabulariesService,
         private recommender: RecommendationService,
         private sidebarService: SideBarStateService,
@@ -76,7 +79,7 @@ export class EditboxComponent implements OnInit, OnChanges {
     public suggestions_property: string[];
     contextmenu_class = false;
     contextmenu_property = false;
-
+    private selectedVertexId: string = null;
     fileURL = 'https://raw.githubusercontent.com/JacobSamro/ngx-spellchecker/master/dict/normalized_en-US.dic';
     oldClassID: string;
 
@@ -102,18 +105,18 @@ export class EditboxComponent implements OnInit, OnChanges {
 
         this.editedClass = this.editboxService.getUndefinedClass();
 
-        const classID: string = input.selectedVertex.currentValue.id;
+        this.selectedVertexId = input.selectedVertex.currentValue.id;
 
-        if (!classID) {
+        if (!this.selectedVertexId) {
             return;
         }
 
         // we get several small pieces of info from the class. multicast is likely a good idea, but did not get it working.
-        this.classInfo$ = this.editboxService.createClassInfoObj(this.vocabID, classID);
+        this.classInfo$ = this.editboxService.createClassInfoObj(this.vocabID, this.selectedVertexId);
 
         // actually already refacored (in editbox service) but very hard to test as the
         // recommender service always returns an empty array, bug ?
-        this.propertyRecommendations = this.editboxService.getClass$(this.vocabID, classID)
+        this.propertyRecommendations = this.editboxService.getClass$(this.vocabID, this.selectedVertexId)
             .pipe(
                 switchMap((theclass) => this.recommender.propertyRecommendation(theclass.URI).pipe(
                     tap(as => console.log(as, "recommendations")),
@@ -232,5 +235,44 @@ export class EditboxComponent implements OnInit, OnChanges {
             this.formProp.controls['URI'].setValue(`${this.uriPrefix}`);
             this.formProp.controls['name'].setValue(``);
         }
+    }
+
+    fnEditClassProps() {
+        let modal = null
+        modal = this.openPropUpdateForm({ domainClazzID: this.selectedVertex.id, edgeID: "", isDataTypeProp: false }, modal);
+    }
+
+    private openPropUpdateForm(domainClassId, modal) {
+        return this.modalService.create({
+            nzTitle: 'Actions on Property',
+            nzContent: PropertyEditModal,
+            nzComponentParams: {
+                propListString: null,
+                domainClassId: domainClassId.domainClazzID,
+            },
+            nzFooter: [
+                {
+                    type: 'default',
+                    label: 'Cancel',
+                    onClick: (componentInstance) => {
+                        modal.destroy();
+                    },
+                },
+                {
+                    type: 'primary',
+                    label: 'Update',
+                    onClick: (componentInstance) => {
+                        componentInstance.closeModal();
+                    },
+                },
+                {
+                    type: 'danger',
+                    label: 'Delete',
+                    onClick: (componentInstance) => {
+                        componentInstance.deleteProp();
+                    },
+                },
+            ],
+        });
     }
 }
