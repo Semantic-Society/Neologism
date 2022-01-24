@@ -6,12 +6,12 @@ services:
     container_name: neologism_app
     image: ghcr.io/semantic-society/neologism/neologism2:latest
     # build creates a local docker container, to use the image comment it out
-    build:
-      context: .
-      dockerfile: Dockerfile
-      args:
-        # This is variable is use to configure meteor-client bundle 
-        METEOR_CLIENT_CONN_URL: http://localhost/api      
+    #build:
+    #  context: .
+    #  dockerfile: Dockerfile
+    #  args:
+    #    # This is variable is use to configure meteor-client bundle 
+    #    METEOR_CLIENT_CONN_URL: http://localhost/api      
     depends_on:
       - mongo
     volumes:
@@ -25,6 +25,7 @@ services:
       PORT: 3000
       METEOR_SETTINGS: '{ "storageLocation":"/data/uploads/vocabularies","accountCreation" :"false" }'
       HTTP_FORWARDED_COUNT: 1
+
   mongo:
     container_name: neologism_db
     image: mongo:latest
@@ -37,7 +38,7 @@ services:
 
   recommender:
     container_name: neologism_recommender
-    image: registry.git.rwth-aachen.de/neologism/recommender:latest
+    image: ghcr.io/semantic-society/recommender/recommender:latest
 
 volumes:
   data:

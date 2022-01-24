@@ -39,20 +39,17 @@ and might interact with a recommender to improve the quality of drafted vocabula
 ## Getting Started
 <!-- 
 __Easy usage via Docker Image Build:__
-1.  Navigate to app/
-2. `docker-compose up`
+1.  `docker-compose up`
 __Easy usage via Docker Building Image on Local:__
-1.  Navigate to app/
-2. `docker-compose build`
+1.  `docker-compose build`
 3. `docker-compose up` -->
 
 __Deploy via Docker Image Run Instructions Local:__
 
 Default Ports to be used: 80, 3000, 3001.
 
-1. Navigate to app/
-2. set the environnement vars `CROOT_URL: http://{server-url}:3000` and `CDDP_URL: http://{server-url}:3000` in docker-compose-yml
-3. exec `docker-compose up`
+1. Set the environnement vars `CROOT_URL: http://{server-url}:3000` and `CDDP_URL: http://{server-url}:3000` in docker-compose-yml
+2. exec `docker-compose up`
 
 ##### Note:
 To disable signup/register please update the var with `accountCreation: false` on the string `METEOR_SETTINGS: '{ "storageLocation":"/etc/neologism/uploads/vocabularies","accountCreation" :"true" }'` in docker-compose-yml
@@ -97,7 +94,7 @@ http {
 4. Install node modules using `npm i` in app and subfolder api
 5. Set ENV variable as shown in example.env file in the app root
 6. Run `npm run meteor-client:bundle` in the app folder
-7. Import guest user document generated using cmd `node generateCredentials.js  guest@neologism.com 12345`  in the app/utils folder using any mongodb interface
+7. Import guest user document generated using cmd `node generateCredentials.js  guest@neologism.com 12345`  in the utils folder using any mongodb interface
 8. Navigate to the app
 10. Run `npm run api` to start a local meteor server (running on http://localhost:3000/ with a connection to a local MongoDB at port 3001).
 11. Run `npm run start` for a dev server. Navigate to http://localhost:4200/. The app will automatically reload if you change any of the source files.
