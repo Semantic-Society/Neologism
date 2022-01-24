@@ -36,9 +36,9 @@ export class SideBarNodeCreatorComponent {
       this.createClassForm = this.formBuilder.group({
           name: ['', [Validators.required]],
           URI: [`${this.uriPrefix}`,
-              {
-                  asyncValidators: [this.vocabService.uriValidator()],
-              }
+            //   {
+            //       asyncValidators: [this.vocabService.uriValidator()],
+            //   }
           ],
           description: ['', []],
       }
