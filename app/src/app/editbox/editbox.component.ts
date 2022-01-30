@@ -6,15 +6,15 @@ import { RecommendationService } from '../services/recommendation.service';
 import { VocabulariesService } from '../services/vocabularies.service';
 import { SideBarStateService } from '../services/state-services/sidebar-state.service';
 import { EditboxService } from './editbox.service';
-import {  IClassProperty } from '../models/editbox.model';
-import {  FormBuilder,  FormGroup, FormGroupDirective, Validators } from '@angular/forms';
+import { IClassProperty } from '../models/editbox.model';
+import { FormBuilder, FormGroup, FormGroupDirective, Validators } from '@angular/forms';
 
 import { PropertyType2, xsdDataTypes, IClassWithProperties } from './../../../api/models';
 import { SpellCheckerService } from 'ngx-spellchecker';
 import { HttpClient } from '@angular/common/http';
 import { PropertyEditModal } from '../mxgraph/property-edit-form/property-edit.component';
 import { NzModalService } from 'ng-zorro-antd/modal';
-
+import { transformURI } from '../shared/validator.dup.URI';
 
 @Component({
     selector: 'app-editbox',
@@ -168,7 +168,7 @@ export class EditboxComponent implements OnInit, OnChanges {
 
     addProperty(formDirective: FormGroupDirective, index: number) {
         if (index) {
-            this.formProp.controls['URI'].setValue(`${this.uriPrefix}${encodeURIComponent(this.formProp.value.name.toLocaleLowerCase())}`);
+            this.formProp.controls['URI'].setValue(`${this.uriPrefix}${transformURI(this.formProp.value.name)}`);
         }
         this.vocabService.addProperty(this.selectedVertex.id, this.formProp.value.name, this.formProp.value.description, this.formProp.value.URI, this.formProp.value.range, PropertyType2[index], this.vocabID);
         formDirective.resetForm();
@@ -209,12 +209,12 @@ export class EditboxComponent implements OnInit, OnChanges {
     }
 
     listenerPropNameChange($event) {
-        this.formProp.controls['URI'].setValue(`${this.uriPrefix}${encodeURIComponent($event.target.value.toLocaleLowerCase())}`);
+        this.formProp.controls['URI'].setValue(`${this.uriPrefix}${transformURI($event.target.value)}`);
 
     }
 
     listenerClassNameChange(value: string) {
-        this.editedClass.URI = `${this.uriPrefix}${encodeURIComponent(value.toLocaleLowerCase())}`;
+        this.editedClass.URI = `${this.uriPrefix}${transformURI(value)}`;
     }
 
     resetSidebarState() {

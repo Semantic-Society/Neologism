@@ -19,23 +19,27 @@ export class N3Codec {
         owl: 'http://www.w3.org/2002/07/owl#',
         purl: 'http://purl.org/dc/terms/',
         proxivocab: 'http://hussain.ali.gitlab.io/vocab-proximity/',
+        xsd: 'http://www.w3.org/2001/XMLSchema#',
     };
-
+    static isLiteral = (prop) => {
+        return prop.range.name === "rdfs:Literal" ? "rdfs:Literal" : `http://www.w3.org/2001/XMLSchema#${prop.range as unknown as string
+            }`
+    }
     public static serialize(id, classesWithProps, respHandler) {
 
         try {
             const vocabId = id || null;
             let name = ""
 
-            const writer = new Writer({
-                prefixes: N3Codec.neoPrefixes,
-            });
+
 
             const vocab = Vocabularies.findOne({ _id: vocabId }) || null;
             if (!vocab) {
                 throw new Meteor.Error(404, 'Not Found');
             }
-
+            const writer = new Writer({
+                prefixes: { ...N3Codec.neoPrefixes, [``]: `http://w3id.org/neologism/${vocab.name}#` }
+            });
             let authorEmails = vocab.authors.map((author) => {
                 const emails = Users.findOne({ _id: author }).emails;
                 if (!!emails)
@@ -171,7 +175,7 @@ export class N3Codec {
                         ), quad(
                             namedNode(prop.URI),
                             namedNode('http://www.w3.org/2000/01/rdf-schema#range'),
-                            namedNode(`http://www.w3.org/2001/XMLSchema#${prop.range as unknown as string}`)
+                            namedNode(N3Codec.isLiteral(prop))
                         ), quad(
                             namedNode(prop.URI),
                             namedNode('http://hussain.ali.gitlab.io/vocab-proximity/hasX'),

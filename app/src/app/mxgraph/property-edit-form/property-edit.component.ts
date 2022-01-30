@@ -7,7 +7,6 @@ import { SpellCheckerService } from 'ngx-spellchecker';
 import { HttpClient } from '@angular/common/http';
 import { NzAutocompleteModule } from 'ng-zorro-antd/auto-complete';
 import { VocabulariesService } from '../../services/vocabularies.service';
-
 @Component({
     selector: 'app-update-prop-modal',
     templateUrl: './property-edit.component.html',
@@ -55,7 +54,7 @@ export class PropertyEditModal implements OnInit {
 
       if (this.prop.type === PropertyType.Data) {
 
-          this.prop.URI = `http://www.w3.org/2001/XMLSchema#${this.prop.rangeName}`;
+        //   this.prop.URI = `http://www.w3.org/2001/XMLSchema#${this.prop.rangeName}`;
           this.vocabService.updateClassName(this.prop._id, this.prop.rangeName);
           this.vocabService.updateClassURI(this.prop._id, this.prop.URI);
 
@@ -117,6 +116,7 @@ export class PropertyEditModal implements OnInit {
   propChange(_id: string) {
       this.prop = this.propList.find(x => x._id == _id);
       this.isDataTypeProp = this.prop.type === PropertyType.Data;
+      this.prop.rangeName = this.prop.range
   }
 
 

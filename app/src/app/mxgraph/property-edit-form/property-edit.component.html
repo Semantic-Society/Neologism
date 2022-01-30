@@ -48,12 +48,12 @@
     </nz-form-item>
     <nz-form-item>
         <nz-form-label>URI</nz-form-label>
-        <input placeholder="URI" nz-input [(ngModel)]="prop.URI" readonly>
+        <input placeholder="URI" nz-input [(ngModel)]="prop.URI">
 
     </nz-form-item>
     <nz-form-item>
         <nz-form-label>Description</nz-form-label>
-        <input placeholder="Comment" nz-input [(ngModel)]="prop.description" readonly>
+        <input placeholder="Comment" nz-input [(ngModel)]="prop.description">
 
     </nz-form-item>
     <nz-form-item>
@@ -61,7 +61,7 @@
         <nz-select style="width: 100%; margin-top: 7px;" nzShowSearch nzPlaceHolder="Select Range"
             [(ngModel)]="prop.rangeName">
             <ng-container *ngFor="let element of xsdDataTypes; let i = index">
-                <nz-option [nzValue]="element" [nzLabel]="'xsd:'+element" [value]="element"></nz-option>
+                <nz-option [nzValue]="element" [nzLabel]="element" [value]="element"></nz-option>
             </ng-container>
 
         </nz-select>

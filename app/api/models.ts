@@ -1,5 +1,4 @@
 import { Meteor } from 'meteor/meteor';
-import { Timestamp } from 'rxjs/internal/operators/timestamp';
 /**
  * These types are only to be used for communication between server and client.
  *
@@ -48,7 +47,7 @@ export interface Iclass {
     closeMatch: string[];
     exactMatch: string[];
   };
-  createdOn:Date;
+  createdOn: Date;
 }
 
 export interface Iproperty {
@@ -59,7 +58,7 @@ export interface Iproperty {
   URI: string;
   range: meteorID;
   rangeName?: string;
-  createdOn:Date;
+  createdOn: Date;
 }
 
 export interface IvocabularyExtended extends Ivocabulary {
@@ -79,7 +78,7 @@ export interface IClassWithProperties {
     type?: PropertyType;
     description: string;
     URI: string;
-    createdOn:Date;
+    createdOn: Date;
     range: IClassWithProperties; // these MUST be in the same vocabulary!
   }>;
   position: {
@@ -90,7 +89,7 @@ export interface IClassWithProperties {
     closeMatch: string[];
     exactMatch: string[];
   };
-createdOn:Date;
+  createdOn: Date;
 }
 
 export enum PropertyType {
@@ -108,98 +107,100 @@ export enum PropertyType2 {
 
 const xsdDataTypes = [
 
-  'anyURI',
+  'xsd:anyURI',
 
-  'base64Binary',
+  'xsd:base64Binary',
 
-  'boolean',
+  'xsd:boolean',
 
-  'byte',
+  'xsd:byte',
 
-  'date',
+  'xsd:date',
 
-  'dateTime',
+  'xsd:dateTime',
 
-  'decimal',
+  'xsd:decimal',
 
-  'derivationControl',
+  'xsd:derivationControl',
 
-  'double',
+  'xsd:double',
 
-  'duration',
+  'xsd:duration',
 
-  'ENTITIES',
+  ' xsd:ENTITIES',
 
-  'ENTITY',
+  ' xsd:ENTITY',
 
-  'float',
+  ' xsd:float',
 
-  'gDay',
+  ' xsd:gDay',
 
-  'gMonth',
+  'xsd:gMonth',
 
-  'gMonthDay',
+  'xsd:gMonthDay',
 
-  'gYear',
+  'xsd:gYear',
 
-  'gYearMonth',
+  'xsd:gYearMonth',
 
-  'hexBinary',
+  'xsd:hexBinary',
 
-  'ID',
+  'xsd:ID',
 
-  'IDREF',
+  'xsd:IDREF',
 
-  'IDREFS',
+  'xsd:IDREFS',
 
-  'int',
+  'xsd:int',
 
-  'integer',
+  'xsd:integer',
 
-  'language',
+  'xsd:language',
 
-  'long',
+  'xsd:long',
 
-  'Name',
+  'xsd:Name',
 
-  'NCName',
+  'xsd:NCName',
 
-  'negativeInteger',
+  'xsd:negativeInteger',
 
-  'NMTOKEN',
+  'xsd:NMTOKEN',
 
-  'NMTOKENS',
+  'xsd:NMTOKENS',
 
-  'nonNegativeInteger',
+  'xsd:nonNegativeInteger',
 
-  'nonPositiveInteger',
+  'xsd:nonPositiveInteger',
 
-  'normalizedString',
+  'xsd:normalizedString',
 
-  'NOTATION',
+  'xsd:NOTATION',
 
-  'positiveInteger',
+  'xsd:positiveInteger',
 
-  'QName',
+  'xsd:QName',
 
-  'short',
+  'xsd:short',
 
-  'simpleDerivationSet',
+  'xsd:simpleDerivationSet',
 
-  'string',
+  'xsd:string',
 
-  'time',
+  'xsd:time',
 
-  'token',
+  'xsd:token',
 
-  'unsignedByte',
+  'xsd:unsignedByte',
 
-  'unsignedInt',
+  'xsd:unsignedInt',
 
-  'unsignedLong',
+  'xsd:unsignedLong',
 
-  'unsignedShort'
+  'xsd:unsignedShort',
+
+  'rdfs:Literal'
 
 ];
 
-export {xsdDataTypes};
+export { xsdDataTypes };

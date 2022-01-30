@@ -165,7 +165,7 @@
                 <nz-form-label nzFor="range">Data Type</nz-form-label> <br>
                 <nz-select nzShowSearch nzAllowClear placeholder="Range" formControlName="range" required>
                   <ng-container *ngFor="let element of xsdDataTypes; let i = index">
-                    <nz-option [nzValue]="element" [nzLabel]="'xsd:'+element" [value]="element">
+                    <nz-option [nzValue]="element" [nzLabel]="element" [value]="element">
                     </nz-option>
                   </ng-container>
                 </nz-select>
