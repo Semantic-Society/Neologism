@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { NamedNode, Store,DataFactory } from 'n3';
-import { NzMessageService } from 'ng-zorro-antd/message';
-import { NzUploadFile } from 'ng-zorro-antd/upload';
-import { N3Codec } from '../mxgraph/N3Codec';
-import { VocabulariesService } from '../services/vocabularies.service';
+import {Component, OnInit} from '@angular/core';
+import {Router} from '@angular/router';
+import {Store} from 'n3';
+import {NzMessageService} from 'ng-zorro-antd/message';
+import {NzUploadFile} from 'ng-zorro-antd/upload';
+import {N3Codec} from '../mxgraph/N3Codec';
+import {VocabulariesService} from '../services/vocabularies.service';
 
 @Component({
     selector: 'app-rdf-uploader',
@@ -21,21 +21,20 @@ import { VocabulariesService } from '../services/vocabularies.service';
 })
 export class RdfUploaderComponent implements OnInit {
 
-
   uploading = false;
   fileList: NzUploadFile[] = [];
   beforeUpload = (file: NzUploadFile): boolean => {
-      if(!this.vocabService.isEligibleForCreatingVocab()){
-          this.msg.warning("Upload failed:Vocabularies Limit Exceeded");
+      if (!this.vocabService.isEligibleForCreatingVocab()) {
+          this.msg.warning('Upload failed:Vocabularies Limit Exceeded');
           return false;
       }
 
       const reader = new FileReader();
 
-      reader.onload = e => {
+      reader.onload = (e) => {
 
-          this.n3Util.deserialize(e.target.result,(store: Store)=>{
-              const importData= this.processImport(store);
+          this.n3Util.deserialize(e.target.result, (store: Store) => {
+              const importData = this.processImport(store);
 
               const modal = this.vocabService.openImportVocabForm(importData.meta);
 
@@ -45,28 +44,24 @@ export class RdfUploaderComponent implements OnInit {
                   if (!result || result.name === undefined)
                       return;
 
-
                   this.vocabService.createVocabulary(
                       result.name,
                       result.description,
                       result.uri
                   ).subscribe((response) => {
-                      this.vocabService.fillVocabularyWithData(importData,response.vocabId);
-                      this.router.navigate(['edit/' + response.vocabId],{ queryParams: { layout: 'true' } });
+                      this.vocabService.fillVocabularyWithData(importData, response.vocabId);
+                      this.router.navigate(['edit/' + response.vocabId], { queryParams: { layout: 'true' } });
                   }, (err) => {
                       console.log(err);
                   });
               });
-
-
           });
-
       };
       reader.readAsText(file as any);
 
       // Prevent upload
       return false;
-  };
+  }
 
   /**
    *
@@ -74,23 +69,21 @@ export class RdfUploaderComponent implements OnInit {
    *
    */
   processImport(store: Store) {
-      const meta= this.n3Util.getMeta(store);
-      const classess=this.n3Util.getClasses(store);
-      const subclasses= this.n3Util.getSubClassRelations(store);
+      const meta = this.n3Util.getMeta(store);
+      const classess = this.n3Util.getClasses(store);
+      const subclasses = this.n3Util.getSubClassRelations(store);
       return {
           meta,
-          classes:classess,
+          classes: classess,
           subclasses
       };
   }
 
-  constructor(private msg: NzMessageService,private n3Util: N3Codec
-      ,private vocabService: VocabulariesService,
-    private router: Router) { }
+  constructor(private msg: NzMessageService,
+              private n3Util: N3Codec,
+              private vocabService: VocabulariesService,
+              private router: Router) { }
 
   ngOnInit(): void {
   }
-
-
-
 }

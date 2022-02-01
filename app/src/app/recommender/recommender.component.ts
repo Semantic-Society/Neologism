@@ -1,8 +1,7 @@
-import { Component, ElementRef, Input, OnInit, Output, ViewChild } from '@angular/core';
-
-import { RecommendationService } from '../services/recommendation.service';
-import { VocabulariesService } from '../services/vocabularies.service';
-import { SideBarStateService } from '../services/state-services/sidebar-state.service';
+import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
+import {RecommendationService} from '../services/recommendation.service';
+import {SideBarStateService} from '../services/state-services/sidebar-state.service';
+import {VocabulariesService} from '../services/vocabularies.service';
 
 interface IClassRecommendation {
   uri: string;
@@ -130,7 +129,7 @@ export class RecommenderComponent implements OnInit {
   }
 
   addToGraph() {
-      this.vocabService.addClass(this.vocabID, this.selectedRecommendation.label, this.selectedRecommendation.comment, this.selectedRecommendation.uri).subscribe(res=>"");
+      this.vocabService.addClass(this.vocabID, this.selectedRecommendation.label, this.selectedRecommendation.comment, this.selectedRecommendation.uri).subscribe((res) => '');
   }
 
   enableSpinner() {
