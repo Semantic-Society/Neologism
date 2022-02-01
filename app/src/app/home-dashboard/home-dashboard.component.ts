@@ -1,9 +1,7 @@
-import { Component, OnInit, ViewChild, TemplateRef, AfterViewInit } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { CreateVocabModalComponent } from './create-vocab-modal/create-vocab-modal.component';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { VocabulariesService } from '../services/vocabularies.service';
 import { Meteor } from 'meteor/meteor';
+import { VocabulariesService } from '../services/vocabularies.service';
 
 @Component({
     selector: 'app-home-dashboard',
@@ -24,8 +22,6 @@ export class HomeDashboardComponent implements OnInit {
     ) {
 
     }
-
-    /** custom trigger can be TemplateRef **/
     changeTrigger(): void {
         this.triggerTemplate = this.customTrigger;
     }
@@ -33,10 +29,7 @@ export class HomeDashboardComponent implements OnInit {
     ngOnInit() {
         Tracker.autorun(() => {
             this.loggedInUser = Meteor.user();
-
-
         });
-
     }
 
     onLogout(): void {
@@ -57,8 +50,6 @@ export class HomeDashboardComponent implements OnInit {
 
             if (!result || result.name === undefined)
                 return;
-
-
             this.vocabService.createVocabulary(
                 result.name,
                 result.description,
@@ -71,7 +62,6 @@ export class HomeDashboardComponent implements OnInit {
                 // Handle error
             });
         });
-
     }
 
     updateListLength(count: number) {
@@ -79,5 +69,4 @@ export class HomeDashboardComponent implements OnInit {
         this.vocabService.vocabCount = count;
 
     }
-
 }

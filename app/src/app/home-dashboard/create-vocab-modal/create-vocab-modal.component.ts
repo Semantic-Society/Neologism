@@ -1,6 +1,6 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NzModalRef } from 'ng-zorro-antd/modal';
+import {Component, Input} from '@angular/core';
+import {FormGroup} from '@angular/forms';
+import {NzModalRef} from 'ng-zorro-antd/modal';
 
 @Component({
     selector: 'app-create-vocab-modal',
@@ -22,12 +22,11 @@ export class CreateVocabModalComponent {
       this.modal.destroy(this.validateForm.value);
   }
 
-  cancelModal(e: MouseEvent){
+  cancelModal(e: MouseEvent) {
       e.preventDefault();
       this.modal.destroy(null);
   }
-  change(value: string){
+  change(value: string) {
       this.validateForm.controls['uri'].setValue(`http://w3id.org/neologism/${encodeURIComponent(value.toLocaleLowerCase())}#`);
-
   }
 }

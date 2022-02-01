@@ -1,14 +1,15 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { VocabulariesService } from '../../../app/services/vocabularies.service';
-import { combineLatest, Observable } from 'rxjs';
-import { startWith, debounceTime, tap, take, map } from 'rxjs/operators';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { MatDialog } from '@angular/material/dialog';
-import { AddUserModalComponent } from '../../../app/vocablist/components/add-user-modal/add-user-modal.component';
-import { Router } from '@angular/router';
-import { Iuser } from '../../../../api/models';
-import { RemoveUserModalComponent } from '../../../app/vocablist/components/remove-user-modal/remove-user-modal.component';
-import { N3Codec } from '../../../app/mxgraph/N3Codec';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {MatDialog} from '@angular/material/dialog';
+import {Router} from '@angular/router';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {Observable} from 'rxjs';
+import {take, tap} from 'rxjs/operators';
+import {Iuser} from '../../../../api/models';
+import {N3Codec} from '../../mxgraph/N3Codec';
+import {VocabulariesService} from '../../services/vocabularies.service';
+import {AddUserModalComponent} from '../../vocablist/components/add-user-modal/add-user-modal.component';
+import {RemoveUserModalComponent} from '../../vocablist/components/remove-user-modal/remove-user-modal.component';
+
 @Component({
     selector: 'app-vocabulary-list',
     templateUrl: './vocabulary-list.component.html',
@@ -23,8 +24,8 @@ export class VocabularyListComponent implements OnInit {
     private router: Router,
     private vocabService: VocabulariesService,
     private modalService: NzModalService,
-    public dialog: MatDialog,) {
-      this.context$ = this.vocabService.getVocabularies().pipe(tap(vocabularies => this.totalVocab.emit(vocabularies.length)));
+    public dialog: MatDialog, ) {
+      this.context$ = this.vocabService.getVocabularies().pipe(tap((vocabularies) => this.totalVocab.emit(vocabularies.length)));
   }
 
   deleteVocabulary(vocab_id: string) {
@@ -56,15 +57,14 @@ export class VocabularyListComponent implements OnInit {
       );
   }
 
-
   openVocabulary(vocab_id: string) {
       this.router.navigateByUrl('edit/' + vocab_id);
   }
 
   addPersonToVocab(vocab_id: string) {
       const dialogRef = this.dialog.open(AddUserModalComponent, {
-          height: "400px",
-          width: "600px",
+          height: '400px',
+          width: '600px',
           data: { vocabId: vocab_id }
       });
   }
@@ -79,8 +79,8 @@ export class VocabularyListComponent implements OnInit {
 
   removePersonFromVocab(vocab_id: string) {
       const dialogRef = this.dialog.open(RemoveUserModalComponent, {
-          height: "400px",
-          width: "600px",
+          height: '400px',
+          width: '600px',
           data: { vocabId: vocab_id }
       });
   }
@@ -89,5 +89,4 @@ export class VocabularyListComponent implements OnInit {
       console.log('publishing vocabulary: ' + vocabID + '...');
       this.vocabService.publishVocab(vocabID);
   }
-
 }
