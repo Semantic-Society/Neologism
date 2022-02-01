@@ -1,18 +1,17 @@
-import { Component, Input, OnChanges, OnInit } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { combineLatest, filter, map, startWith, switchMap, tap } from 'rxjs/operators';
+import {Component, Input, OnChanges, OnInit} from '@angular/core';
+import {Observable, of} from 'rxjs';
+import {combineLatest, map, startWith, switchMap, tap} from 'rxjs/operators';
 
-import { RecommendationService } from '../services/recommendation.service';
-import { VocabulariesService } from '../services/vocabularies.service';
-import { SideBarStateService } from '../services/state-services/sidebar-state.service';
-import { EditboxService } from './editbox.service';
-import { IClassProperties, IClassProperty } from '../models/editbox.model';
-import { FormArray, FormBuilder, FormControl, FormGroup, FormGroupDirective, Validators } from '@angular/forms';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { PropertyType, xsdDataTypes,IClassWithProperties} from './../../../api/models';
-import { SpellCheckerService } from 'ngx-spellchecker';
-import { HttpClient } from '@angular/common/http';
-
+import {HttpClient} from '@angular/common/http';
+import {FormBuilder, FormGroup, FormGroupDirective, Validators} from '@angular/forms';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {SpellCheckerService} from 'ngx-spellchecker';
+import {IClassWithProperties, PropertyType, xsdDataTypes} from '../../../api/models';
+import {IClassProperties, IClassProperty} from '../models/editbox.model';
+import {RecommendationService} from '../services/recommendation.service';
+import {SideBarStateService} from '../services/state-services/sidebar-state.service';
+import {VocabulariesService} from '../services/vocabularies.service';
+import {EditboxService} from './editbox.service';
 
 @Component({
     selector: 'app-editbox',
@@ -35,10 +34,10 @@ export class EditboxComponent implements OnInit, OnChanges {
     }
 
   // protected alreadyThere: Array<{ comment: string; label: string; uri: string; range: string; }> = [];
-  protected alreadyThere$: Observable<{ comment: string; label: string; uri: string; range: string }[]>;
+  protected alreadyThere$: Observable<Array<{ comment: string; label: string; uri: string; range: string }>>;
 
   // protected propertyRecommendations: Array<{ comment: string; label: string; uri: string; range: string; }> = [];
-  protected propertyRecommendations: Observable<{ comment: string; label: string; uri: string; range: string }[]>;
+  protected propertyRecommendations: Observable<Array<{ comment: string; label: string; uri: string; range: string }>>;
 
   // TODO (184): as this is an observable, does it need @Input?
   @Input() selectedVertex: any;
@@ -71,17 +70,15 @@ export class EditboxComponent implements OnInit, OnChanges {
 
   protected classToUpdate: Observable<IClassWithProperties>;
   public editToggle = false;
-  protected rangeOptions: Observable<{ _id: string; name: string }[]>;
+  protected rangeOptions: Observable<Array<{ _id: string; name: string }>>;
   public suggestions_class: string[];
   public suggestions_property: string[];
   contextmenu_class = false;
-  contextmenu_property = false;
-
   fileURL = 'https://raw.githubusercontent.com/JacobSamro/ngx-spellchecker/master/dict/normalized_en-US.dic';
   oldClassID: string;
 
   ngOnInit() {
-      this.uriPrefix = (this.uriPrefix.search(/^(.*)#$/) == -1) ? `${this.uriPrefix}#` : `${this.uriPrefix}`;
+      this.uriPrefix = (this.uriPrefix.search(/^(.*)#$/) === -1) ? `${this.uriPrefix}#` : `${this.uriPrefix}`;
       this.formProp = this.fb.group({
           name: ['', Validators.required],
           URI: [`${this.uriPrefix}`],
@@ -97,18 +94,6 @@ export class EditboxComponent implements OnInit, OnChanges {
       this.classToUpdate = this.vocabService.getClassWithProperties(this.vocabID, of(this.selectedVertex.id));
 
   }
-
-  public buildForm(rec: IClassProperties): FormGroup {
-      return this.fb.group({
-          id: [rec.id, Validators.required],
-          name: [rec.label, Validators.required],
-          uri: [rec.uri, Validators.required],
-          range: [rec.range, Validators.required],
-          rangeId: [rec.rangeId, Validators.required],
-          comment: [rec.comment],
-
-      });
-  }
   ngOnChanges(input) {
 
       this.editedClass = this.editboxService.getUndefinedClass();
@@ -122,12 +107,12 @@ export class EditboxComponent implements OnInit, OnChanges {
       // we get several small pieces of info from the class. multicast is likely a good idea, but did not get it working.
       this.classInfo$ = this.editboxService.createClassInfoObj(this.vocabID, classID);
 
-      // actually already refacored (in editbox service) but very hard to test as the
+      // actually already refactored (in editbox service) but very hard to test as the
       // recommender service always returns an empty array, bug ?
       this.propertyRecommendations = this.editboxService.getClass$(this.vocabID, classID)
           .pipe(
               switchMap((theclass) => this.recommender.propertyRecommendation(theclass.URI).pipe(
-                  tap(as => console.log(as, "recommendations")),
+                  tap((as) => console.log(as, 'recommendations')),
                   combineLatest(this.alreadyThere$, (recommendations, alreadys) => {
                       const newReccommendations = [];
                       recommendations.forEach((recommendation) => {
@@ -143,7 +128,6 @@ export class EditboxComponent implements OnInit, OnChanges {
               startWith([]),
           );
 
-
   }
   checkWordProperty(word: string) {
 
@@ -152,7 +136,6 @@ export class EditboxComponent implements OnInit, OnChanges {
 
           this.suggestions_property = dictionary.getSuggestions(word);
       });
-
 
       this.contextmenu_class = true;
   }
@@ -165,14 +148,8 @@ export class EditboxComponent implements OnInit, OnChanges {
           this.suggestions_class = dictionary.getSuggestions(word);
       });
 
-
       this.contextmenu_class = true;
   }
-  addRecommendedProperyToGraph(rec: IClassProperty) {
-      this.editboxService.addRecommendedProperyToGraph(rec, this.selectedVertex.id, this.vocabID);
-  }
-
-
   addProperty(formDirective: FormGroupDirective, index: number) {
       const type = (index === 0) ? PropertyType.Object : PropertyType.Data;
       if (index) {
@@ -182,8 +159,6 @@ export class EditboxComponent implements OnInit, OnChanges {
       formDirective.resetForm();
       this.formProp.reset();
   }
-
-
 
   cancelEdit() {
       this.editToggle = false;

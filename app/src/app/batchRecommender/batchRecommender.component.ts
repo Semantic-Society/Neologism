@@ -1,20 +1,20 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChange } from "@angular/core";
-import { MeteorObservable } from "meteor-rxjs";
-import { Observable } from "rxjs";
-import { debounceTime, startWith } from "rxjs/operators";
-import { BatchRecommendations } from "../services/BatchRecommendations";
-import { Recommendation } from "../services/Recommendation";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
+import { MeteorObservable } from 'meteor-rxjs';
+import { Observable } from 'rxjs';
+import { debounceTime, startWith } from 'rxjs/operators';
+import { IClassWithProperties } from '../../../api/models';
+import { BatchRecommendations } from '../services/BatchRecommendations';
+import { Recommendation } from '../services/Recommendation';
 import {
     VocabulariesService
-} from "../services/vocabularies.service";
-import { IClassWithProperties } from '../../../api/models';
+} from '../services/vocabularies.service';
 @Component({
-    selector: "app-batchRecommender",
-    templateUrl: "./batchRecommender.component.html",
-    styleUrls: ["./batchRecommender.component.css"],
+    selector: 'app-batchRecommender',
+    templateUrl: './batchRecommender.component.html',
+    styleUrls: ['./batchRecommender.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class BatchRecommenderComponent implements OnInit{
+export class BatchRecommenderComponent implements OnInit {
   radioSelected: any[];
   @Input() recommendations$: Observable<BatchRecommendations[]>;
   @Input() classes: Observable<IClassWithProperties[]>;
@@ -29,27 +29,27 @@ export class BatchRecommenderComponent implements OnInit{
   ngOnInit() {
       this.radioSelected = [];
   }
-  dataLoaded(){
-      this.loaded =true;
+  dataLoaded() {
+      this.loaded = true;
   }
-  return(){
-      this.loaded =false;
+  return() {
+      this.loaded = false;
   }
 
   ngAfterContentChecked(): void {
       this.changeDedectionRef.detectChanges();
   }
   preselect(URI: string, index: number) {
-      if(!this.radioSelected[index]){
+      if (!this.radioSelected[index]) {
           this.radioSelected[index] = URI;
       }
   }
-  preselectNone(index: number){
-      this.radioSelected[index] = "None_"+index;
+  preselectNone(index: number) {
+      this.radioSelected[index] = 'None_' + index;
   }
 
   liftOntology() {
-      this.loaded =false;
+      this.loaded = false;
       this.recommendations$
           .pipe(startWith([]), debounceTime(1000))
           .subscribe((recs) => {
@@ -69,7 +69,7 @@ export class BatchRecommenderComponent implements OnInit{
                                       );
 
                                       this.vocabService.updateClassDescription(c._id, classNameAndDescription[1]);
-                                      this.vocabService.updateClassName(c._id, classNameAndDescription[0] === "" ? rec.keyword : classNameAndDescription[0]);
+                                      this.vocabService.updateClassName(c._id, classNameAndDescription[0] === '' ? rec.keyword : classNameAndDescription[0]);
                                       this.vocabService.updateClassURI(c._id, element.URI);
 
                                   }
@@ -88,7 +88,7 @@ export class BatchRecommenderComponent implements OnInit{
                                           MeteorObservable.call(
                                               'property.update',
                                               p._id,
-                                              classNameAndDescription[0] === ""
+                                              classNameAndDescription[0] === ''
                                                   ? rec.keyword
                                                   : classNameAndDescription[0],
                                               classNameAndDescription[1],
@@ -97,7 +97,7 @@ export class BatchRecommenderComponent implements OnInit{
                                           ).subscribe(
                                               (response) => {
                                                   // Handle success and response from server!
-                                                  console.log("properties lifted");
+                                                  console.log('properties lifted');
                                               },
                                               (err) => {
                                                   console.log(err);
@@ -113,13 +113,13 @@ export class BatchRecommenderComponent implements OnInit{
   }
 
   private getNameAndDescription(element: Recommendation) {
-      const regexBold = new RegExp('<\/?b>','g');
+      const regexBold = new RegExp('<\/?b>', 'g');
       const name = element.labels[0]
-          ? element.labels[0].label.replace(regexBold, "")
-          : "";
+          ? element.labels[0].label.replace(regexBold, '')
+          : '';
       const description = element.comments[0]
-          ? element.comments[0].label.replace(regexBold,"")
-          : "";
+          ? element.comments[0].label.replace(regexBold, '')
+          : '';
 
       return [name, description];
   }

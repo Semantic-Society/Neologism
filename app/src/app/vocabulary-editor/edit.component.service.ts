@@ -62,8 +62,7 @@ export class EditComponentService {
                  // props_reco are the new property recommendation and xting_props are the existing ones
                  map(reommendations => this.mergeOldandNewRecommendations(reommendations, existing_properties)),
                  take(1),
-                 filter(Boolean),
-                 // tap(recommendations => this.property_recommendations.next(recommendations))
+                 filter(Boolean)
              );
 
      }

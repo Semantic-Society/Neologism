@@ -27,7 +27,7 @@ class VocabClass {
           range: ''
       };
   }
-};
+}
 
 interface ClassPropertyI {
   name: string;
@@ -197,19 +197,6 @@ export class VocabularyEditorComponent implements OnInit {
              .pipe(
                  switchMap((theclass) => this.recommender.propertyRecommendation(theclass.URI).pipe(
                      tap(as=> console.log(as, "recommendations")),
-                     // combineLatest(this.alreadyThere2, (recommendations, alreadys) => {
-                     //   const newReccommendations = [];
-                     //   recommendations.forEach((recommendation) => {
-                     //     //       // TODO (184)is there a better way in JS?
-                     //     if (!alreadys.some((already) => {
-                     //       return already.uri === recommendation.uri;
-                     //     })) {
-                     //       // the property is not there yet
-                     //       newReccommendations.push(recommendation);
-                     //     }
-                     //   });
-                     //   return newReccommendations;
-                     // })
                  )),
                  startWith([]),
              );
