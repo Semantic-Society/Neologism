@@ -1,4 +1,5 @@
-import { Meteor } from 'meteor/meteor';
+import {Meteor} from 'meteor/meteor';
+
 /**
  * These types are only to be used for communication between server and client.
  *
@@ -12,13 +13,6 @@ export interface Iuser extends Meteor.User {
 export type meteorID = string;
 export type userID = meteorID;
 
-export interface IpropertyMeta {
-  name: string;
-  URI: string;
-  range: string;
-  comment: string;
-}
-
 export interface Ivocabulary {
   _id?: meteorID; // Mongo generated ID
   name: string;
@@ -27,7 +21,6 @@ export interface Ivocabulary {
   authors: userID[];
   uriPrefix: string;
   public: boolean;
-  // version: string;
   classes: meteorID[]; // List of all classes in the vocab
   domain: string;
 }
@@ -63,7 +56,6 @@ export interface IvocabularyExtended extends Ivocabulary {
   authorsEmailAddress: string;
 }
 
-
 export interface IClassWithProperties {
   _id: string; // Mongo generated ID
   name: string;
@@ -93,101 +85,54 @@ export enum PropertyType {
   Data = 'owl:DatatypeProperty'
 }
 
-
 const xsdDataTypes = [
 
   'anyURI',
-
   'base64Binary',
-
   'boolean',
-
   'byte',
-
   'date',
-
   'dateTime',
-
   'decimal',
-
   'derivationControl',
-
   'double',
-
   'duration',
-
   'ENTITIES',
-
   'ENTITY',
-
   'float',
-
   'gDay',
-
   'gMonth',
-
   'gMonthDay',
-
   'gYear',
-
   'gYearMonth',
-
   'hexBinary',
-
   'ID',
-
   'IDREF',
-
   'IDREFS',
-
   'int',
-
   'integer',
-
   'language',
-
   'long',
-
   'Name',
-
   'NCName',
-
   'negativeInteger',
-
   'NMTOKEN',
-
   'NMTOKENS',
-
   'nonNegativeInteger',
-
   'nonPositiveInteger',
-
   'normalizedString',
-
   'NOTATION',
-
   'positiveInteger',
-
   'QName',
-
   'short',
-
   'simpleDerivationSet',
-
   'string',
-
   'time',
-
   'token',
-
   'unsignedByte',
-
   'unsignedInt',
-
   'unsignedLong',
-
   'unsignedShort'
-
 ];
 
 export {xsdDataTypes};
