@@ -17,7 +17,6 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
-
 const MATERIAL_MODULES = [
     MatAutocompleteModule,
     MatButtonModule,
@@ -38,10 +37,9 @@ const MATERIAL_MODULES = [
     MatTooltipModule,
 ];
 
-
-  @NgModule({
-      imports: MATERIAL_MODULES,
-      exports: MATERIAL_MODULES
-  })
+@NgModule({
+    imports: MATERIAL_MODULES,
+    exports: MATERIAL_MODULES
+})
 
 export class NeologismMaterialModule { }
