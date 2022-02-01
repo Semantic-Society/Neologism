@@ -1,16 +1,14 @@
-import { stringify } from '@angular/compiler/src/util';
-import { Injectable } from '@angular/core';
-import { DataFactory, Writer, Quad, Parser, Store, termToId } from 'n3';
+import {Injectable} from '@angular/core';
+import {DataFactory, Parser, Quad, Store, Writer} from 'n3';
+import {Users, Vocabularies} from '../../../api/collections';
+import {IClassWithProperties, Iuser, PropertyType} from '../../../api/models';
+
 const { namedNode, literal, quad } = DataFactory;
-import { Vocabularies, Users } from '../../../api/collections';
-import { IClassWithProperties, Iuser, PropertyType, } from '../../../api/models'
 
 @Injectable({
     providedIn: 'root',
 })
 export class N3Codec {
-    parser = new Parser();
-
     public static neoPrefixes = {
         rdf: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
         rdfs: 'http://www.w3.org/2000/01/rdf-schema#',
@@ -19,11 +17,12 @@ export class N3Codec {
         purl: 'http://purl.org/dc/terms/'
     };
 
+  parser = new Parser();
+
     public static serialize(id, classesWithProps, respHandler) {
 
         try {
             const vocabId = id || null;
-            let name = ""
 
             const writer = new Writer({
                 prefixes: N3Codec.neoPrefixes
@@ -40,9 +39,6 @@ export class N3Codec {
                     return emails;
             });
 
-            if (name === '' || name === undefined) name = 'vocab-' + vocabId;
-
-
             let classes: IClassWithProperties[] = classesWithProps;
             classes = classes.filter((classs) => !classs.isDataTypeVertex);
             const creator: Iuser = (vocab.creator) ? Users.findOne({ _id: vocab.creator }, { fields: { emails: 1 } }) : null;
@@ -58,7 +54,7 @@ export class N3Codec {
                 literal(creator.emails[0].address)
             ));
 
-            authorEmails = authorEmails.filter((emails) => emails[0].address != creator.emails[0].address);
+            authorEmails = authorEmails.filter((emails) => emails[0].address !== creator.emails[0].address);
             authorEmails.forEach((emails) => emails.forEach((email) => {
                 quads.push(quad(
                     namedNode(vocab.uriPrefix),
@@ -66,7 +62,6 @@ export class N3Codec {
                     literal(email.address)
                 ));
             }));
-
 
             quads.push(quad(
                 namedNode(vocab.uriPrefix),
@@ -77,7 +72,6 @@ export class N3Codec {
                 namedNode('http://purl.org/dc/terms/description'),
                 literal(vocab.description)
             ));
-
 
             const objectProps = Object.create(null);
             const dataProps = Object.create(null);
@@ -125,9 +119,6 @@ export class N3Codec {
                             namedNode(`http://www.w3.org/2001/XMLSchema#${prop.range as unknown as string}`)
                         ));
                     }
-
-
-
                 });
             });
             for (const propURI in objectProps) {
@@ -170,18 +161,15 @@ export class N3Codec {
                 else {
                     respHandler(new Store(list));
                 }
-
             });
     }
 
     getMeta(store: Store): { name: string; uri: string; desc: string } {
-
         return {
             name: store.getQuads(null, namedNode('http://purl.org/dc/terms/title'), null, null)[0].object.value,
             uri: store.getQuads(null, null, namedNode('http://www.w3.org/2002/07/owl#Ontology'), null)[0].subject.value,
             desc: store.getQuads(null, namedNode('http://purl.org/dc/terms/description'), null, null)[0].object.value,
         };
-
     }
 
     getClasses(store: Store) {
@@ -207,7 +195,7 @@ export class N3Codec {
                 const subClasses = store.getQuads(null, 'http://www.w3.org/2000/01/rdf-schema#domain', aClass, null);
                 subClasses.forEach((subClass) => {
                     const range = store.getQuads(subClass.subject, 'http://www.w3.org/2000/01/rdf-schema#range', null, null);
-                    const isDataType = store.getQuads(subClass.subject, null, "http://www.w3.org/2002/07/owl#DatatypeProperty", null).length ? true : false;
+                    const isDataType = !!store.getQuads(subClass.subject, null, 'http://www.w3.org/2002/07/owl#DatatypeProperty', null).length;
                     const rangeLabel = range[0].object.value.split('#')[1];
                     const propLabel = subClass.subject.value.split('#')[1];
                     const domainLabel = aClass.value.split('#')[1];
@@ -216,7 +204,7 @@ export class N3Codec {
                             uri: subClass.subject.value,
                             label: propLabel,
                             domain: domainLabel,
-                            description: "" , // TODO: Fix export to include comments
+                            description: '' , // TODO: Fix export to include comments
                             type: isDataType ? PropertyType.Data : PropertyType.Object,
                             range: rangeLabel
                         }

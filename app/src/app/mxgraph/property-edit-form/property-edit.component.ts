@@ -1,12 +1,11 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { Properties, Classes } from '../../../../api/collections';
-import { Iclass, Iproperty, PropertyType, xsdDataTypes } from '../../../../api/models';
-import { NzModalRef } from 'ng-zorro-antd/modal';
-import { MeteorObservable } from 'meteor-rxjs';
-import { SpellCheckerService } from 'ngx-spellchecker';
-import { HttpClient } from '@angular/common/http';
-import { NzAutocompleteModule } from 'ng-zorro-antd/auto-complete';
-import { VocabulariesService } from '../../services/vocabularies.service';
+import {HttpClient} from '@angular/common/http';
+import {Component, Input, OnInit} from '@angular/core';
+import {MeteorObservable} from 'meteor-rxjs';
+import {NzModalRef} from 'ng-zorro-antd/modal';
+import {SpellCheckerService} from 'ngx-spellchecker';
+import {Classes, Properties} from '../../../../api/collections';
+import {Iclass, Iproperty, PropertyType, xsdDataTypes} from '../../../../api/models';
+import {VocabulariesService} from '../../services/vocabularies.service';
 
 @Component({
     selector: 'app-update-prop-modal',
@@ -16,9 +15,9 @@ import { VocabulariesService } from '../../services/vocabularies.service';
 export class PropertyEditModal implements OnInit {
 
     constructor(private modal: NzModalRef,
-    private spellCheckerService: SpellCheckerService,
-    private httpClient: HttpClient,
-    private vocabService: VocabulariesService) { }
+                private spellCheckerService: SpellCheckerService,
+                private httpClient: HttpClient,
+                private vocabService: VocabulariesService) { }
   @Input() propListString: string;
   isDataTypeProp: boolean;
   propList: Iproperty[];
@@ -39,7 +38,7 @@ export class PropertyEditModal implements OnInit {
   ngOnInit() {
       this.propList = [];
       this.propListName = [];
-      this.propListString.split(',').forEach(key => {
+      this.propListString.split(',').forEach((key) => {
           const prop = Properties.findOne({ _id: key });
           this.propList.push(prop);
       });
@@ -87,7 +86,6 @@ export class PropertyEditModal implements OnInit {
       this.contextmenu = true;
   }
 
-
   deleteProp(): void {
 
       if (this.prop.type === PropertyType.Data) {
@@ -113,9 +111,7 @@ export class PropertyEditModal implements OnInit {
   }
 
   propChange(_id: string) {
-      this.prop = this.propList.find(x => x._id == _id);
+      this.prop = this.propList.find((x) => x._id === _id);
       this.isDataTypeProp = this.prop.type === PropertyType.Data;
   }
-
-
 }
