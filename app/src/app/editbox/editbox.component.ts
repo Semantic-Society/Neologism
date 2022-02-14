@@ -13,7 +13,7 @@ import { PropertyType2, xsdDataTypes, IClassWithProperties } from './../../../ap
 import { SpellCheckerService } from 'ngx-spellchecker';
 import { HttpClient } from '@angular/common/http';
 import { PropertyEditModal } from '../mxgraph/property-edit-form/property-edit.component';
-import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
 import { transformURI } from '../shared/validator.dup.URI';
 
 @Component({
@@ -238,23 +238,18 @@ export class EditboxComponent implements OnInit, OnChanges {
     }
 
     fnEditClassProps() {
-        let modal = null
-        modal = this.openPropUpdateForm({ domainClazzID: this.selectedVertex.id, edgeID: "", isDataTypeProp: false }, modal);
-    }
-
-    private openPropUpdateForm(domainClassId, modal) {
-        return this.modalService.create({
+        const modal: NzModalRef  =   this.modalService.create({
             nzTitle: 'Actions on Property',
             nzContent: PropertyEditModal,
             nzComponentParams: {
                 propListString: null,
-                domainClassId: domainClassId.domainClazzID,
+                domainClassId: this.selectedVertex.id,
             },
             nzFooter: [
                 {
                     type: 'default',
                     label: 'Cancel',
-                    onClick: (componentInstance) => {
+                    onClick: () => {
                         modal.destroy();
                     },
                 },

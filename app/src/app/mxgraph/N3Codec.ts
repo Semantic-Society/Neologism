@@ -14,10 +14,14 @@ export class N3Codec {
     parser = new Parser();
 
     public static neoPrefixes = {
+        /**
+         * TODO: purl to dcterms, order of terms ?
+         * add rdfs isDefinedBy
+         */
         rdf: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
         rdfs: 'http://www.w3.org/2000/01/rdf-schema#',
         owl: 'http://www.w3.org/2002/07/owl#',
-        purl: 'http://purl.org/dc/terms/',
+        dcterms: 'http://purl.org/dc/terms/',
         proxivocab: 'http://hussain.ali.gitlab.io/vocab-proximity/',
         xsd: 'http://www.w3.org/2001/XMLSchema#',
     };
@@ -143,7 +147,7 @@ export class N3Codec {
                             namedNode(prop.URI),
                             namedNode('http://www.w3.org/2000/01/rdf-schema#domain'),
                             namedNode(clazz.URI)
-                        ), quad(
+                        ), quad( //TODO: allow only range and only domain props using owl:thing as filler in visualisation
                             namedNode(prop.URI),
                             namedNode('http://www.w3.org/2000/01/rdf-schema#range'),
                             namedNode(prop.range.URI),

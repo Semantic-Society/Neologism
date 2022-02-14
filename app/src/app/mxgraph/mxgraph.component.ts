@@ -115,14 +115,14 @@ export class MxgraphComponent implements OnInit, OnDestroy {
         this.mx = new MxgraphService(this.mxGraphView.nativeElement);
         this.sideBarState.changeSidebarToDefault();
 
-        this.currentEdgeSelectionSub = this.mx
-            .currentEdgeSelection().pipe(takeUntil(this.ngUnsubscribe))
-            .subscribe((edgeSelection) => {
-                if (edgeSelection != null) {
-                    let modal = null
-                    modal = this.openPropUpdateForm(edgeSelection, modal);
-                }
-            });
+        // this.currentEdgeSelectionSub = this.mx
+        //     .currentEdgeSelection().pipe(takeUntil(this.ngUnsubscribe))
+        //     .subscribe((edgeSelection) => {
+        //         if (edgeSelection != null) {
+        //             let modal = null
+        //             modal = this.openPropUpdateForm(edgeSelection, modal);
+        //         }
+        //     });
 
         this.currentSelectionSub = this.mx
             .currentSelection()
