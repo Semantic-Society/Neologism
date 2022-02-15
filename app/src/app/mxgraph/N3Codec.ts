@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { DataFactory, Writer, Quad, Parser, Store, termToId } from 'n3';
 const { namedNode, literal, quad } = DataFactory;
 import { Vocabularies, Users } from '../../../api/collections';
-import { IClassWithProperties, Iuser, PropertyType, } from '../../../api/models'
+import { IClassWithProperties, Iproperty, Iuser, PropertyType, } from '../../../api/models'
 
 function formatTime(timeInMs) {
     return new Date(timeInMs).toISOString()
@@ -26,8 +26,8 @@ export class N3Codec {
         xsd: 'http://www.w3.org/2001/XMLSchema#',
     };
     static isLiteral = (prop) => {
-        return prop.range.name === "rdfs:Literal" ? "rdfs:Literal" : `http://www.w3.org/2001/XMLSchema#${prop.range as unknown as string
-            }`
+        return prop.range.name === "rdfs:Literal" ? "rdfs:Literal" : prop.range.name;
+            
     }
     public static serialize(id, classesWithProps, respHandler) {
 
@@ -145,6 +145,15 @@ export class N3Codec {
                             namedNode('http://www.w3.org/2002/07/owl#ObjectProperty')
                         ), quad(
                             namedNode(prop.URI),
+                            namedNode('http://www.w3.org/2000/01/rdf-schema#label'),
+                            literal(prop.name)
+                        ),
+                        quad(
+                            namedNode(prop.URI),
+                            namedNode('http://www.w3.org/2000/01/rdf-schema#comment'),
+                            literal(prop.description)
+                        ), quad(
+                            namedNode(prop.URI),
                             namedNode('http://www.w3.org/2000/01/rdf-schema#domain'),
                             namedNode(clazz.URI)
                         ), quad( //TODO: allow only range and only domain props using owl:thing as filler in visualisation
@@ -162,6 +171,10 @@ export class N3Codec {
                                 namedNode(clazz.URI),
                                 namedNode(prop.URI),
                                 namedNode(prop.range.URI)
+                            ), quad(
+                                namedNode(prop.URI),
+                                namedNode('http://hussain.ali.gitlab.io/vocab-proximity/hasTime'),
+                                literal(formatTime(prop.createdOn))
                             )
                         );
                     }
@@ -174,12 +187,21 @@ export class N3Codec {
                             namedNode('http://www.w3.org/2002/07/owl#DatatypeProperty')
                         ), quad(
                             namedNode(prop.URI),
+                            namedNode('http://www.w3.org/2000/01/rdf-schema#label'),
+                            literal(prop.name)
+                        ),
+                        quad(
+                            namedNode(prop.URI),
+                            namedNode('http://www.w3.org/2000/01/rdf-schema#comment'),
+                            literal(prop.description)
+                        ), quad(
+                            namedNode(prop.URI),
                             namedNode('http://www.w3.org/2000/01/rdf-schema#domain'),
                             namedNode(clazz.URI)
                         ), quad(
                             namedNode(prop.URI),
                             namedNode('http://www.w3.org/2000/01/rdf-schema#range'),
-                            namedNode(N3Codec.isLiteral(prop))
+                            namedNode(prop.range.name)
                         ), quad(
                             namedNode(prop.URI),
                             namedNode('http://hussain.ali.gitlab.io/vocab-proximity/hasX'),

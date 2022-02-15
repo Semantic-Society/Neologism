@@ -29,7 +29,7 @@ export class PropertyEditModal implements OnInit {
   fileURL = 'https://raw.githubusercontent.com/JacobSamro/ngx-spellchecker/master/dict/normalized_en-US.dic';
 
   classes: Iclass[];
-
+  nonDataTypeClass: Iclass[];
   public suggestions: string[];
   contextmenu = false;
 
@@ -44,10 +44,9 @@ export class PropertyEditModal implements OnInit {
         const prop = Properties.findOne({ _id: key });
         this.propList.push(prop);
     });
-      this.classes = Classes.find({ isDataTypeVertex: false }).fetch();
-      this.prop = this.propList[0];
-      this.selectedProp = this.prop._id;
-      this.isDataTypeProp = this.prop.type === PropertyType.Data;
+      this.classes = Classes.find().fetch();
+      this.nonDataTypeClass = this.classes.filter((x)=>x.isDataTypeVertex===false)
+      this.propChange(this.propList[0]._id)
   }
 
   closeModal(): void {
@@ -75,7 +74,7 @@ export class PropertyEditModal implements OnInit {
           });
       }
 
-      this.modal.destroy();
+    //   this.modal.destroy();
   }
 
   checkWord(word: string) {
@@ -89,8 +88,8 @@ export class PropertyEditModal implements OnInit {
   }
 
 
-  deleteProp(): void {
-
+  deleteProp() {
+    
       if (this.prop.type === PropertyType.Data) {
           MeteorObservable.call('property.delete', this.prop._id, this.domainClassId).subscribe((response) => {
               // Handle success and response from server!
@@ -104,19 +103,22 @@ export class PropertyEditModal implements OnInit {
               console.log(err);
           });
       } else {
-          MeteorObservable.call('property.delete', this.prop._id, this.domainClassId).subscribe((response) => {
+        MeteorObservable.call('property.delete', this.prop._id, this.domainClassId).subscribe((response) => {
               // Handle success and response from server!
           }, (err) => {
               console.log(err);
           });
       }
-      this.modal.destroy();
+
+      
   }
 
   propChange(_id: string) {
       this.prop = this.propList.find(x => x._id == _id);
       this.isDataTypeProp = this.prop.type === PropertyType.Data;
-      this.prop.rangeName = this.prop.range
+      this.prop.rangeName = this.classes.find(x=>x._id===this.prop.range).name
+      this.selectedProp = this.prop._id;
+      return false;
   }
 
 
