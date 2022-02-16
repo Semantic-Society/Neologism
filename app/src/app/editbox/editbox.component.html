@@ -142,10 +142,13 @@
             </nz-form-item>
 
 
-            <nz-form-item class="prop-input" style="display: none;">
+            <nz-form-item class="prop-input" >
               <nz-form-control>
                 <nz-form-label nzFor="URI">Property URI</nz-form-label> <br>
                 <input class="" nz-input placeholder="URI" formControlName="URI">
+                <nz-form-explain *ngIf="formProp.get('URI').hasError('invalidURI')">
+                  URI is already in <strong>USE</strong>
+                </nz-form-explain>
               </nz-form-control>
             </nz-form-item>
 
