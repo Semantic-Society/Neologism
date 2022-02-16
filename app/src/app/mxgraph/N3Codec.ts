@@ -171,11 +171,12 @@ export class N3Codec {
                                 namedNode(clazz.URI),
                                 namedNode(prop.URI),
                                 namedNode(prop.range.URI)
-                            ), quad(
-                                namedNode(prop.URI),
-                                namedNode('http://hussain.ali.gitlab.io/vocab-proximity/hasTime'),
-                                literal(formatTime(prop.createdOn))
                             )
+                            // , quad(
+                            //     namedNode(prop.URI),
+                            //     namedNode('http://hussain.ali.gitlab.io/vocab-proximity/hasTime'),
+                            //     literal(formatTime(prop.createdOn))
+                            // )
                         );
                     }
                     else {
