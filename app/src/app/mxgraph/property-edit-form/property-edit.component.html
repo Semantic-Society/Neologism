@@ -66,7 +66,7 @@
     <nz-form-item>
         <nz-form-label>Select XSD Type</nz-form-label>
         <nz-select style="width: 100%; margin-top: 7px;" nzShowSearch nzPlaceHolder="Select Range"
-            [(ngModel)]="prop.rangeName">
+            [(ngModel)]="prop.range">
             <ng-container *ngFor="let element of xsdDataTypes; let i = index">
                 <nz-option [nzValue]="element" [nzLabel]="element" [value]="element"></nz-option>
             </ng-container>

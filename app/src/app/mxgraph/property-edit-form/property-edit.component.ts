@@ -54,10 +54,10 @@ export class PropertyEditModal implements OnInit {
       if (this.prop.type === PropertyType.Data) {
 
         //   this.prop.URI = `http://www.w3.org/2001/XMLSchema#${this.prop.rangeName}`;
-          this.vocabService.updateClassName(this.prop._id, this.prop.rangeName);
+          this.vocabService.updateClassName(this.prop._id, this.prop.range);
           this.vocabService.updateClassURI(this.prop._id, this.prop.URI);
 
-          MeteorObservable.call('property.update', this.prop._id, this.prop.name, this.prop.description, this.prop.URI, this.prop._id).subscribe((response) => {
+          MeteorObservable.call('property.update', this.prop._id, this.prop.name, this.prop.description, this.prop.URI,this.prop.range).subscribe((response) => {
               // Handle success and response from server!
               console.log('updated');
 
@@ -116,7 +116,6 @@ export class PropertyEditModal implements OnInit {
   propChange(_id: string) {
       this.prop = this.propList.find(x => x._id == _id);
       this.isDataTypeProp = this.prop.type === PropertyType.Data;
-      this.prop.rangeName = this.classes.find(x=>x._id===this.prop.range).name
       this.selectedProp = this.prop._id;
       return false;
   }
