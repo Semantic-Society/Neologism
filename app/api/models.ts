@@ -56,8 +56,7 @@ export interface Iproperty {
   type?: PropertyType;
   description: string;
   URI: string;
-  range: meteorID;
-  rangeName?: string;
+  range: meteorID | string;
   createdOn: Date;
 }
 
