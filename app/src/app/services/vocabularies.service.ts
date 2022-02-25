@@ -157,7 +157,7 @@ export class VocabulariesService {
   addProperty(domainId: meteorID, name: string, description: string, URI: string, range: string,
       type: string, vocabID: string) {
       if (type==PropertyType2[1]) {
-          this.addClass(vocabID, range, description = PropertyType.Data, URI, undefined, true).subscribe(dummyRangeId => {
+          this.addClass(vocabID, range, description, URI, undefined, true).subscribe(dummyRangeId => {
               MeteorObservable.call('property.create', domainId, { name, description, URI, range, type, _id: dummyRangeId })
                   .subscribe((_response) => {
                       // Handle success and response from server!
