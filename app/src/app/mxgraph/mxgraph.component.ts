@@ -111,7 +111,7 @@ export class MxgraphComponent implements OnInit, OnDestroy {
             });
         // TODO (18): Currently creates a new instance with each subscription. Use something like this instead: .multicast(new BehaviorSubject([]));
         // This did, however, not work.
-        this.classes = this.vocabService.getClassesWithProperties(this.vocabID);
+        this.classes = this.vocabService.getClassesWithProperties(this.vocabID)
         this.mx = new MxgraphService(this.mxGraphView.nativeElement);
         this.sideBarState.changeSidebarToDefault();
 

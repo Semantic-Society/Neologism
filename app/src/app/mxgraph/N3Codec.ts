@@ -25,10 +25,7 @@ export class N3Codec {
         proxivocab: 'http://hussain.ali.gitlab.io/vocab-proximity/',
         xsd: 'http://www.w3.org/2001/XMLSchema#',
     };
-    static isLiteral = (prop) => {
-        return prop.range.name === "rdfs:Literal" ? "rdfs:Literal" : prop.range.name;
-            
-    }
+
     public static serialize(id, classesWithProps, respHandler) {
 
         try {
@@ -148,22 +145,22 @@ export class N3Codec {
                             namedNode('http://www.w3.org/2000/01/rdf-schema#label'),
                             literal(prop.name)
                         ),
-                        quad(
-                            namedNode(prop.URI),
-                            namedNode('http://www.w3.org/2000/01/rdf-schema#comment'),
-                            literal(prop.description)
-                        ), quad(
-                            namedNode(prop.URI),
-                            namedNode('http://www.w3.org/2000/01/rdf-schema#domain'),
-                            namedNode(clazz.URI)
-                        ), quad( //TODO: allow only range and only domain props using owl:thing as filler in visualisation
-                            namedNode(prop.URI),
-                            namedNode('http://www.w3.org/2000/01/rdf-schema#range'),
-                            namedNode(prop.range.URI),
-                        ), quad(
-                            namedNode(prop.URI),
-                            namedNode('http://hussain.ali.gitlab.io/vocab-proximity/hasTime'),
-                            literal(formatTime(prop.createdOn)))
+                            quad(
+                                namedNode(prop.URI),
+                                namedNode('http://www.w3.org/2000/01/rdf-schema#comment'),
+                                literal(prop.description)
+                            ), quad(
+                                namedNode(prop.URI),
+                                namedNode('http://www.w3.org/2000/01/rdf-schema#domain'),
+                                namedNode(clazz.URI)
+                            ), quad( //TODO: allow only range and only domain props using owl:thing as filler in visualisation
+                                namedNode(prop.URI),
+                                namedNode('http://www.w3.org/2000/01/rdf-schema#range'),
+                                namedNode(prop.range.URI),
+                            ), quad(
+                                namedNode(prop.URI),
+                                namedNode('http://hussain.ali.gitlab.io/vocab-proximity/hasTime'),
+                                literal(formatTime(prop.createdOn)))
                         );
                     } else if (prop.type === PropertyType.subclass) {
                         quads.push(
@@ -191,27 +188,27 @@ export class N3Codec {
                             namedNode('http://www.w3.org/2000/01/rdf-schema#label'),
                             literal(prop.name)
                         ),
-                        quad(
-                            namedNode(prop.URI),
-                            namedNode('http://www.w3.org/2000/01/rdf-schema#comment'),
-                            literal(prop.description)
-                        ), quad(
-                            namedNode(prop.URI),
-                            namedNode('http://www.w3.org/2000/01/rdf-schema#domain'),
-                            namedNode(clazz.URI)
-                        ), quad(
-                            namedNode(prop.URI),
-                            namedNode('http://www.w3.org/2000/01/rdf-schema#range'),
-                            namedNode(prop.range.name)
-                        ), quad(
-                            namedNode(prop.URI),
-                            namedNode('http://hussain.ali.gitlab.io/vocab-proximity/hasX'),
-                            literal(temp[0].position.x)
-                        ), quad(
-                            namedNode(prop.URI),
-                            namedNode('http://hussain.ali.gitlab.io/vocab-proximity/hasY'),
-                            literal(temp[0].position.y)
-                        )
+                            quad(
+                                namedNode(prop.URI),
+                                namedNode('http://www.w3.org/2000/01/rdf-schema#comment'),
+                                literal(prop.description)
+                            ), quad(
+                                namedNode(prop.URI),
+                                namedNode('http://www.w3.org/2000/01/rdf-schema#domain'),
+                                namedNode(clazz.URI)
+                            ), quad(
+                                namedNode(prop.URI),
+                                namedNode('http://www.w3.org/2000/01/rdf-schema#range'),
+                                namedNode(prop.range as unknown as string)
+                            ), quad(
+                                namedNode(prop.URI),
+                                namedNode('http://hussain.ali.gitlab.io/vocab-proximity/hasX'),
+                                literal(temp[0].position.x)
+                            ), quad(
+                                namedNode(prop.URI),
+                                namedNode('http://hussain.ali.gitlab.io/vocab-proximity/hasY'),
+                                literal(temp[0].position.y)
+                            )
                             , quad(
                                 namedNode(prop.URI),
                                 namedNode('http://hussain.ali.gitlab.io/vocab-proximity/hasTime'),

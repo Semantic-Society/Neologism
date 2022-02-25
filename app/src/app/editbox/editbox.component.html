@@ -42,13 +42,14 @@
 
       <div *ngIf="!editToggle">
 
-        <nz-descriptions nzTitle="Class Info" nzSize="small"  nzBordered [nzColumn]="{ xxl: 1, xl: 1, lg:1, md: 1, sm: 1, xs: 1 }">
+        <nz-descriptions nzTitle="Class Info" nzSize="small" nzBordered
+          [nzColumn]="{ xxl: 1, xl: 1, lg:1, md: 1, sm: 1, xs: 1 }">
           <nz-descriptions-item nzTitle="Name">{{classInfo.label}}</nz-descriptions-item>
           <nz-descriptions-item nzTitle="URI">{{classInfo.url}}</nz-descriptions-item>
           <nz-descriptions-item nzTitle="Comment">{{classInfo.description}}</nz-descriptions-item>
-          
+
         </nz-descriptions>
-        
+
       </div>
       <div class="button-group-edit">
         <div *ngIf="editToggle">
@@ -56,25 +57,26 @@
           <button nz-button nzType="default" (click)="cancelEdit()">Cancel</button>
           <button nz-button nzType="danger" (click)="showDeleteConfirm()">Delete</button>
         </div>
-<div *ngIf="!editToggle">
-  <button nz-button nzNoAnimation (click)="toggleEdit()" ><i nz-icon nzType="edit"
-    nzTheme="twotone"></i>Class</button>
-    <button nz-button nzNoAnimation (click)="fnEditClassProps()"><i nz-icon nzType="edit"
-      nzTheme="twotone"></i>Props</button>
-</div>
-       
+        <div *ngIf="!editToggle">
+          <button nz-button nzNoAnimation (click)="toggleEdit()"><i nz-icon nzType="edit"
+              nzTheme="twotone"></i>Class</button>
+          <button nz-button nzNoAnimation (click)="fnEditClassProps()"><i nz-icon nzType="edit"
+              nzTheme="twotone"></i>Props</button>
+        </div>
+
       </div>
 
     </div>
 
     <div class="addPropBox">
       <div class="frmSelectBox">
-        <nz-select nzSize="small" nzPlaceHolder="Choose type of Property" (ngModelChange)="fnFillVal($event)" [(ngModel)]="selectedForm">
+        <nz-select nzSize="small" nzPlaceHolder="Choose type of Property" (ngModelChange)="fnFillVal($event)"
+          [(ngModel)]="selectedForm">
           <nz-option [nzValue]="'object'" nzLabel="owl:ObjectProperty"></nz-option>
           <nz-option [nzValue]="'data'" nzLabel="owl:DataProperty"></nz-option>
           <nz-option [nzValue]="'subclass'" nzLabel="rdfs:subClassOf"></nz-option>
         </nz-select>
-       
+
       </div>
 
       <div class="groupPropForms">
@@ -83,23 +85,23 @@
             #formDirective="ngForm">
 
             <nz-form-item class="prop-input">
-                <input nzSize="default size" nz-input placeholder="Name"
-                  (keyup)="listenerPropNameChange($event);checkWordProperty(formProp.get('name').value)"
-                  formControlName="name" required [nzAutocomplete]="autoProperty">
-                <nz-autocomplete nzBackfill #autoProperty>
-                  <nz-auto-option *ngFor="let option of suggestions_property" [nzValue]="option" [nzLabel]="option">
-                    {{ option }}
-                  </nz-auto-option>
-                </nz-autocomplete>
+              <input nzSize="default size" nz-input placeholder="Name"
+                (keyup)="listenerPropNameChange($event);checkWordProperty(formProp.get('name').value)"
+                formControlName="name" required [nzAutocomplete]="autoProperty">
+              <nz-autocomplete nzBackfill #autoProperty>
+                <nz-auto-option *ngFor="let option of suggestions_property" [nzValue]="option" [nzLabel]="option">
+                  {{ option }}
+                </nz-auto-option>
+              </nz-autocomplete>
             </nz-form-item>
 
 
             <nz-form-item class="prop-input">
-               
-                <input class="" nz-input placeholder="Property URI" formControlName="URI" required>
-                <nz-form-explain *ngIf="formProp.get('URI').hasError('invalidURI')">
-                  URI is already in <strong>USE</strong>
-                </nz-form-explain>
+
+              <input class="" nz-input placeholder="Property URI" formControlName="URI" required>
+              <nz-form-explain *ngIf="formProp.get('URI').hasError('invalidURI')">
+                URI is already in <strong>USE</strong>
+              </nz-form-explain>
             </nz-form-item>
 
 
@@ -115,7 +117,7 @@
 
             <nz-form-item class="class-dropdown">
               <nz-form-control>
-                <nz-select placeholder="Range" nzShowSearch nzAllowClear  formControlName="range" required>
+                <nz-select placeholder="Range" nzShowSearch nzAllowClear formControlName="range" required>
                   <ng-container *ngFor="let c of rangeOptions | async">
                     <nz-option [nzValue]="c._id" [nzLabel]="c.name" [value]="c._id">
                     </nz-option>
@@ -142,7 +144,7 @@
             </nz-form-item>
 
 
-            <nz-form-item class="prop-input" >
+            <nz-form-item class="prop-input">
               <nz-form-control>
                 <nz-form-label nzFor="URI">Property URI</nz-form-label> <br>
                 <input class="" nz-input placeholder="URI" formControlName="URI">
