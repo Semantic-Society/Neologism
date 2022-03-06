@@ -98,7 +98,7 @@ export class EditboxComponent implements OnInit, OnChanges {
         );
 
         this.classToUpdate = this.vocabService.getClassWithProperties(this.vocabID, of(this.selectedVertex.id));
-
+        this.fnFillVal(this.selectedForm.toString())
     }
 
     ngOnChanges(input) {
@@ -167,12 +167,11 @@ export class EditboxComponent implements OnInit, OnChanges {
     }
 
     addProperty(formDirective: FormGroupDirective, index: number) {
-        if (index) {
-            this.formProp.controls['URI'].setValue(`${this.uriPrefix}${transformURI(this.formProp.value.name)}`);
-        }
+
         this.vocabService.addProperty(this.selectedVertex.id, this.formProp.value.name, this.formProp.value.description, this.formProp.value.URI, this.formProp.value.range, PropertyType2[index], this.vocabID);
         formDirective.resetForm();
         this.formProp.reset();
+        this.fnFillVal(this.selectedForm.toString())
     }
 
     cancelEdit() {
@@ -238,7 +237,7 @@ export class EditboxComponent implements OnInit, OnChanges {
     }
 
     fnEditClassProps() {
-        const modal: NzModalRef  =   this.modalService.create({
+        const modal: NzModalRef = this.modalService.create({
             nzTitle: 'Actions on Property',
             nzContent: PropertyEditModal,
             nzComponentParams: {

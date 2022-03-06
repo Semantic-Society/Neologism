@@ -139,7 +139,7 @@
             <nz-form-item class="prop-input">
               <nz-form-control>
                 <nz-form-label nzFor="name">Property Name</nz-form-label> <br>
-                <input nz-input placeholder="Name" formControlName="name" required>
+                <input nz-input placeholder="Name" formControlName="name" (keyup)="listenerPropNameChange($event)" required>
               </nz-form-control>
             </nz-form-item>
 

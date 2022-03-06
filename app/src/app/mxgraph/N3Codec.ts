@@ -101,12 +101,13 @@ export class N3Codec {
                         namedNode(clazz.URI),
                         namedNode('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'),
                         namedNode('http://www.w3.org/2002/07/owl#Class')
-                    ),
-                    quad(
+                    )
+                    ,quad(
                         namedNode(clazz.URI),
                         namedNode('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'),
                         namedNode('http://hussain.ali.gitlab.io/vocab-proximity/hasCoordinates')
-                    ), quad(
+                    )
+                    , quad(
                         namedNode(clazz.URI),
                         namedNode('http://www.w3.org/2000/01/rdf-schema#label'),
                         literal(clazz.name)
@@ -115,8 +116,8 @@ export class N3Codec {
                         namedNode(clazz.URI),
                         namedNode('http://www.w3.org/2000/01/rdf-schema#comment'),
                         literal(clazz.description)
-                    ),
-                    quad(
+                    )
+                    ,quad(
                         namedNode(clazz.URI),
                         namedNode('http://hussain.ali.gitlab.io/vocab-proximity/hasX'),
                         literal(clazz.position.x)
@@ -124,11 +125,13 @@ export class N3Codec {
                         namedNode(clazz.URI),
                         namedNode('http://hussain.ali.gitlab.io/vocab-proximity/hasY'),
                         literal(clazz.position.y)
-                    ), quad(
+                    )
+                    , quad(
                         namedNode(clazz.URI),
                         namedNode('http://hussain.ali.gitlab.io/vocab-proximity/hasTime'),
                         literal(formatTime(clazz.createdOn))
-                    ));
+                    )
+                    );
 
 
 
@@ -157,7 +160,8 @@ export class N3Codec {
                                 namedNode(prop.URI),
                                 namedNode('http://www.w3.org/2000/01/rdf-schema#range'),
                                 namedNode(prop.range.URI),
-                            ), quad(
+                            )
+                            , quad(
                                 namedNode(prop.URI),
                                 namedNode('http://hussain.ali.gitlab.io/vocab-proximity/hasTime'),
                                 literal(formatTime(prop.createdOn)))
@@ -169,11 +173,6 @@ export class N3Codec {
                                 namedNode(prop.URI),
                                 namedNode(prop.range.URI)
                             )
-                            // , quad(
-                            //     namedNode(prop.URI),
-                            //     namedNode('http://hussain.ali.gitlab.io/vocab-proximity/hasTime'),
-                            //     literal(formatTime(prop.createdOn))
-                            // )
                         );
                     }
                     else {
@@ -200,7 +199,8 @@ export class N3Codec {
                                 namedNode(prop.URI),
                                 namedNode('http://www.w3.org/2000/01/rdf-schema#range'),
                                 namedNode(prop.range as unknown as string)
-                            ), quad(
+                            )
+                            ,quad(
                                 namedNode(prop.URI),
                                 namedNode('http://hussain.ali.gitlab.io/vocab-proximity/hasX'),
                                 literal(temp[0].position.x)
