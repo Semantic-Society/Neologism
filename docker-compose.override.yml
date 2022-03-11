@@ -8,16 +8,12 @@ services:
       - '3000:3000'
       - '80:80'
       - '3001:3001'
-    volumes: 
-      - uploads:/etc/neologism/uploads/vocabularies
   
   mongo:
     container_name: neologism_db
     image: mongo:latest
     command:
       - --storageEngine=wiredTiger
-    volumes:
-      - data:/data/db
 
   recommender:
     container_name: neologism_recommender
