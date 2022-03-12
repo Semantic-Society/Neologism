@@ -18,8 +18,8 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: apk update, add gettext and create env.js
         run: |
-         apt update
-         apt add gettext
+         sudo apt update
+         sudo apt add gettext
          envsubst < app/src/assets/env.template.js > app/src/assets/env.js
       - name: Build and push
         uses: docker/build-push-action@v2
