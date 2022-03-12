@@ -16,6 +16,11 @@ jobs:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
+      - name: apk update, add gettext and create env.js
+        run: |
+         apk update
+         apk add gettext
+         envsubst < app/src/assets/env.template.js > app/src/assets/env.js
       - name: Build and push
         uses: docker/build-push-action@v2
         with:
