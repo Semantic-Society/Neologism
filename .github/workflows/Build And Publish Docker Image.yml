@@ -21,6 +21,10 @@ jobs:
          sudo apt update
          sudo apt-get install gettext
          envsubst < app/src/assets/env.template.js > app/src/assets/env.js
+        env:
+          NEO_GUSER: guest@neologism.com
+          NEO_GPASS: 12345
+          NEO_GMAXLENGTH: 20
       - name: Build and push
         uses: docker/build-push-action@v2
         with:
