@@ -31,7 +31,7 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          buildArgs: METEOR_BUNDLER_URL=${{secrets.CLIENT_CONN_URL}}
+          buildArgs: METEOR_CLIENT_CONN_URL=${{secrets.CLIENT_CONN_URL}}
           tags: |
             ghcr.io/semantic-society/neologism/neologism2:latest
             ghcr.io/semantic-society/neologism/neologism2:${{ github.sha }}
