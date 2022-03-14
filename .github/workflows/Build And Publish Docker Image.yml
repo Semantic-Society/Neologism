@@ -20,6 +20,7 @@ jobs:
         run: |
          sudo apt update
          sudo apt-get install gettext
+         echo "${{secrets.CLIENT_CONN_URL}}"
          envsubst < app/src/assets/env.template.js > app/src/assets/env.js
         env:
           NEO_GUSER: ${{secrets.NEO_GUSER}}
