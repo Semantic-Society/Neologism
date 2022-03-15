@@ -7,6 +7,8 @@
     "start": "ng serve --open",
     "build": "ng build",
     "prod": "ng build --configuration production",
+    "postprod": "mkdir -p dist/sourceMapInspector/sourceMaps; mv dist/neologism/*.map dist/sourceMapInspector/sourceMaps",
+    "build:sourcemaps": "ng build --prod --output-path=localSourceMaps",
     "test": "ng test",
     "lint": "ng lint neologism",
     "e2e": "ng e2e",
