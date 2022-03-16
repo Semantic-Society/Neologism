@@ -7,7 +7,7 @@
     "start": "ng serve --open",
     "build": "ng build",
     "prod": "ng build --configuration production",
-    "postbuild": "mkdir -p dist/neologism/sourceMaps; mv dist/neologism/*.map dist/neologism/sourceMaps",
+    "postprod": "mkdir -p dist/neologism/sourceMaps; mv dist/neologism/*.map dist/neologism/sourceMaps",
     "test": "ng test",
     "lint": "ng lint neologism",
     "e2e": "ng e2e",
