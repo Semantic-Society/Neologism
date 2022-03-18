@@ -23,7 +23,7 @@ services:
       CROOT_URL: ${CROOT_URL:-http://localhost:3000}
       CDDP_URL: ${CDDP_URL:-http://localhost:3000}
       PORT: 3000
-      METEOR_SETTINGS: '{ "storageLocation":"/data/uploads/vocabularies","accountCreation" :"true" }'
+      METEOR_SETTINGS: '{ "storageLocation":"/data/uploads/vocabularies","forbidClientAccountCreation" :"true" }'
       HTTP_FORWARDED_COUNT: 1
 
   mongo:
