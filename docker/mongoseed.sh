@@ -11,7 +11,7 @@ then
 else  
     printf "\nImporting Document in Database called neologism\n"
     printf "===================================================\n"
-    mongoimport --host $MONGO_HOST_PORT --db neologism --collection users --file $SCRIPTS_FOLDER/guest.json
+    mongoimport --uri $MONGO_URL --db neologism --collection users --file $SCRIPTS_FOLDER/guest.json
   touch $SCRIPTS_FOLDER/.seeddata
   printf "\nDONE!\n"
 fi 
