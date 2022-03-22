@@ -30,7 +30,7 @@ RUN curl https://install.meteor.com/?release=$METEOR_VERSION --output /tmp/insta
 
 # Fix permissions warning; https://github.com/meteor/meteor/issues/7959
 ENV METEOR_ALLOW_SUPERUSER true
-
+ENV ROOT_URL="http://localhost:3000"
 
 # Copy entrypoint and dependencies
 COPY ./docker $SCRIPTS_FOLDER/
@@ -115,6 +115,7 @@ COPY $SCRIPTS_FOLDER/config/supervisord.conf /etc/
 
 COPY $SCRIPTS_FOLDER/config/nginx.default.conf /etc/nginx/conf.d/default.conf
 
-# ENTRYPOINT "bin/startup.sh && /usr/bin/supervisord -c /etc/supervisord.conf"
+EXPOSE 3000
 
+# ENTRYPOINT "bin/startup.sh && /usr/bin/supervisord -c /etc/supervisord.conf"
 ENTRYPOINT $SCRIPTS_FOLDER/entrypoint.sh
