@@ -15,6 +15,8 @@ source ./connect-to-mongo.sh
 # seed data into MongoDB
 source ./mongoseed.sh
 
+# ToDo create env.js using envsubset here with 
+
 
 # echo 'Starting app...'
 # cd $APP_BUNDLE_FOLDER/api/bundle
