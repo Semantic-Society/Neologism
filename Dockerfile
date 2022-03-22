@@ -4,9 +4,6 @@
 # - https://github.com/meteor/galaxy-images/blob/master/ubuntu/Dockerfile
 FROM ubuntu
 
-
-ARG METEOR_CLIENT_CONN_URL
-
 # Meteor version to build for; see ../build.sh
 ENV METEOR_VERSION 2.2
 
@@ -90,6 +87,7 @@ FROM node:14.17.0-alpine
 
 ENV APP_BUNDLE_FOLDER /opt/bundle
 ENV SCRIPTS_FOLDER /docker
+ENV ROOT_URL="http://localhost:3000"
 
 # Install OS runtime dependencies
 RUN apk --no-cache add \
