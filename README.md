@@ -46,13 +46,13 @@ __Easy usage via Docker Building Image on Local:__
 
 __Deploy via Docker Image Run Instructions Local:__
 
-Default Ports to be used: 80, 3000, 3001.
+Default Ports to be used: 80, 3000
 
-1. Set the environnement vars `CROOT_URL: http://{server-url}:3000` and `CDDP_URL: http://{server-url}:3000` in docker-compose-yml
+1. Set the environnement vars `METEOR_CLIENT_CONFIG_URL: {complete-server-url}` in docker-compose-yml
 2. exec `docker-compose up`
 
 ##### Note:
-To disable signup/register please update the var with `accountCreation: false` on the string `METEOR_SETTINGS: '{ "storageLocation":"/etc/neologism/uploads/vocabularies","accountCreation" :"true" }'` in docker-compose-yml
+To disable signup/register please update the var with `forbidClientAccountCreation: true` on the string `METEOR_SETTINGS: '{ "storageLocation":"/etc/neologism/uploads/vocabularies","forbidClientAccountCreation" :"true" }'` in docker-compose-yml
 
 __Local setup:__
 

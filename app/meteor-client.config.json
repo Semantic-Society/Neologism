@@ -1,9 +1,7 @@
 {
   "runtime": {
     "DDP_DEFAULT_CONNECTION_URL": "http://localhost:3000",
-    "autoupdate": {
-      "versions": {}
-    }
+    "ROOT_URL": "http://localhost:3000"
   },
   "generateNodeModules": true
 }

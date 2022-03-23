@@ -6,25 +6,28 @@ services:
     container_name: neologism_app
     image: ghcr.io/semantic-society/neologism/neologism2:latest
     # build creates a local docker container, to use the image comment it out
-    #build:
-    #  context: .
-    #  dockerfile: Dockerfile
-    #  args:
-    #    # This is variable is use to configure meteor-client bundle 
-    #    METEOR_CLIENT_CONN_URL: http://localhost/api      
+    build:
+     context: .
+     dockerfile: Dockerfile
     depends_on:
       - mongo
     volumes:
       - data:/data/uploads
     environment:
-      ROOT_URL: http://localhost
-      MONGO_URL: mongodb://mongo:27017/neologism
-      MONGO_HOST_PORT: mongo:27017
-      CROOT_URL: ${CROOT_URL:-http://localhost:3000}
-      CDDP_URL: ${CDDP_URL:-http://localhost:3000}
+      
+      # Required for meteor server startup
+      # https://docs.meteor.com/v2.2/environment-variables.html
       PORT: 3000
-      METEOR_SETTINGS: '{ "storageLocation":"/data/uploads/vocabularies","forbidClientAccountCreation" :"true" }'
+      MONGO_URL: mongodb://mongo:27017/meteor
+      METEOR_SETTINGS: '{ "storageLocation":"/data/uploads/vocabularies","forbidClientAccountCreation" :"false" }'
       HTTP_FORWARDED_COUNT: 1
+      ROOT_URL: ${ROOT_URL:-http://localhost/api}
+      
+      # Required for meteor client-side bundle 
+      # used as external in angular static bundle 
+      METEOR_CLIENT_CONFIG_URL: ${METEOR_CLIENT_CONFIG_URL:-http://localhost/api}
+
+      
 
   mongo:
     container_name: neologism_db
