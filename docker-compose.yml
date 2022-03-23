@@ -14,7 +14,6 @@ services:
     volumes:
       - data:/data/uploads
     environment:
-      
       # Required for meteor server startup
       # https://docs.meteor.com/v2.2/environment-variables.html
       PORT: 3000
