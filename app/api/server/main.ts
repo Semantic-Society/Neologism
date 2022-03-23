@@ -3,6 +3,6 @@ import { Meteor } from 'meteor/meteor';
 Meteor.startup(() => {
   // code to run on server at startup
   Accounts.config({
-    forbidClientAccountCreation: Meteor.settings.accountCreation == "true"
+    forbidClientAccountCreation: Meteor.settings.forbidClientAccountCreation == "true"
   });
 });

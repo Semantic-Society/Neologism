@@ -16,12 +16,23 @@ jobs:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
+      - name: apt-get update, apt-get install gettext and create env.js
+        run: |
+         sudo apt-get update
+         sudo apt-get install gettext
+         echo "${{secrets.CLIENT_CONN_URL}}"
+         envsubst < app/src/assets/env.template.js > app/src/assets/env.js
+        env:
+          NEO_GUSER: ${{secrets.NEO_GUSER}}
+          NEO_GPASS: ${{secrets.NEO_GPASS}}
+          NEO_GMAXLENGTH: ${{secrets.NEO_GMAXLENGTH}}
       - name: Build and push
         uses: docker/build-push-action@v2
         with:
           context: .
           file: ./Dockerfile
           push: true
+          build-args: METEOR_CLIENT_CONN_URL=${{secrets.CLIENT_CONN_URL}}
           tags: |
             ghcr.io/semantic-society/neologism/neologism2:latest
             ghcr.io/semantic-society/neologism/neologism2:${{ github.sha }}

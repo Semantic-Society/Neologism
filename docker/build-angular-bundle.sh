@@ -10,7 +10,7 @@ cd $APP_SOURCE_FOLDER
 
 printf "\n[-] Building Meteor Client bundle...\n\n"
 
-ROOT_URL=$METEOR_CLIENT_CONN_URL METEOR_BUNDLER_URL=$METEOR_CLIENT_CONN_URL  meteor npm run meteor-client:bundle-prod
+meteor npm run meteor-client:bundle
 
 printf "\n[-] Building Angular bundle...\n\n"
 
