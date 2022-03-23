@@ -9,23 +9,23 @@ services:
     build:
      context: .
      dockerfile: Dockerfile
-    #  args:
-    #    # This is variable is use to configure meteor-client bundle 
-    #    METEOR_CLIENT_CONN_URL: http://localhost/api      
     depends_on:
       - mongo
     volumes:
       - data:/data/uploads
     environment:
+      
       # Required for meteor server startup
+      # https://docs.meteor.com/v2.2/environment-variables.html
       PORT: 3000
       MONGO_URL: mongodb://mongo:27017/meteor
-      METEOR_SETTINGS: '{ "storageLocation":"/data/uploads/vocabularies","forbidClientAccountCreation" :"true" }'
+      METEOR_SETTINGS: '{ "storageLocation":"/data/uploads/vocabularies","forbidClientAccountCreation" :"false" }'
       HTTP_FORWARDED_COUNT: 1
-
+      ROOT_URL: ${ROOT_URL:-http://localhost/api}
+      
       # Required for meteor client-side bundle 
       # used as external in angular static bundle 
-      METEOR_CLIENT_CONFIG_URL: ${METEOR_CLIENT_CONFIG_URL:-http://localhost:3000}
+      METEOR_CLIENT_CONFIG_URL: ${METEOR_CLIENT_CONFIG_URL:-http://localhost/api}
 
       
 
