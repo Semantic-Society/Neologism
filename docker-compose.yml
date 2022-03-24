@@ -5,10 +5,10 @@ services:
   neologism:
     container_name: neologism_app
     image: ghcr.io/semantic-society/neologism/neologism2:latest
-    # build creates a local docker container, to use the image comment it out
-    build:
-     context: .
-     dockerfile: Dockerfile
+    # To build a local docker container, comment these 3 lines in.
+    # build:
+    # context: .
+    # dockerfile: Dockerfile
     depends_on:
       - mongo
     volumes:
@@ -25,8 +25,6 @@ services:
       # Required for meteor client-side bundle 
       # used as external in angular static bundle 
       METEOR_CLIENT_CONFIG_URL: ${METEOR_CLIENT_CONFIG_URL:-http://localhost/api}
-
-      
 
   mongo:
     container_name: neologism_db
