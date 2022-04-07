@@ -250,7 +250,12 @@ export class MxgraphComponent implements OnInit, OnDestroy {
                     type: 'danger',
                     label: 'Delete',
                     onClick: (componentInstance) => {
-                        componentInstance.deleteProp();
+                        componentInstance.deleteProp()
+                        .subscribe((response) => {
+                            // Handle success and response from server!
+                        }, (err) => {
+                            console.log(err);
+                        });
                     },
                 },
             ],

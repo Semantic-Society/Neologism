@@ -15,110 +15,101 @@ import { VocabulariesService } from '../../services/vocabularies.service';
 export class PropertyEditModal implements OnInit {
 
     constructor(private modal: NzModalRef,
-    private spellCheckerService: SpellCheckerService,
-    private httpClient: HttpClient,
-    private vocabService: VocabulariesService) { }
-  @Input() propListString: string;
-  isDataTypeProp: boolean;
-  propList: Iproperty[];
-  propListName: string[];
-  domainClassId: string;
-  public prop: Iproperty;
-  readonly xsdDataTypes = xsdDataTypes;
+        private spellCheckerService: SpellCheckerService,
+        private httpClient: HttpClient,
+        private vocabService: VocabulariesService) { }
+    @Input() propListString: string;
+    isDataTypeProp: boolean;
+    propList: Iproperty[];
+    propListName: string[];
+    domainClassId: string;
+    public prop: Iproperty;
+    readonly xsdDataTypes = xsdDataTypes;
 
-  fileURL = 'https://raw.githubusercontent.com/JacobSamro/ngx-spellchecker/master/dict/normalized_en-US.dic';
+    fileURL = 'https://raw.githubusercontent.com/JacobSamro/ngx-spellchecker/master/dict/normalized_en-US.dic';
 
-  classes: Iclass[];
-  nonDataTypeClass: Iclass[];
-  public suggestions: string[];
-  contextmenu = false;
+    classes: Iclass[];
+    nonDataTypeClass: Iclass[];
+    public suggestions: string[];
+    contextmenu = false;
 
-  selectedProp: string;
+    selectedProp: string;
 
-  ngOnInit() {
-      this.propList = [];
-      this.propListName = [];
-      Classes.find({ _id: this.domainClassId }).fetch()[0]
-      .properties
-      .forEach(key => {
-        const prop = Properties.findOne({ _id: key });
-        this.propList.push(prop);
-    });
-      this.classes = Classes.find().fetch();
-      this.nonDataTypeClass = this.classes.filter((x)=>x.isDataTypeVertex===false)
-      this.propChange(this.propList[0]._id)
-  }
+    ngOnInit() {
+        this.propList = [];
+        this.propListName = [];
+        Classes.find({ _id: this.domainClassId }).fetch()[0]
+            .properties
+            .forEach(key => {
+                const prop = Properties.findOne({ _id: key });
+                this.propList.push(prop);
+            });
+        this.classes = Classes.find().fetch();
+        this.nonDataTypeClass = this.classes.filter((x) => x.isDataTypeVertex === false)
+        this.propChange(this.propList[0]._id)
+    }
 
-  closeModal(): void {
+    closeModal(): void {
 
-      if (this.prop.type === PropertyType.Data) {
+        if (this.prop.type === PropertyType.Data) {
 
-        //   this.prop.URI = `http://www.w3.org/2001/XMLSchema#${this.prop.rangeName}`;
-          this.vocabService.updateClassName(this.prop._id, this.prop.range);
-          this.vocabService.updateClassURI(this.prop._id, this.prop.URI);
+            //   this.prop.URI = `http://www.w3.org/2001/XMLSchema#${this.prop.rangeName}`;
+            this.vocabService.updateClassName(this.prop._id, this.prop.range);
+            this.vocabService.updateClassURI(this.prop._id, this.prop.URI);
 
-          MeteorObservable.call('property.update', this.prop._id, this.prop.name, this.prop.description, this.prop.URI,this.prop.range).subscribe((response) => {
-              // Handle success and response from server!
-              console.log('updated');
+            MeteorObservable.call('property.update', this.prop._id, this.prop.name, this.prop.description, this.prop.URI, this.prop.range).subscribe((response) => {
+                // Handle success and response from server!
+                console.log('updated');
 
-          }, (err) => {
-              console.log(err);
-          });
-      } else {
-          MeteorObservable.call('property.update', this.prop._id, this.prop.name, this.prop.description, this.prop.URI, this.prop.range).subscribe((response) => {
-              // Handle success and response from server!
-              console.log('updated');
+            }, (err) => {
+                console.log(err);
+            });
+        } else {
+            MeteorObservable.call('property.update', this.prop._id, this.prop.name, this.prop.description, this.prop.URI, this.prop.range).subscribe((response) => {
+                // Handle success and response from server!
+                console.log('updated');
 
-          }, (err) => {
-              console.log(err);
-          });
-      }
+            }, (err) => {
+                console.log(err);
+            });
+        }
 
-    //   this.modal.destroy();
-  }
+        //   this.modal.destroy();
+    }
 
-  checkWord(word: string) {
+    checkWord(word: string) {
 
-      this.httpClient.get(this.fileURL, { responseType: 'text' }).subscribe((res: any) => {
-          const dictionary = this.spellCheckerService.getDictionary(res);
-          this.suggestions = dictionary.getSuggestions(word);
-      });
+        this.httpClient.get(this.fileURL, { responseType: 'text' }).subscribe((res: any) => {
+            const dictionary = this.spellCheckerService.getDictionary(res);
+            this.suggestions = dictionary.getSuggestions(word);
+        });
 
-      this.contextmenu = true;
-  }
+        this.contextmenu = true;
+    }
 
 
-  deleteProp() {
-    
-      if (this.prop.type === PropertyType.Data) {
-          MeteorObservable.call('property.delete', this.prop._id, this.domainClassId).subscribe((response) => {
-              // Handle success and response from server!
-          }, (err) => {
-              console.log(err);
-          });
+    deleteProp() {
+        let observable$ = null
+        if (this.prop.type === PropertyType.Data) {
+            observable$ = MeteorObservable.call('property.delete', this.prop._id, this.domainClassId)
 
-          MeteorObservable.call('classes.delete', this.prop._id).subscribe((response) => {
-              // Handle success and response from server!
-          }, (err) => {
-              console.log(err);
-          });
-      } else {
-        MeteorObservable.call('property.delete', this.prop._id, this.domainClassId).subscribe((response) => {
-              // Handle success and response from server!
-          }, (err) => {
-              console.log(err);
-          });
-      }
+            MeteorObservable.call('classes.delete', this.prop._id).subscribe((response) => {
+                // Handle success and response from server!
+            }, (err) => {
+                console.log(err);
+            });
+        } else {
+            observable$ = MeteorObservable.call('property.delete', this.prop._id, this.domainClassId)
+        }
+        return observable$
+    }
 
-      
-  }
-
-  propChange(_id: string) {
-      this.prop = this.propList.find(x => x._id == _id);
-      this.isDataTypeProp = this.prop.type === PropertyType.Data;
-      this.selectedProp = this.prop._id;
-      return false;
-  }
+    propChange(_id: string) {
+        this.prop = this.propList.find(x => x._id == _id);
+        this.isDataTypeProp = this.prop.type === PropertyType.Data;
+        this.selectedProp = this.prop._id;
+        return false;
+    }
 
 
 }

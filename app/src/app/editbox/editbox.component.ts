@@ -83,6 +83,8 @@ export class EditboxComponent implements OnInit, OnChanges {
     fileURL = 'https://raw.githubusercontent.com/JacobSamro/ngx-spellchecker/master/dict/normalized_en-US.dic';
     oldClassID: string;
 
+    hasProps: boolean = false;
+
     ngOnInit() {
         this.uriPrefix = (this.uriPrefix.search(/^(.*)#$/) == -1) ? `${this.uriPrefix}#` : `${this.uriPrefix}`;
         this.formProp = this.fb.group({
@@ -101,6 +103,10 @@ export class EditboxComponent implements OnInit, OnChanges {
         this.fnFillVal(this.selectedForm.toString())
     }
 
+    checkIfPropsAny(){
+        this.hasProps = this.vocabService.hasProps(this.selectedVertexId)
+    }
+
     ngOnChanges(input) {
 
         this.editedClass = this.editboxService.getUndefinedClass();
@@ -110,6 +116,8 @@ export class EditboxComponent implements OnInit, OnChanges {
         if (!this.selectedVertexId) {
             return;
         }
+        
+        this.checkIfPropsAny()
 
         // we get several small pieces of info from the class. multicast is likely a good idea, but did not get it working.
         this.classInfo$ = this.editboxService.createClassInfoObj(this.vocabID, this.selectedVertexId);
@@ -168,10 +176,16 @@ export class EditboxComponent implements OnInit, OnChanges {
 
     addProperty(formDirective: FormGroupDirective, index: number) {
 
-        this.vocabService.addProperty(this.selectedVertex.id, this.formProp.value.name, this.formProp.value.description, this.formProp.value.URI, this.formProp.value.range, PropertyType2[index], this.vocabID);
+        this.vocabService.addPropertyExt(this.selectedVertex.id, this.formProp.value.name, this.formProp.value.description, this.formProp.value.URI, this.formProp.value.range, PropertyType2[index], this.vocabID)
+        .subscribe((_response) => {
+            this.checkIfPropsAny()
+        }, (err) => {
+            console.log(err);
+        });
         formDirective.resetForm();
         this.formProp.reset();
         this.fnFillVal(this.selectedForm.toString())
+        
     }
 
     cancelEdit() {
@@ -263,7 +277,12 @@ export class EditboxComponent implements OnInit, OnChanges {
                     type: 'danger',
                     label: 'Delete',
                     onClick: (componentInstance) => {
-                        componentInstance.deleteProp();
+                        componentInstance.deleteProp().subscribe((response) => {
+                            // Handle success and response from server!
+                            this.checkIfPropsAny()
+                        }, (err) => {
+                            console.log(err);
+                        });   
                     },
                 },
             ],

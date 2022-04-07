@@ -232,7 +232,6 @@ mat-form-field.description input {
 
 .button-group-edit button {
   margin:0.25rem;
-  width: calc(50% - 1rem);
 }
 
 .full-width-field {

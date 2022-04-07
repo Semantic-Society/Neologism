@@ -60,7 +60,7 @@
         <div *ngIf="!editToggle">
           <button nz-button nzNoAnimation (click)="toggleEdit()"><i nz-icon nzType="edit"
               nzTheme="twotone"></i>Class</button>
-          <button nz-button nzNoAnimation (click)="fnEditClassProps()"><i nz-icon nzType="edit"
+          <button *ngIf="hasProps" nz-button nzNoAnimation (click)="fnEditClassProps()"><i nz-icon nzType="edit"
               nzTheme="twotone"></i>Props</button>
         </div>
 
@@ -139,7 +139,8 @@
             <nz-form-item class="prop-input">
               <nz-form-control>
                 <nz-form-label nzFor="name">Property Name</nz-form-label> <br>
-                <input nz-input placeholder="Name" formControlName="name" (keyup)="listenerPropNameChange($event)" required>
+                <input nz-input placeholder="Name" formControlName="name" (keyup)="listenerPropNameChange($event)"
+                  required>
               </nz-form-control>
             </nz-form-item>
 

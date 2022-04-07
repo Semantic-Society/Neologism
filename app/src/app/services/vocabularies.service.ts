@@ -178,6 +178,24 @@ export class VocabulariesService {
 
     }
 
+    addPropertyExt(domainId: meteorID, name: string, description: string, URI: string, range: string,
+        type: string, vocabID: string) {
+
+        let observable$ = null
+        if (type == PropertyType2[1]) {
+            this.addClass(vocabID, range, description, URI, undefined, true).subscribe(dummyRangeId => {
+                observable$ = MeteorObservable.call('property.create', domainId, { name, description, URI, range, type, _id: dummyRangeId })
+                    
+            });
+
+        } else {
+            observable$ = MeteorObservable.call('property.create', domainId, { name, description, URI, range, type })
+                
+        }
+        return observable$;
+
+    }
+
     /**
      * Gets the list of class IDs for the given vocabulary
      *
@@ -521,6 +539,10 @@ export class VocabulariesService {
 
     createMeteorNewId(): string {
         return Random.id();
+    }
+
+    hasProps(classId): boolean {
+        return Classes.findOne({ _id: classId}).properties.length > 0 
     }
 
 }
