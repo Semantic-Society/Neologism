@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AbstractControl, AsyncValidatorFn, FormBuilder, ValidationErrors, Validators } from '@angular/forms';
 import { Random } from 'meteor/random';
 import { MeteorObservable, zoneOperator } from 'meteor-rxjs';
-import { combineLatest, empty, Observable, of, throwError, timer } from 'rxjs';
+import { combineLatest, empty, forkJoin, Observable, of, throwError, timer } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, filter, flatMap, map, switchMap, take, tap } from 'rxjs/operators';
 
 import { Classes, Properties, Users, Vocabularies } from '../../../api/collections';
@@ -183,10 +183,10 @@ export class VocabulariesService {
 
         let observable$ = null
         if (type == PropertyType2[1]) {
-            this.addClass(vocabID, range, description, URI, undefined, true).subscribe(dummyRangeId => {
-                observable$ = MeteorObservable.call('property.create', domainId, { name, description, URI, range, type, _id: dummyRangeId })
+            observable$ = this.addClass(vocabID, range, description, URI, undefined, true).pipe(switchMap(dummyRangeId => {
+                return forkJoin(MeteorObservable.call('property.create', domainId, { name, description, URI, range, type, _id: dummyRangeId }))
                     
-            });
+            }))
 
         } else {
             observable$ = MeteorObservable.call('property.create', domainId, { name, description, URI, range, type })
