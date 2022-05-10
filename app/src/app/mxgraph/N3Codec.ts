@@ -129,8 +129,7 @@ export class N3Codec {
                     , quad(
                         namedNode(clazz.URI),
                         namedNode('http://hussain.ali.gitlab.io/vocab-proximity/hasTime'),
-                        literal(formatTime(clazz.createdOn))
-                    )
+                        literal(formatTime(clazz.createdOn)))
                     );
 
 
@@ -170,7 +169,7 @@ export class N3Codec {
                         quads.push(
                             quad(
                                 namedNode(clazz.URI),
-                                namedNode(prop.URI),
+                                namedNode(prop.type),
                                 namedNode(prop.range.URI)
                             )
                         );
