@@ -185,12 +185,12 @@ export class VocabulariesService {
         if (type == PropertyType2[1]) {
             observable$ = this.addClass(vocabID, range, description, URI, undefined, true).pipe(switchMap(dummyRangeId => {
                 return forkJoin(MeteorObservable.call('property.create', domainId, { name, description, URI, range, type, _id: dummyRangeId }))
-                    
+
             }))
 
         } else {
             observable$ = MeteorObservable.call('property.create', domainId, { name, description, URI, range, type })
-                
+
         }
         return observable$;
 
@@ -316,7 +316,6 @@ export class VocabulariesService {
      * @param selectedClassID
      */
     getClassWithProperties(vocabID: string, selectedClassID: Observable<string>): Observable<IClassWithProperties> {
-        //TODO (184): this following steps are overkill. We can use something more granular later.
         const theClassO: Observable<IClassWithProperties> = selectedClassID.pipe(
             switchMap((classID) => {
                 const allClassesO: Observable<IClassWithProperties[]> = this.getClassesWithProperties(vocabID);
@@ -324,23 +323,9 @@ export class VocabulariesService {
                     map((allClasses) => {
                         const potentiallyTheClass = allClasses.filter((clazz) => clazz._id === classID);
                         if (potentiallyTheClass.length !== 1) {
-                            // throw new Error('zero or more than 1 class found, while there should only be 1');
-                            // This can happen when the result for that class is not yet in the result, but still coming.
-                            // return null now, filter our below.
                             return null;
-                            // Still not as filter does not work :-S so now returning some empty thing
-                            // return {
-                            //   _id: '', name: 'waiting...', description: 'waiting...', URI: '', properties: [], position: {
-                            //     x: 0, y: 0
-                            //   },
-                            //   skos: {
-                            //     closeMatch: [],
-                            //     exactMatch: []
-                            //   }
-                            // };
                         }
-                        const theClass = potentiallyTheClass[0];
-                        return theClass;
+                        return potentiallyTheClass[0];
                     })
                 );
             }),
@@ -542,7 +527,7 @@ export class VocabulariesService {
     }
 
     hasProps(classId): boolean {
-        return Classes.findOne({ _id: classId}).properties.length > 0 
+        return Classes.findOne({ _id: classId}).properties.length > 0
     }
 
 }

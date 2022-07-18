@@ -43,7 +43,6 @@ export class EditboxComponent implements OnInit, OnChanges {
     // protected propertyRecommendations: Array<{ comment: string; label: string; uri: string; range: string; }> = [];
     protected propertyRecommendations: Observable<{ comment: string; label: string; uri: string; range: string }[]>;
 
-    // TODO (184): as this is an observable, does it need @Input?
     @Input() selectedVertex: any;
     @Input() uriPrefix: string;
     /**
@@ -116,7 +115,7 @@ export class EditboxComponent implements OnInit, OnChanges {
         if (!this.selectedVertexId) {
             return;
         }
-        
+
         this.checkIfPropsAny()
 
         // we get several small pieces of info from the class. multicast is likely a good idea, but did not get it working.
@@ -185,7 +184,7 @@ export class EditboxComponent implements OnInit, OnChanges {
         formDirective.resetForm();
         this.formProp.reset();
         this.fnFillVal(this.selectedForm.toString())
-        
+
     }
 
     cancelEdit() {
@@ -282,7 +281,7 @@ export class EditboxComponent implements OnInit, OnChanges {
                             this.checkIfPropsAny()
                         }, (err) => {
                             console.log(err);
-                        });   
+                        });
                     },
                 },
             ],
