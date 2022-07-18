@@ -2,7 +2,7 @@ name: Build and Publish Docker Image
 
 on:
   push:
-    branches: [ main, thesis-hussain ]
+    branches: [ main ]
 
 jobs:
   build-and-push:

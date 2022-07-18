@@ -25,4 +25,3 @@ docker_build_and_push:
     - docker push $LATEST_TAG
   only:
     - main
-    - thesis-hussain
