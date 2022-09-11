@@ -119,7 +119,8 @@ __Major Versions:__
 
 __Troubleshooting:__
 - check if node version compatibility for front and api
-- run `meteor npm -v` or `meteor node -v`
+- run `meteor npm -v` or `meteor node -v
+- For slow run of meteor on windows turn on the profiler see link https://github.com/meteor/meteor/issues/7253
 
 ## Technical Workflow
 After starting Neologism, navigate to `localhost` (or whatever server you are hosting it on), and follow the user interface.
