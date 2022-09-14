@@ -108,7 +108,7 @@ Meteor.methods({
   },*/
   'vocabulary.remove'(vocabId: string) {
     assertUser();
-    // TODO (#183): Sanitize
+
     // currently: pseudo permission check via only being able to remove documents where the current user is also an author
     const vocab = Vocabularies.findOne({ _id: vocabId, creator: this.userId });
     Vocabularies.remove({ _id: vocabId, creator: this.userId });
@@ -124,12 +124,12 @@ Meteor.methods({
   },
   'vocabulary.publish'(rdfTtl: string, vocabId: string) {
     assertUser();
-    // TODO (#183): Sanitize
+  
     publishVocabulary(rdfTtl, vocabId)
   },
   'class.create'(vocabId, vertexType, name, description, URI, position, _id) {
     assertUser();
-    // TODO (#183): Sanitize
+
     var classIdO
     // checking for Id indicates that it is a DataType Vertex
     // where the id for prop and vertex are identical
@@ -180,7 +180,7 @@ Meteor.methods({
   },
   'classes.translate'(classids: string[], dx: number, dy: number) {
     assertUser();
-    // TODO (#183): Sanitize
+  
     Classes.update(
       { _id: { $in: classids } },
       { $inc: { 'position.x': dx, 'position.y': dy } },
@@ -208,7 +208,7 @@ Meteor.methods({
   },
   'property.create'(classId, payload) {
     assertUser();
-    // TODO (#183): Sanitize
+
     // Note, these operations must occur in this order. Otherwise an observer of the vocabualry might
     const propID = Properties.insert(
       { ...payload })
