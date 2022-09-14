@@ -243,12 +243,12 @@ export class MxgraphService {
 
     public clearModel() {
         this.assertTransaction();
-        this.graph.removeCells(this.graph.getChildCells(this.canvas, true, true)); // TODO (183): Assert this clear selection model
+        this.graph.removeCells(this.graph.getChildCells(this.canvas, true, true)); // 
     }
 
     public removeCell(_id: string) {
         this.assertTransaction();
-        this.model.remove(this.model.getCell(_id)); // TODO (183): Assert this clear selection model
+        this.model.remove(this.model.getCell(_id));
     }
 
     assertTransaction() {
