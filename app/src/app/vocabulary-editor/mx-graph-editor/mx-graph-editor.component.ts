@@ -70,7 +70,6 @@ export class MxGraphEditorComponent implements OnInit {
                this.vocabEditorService.setEditorDrawer(true);
        });
 
-       // TODO (186) It looks like this currently leaks observables.
        this.mx.deleteRequestObservable().pipe(
            combineLatest(this.mx.currentEdgeSelection(), this.mx.currentSelection(),
                (keyevent, edgeSel, nodeSel) => ({ key: keyevent, edge: edgeSel, node: nodeSel })

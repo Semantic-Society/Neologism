@@ -72,7 +72,6 @@ export class VocabularyEditorComponent implements OnInit {
      //  propertyRecommendations: Array<{ comment: string; label: string; uri: string; range: string; }> = [];
      propertyRecommendations: Observable<{ comment: string; label: string; uri: string; range: string }[]>;
 
-    // TODO (186): as this is an observable, does it need @Input?
     @Input() selectedClassID: string;
 
     /**

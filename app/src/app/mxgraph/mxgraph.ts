@@ -124,8 +124,7 @@ export class MxgraphService {
         // The default parent for inserting new cells. This is normally the first child of the root (ie. layer 0).
         this.canvas = this.graph.getDefaultParent();
 
-
-        // TODO (186): Check if multiple listener on same event creating UI flow disturbances
+ 
         this.selection$ = new Observable<string>((observer) => {
             const handler = (sender, evt) => {
                 const cell = evt.getProperty('cell'); // cell may be null
@@ -173,7 +172,6 @@ export class MxgraphService {
     }
 
     getEdgeWithId(edgeID: string) {
-        // TODO (186): in principle getCell should work, but upon inserting there is an issue and the cell gets assigned a new id
         for (const key in this.model.cells) {
             if (this.model.cells.hasOwnProperty(key)) {
                 const candidate = this.model.cells[key];
