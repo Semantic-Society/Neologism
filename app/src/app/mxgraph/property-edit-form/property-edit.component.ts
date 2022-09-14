@@ -24,6 +24,7 @@ export class PropertyEditModal implements OnInit {
   propList: Iproperty[];
   propListName: string[];
   propSourceNodeId: string;
+  uriPrefix: string;
   public prop: Iproperty;
   readonly xsdDataTypes = xsdDataTypes;
 
@@ -112,6 +113,9 @@ export class PropertyEditModal implements OnInit {
       this.modal.destroy();
   }
 
+  autoCompleteURI($event) {
+    this.prop['URI'] = `${this.uriPrefix}${encodeURIComponent($event.target.value)}`
+}
   propChange(_id: string) {
       this.prop = this.propList.find(x => x._id == _id);
       this.isDataTypeProp = this.prop.type === PropertyType.Data;
