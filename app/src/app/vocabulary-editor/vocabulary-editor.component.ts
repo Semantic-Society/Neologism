@@ -248,8 +248,6 @@ export class VocabularyEditorComponent implements OnInit {
      }
 
      updateEdit() {
-         // TODO (187): Call the updateClass (needs to be implemented) of vocabService and call toggleEdit() afterwards
-         // this.vocabService.updateClass(this.newClass.name);
          console.log(this.editedClass);
          if (this.editedClass.name) {
              this.vocabService.updateClassName(this.selectedClassID, this.editedClass.name);
