@@ -30,6 +30,8 @@ export interface Ivocabulary {
   // version: string;
   classes: meteorID[]; // List of all classes in the vocab
   domain: string;
+  createdAt:number;
+  publishedAt?:number;
 }
 
 export interface Iclass {

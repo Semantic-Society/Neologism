@@ -92,7 +92,7 @@ export class RecommenderComponent implements OnInit {
                       if (this.currentRequestNumber === requestNumber) {
                           this.recommendations = recs;
                       }
-                  }, (error){
+                  }, (error) =>{
                     console.log(error)
                   } 
                   , () => {

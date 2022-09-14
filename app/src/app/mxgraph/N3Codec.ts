@@ -76,8 +76,11 @@ export class N3Codec {
                 namedNode(vocab.uriPrefix),
                 namedNode('http://purl.org/dc/terms/description'),
                 literal(vocab.description)
-            ));
-
+            ),quad(
+                namedNode(vocab.uriPrefix),
+                namedNode('http://purl.org/dc/terms/created'),
+                literal(new Date(vocab.createdAt).toLocaleDateString('sv'))
+            )     );
 
             const objectProps = Object.create(null);
             const dataProps = Object.create(null);
