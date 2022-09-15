@@ -82,7 +82,7 @@ export class VocabulariesService {
       });
   }
 
-  getVocabulary(id: string): Observable<Ivocabulary> { // TODO (186): Breaks upon deletion
+  getVocabulary(id: string): Observable<Ivocabulary> { 
       return VocabulariesService.wrapFunkyObservables(
           Vocabularies.find({ _id: id }).pipe(
               filter((arr: any[]) => arr.length > 0),

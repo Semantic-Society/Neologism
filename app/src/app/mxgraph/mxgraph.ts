@@ -52,7 +52,7 @@ export class MxgraphService {
         this.graph.setAutoSizeCells(true);
         this.graph.autoSizeCellsOnAdd = true;
         this.graph.setCellsResizable(false);
-        this.graph.setConnectable(false); // TODO (187): Implement this in the future?
+        this.graph.setConnectable(false);
         this.graph.setPanning(true);
         this.graph.setCellsEditable(false);
         this.graph.panningHandler.useLeftButtonForPanning = true;    // Breaks lasso selection!
@@ -124,48 +124,7 @@ export class MxgraphService {
         // The default parent for inserting new cells. This is normally the first child of the root (ie. layer 0).
         this.canvas = this.graph.getDefaultParent();
 
-        // Create layout algorithm to be used with the graph
-        // const hierarchical = new MxgraphService.mx.mxHierarchicalLayout(this.graph, MxgraphService.mx.mxConstants.DIRECTION_SOUTH, true);
-        // const organic = new MxgraphServiBehaviorSubject,e.mx.mxFastOrganicLayout(this.graph);
-        // organic.forceConstant = 120;
-
-        // Initialize a lookup map from subject IRI to the corresponding mxGraph cell and set up automatic syncronization
-        // this.graph.addListener(MxgraphService.mx.mxEvent.CELLS_ADDED, (sender: m.mxEventSource, evt: m.mxEventObject) => {
-        // throw new Error('NOT  IMPELEMENTED'); // TODO (187):Michael does this need to be implemented?
-        // const cells: m.mxCell[] = (evt.getProperties() || {})['cells'];
-        // if (Array.isArray(cells)) cells.forEach((cell) => this.model.set(cell.getId(), cell));
-        // organic.execute(this.canvas);
-        // });
-        // this.graph.addListener(MxgraphService.mx.mxEvent.CELLS_REMOVED, (sender: m.mxEventSource, evt: m.mxEventObject) => {
-        //  throw new Error('NOT  IMPELEMENTED'); // TODO (187): Michael does this need to be implemented?
-        // const cells: m.mxCell[] = (evt.getProperties() || {})['cells'];
-        // if (Array.isArray(cells)) cells.forEach((cell) => this.cellByIRI.delete(cell.getId()));
-        // organic.execute(this.canvas);
-        // });
-
-        // this.toolbar = new MxgraphService.mx.mxToolbar(toolbarContainer);
-        // this.addToolbarVertex('assets/class_mockup.gif', 80, 30, 'shape=rounded');
-
-        // this.codec = new N3Codec();
-        // const importingCodec = new N3Codec();
-        // importingCodec.loadUrl2store(this.url)
-        //     .then(() => {
-        //         this.codec.getClasses()
-        //             .forEach((element) => {
-        //                 this.insertClass(element.uri, element.label);
-        //             });
-        //         this.codec.getPredicates()
-        //             .forEach((element) => {
-        //                 this.insertProperty(element.domain, element.uri, element.label, element.comment, element.range);
-        //             });
-        //         this.codec.getSubClassRelations()
-        //             .forEach((element) => {
-        //                 this.insertSubclassRelation(element.domain, element.range);
-        //             });
-        //         this.zoomToFit();
-        //     });
-
-        // TODO (186): Check if multiple listener on same event creating UI flow disturbances
+ 
         this.selection$ = new Observable<string>((observer) => {
             const handler = (sender, evt) => {
                 const cell = evt.getProperty('cell'); // cell may be null
@@ -213,7 +172,6 @@ export class MxgraphService {
     }
 
     getEdgeWithId(edgeID: string) {
-        // TODO (186): in principle getCell should work, but upon inserting there is an issue and the cell gets assigned a new id
         for (const key in this.model.cells) {
             if (this.model.cells.hasOwnProperty(key)) {
                 const candidate = this.model.cells[key];
@@ -285,12 +243,12 @@ export class MxgraphService {
 
     public clearModel() {
         this.assertTransaction();
-        this.graph.removeCells(this.graph.getChildCells(this.canvas, true, true)); // TODO (183): Assert this clear selection model
+        this.graph.removeCells(this.graph.getChildCells(this.canvas, true, true)); // 
     }
 
     public removeCell(_id: string) {
         this.assertTransaction();
-        this.model.remove(this.model.getCell(_id)); // TODO (183): Assert this clear selection model
+        this.model.remove(this.model.getCell(_id));
     }
 
     assertTransaction() {

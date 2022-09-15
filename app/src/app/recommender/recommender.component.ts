@@ -85,15 +85,16 @@ export class RecommenderComponent implements OnInit {
           if (!(queryString)) {
               throw new Error('labelFiled null');
           }
-          // this.mx.serializeModel().then((context) =>
-          // TODO (187) re-enable context
+
           this.recommendationService.classRecommendationforNewClass(''/*context*/, queryString)
               .subscribe(
                   (recs) => {
                       if (this.currentRequestNumber === requestNumber) {
                           this.recommendations = recs;
                       }
-                  }, null // TODO (187) handle error?
+                  }, (error){
+                    console.log(error)
+                  } 
                   , () => {
                       if (this.currentRequestNumber === requestNumber) {
                           this.disableSpinner();
