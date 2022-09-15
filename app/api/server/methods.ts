@@ -99,13 +99,12 @@ Meteor.methods({
       public:
         field_public,
       classes: [],
-      domain
+      domain,
+      createdAt: new Date().getTime()
     });
 
   },
-  /*'vocabulary.insertClass'({id, vClass}) {
-    Vocabularies.update({_id:id}, { $push: {classes: vClass}});
-  },*/
+
   'vocabulary.remove'(vocabId: string) {
     assertUser();
 
