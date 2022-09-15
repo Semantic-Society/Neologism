@@ -125,6 +125,7 @@ export class MxgraphComponent implements OnInit, OnDestroy {
                         nzComponentParams: {
                             propListString: edgeSelection.edgeID,
                             propSourceNodeId: edgeSelection.domainClazzID,
+                            uriPrefix: this.vocabulary.uriPrefix
                         },
                         nzFooter: [
                             {
