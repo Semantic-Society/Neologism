@@ -1,17 +1,13 @@
-import { DataSource } from '@angular/cdk/collections';
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-
-import { saveAs } from 'file-saver';
-import { Observable } from 'rxjs';
-import { debounceTime, tap } from 'rxjs/operators';
-
-import { Vocabularies, Users } from '../../../api/collections';
-import { Ivocabulary } from '../../../api/models';
-import { VocabulariesService } from '../services/vocabularies.service';
-import { AccessManagement } from '../services/access-management.service';
-import { AddUserModalComponent } from './components/add-user-modal/add-user-modal.component';
-import { MatDialog } from '@angular/material/dialog';
+import {Component, OnInit} from '@angular/core';
+import {MatDialog} from '@angular/material/dialog';
+import {Router} from '@angular/router';
+import {saveAs} from 'file-saver';
+import {Observable} from 'rxjs';
+import {debounceTime} from 'rxjs/operators';
+import {Ivocabulary} from '../../../api/models';
+import {AccessManagement} from '../services/access-management.service';
+import {VocabulariesService} from '../services/vocabularies.service';
+import {AddUserModalComponent} from './components/add-user-modal/add-user-modal.component';
 
 @Component({
     selector: 'app-vocablist',
@@ -33,12 +29,12 @@ export class VocablistComponent implements OnInit {
   constructor(
      private router: Router,
      private accessMngmt: AccessManagement,
-    public dialog: MatDialog,
+     public dialog: MatDialog,
      private vocabService: VocabulariesService) { }
 
   ngOnInit() {
       this.dataSource = this.vocabService.getVocabularies();
-      this.dataSource.subscribe(x => console.log(x));
+      this.dataSource.subscribe((x) => console.log(x));
   }
 
   addVocabulary() {
@@ -57,18 +53,17 @@ export class VocablistComponent implements OnInit {
       window.open('../v/' + id);
   }
 
-  addPersonToVocab(dataSource){
-      const dialogRef = this.dialog.open(AddUserModalComponent, {
-          height: "400px",
-          width: "600px",
+  addPersonToVocab(dataSource) {
+      this.dialog.open(AddUserModalComponent, {
+          height: '400px',
+          width: '600px',
           data: {vocabId: dataSource._id}
       });
   }
 
   downloadVocab(id: string, name: string) {
-      console.log('bla');
       const subscription = this.vocabService.getClassesWithProperties(id).pipe(
-      // this delay is artifical to get the latest, final result and not an intermediary.
+      // this delay is artificial to get the latest, final result and not an intermediary.
       // Using 'last would be more natural, but does not seem to work (this is a query on a life collection).
           debounceTime(100)
       ).subscribe(
@@ -103,36 +98,5 @@ export class VocablistComponent implements OnInit {
               saveAs(blob, name + '.rdf');
           }
       );
-
-      // const blob = new Blob(['Hello'], { type: 'text/plain' });
-      // /saveAs(blob, './filename.txt');
   }
-
-    // randomStr(m) {
-    //   m = m || 9;
-    //   let s = '';
-    //   const r = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    //   for (let i = 0; i < m; i++) { s += r.charAt(Math.floor(Math.random() * r.length)); }
-    //   return s;
-    // }
-
 }
-
-// eslint-disable-next-line max-classes-per-file
-// export class VocabularyDataSource extends DataSource<any> {
-//   constructor() {
-//     super();
-//   }
-//   connect(): Observable<Ivocabulary[]> {
-//     return
-
-//     (Vocabularies.find({})
-//       .pipe(
-//         zoneOperator(),
-//         // map((x) => { // console.log(x);
-//         //   return x;
-//         // })
-//       ) as any;
-//   }
-//   disconnect() { }
-// }

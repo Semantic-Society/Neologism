@@ -11,8 +11,6 @@ function formatTime(timeInMs) {
     providedIn: 'root',
 })
 export class N3Codec {
-    parser = new Parser();
-
     public static neoPrefixes = {
         /**
          * TODO: purl to dcterms, order of terms ?
@@ -26,11 +24,12 @@ export class N3Codec {
         xsd: 'http://www.w3.org/2001/XMLSchema#',
     };
 
+  parser = new Parser();
+
     public static serialize(id, classesWithProps, respHandler) {
 
         try {
             const vocabId = id || null;
-            let name = ""
 
 
 
@@ -46,9 +45,6 @@ export class N3Codec {
                 if (!!emails)
                     return emails;
             });
-
-            if (name === '' || name === undefined) name = 'vocab-' + vocabId;
-
 
             let classes: IClassWithProperties[] = classesWithProps;
             const dataTypeProps = classes.filter((classs) => classs.isDataTypeVertex);
@@ -66,7 +62,7 @@ export class N3Codec {
                 literal(creator.emails[0].address)
             ));
 
-            authorEmails = authorEmails.filter((emails) => emails[0].address != creator.emails[0].address);
+            authorEmails = authorEmails.filter((emails) => emails[0].address !== creator.emails[0].address);
             authorEmails.forEach((emails) => emails.forEach((email) => {
                 quads.push(quad(
                     namedNode(vocab.uriPrefix),
@@ -74,7 +70,6 @@ export class N3Codec {
                     literal(email.address)
                 ));
             }));
-
 
             quads.push(quad(
                 namedNode(vocab.uriPrefix),
@@ -246,18 +241,15 @@ export class N3Codec {
                 else {
                     respHandler(new Store(list));
                 }
-
             });
     }
 
     getMeta(store: Store): { name: string; uri: string; desc: string } {
-
         return {
             name: store.getQuads(null, namedNode('http://purl.org/dc/terms/title'), null, null)[0].object.value,
             uri: store.getQuads(null, null, namedNode('http://www.w3.org/2002/07/owl#Ontology'), null)[0].subject.value,
             desc: store.getQuads(null, namedNode('http://purl.org/dc/terms/description'), null, null)[0].object.value,
         };
-
     }
 
     getClasses(store: Store) {
@@ -283,7 +275,7 @@ export class N3Codec {
                 const subClasses = store.getQuads(null, 'http://www.w3.org/2000/01/rdf-schema#domain', aClass, null);
                 subClasses.forEach((subClass) => {
                     const range = store.getQuads(subClass.subject, 'http://www.w3.org/2000/01/rdf-schema#range', null, null);
-                    const isDataType = store.getQuads(subClass.subject, null, "http://www.w3.org/2002/07/owl#DatatypeProperty", null).length ? true : false;
+                    const isDataType = !!store.getQuads(subClass.subject, null, 'http://www.w3.org/2002/07/owl#DatatypeProperty', null).length;
                     const rangeLabel = range[0].object.value.split('#')[1];
                     const propLabel = subClass.subject.value.split('#')[1];
                     const domainLabel = aClass.value.split('#')[1];
@@ -292,7 +284,7 @@ export class N3Codec {
                             uri: subClass.subject.value,
                             label: propLabel,
                             domain: domainLabel,
-                            description: "", // TODO: Fix export to include comments
+                            description: "", 
                             type: isDataType ? PropertyType.Data : PropertyType.Object,
                             range: rangeLabel
                         }

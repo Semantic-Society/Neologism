@@ -1,11 +1,10 @@
-import { Component, OnInit, Inject } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { FormControl } from '@angular/forms';
-import { AccessManagement } from '../../../services/access-management.service';
-import { BehaviorSubject, Observable, Subject, of } from 'rxjs';
-import { map, debounceTime, distinctUntilChanged, flatMap, startWith, tap, switchMap } from 'rxjs/operators';
-import { Users, Vocabularies } from '../../../../../api/collections';
-import { Iuser } from '../../../../../api/models';
+import {Component, Inject} from '@angular/core';
+import {FormControl} from '@angular/forms';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {Users, Vocabularies} from '../../../../../api/collections';
+import {Iuser} from '../../../../../api/models';
+import {AccessManagement} from '../../../services/access-management.service';
 
 @Component({
     selector: 'app-remove-user-modal',
@@ -18,7 +17,6 @@ export class RemoveUserModalComponent {
   autoUsers: Observable<any>;
   contributors: Iuser[];
   toRemove: Iuser[];
-  keyUp = new Subject<string>();
   myControl = new FormControl();
   options: string[] = ['One', 'Two', 'Three'];
 
@@ -31,7 +29,7 @@ export class RemoveUserModalComponent {
       this.toRemove = [];
       Vocabularies.findOne({ _id: this.data.vocabId }, { fields: { authors: 1 } })
           .authors
-          .forEach(authorId =>
+          .forEach((authorId) =>
               this.contributors
                   .push(
                       Users.findOne({ _id: authorId })
@@ -41,8 +39,8 @@ export class RemoveUserModalComponent {
 
   removeUserFromGroup(user) {
       const tmp_users = this.removeGroup.getValue();
-      const toRemove = tmp_users.find(remove => user === remove);
-      const new_users = tmp_users.filter(remove => user !== remove);
+      const toRemove = tmp_users.find((remove) => user === remove);
+      const new_users = tmp_users.filter((remove) => user !== remove);
       this.toRemove.push(toRemove);
       this.removeGroup.next(new_users);
   }
@@ -54,7 +52,7 @@ export class RemoveUserModalComponent {
 
   removeUsers() {
       const userIds = this.toRemove
-          .map(user => user._id);
+          .map((user) => user._id);
 
       this.accessService.removeUsersVocab(userIds, this.data.vocabId);
   }
@@ -62,5 +60,4 @@ export class RemoveUserModalComponent {
   closeDialog() {
       this.dialogRef.close();
   }
-
 }

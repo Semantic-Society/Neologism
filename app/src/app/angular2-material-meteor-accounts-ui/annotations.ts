@@ -41,5 +41,3 @@ export function InjectUser(propName?: string): (cls: any) => any {
     } as TypeDecorator;
     return TypeDecorator;
 }
-
-

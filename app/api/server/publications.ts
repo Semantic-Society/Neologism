@@ -1,12 +1,11 @@
 import { Meteor } from 'meteor/meteor';
 import { Mongo } from 'meteor/mongo';
 
-
 import { Iclass, Iproperty, Iuser, Ivocabulary, meteorID } from 'models';
 import { Classes, Properties, Users, Vocabularies } from '../collections';
 
 // There are no permission checks yet on  a lot of published data. The case of public data, example
-// github punlic repos should be integrated in designing the access to the publisghed vocab data.
+// GitHub public repos should be integrated in designing the access to the published vocab data.
 (Meteor as any).publishComposite('vocabularies', function (): any {
     return {
         find: () => {
@@ -19,7 +18,7 @@ import { Classes, Properties, Users, Vocabularies } from '../collections';
                 find: (vocab) => {
                     return Users.collection.find(
                         { _id: { $in: vocab.authors } },
-                        { fields: { profile: 1, 'emails.address': 1 } }
+                        { fields: { 'profile': 1, 'emails.address': 1 } }
                     );
                 }
             } as PublishCompositeConfig1<Ivocabulary, Iuser>,
@@ -36,7 +35,6 @@ import { Classes, Properties, Users, Vocabularies } from '../collections';
     };
 
 });
-
 
 (Meteor as any).publishComposite('vocabDetails', function (vocabularyID: meteorID): PublishCompositeConfig<Ivocabulary> {
     if (!this.userId) {
@@ -56,7 +54,7 @@ import { Classes, Properties, Users, Vocabularies } from '../collections';
                 find: (vocab) => {
                     return Users.collection.find(
                         { _id: { $in: vocab.authors } },
-                        { fields: { profile: 1, 'emails.address': 1 } }
+                        { fields: { 'profile': 1, 'emails.address': 1 } }
                     );
                 }
             } as PublishCompositeConfig1<Ivocabulary, Iuser>,
@@ -81,7 +79,6 @@ import { Classes, Properties, Users, Vocabularies } from '../collections';
         ]
     };
 });
-
 
 interface PublishCompositeConfigN {
     collectionName?: string;

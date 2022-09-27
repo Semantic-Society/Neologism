@@ -1,9 +1,9 @@
-import { Component, OnInit, Inject } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { FormControl } from '@angular/forms';
-import { AccessManagement } from '../../../services/access-management.service';
-import { BehaviorSubject, Observable, Subject, of } from 'rxjs';
-import { map, debounceTime, distinctUntilChanged, flatMap, startWith, tap, switchMap } from 'rxjs/operators';
+import {Component, Inject, OnInit} from '@angular/core';
+import {FormControl} from '@angular/forms';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {BehaviorSubject, Observable, Subject} from 'rxjs';
+import {debounceTime, distinctUntilChanged, map, startWith, switchMap} from 'rxjs/operators';
+import {AccessManagement} from '../../../services/access-management.service';
 
 @Component({
     selector: 'app-add-user-modal',
@@ -27,25 +27,20 @@ export class AddUserModalComponent implements OnInit {
       this.setupAutoComp();
   }
 
+  ngOnInit() { }
 
-
-  ngOnInit() {
-
-  }
-
-  setupAutoComp(){
+  setupAutoComp() {
       this.autoUsers = this.keyUp.asObservable()
           .pipe(
               map((event: any) => event.target.value),
               debounceTime(300),
               distinctUntilChanged(),
-              switchMap(search =>
-                  this.accessService.getUsers(search)),
+              switchMap((search) => this.accessService.getUsers(search)),
               startWith([])
           );
   }
 
-  addToAddGroup(user){
+  addToAddGroup(user) {
       const tmp_users = this.addGroup.getValue();
       const new_users = [...tmp_users, user];
 
@@ -54,20 +49,17 @@ export class AddUserModalComponent implements OnInit {
 
   removeUserAddGroup(user) {
       const tmp_users = this.addGroup.getValue();
-      const new_users = tmp_users.filter(remove => user !== remove);
+      const new_users = tmp_users.filter((remove) => user !== remove);
 
       this.addGroup.next(new_users);
   }
 
-  addUsers(){
-      const userIds = this.addGroup.getValue()
-          .map(user => user._id);
-
+  addUsers() {
+      const userIds = this.addGroup.getValue().map((user) => user._id);
       this.accessService.addUsersVocab(userIds, this.data.vocabId);
   }
 
   closeDialog() {
       this.dialogRef.close();
   }
-
 }

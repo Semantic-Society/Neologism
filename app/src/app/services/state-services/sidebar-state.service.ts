@@ -6,7 +6,7 @@ export type SidebarChange = 'default' | 'edit' | 'recommend' | 'create';
 @Injectable()
 export class SideBarStateService {
 
-    // it is necessarry to cast the string
+    // it is necessary to cast the string
      _editMode: BehaviorSubject<SidebarChange> = new BehaviorSubject(('default' as SidebarChange));
 
      constructor() { }

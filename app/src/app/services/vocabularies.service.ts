@@ -531,5 +531,3 @@ export class VocabulariesService {
     }
 
 }
-
-

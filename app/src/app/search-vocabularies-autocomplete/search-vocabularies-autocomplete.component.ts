@@ -1,7 +1,7 @@
-import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
-import { VocabulariesService } from '../services/vocabularies.service';
-import { Iclass, Iproperty, Ivocabulary, meteorID } from '../../../api/models';
-import { Meteor } from 'meteor/meteor';
+import {Component, Input, OnInit, ViewEncapsulation} from '@angular/core';
+import {Meteor} from 'meteor/meteor';
+import {VocabulariesService} from '../services/vocabularies.service';
+
 @Component({
     encapsulation: ViewEncapsulation.None,
     selector: 'search-vocabularies-autocomplete',
@@ -19,7 +19,6 @@ export class SearchVocabulariesAutocompleteComponent implements OnInit {
       this.vocabs = [];
   }
 
-
   onChange($event: Event): void {
       const value = ($event.target as HTMLInputElement).value;
       if (!value) {
@@ -29,4 +28,3 @@ export class SearchVocabulariesAutocompleteComponent implements OnInit {
       }
   }
 }
-

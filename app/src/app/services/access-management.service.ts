@@ -1,18 +1,16 @@
-import { Injectable } from '@angular/core';
-import { MeteorObservable, zoneOperator } from 'meteor-rxjs';
-import { Observable, of, BehaviorSubject, ObservableLike } from 'rxjs';
-import { Users } from '../../../api/collections';
+import {Injectable} from '@angular/core';
+import {MeteorObservable, zoneOperator} from 'meteor-rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
 
 @Injectable()
 export class AccessManagement {
     users: BehaviorSubject<any> =  new BehaviorSubject([]);
 
-    constructor(){
-
+    constructor() {
     }
 
     getUsers(query): Observable<any> {
-        return Observable.create(observer => {
+        return Observable.create((observer) => {
             MeteorObservable.call('users-without-self.get', query)
                 .pipe(zoneOperator())
                 .subscribe(
@@ -22,7 +20,6 @@ export class AccessManagement {
                 );
         });
     }
-
 
     addUsersVocab(userIds: string[], vocabId: string) {
         console.log('meteor-cal');
@@ -49,6 +46,4 @@ export class AccessManagement {
                 // Handle error
             });
     }
-
-
 }

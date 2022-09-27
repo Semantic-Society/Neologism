@@ -1,7 +1,7 @@
-import { Component, OnInit, NgZone } from '@angular/core';
-import { NzMessageService } from 'ng-zorro-antd/message';
+import { Component, NgZone } from '@angular/core';
 import { Router } from '@angular/router';
-import { environment } from './../../environments/environment';
+import { NzMessageService } from 'ng-zorro-antd/message';
+import { environment } from '../../environments/environment';
 
 @Component({
     selector: 'app-login-page',
@@ -51,7 +51,7 @@ export class LoginPageComponent {
           if (this.password === this.password2) {
               Accounts.createUser({ email: this.username, password: this.password }, (error) => {
                   if (error) {
-                      if (error.message === "Signups forbidden [403]") {
+                      if (error.message === 'Signups forbidden [403]') {
                           this.createBasicErrorMessage('Sorry! User creation is disabled');
                       } else {
                           this.createBasicErrorMessage('Sorry! User creation failed...');

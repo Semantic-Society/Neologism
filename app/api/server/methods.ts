@@ -1,12 +1,10 @@
-import { Meteor } from 'meteor/meteor';
+import {Meteor} from 'meteor/meteor';
 
-import { combineLatest } from 'rxjs';
-import { map, take, tap } from 'rxjs/operators';
+import {combineLatest} from 'rxjs';
+import {map, take, tap} from 'rxjs/operators';
 
-
-import { Classes, Properties, Vocabularies, Users } from '../collections';
-import { publishVocabulary } from './helper';
-
+import {Classes, Properties, Users, Vocabularies} from '../collections';
+import {publishVocabulary} from './helper';
 
 // should be refactored as well. The checck is not sufficient
 function assertUser() {
@@ -35,13 +33,11 @@ Meteor.methods({
     assertUser();
 
     const re = new RegExp(this.userId);
-    const users = Users.find({
-      'emails.address': { $regex: email },
-      _id: { $not: re },
-    },
-      { limit: 10 }).fetch();
-
-    return users;
+    return Users.find({
+        'emails.address': {$regex: email},
+        '_id': {$not: re},
+      },
+      {limit: 10}).fetch();
   },
   'vocabulary.assign-creator.self'(vocabId: string) {
     assertUser();
@@ -116,14 +112,14 @@ Meteor.methods({
     // currently: pseudo permission check via only being able to remove documents where the current user is also an author
     const vocab = Vocabularies.findOne({ _id: vocabId, creator: this.userId });
     Vocabularies.remove({ _id: vocabId, creator: this.userId });
-    vocab.classes.forEach(classId => {
-      const classa = Classes.findOne({ _id: classId })
-      Classes.remove({ _id: classId })
-      classa.properties.forEach(propId => {
-        Properties.remove({ _id: propId })
-      })
-      Properties.remove({ range: classId })
-    })
+    vocab.classes.forEach((classId) => {
+      const classa = Classes.findOne({ _id: classId });
+      Classes.remove({ _id: classId });
+      classa.properties.forEach((propId) => {
+        Properties.remove({ _id: propId });
+      });
+      Properties.remove({ range: classId });
+    });
 
   },
   'vocabulary.publish'(rdfTtl: string, vocabId: string) {
