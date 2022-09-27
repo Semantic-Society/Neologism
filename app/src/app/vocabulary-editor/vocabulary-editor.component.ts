@@ -27,7 +27,7 @@ class VocabClass {
           range: ''
       };
   }
-};
+}
 
 interface ClassPropertyI {
   name: string;
@@ -79,8 +79,8 @@ export class VocabularyEditorComponent implements OnInit {
      */
      classInfo: Observable<{ label: string; description: string; url: string }>;
 
-     // TODO (184): strictly speaking, this component does not need this as it only needs access to classes and properties.
-     // However, more fine grained methods in the VocabulariesService are not yet implemented.
+     // Strictly speaking, this component does not need this as it only needs access to classes and properties.
+     // However, more fine-grained methods in the VocabulariesService are not yet implemented.
      newClass = {
          name: '',
          URI: '',
