@@ -4,12 +4,26 @@ import { Observable, Subject } from 'rxjs';
 import { distinctUntilChanged } from 'rxjs/operators';
 
 import { enableDynamicGrid } from './dynamicGrid';
+// import { N3Codec } from './N3Codec';
+
+type Predicates = Map<string, Set<string>>;
+// export interface IUserObject { url: string; label: string; creator: string; }
+
 export class MxgraphService {
-  static mx: typeof m = require('mxgraph')({
-    mxImageBasePath: 'mxgraph/images',
-    mxBasePath: 'mxgraph',
-    mxLoadResources: false, // Disables synchronous loading of resources. Disables resource warnings for the moment.
-  });
+    executeLayout() {
+        var layout = new MxgraphService.mx.mxCircleLayout(this.graph);
+        const { x, y } = this.viewCenter()
+        layout.x0 = x
+        layout.y0 = y
+        layout.moveCircle = true;
+        layout.execute(this.canvas)
+    }
+
+    static mx: typeof m = require('mxgraph')({
+        mxImageBasePath: 'mxgraph/images',
+        mxBasePath: 'mxgraph',
+        mxLoadResources: false, // Disables synchronous loading of resources. Disables resource warnings for the moment.
+    });
 
     graph: m.mxGraph;
     model: m.mxGraphModel;
@@ -18,16 +32,18 @@ export class MxgraphService {
     selection$: Observable<string>;
     wnd: any;
     edgeSelection$: Observable<{ domainClazzID: string; edgeID: string; isDataTypeProp: boolean }>;
+
     tb: m.mxToolbar;
+    // public codec: N3Codec;
+
     deletePress: Subject<any>;
 
     constructor(
         private container: HTMLDivElement,
-       
+        //  toolbarContainer: HTMLElement,
     ) {
 
-  constructor(private container: HTMLDivElement) {
-    if (!MxgraphService.mx.mxClient.isBrowserSupported()) MxgraphService.mx.mxUtils.error('Browser is not supported!', 200, false);
+        if (!MxgraphService.mx.mxClient.isBrowserSupported()) MxgraphService.mx.mxUtils.error('Browser is not supported!', 200, false);
 
         this.graph = new MxgraphService.mx.mxGraph(container);          // Create the graph inside the given container
         this.model = this.graph.getModel();
@@ -47,67 +63,67 @@ export class MxgraphService {
         // allow only one thing to be selected at the same time.
         this.graph.getSelectionModel().setSingleSelection(true);
 
-    const edgeStyle = this.graph.stylesheet.getDefaultEdgeStyle();
-    edgeStyle[MxgraphService.mx.mxConstants.STYLE_FILLCOLOR] = '#FFFFFF';
-    edgeStyle[MxgraphService.mx.mxConstants.STYLE_LABEL_BACKGROUNDCOLOR] = '#FFFFFF';
-    const style = {};
-    style[MxgraphService.mx.mxConstants.STYLE_SHAPE] = MxgraphService.mx.mxConstants.SHAPE_RECTANGLE;
-    style[MxgraphService.mx.mxConstants.STYLE_DASHED] = 1;
-    style[MxgraphService.mx.mxConstants.STYLE_STROKECOLOR] = '#000000';
-    style[MxgraphService.mx.mxConstants.STYLE_FILLCOLOR] = '#17E506';
-    style[MxgraphService.mx.mxConstants.STYLE_FONTCOLOR] = '#000000';
-    style[MxgraphService.mx.mxConstants.STYLE_LABEL_BACKGROUNDCOLOR] = '#17E506';
-    this.graph.getStylesheet().putCellStyle('Dashed', style);
+        const edgeStyle = this.graph.stylesheet.getDefaultEdgeStyle();
+        edgeStyle[MxgraphService.mx.mxConstants.STYLE_FILLCOLOR] = '#FFFFFF';
+        edgeStyle[MxgraphService.mx.mxConstants.STYLE_LABEL_BACKGROUNDCOLOR] = '#FFFFFF';
+        const style = new Object();
+        style[MxgraphService.mx.mxConstants.STYLE_SHAPE] = MxgraphService.mx.mxConstants.SHAPE_RECTANGLE;
+        style[MxgraphService.mx.mxConstants.STYLE_DASHED] = 1;
+        style[MxgraphService.mx.mxConstants.STYLE_STROKECOLOR] = '#000000';
+        style[MxgraphService.mx.mxConstants.STYLE_FILLCOLOR] = '#17E506';
+        style[MxgraphService.mx.mxConstants.STYLE_FONTCOLOR] = '#000000';
+        style[MxgraphService.mx.mxConstants.STYLE_LABEL_BACKGROUNDCOLOR] = '#17E506';
+        this.graph.getStylesheet().putCellStyle('Dashed', style);
 
-    this.deletePress = new Subject();
-    const keyHandler = new MxgraphService.mx.mxKeyHandler(this.graph);
-    keyHandler.bindKey(8, (evt) => {
-      if (this.graph.isEnabled()) {
-        this.deletePress.next(evt);
-      }
-    });   // backspace key removes cell
-    keyHandler.bindKey(43, (evt) => {
-      if (this.graph.isEnabled()) {
-        this.deletePress.next(evt);
-      }
-    });  // mac delete key removes cell
-    keyHandler.bindKey(127, (evt) => {
-      if (this.graph.isEnabled()) {
-        this.deletePress.next(evt);
-      }
-    });  // proper operating systems delete
+        this.deletePress = new Subject();
+        const keyHandler = new MxgraphService.mx.mxKeyHandler(this.graph);
+        keyHandler.bindKey(8, (evt) => {
+            if (this.graph.isEnabled()) {
+                this.deletePress.next(evt);
+            }
+        });   // backspace key removes cell
+        keyHandler.bindKey(43, (evt) => {
+            if (this.graph.isEnabled()) {
+                this.deletePress.next(evt);
+            }
+        });  // mac delete key removes cell
+        keyHandler.bindKey(127, (evt) => {
+            if (this.graph.isEnabled()) {
+                this.deletePress.next(evt);
+            }
+        });  // proper operating systems delete
 
-    // Adds mouse wheel handling for zoom
-    // see https://github.com/jgraph/mxgraph/blob/master/javascript/examples/grapheditor/www/js/EditorUi.js
-    MxgraphService.mx.mxEvent.addMouseWheelListener((evt: MouseEvent, scrollUp: boolean) => {
-      // Ctrl+wheel (or pinch on touchpad) is a native browser zoom event is OS X
-      // LATER: Add support for zoom via pinch on trackpad for Chrome in OS X
-      // if (((mxEvent.isControlDown(evt) && !MxgraphService.mx.mxClient.IS_MAC) || mxEvent.isAltDown(evt) ||
-      //     this.graph.panningHandler.isActive()) /* && (this.dialogs == null || this.dialogs.length == 0) */) {
+        // Adds mouse wheel handling for zoom
+        // see https://github.com/jgraph/mxgraph/blob/master/javascript/examples/grapheditor/www/js/EditorUi.js
+        MxgraphService.mx.mxEvent.addMouseWheelListener((evt: MouseEvent, scrollUp: boolean) => {
+            // Ctrl+wheel (or pinch on touchpad) is a native browser zoom event is OS X
+            // LATER: Add support for zoom via pinch on trackpad for Chrome in OS X
+            // if (((mxEvent.isControlDown(evt) && !MxgraphService.mx.mxClient.IS_MAC) || mxEvent.isAltDown(evt) ||
+            //     this.graph.panningHandler.isActive()) /* && (this.dialogs == null || this.dialogs.length == 0) */) {
 
-      if (this.container.contains(MxgraphService.mx.mxEvent.getSource(evt))) {
+            if (this.container.contains(MxgraphService.mx.mxEvent.getSource(evt))) {
 
-        scrollUp ? this.graph.zoomIn() : this.graph.zoomOut();
+                scrollUp ? this.graph.zoomIn() : this.graph.zoomOut();
 
-        const windowContainerOffset = MxgraphService.mx.mxUtils.getOffset(this.container); // 0:0
-        const dx = windowContainerOffset.x + this.container.offsetWidth / 2 - MxgraphService.mx.mxEvent.getClientX(evt);
-        const dy = windowContainerOffset.y + this.container.offsetHeight / 2 - MxgraphService.mx.mxEvent.getClientY(evt);
+                const windowContainerOffset = MxgraphService.mx.mxUtils.getOffset(this.container); // 0:0
+                const dx = windowContainerOffset.x + this.container.offsetWidth / 2 - MxgraphService.mx.mxEvent.getClientX(evt);
+                const dy = windowContainerOffset.y + this.container.offsetHeight / 2 - MxgraphService.mx.mxEvent.getClientY(evt);
 
-        const cx = dx * (this.graph.zoomFactor - 1);
-        const cy = dy * (this.graph.zoomFactor - 1);
+                const cx = dx * (this.graph.zoomFactor - 1);
+                const cy = dy * (this.graph.zoomFactor - 1);
 
-        if (cx !== 0 || cy !== 0) {
-          const t = this.graph.view.translate;
-          const s = this.graph.view.scale;
+                if (cx !== 0 || cy !== 0) {
+                    const t = this.graph.view.translate;
+                    const s = this.graph.view.scale;
 
-          this.graph.view.setTranslate(Math.floor(t.x + cx / s), Math.floor(t.y + cy / s));
-        }
-      }
-      // }
-    });
+                    this.graph.view.setTranslate(Math.floor(t.x + cx / s), Math.floor(t.y + cy / s));
+                }
+            }
+            // }
+        });
 
-    // The default parent for inserting new cells. This is normally the first child of the root (ie. layer 0).
-    this.canvas = this.graph.getDefaultParent();
+        // The default parent for inserting new cells. This is normally the first child of the root (ie. layer 0).
+        this.canvas = this.graph.getDefaultParent();
 
  
         this.selection$ = new Observable<string>((observer) => {
@@ -115,46 +131,46 @@ export class MxgraphService {
                 const cell = evt.getProperty('cell'); // cell may be null
                 if (cell != null && cell.vertex) {
 
-          if (cell.style === 'Dashed') {
-            observer.next(null);
-          } else {
-            observer.next(cell);
-          }
-          this.graph.setSelectionCell(cell);
-        }
-        evt.consume();
-      };
-      this.graph.addListener(MxgraphService.mx.mxEvent.CLICK, handler);
-      return () => this.graph.getSelectionModel().removeListener(handler);
-    }).pipe(distinctUntilChanged());
+                    if (cell.style === 'Dashed') {
+                        observer.next(null);
+                    } else {
+                        observer.next(cell);
+                    }
+                    this.graph.setSelectionCell(cell);
+                }
+                evt.consume();
+            };
+            this.graph.addListener(MxgraphService.mx.mxEvent.CLICK, handler);
+            return () => this.graph.getSelectionModel().removeListener(handler);
+        }).pipe(distinctUntilChanged());
 
-    this.edgeSelection$ = new Observable<{ domainClazzID: string; edgeID: string; isDataTypeProp: boolean }>((observer) => {
-      const handler = (selectionModel: m.mxGraphSelectionModel, evt: m.mxEventObject) => {
-        const values = selectionModel.cells
-          .filter((cell) => cell.edge)
-          .map((cell) => cell.getId());
-        if (values.length === 1) {
-          const edgeID: string = values[0];
-          const edgeO = this.getEdgeWithId(edgeID);
-          const sourceNode = edgeO.getTerminal(true);
-          const isDestNodeDataType = edgeO.getTerminal(false).style === 'Dashed';
-          const domainClazzID: string = sourceNode.getId();
-          observer.next({domainClazzID, edgeID, isDataTypeProp: isDestNodeDataType});
-        } else if (values.length === 0) {
-          observer.next(null);
-        } else {
-          throw new Error('Multiple items selected. Should not be possible');
-        }
-      };
-      this.graph.getSelectionModel().addListener(MxgraphService.mx.mxEvent.CHANGE, handler);
-      return () => this.graph.getSelectionModel().removeListener(handler);
-    }).pipe(distinctUntilChanged());
+        this.edgeSelection$ = new Observable<{ domainClazzID: string; edgeID: string; isDataTypeProp: boolean }>((observer) => {
+            const handler = (selectionModel: m.mxGraphSelectionModel, evt: m.mxEventObject) => {
+                const values = selectionModel.cells
+                    .filter((cell) => cell.edge)
+                    .map((cell) => cell.getId());
+                if (values.length === 1) {
+                    const edgeID: string = values[0];
+                    const edgeO = this.getEdgeWithId(edgeID);
+                    const sourceNode = edgeO.getTerminal(true);
+                    const isDestNodeDataType = edgeO.getTerminal(false).style === 'Dashed';
+                    const domainClazzID: string = sourceNode.getId();
+                    observer.next({ domainClazzID, edgeID, isDataTypeProp: isDestNodeDataType });
+                } else if (values.length === 0) {
+                    observer.next(null);
+                } else {
+                    throw new Error('Multiple items selected. Should not be possible');
+                }
+            };
+            this.graph.getSelectionModel().addListener(MxgraphService.mx.mxEvent.CHANGE, handler);
+            return () => this.graph.getSelectionModel().removeListener(handler);
+        }).pipe(distinctUntilChanged());
 
 
         this.initializeToolBar();
 
 
-  }
+    }
 
     getEdgeWithId(edgeID: string) {
         for (const key in this.model.cells) {
@@ -242,6 +258,7 @@ export class MxgraphService {
         }
     }
 
+    /** Add edge as mxcell to actual graph */
     addEdge(
         id: string,
         label: string,
@@ -286,9 +303,11 @@ export class MxgraphService {
             throw new Error('Class already exists');
         }
         this.assertTransaction();
+
         this.graph.insertVertex(this.canvas, id, label, x, y, 100, 15);
 
     }
+
 
     /**
      * Inserts a new class into the graph
@@ -303,6 +322,7 @@ export class MxgraphService {
             throw new Error('Class already exists');
         }
         this.assertTransaction();
+
         this.graph.insertVertex(this.canvas, id, label, x, y, 100, 15, 'Dashed');
     }
 
@@ -334,6 +354,7 @@ export class MxgraphService {
         for (let i = 0; i < count; i++) {
             const edge = v1.getEdgeAt(i);
             if (edge.getId() === predicateID && edge.getTerminal(false).getId() === object) {
+                // return;
                 throw new Error('Trying to add same property twice');
             }
         }
@@ -376,6 +397,12 @@ export class MxgraphService {
         this.wnd.destroy();
     }
 
+    /** Highlight cell in graph by its ID */
+    public selectClass(id: string) {
+        this.selectCells([this.model.getCell(id)]);
+    }
+
+    /** Select an array of mxcells in the graph */
     selectCells(cells: m.mxCell[]) {
         this.graph.setSelectionCells(cells);
     }
@@ -426,23 +453,24 @@ export class MxgraphService {
         });
     }
 
-    public saveLayout(funct: (ids: string[], dx: number, dy: number) => void)  {
+    public saveLayout(funct: (ids: string[], dx: number, dy: number) => void) {
 
-            Object.keys(this.model.cells).map((cellid) => {
-                if (this.model.cells[cellid].vertex) {
-                    const ids: string = this.model.cells[cellid].getId();
-                    const dx: number = this.model?.cells[cellid].geometry.x || 0;
-                    const dy: number = this.model?.cells[cellid].geometry.y || 0;
+        Object.keys(this.model.cells).map(cellid => {
+            if (this.model.cells[cellid].vertex) {
+                const ids: string = this.model.cells[cellid].getId()
+                const dx: number = this.model?.cells[cellid].geometry.x || 0
+                const dy: number = this.model?.cells[cellid].geometry.y || 0
 
-                    funct([ids], dx, dy);
-                }
+                funct([ids], dx, dy);
+            }
 
-          });
+        });
+
 
     }
     private initializeToolBar() {
 
-        const content = document.createElement('div');
+        const content = document.createElement("div");
         content.style.padding = '4px';
 
         this.tb = new MxgraphService.mx.mxToolbar(content);
@@ -465,7 +493,7 @@ export class MxgraphService {
         });
 
         this.tb.addItem('Poster Print', '/assets/images/press32.png', (evt) => {
-            const pageCount = MxgraphService.mx.mxUtils.prompt('Enter maximum page count', '1');
+            const pageCount = MxgraphService.mx.mxUtils.prompt("Enter maximum page count", "1");
 
             if (pageCount != null) {
                 const scale = MxgraphService.mx.mxUtils.getScaleForPageCount(Number(pageCount), this.graph);

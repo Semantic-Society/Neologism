@@ -1,6 +1,6 @@
-import {Component, Input, OnChanges, OnInit} from '@angular/core';
-import {Observable, of} from 'rxjs';
-import {combineLatest, map, startWith, switchMap, tap} from 'rxjs/operators';
+import { Component, Input, OnChanges, OnInit } from '@angular/core';
+import { Observable, of } from 'rxjs';
+import { combineLatest, filter, map, startWith, switchMap, tap } from 'rxjs/operators';
 
 import { RecommendationService } from '../services/recommendation.service';
 import { VocabulariesService } from '../services/vocabularies.service';
