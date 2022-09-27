@@ -23,7 +23,8 @@ export class PropertyEditModal implements OnInit {
     propList: Iproperty[];
     propListName: string[];
     domainClassId: string;
-    public prop: Iproperty;
+    uriPrefix: string;
+  public prop: Iproperty;
     readonly xsdDataTypes = xsdDataTypes;
 
     fileURL = 'https://raw.githubusercontent.com/JacobSamro/ngx-spellchecker/master/dict/normalized_en-US.dic';
@@ -104,7 +105,10 @@ export class PropertyEditModal implements OnInit {
         return observable$
     }
 
-    propChange(_id: string) {
+    autoCompleteURI($event) {
+    this.prop['URI'] = `${this.uriPrefix}${encodeURIComponent($event.target.value)}`
+}
+  propChange(_id: string) {
         this.prop = this.propList.find(x => x._id == _id);
         this.isDataTypeProp = this.prop.type === PropertyType.Data;
         this.selectedProp = this.prop._id;

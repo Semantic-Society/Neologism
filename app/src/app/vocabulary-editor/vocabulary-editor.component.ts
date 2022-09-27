@@ -72,7 +72,6 @@ export class VocabularyEditorComponent implements OnInit {
      //  propertyRecommendations: Array<{ comment: string; label: string; uri: string; range: string; }> = [];
      propertyRecommendations: Observable<{ comment: string; label: string; uri: string; range: string }[]>;
 
-    // TODO (186): as this is an observable, does it need @Input?
     @Input() selectedClassID: string;
 
     /**
@@ -248,8 +247,6 @@ export class VocabularyEditorComponent implements OnInit {
      }
 
      updateEdit() {
-         // TODO (187): Call the updateClass (needs to be implemented) of vocabService and call toggleEdit() afterwards
-         // this.vocabService.updateClass(this.newClass.name);
          console.log(this.editedClass);
          if (this.editedClass.name) {
              this.vocabService.updateClassName(this.selectedClassID, this.editedClass.name);

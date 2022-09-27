@@ -82,14 +82,14 @@ export class VocabulariesService {
         });
     }
 
-    getVocabulary(id: string): Observable<Ivocabulary> { // TODO (186): Breaks upon deletion
-        return VocabulariesService.wrapFunkyObservables(
-            Vocabularies.find({ _id: id }).pipe(
-                filter((arr: any[]) => arr.length > 0),
-                map((arr) => arr[0]),
-            )
-        );
-    }
+  getVocabulary(id: string): Observable<Ivocabulary> { 
+      return VocabulariesService.wrapFunkyObservables(
+          Vocabularies.find({ _id: id }).pipe(
+              filter((arr: any[]) => arr.length > 0),
+              map((arr) => arr[0]),
+          )
+      );
+  }
 
     createVocabulary(name: string, description: string, uriPrefix: string) {
         const _id = new Mongo.ObjectID().toHexString();

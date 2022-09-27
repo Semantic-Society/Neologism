@@ -16,6 +16,13 @@ export function publishVocabulary(rdfTtl: String, vocabId) {
             throw new Meteor.Error(404, 'Not Found');
         }
 
+
+        Vocabularies.update(
+            { _id: vocabId },
+            { $set: { publishedAt: new Date().getTime() } },
+            {}
+        )
+
         const authorEmails = vocab.authors.map((author) => {
             const emails = Users.findOne({ _id: author }).emails;
             if (!!emails)
