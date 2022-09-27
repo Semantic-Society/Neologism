@@ -134,18 +134,12 @@ export class MxGraphEditorComponent implements OnInit {
 
            this.mx.endTransaction();
        });
-
-       // this.mx = new MxgraphService(
-       //     this.mxGraphView.nativeElement,
-       //     document.getElementById('mx-toolbar'),
-       //     'http://xmlns.com/foaf/spec/index.rdf');
    }// end ngOnInit
 
    mergeProperties(c: IClassWithProperties): IMergedPropertiesClass {
        // only takes the necessary parts
        const withMergedProps: IMergedPropertiesClass = { _id: c._id, properties: [], name: c.name };
        // merge the properties and fill.
-       // TODO (184): is this better solved with a ES6 Map?
        const grouped = c.properties.reduce(
            (groups, x, ignored) => {
                (groups[x.range._id] = groups[x.range._id] || []).push(x);

@@ -1,0 +1,4 @@
+{
+    "storageLocation": "/path/to/vocab/on/local",
+    "forbidClientAccountCreation": "false" 
+}

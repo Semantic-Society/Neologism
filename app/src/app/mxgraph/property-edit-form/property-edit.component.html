@@ -30,12 +30,19 @@
         <nz-form-label>Target Node/Range</nz-form-label>
         <nz-select style="width: 100%; margin-top: 7px;" nzShowSearch nzPlaceHolder="Select Range"
             [(ngModel)]="prop.range">
-            <nz-option *ngFor="let c of classes" [nzValue]="c._id" [nzLabel]="c.name"> {{ c.name }}</nz-option>
+            <nz-option *ngFor="let c of nonDataTypeClass" [nzValue]="c._id" [nzLabel]="c.name"> {{ c.name }}</nz-option>
         </nz-select>
     </nz-form-item>
 </div>
 
 <div *ngIf="isDataTypeProp">
+    <nz-form-item>
+        <nz-form-label>Select Property to Modify</nz-form-label>
+        <nz-select style="width: 100%; margin-top: 7px;" (ngModelChange)="propChange($event)"
+            nzPlaceHolder="Select Prop to edit" [(ngModel)]="selectedProp">
+            <nz-option *ngFor="let c of propList" [nzValue]="c._id" [nzLabel]="c.name"> </nz-option>
+        </nz-select>
+    </nz-form-item>
     <nz-form-item>
         <nz-form-label>Name</nz-form-label>
         <input placeholder="Label" nz-input [(ngModel)]="prop.name" [nzAutocomplete]="auto"
@@ -48,20 +55,20 @@
     </nz-form-item>
     <nz-form-item>
         <nz-form-label>URI</nz-form-label>
-        <input placeholder="URI" nz-input [(ngModel)]="prop.URI" readonly>
+        <input placeholder="URI" nz-input [(ngModel)]="prop.URI">
 
     </nz-form-item>
     <nz-form-item>
         <nz-form-label>Description</nz-form-label>
-        <input placeholder="Comment" nz-input [(ngModel)]="prop.description" readonly>
+        <input placeholder="Comment" nz-input [(ngModel)]="prop.description">
 
     </nz-form-item>
     <nz-form-item>
         <nz-form-label>Select XSD Type</nz-form-label>
         <nz-select style="width: 100%; margin-top: 7px;" nzShowSearch nzPlaceHolder="Select Range"
-            [(ngModel)]="prop.rangeName">
+            [(ngModel)]="prop.range">
             <ng-container *ngFor="let element of xsdDataTypes; let i = index">
-                <nz-option [nzValue]="element" [nzLabel]="'xsd:'+element" [value]="element"></nz-option>
+                <nz-option [nzValue]="element" [nzLabel]="element" [value]="element"></nz-option>
             </ng-container>
 
         </nz-select>

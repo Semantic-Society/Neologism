@@ -5,6 +5,7 @@ import { VocabulariesService } from '../services/vocabularies.service';
 import { of, Observable, BehaviorSubject } from 'rxjs';
 import { map, startWith, combineLatest, switchMap, tap, take, withLatestFrom, filter } from 'rxjs/operators';
 import { PropertyType ,IClassWithProperties} from "./../../../api/models";
+import { NzModalService } from 'ng-zorro-antd/modal';
 
 @Injectable()
 export class EditComponentService {
@@ -84,11 +85,10 @@ export class EditComponentService {
 
          // this is currently rather weirdly working.
          // When the rangeID is not found, the class is added, after which the rangeID is found and the property can be added.
-         // TODO (184): is this a good way to do this?
          this.vocabService.getClassIDFromVocabForURI(vocabID, rec.range)
              .pipe(
                  take(1),
-                 tap(rangeID => this.handleRangeID(rec, rangeID, selectedClassID, vocabID))
+                 tap((rangeID) => this.handleRangeID(rec, rangeID, selectedClassID, vocabID))
              ).subscribe();
 
      }
@@ -137,6 +137,7 @@ export class EditComponentService {
              url: theClass.URI
          };
      }
+
 
 
 }

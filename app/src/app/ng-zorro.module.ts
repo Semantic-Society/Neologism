@@ -24,6 +24,7 @@ import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { NzPaginationModule } from 'ng-zorro-antd/pagination';
 import { NzUploadModule } from 'ng-zorro-antd/upload';
+import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
 @NgModule({
     imports: [
         NzPaginationModule,
@@ -50,6 +51,7 @@ import { NzUploadModule } from 'ng-zorro-antd/upload';
         NzButtonModule,
         NzListModule,
         NzUploadModule,
+        NzDescriptionsModule
     ],
     exports: [
         NzPaginationModule,
@@ -75,7 +77,8 @@ import { NzUploadModule } from 'ng-zorro-antd/upload';
         NzDividerModule,
         NzIconModule,
         NzLayoutModule,
-        NzUploadModule
+        NzUploadModule,
+        NzDescriptionsModule
 
     ],
     providers: [

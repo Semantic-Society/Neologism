@@ -22,7 +22,12 @@ function assertUser() {
  * They are not matched by order, but by name.
  */
 
-
+function addTimeStamp(data){
+  return {
+    ...data,
+    createdOn:Date.now()
+  }
+}
 
 Meteor.methods({
   // get user by email, needed to add users by email, collaboration feature
@@ -132,9 +137,11 @@ Meteor.methods({
     var classIdO
     // checking for Id indicates that it is a DataType Vertex
     // where the id for prop and vertex are identical
-      classIdO = Classes.insert({ _id, name, isDataTypeVertex: vertexType, description, URI, properties: [], position, skos: { closeMatch: [], exactMatch: [] } });
-  
-    
+      classIdO = Classes.insert(addTimeStamp({
+         _id, name, isDataTypeVertex: vertexType
+      , description, URI, properties: [], position
+      , skos: { closeMatch: [], exactMatch: [] } 
+      }));
 
     classIdO.subscribe((classID) =>
       Vocabularies.update(
@@ -210,7 +217,7 @@ Meteor.methods({
 
     // Note, these operations must occur in this order. Otherwise an observer of the vocabualry might
     const propID = Properties.insert(
-      { ...payload })
+      addTimeStamp({ ...payload }))
       ;
     propID.subscribe((pID) => {
       return Classes.update(

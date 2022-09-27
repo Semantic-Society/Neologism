@@ -1,4 +1,5 @@
 import * as m from 'mxgraph';
+import { mxCell, mxPoint } from 'mxgraph';
 import { Observable, Subject } from 'rxjs';
 import { distinctUntilChanged } from 'rxjs/operators';
 
@@ -167,7 +168,7 @@ export class MxgraphService {
 
 
         this.initializeToolBar();
-        
+
 
     }
 
@@ -267,6 +268,7 @@ export class MxgraphService {
         const edge = this.graph.insertEdge(this.canvas, id, label, v1, v2);
         // there seems to be a bug in mxgraph, such that the id is not set properly upon insertion
         edge.setId(id);
+        // edge.geometry.points = [edge.source.geometry.getPoint(), edge.target.geometry.getPoint()]
         return edge;
     }
 
@@ -303,6 +305,7 @@ export class MxgraphService {
         this.assertTransaction();
 
         this.graph.insertVertex(this.canvas, id, label, x, y, 100, 15);
+
     }
 
 
@@ -389,9 +392,9 @@ export class MxgraphService {
     // }
 
     destroy() {
-            this.graph.destroy();
-            this.tb.destroy();
-            this.wnd.destroy();
+        this.graph.destroy();
+        this.tb.destroy();
+        this.wnd.destroy();
     }
 
     /** Highlight cell in graph by its ID */
@@ -443,25 +446,27 @@ export class MxgraphService {
             const ids: string[] = cells.map((cell) => cell.getId());
             const dx: number = evt.getProperty('dx');
             const dy: number = evt.getProperty('dy');
+            // cells[0].edges[0].geometry.points = [cells[0].edges[0].source.geometry.getPoint(),cells[0].edges[0].target.geometry.getPoint()]
 
+            // console.log(this.computeEdgeCenter(cells[0].edges[0]))
             funct(ids, dx, dy);
         });
     }
 
-    public saveLayout(funct: (ids: string[], dx: number, dy: number) => void){
+    public saveLayout(funct: (ids: string[], dx: number, dy: number) => void) {
 
-            Object.keys(this.model.cells).map(cellid => {
-                if(this.model.cells[cellid].vertex){
-                    const ids: string= this.model.cells[cellid].getId()
-                    const dx: number = this.model?.cells[cellid].geometry.x || 0 
-                    const dy: number = this.model?.cells[cellid].geometry.y || 0
-        
-                    funct([ids], dx, dy);
-                }
-          
-          });
-                
-    
+        Object.keys(this.model.cells).map(cellid => {
+            if (this.model.cells[cellid].vertex) {
+                const ids: string = this.model.cells[cellid].getId()
+                const dx: number = this.model?.cells[cellid].geometry.x || 0
+                const dy: number = this.model?.cells[cellid].geometry.y || 0
+
+                funct([ids], dx, dy);
+            }
+
+        });
+
+
     }
     private initializeToolBar() {
 
@@ -505,5 +510,20 @@ export class MxgraphService {
         this.wnd.addListener(MxgraphService.mx.mxEvent.MOVE, (e) => {
             this.wnd.setLocation(Math.max(0, this.wnd.getX()), Math.max(0, this.wnd.getY()));
         });
+    }
+
+    private computeEdgeCenter(mxEdge: mxCell): mxPoint {
+        const points: mxPoint[] = mxEdge.geometry.points;
+
+        const p0 = points[0];
+        const pe = points[points.length - 1];
+
+        if (p0 != null && pe != null) {
+            const dx = pe.x - p0.x;
+            const dy = pe.y - p0.y;
+            return new MxgraphService.mx.mxPoint(p0.x + dx / 2, p0.y + dy / 2);
+        }
+
+        return undefined;
     }
 }

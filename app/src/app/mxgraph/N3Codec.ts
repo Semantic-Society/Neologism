@@ -1,10 +1,12 @@
-import { stringify } from '@angular/compiler/src/util';
 import { Injectable } from '@angular/core';
 import { DataFactory, Writer, Quad, Parser, Store, termToId } from 'n3';
 const { namedNode, literal, quad } = DataFactory;
 import { Vocabularies, Users } from '../../../api/collections';
-import { IClassWithProperties, Iuser, PropertyType, } from '../../../api/models'
+import { IClassWithProperties, Iproperty, Iuser, PropertyType, } from '../../../api/models'
 
+function formatTime(timeInMs) {
+    return new Date(timeInMs).toISOString()
+}
 @Injectable({
     providedIn: 'root',
 })
@@ -12,11 +14,16 @@ export class N3Codec {
     parser = new Parser();
 
     public static neoPrefixes = {
+        /**
+         * TODO: purl to dcterms, order of terms ?
+         * add rdfs isDefinedBy
+         */
         rdf: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
         rdfs: 'http://www.w3.org/2000/01/rdf-schema#',
         owl: 'http://www.w3.org/2002/07/owl#',
-        xmlns: 'http://www.w3.org/2001/XMLSchema#',
-        purl: 'http://purl.org/dc/terms/'
+        dcterms: 'http://purl.org/dc/terms/',
+        proxivocab: 'http://hussain.ali.gitlab.io/vocab-proximity/',
+        xsd: 'http://www.w3.org/2001/XMLSchema#',
     };
 
     public static serialize(id, classesWithProps, respHandler) {
@@ -25,15 +32,15 @@ export class N3Codec {
             const vocabId = id || null;
             let name = ""
 
-            const writer = new Writer({
-                prefixes: N3Codec.neoPrefixes
-            });
+
 
             const vocab = Vocabularies.findOne({ _id: vocabId }) || null;
             if (!vocab) {
                 throw new Meteor.Error(404, 'Not Found');
             }
-
+            const writer = new Writer({
+                prefixes: { ...N3Codec.neoPrefixes, [``]: `http://w3id.org/neologism/${vocab.name}#` }
+            });
             let authorEmails = vocab.authors.map((author) => {
                 const emails = Users.findOne({ _id: author }).emails;
                 if (!!emails)
@@ -44,6 +51,7 @@ export class N3Codec {
 
 
             let classes: IClassWithProperties[] = classesWithProps;
+            const dataTypeProps = classes.filter((classs) => classs.isDataTypeVertex);
             classes = classes.filter((classs) => !classs.isDataTypeVertex);
             const creator: Iuser = (vocab.creator) ? Users.findOne({ _id: vocab.creator }, { fields: { emails: 1 } }) : null;
             const quads: Quad[] = [];
@@ -92,62 +100,127 @@ export class N3Codec {
                     namedNode('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'),
                     namedNode('http://www.w3.org/2000/01/rdf-schema#Class')
                 ),
-                quad(
-                    namedNode(clazz.URI),
-                    namedNode('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'),
-                    namedNode('http://www.w3.org/2002/07/owl#Class')
-                ), quad(
-                    namedNode(clazz.URI),
-                    namedNode('http://www.w3.org/2000/01/rdf-schema#label'),
-                    literal(clazz.name)
-                ),
-                quad(
-                    namedNode(clazz.URI),
-                    namedNode('http://www.w3.org/2000/01/rdf-schema#comment'),
-                    literal(clazz.description)
-                ));
+                    quad(
+                        namedNode(clazz.URI),
+                        namedNode('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'),
+                        namedNode('http://www.w3.org/2002/07/owl#Class')
+                    )
+                    ,quad(
+                        namedNode(clazz.URI),
+                        namedNode('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'),
+                        namedNode('http://hussain.ali.gitlab.io/vocab-proximity/hasCoordinates')
+                    )
+                    , quad(
+                        namedNode(clazz.URI),
+                        namedNode('http://www.w3.org/2000/01/rdf-schema#label'),
+                        literal(clazz.name)
+                    ),
+                    quad(
+                        namedNode(clazz.URI),
+                        namedNode('http://www.w3.org/2000/01/rdf-schema#comment'),
+                        literal(clazz.description)
+                    )
+                    ,quad(
+                        namedNode(clazz.URI),
+                        namedNode('http://hussain.ali.gitlab.io/vocab-proximity/hasX'),
+                        literal(clazz.position.x)
+                    ), quad(
+                        namedNode(clazz.URI),
+                        namedNode('http://hussain.ali.gitlab.io/vocab-proximity/hasY'),
+                        literal(clazz.position.y)
+                    )
+                    , quad(
+                        namedNode(clazz.URI),
+                        namedNode('http://hussain.ali.gitlab.io/vocab-proximity/hasTime'),
+                        literal(formatTime(clazz.createdOn)))
+                    );
+
+
 
                 clazz.properties.forEach((prop) => {
-                    quads.push(quad(
-                        namedNode(prop.URI),
-                        namedNode('http://www.w3.org/2000/01/rdf-schema#domain'),
-                        namedNode(clazz.URI)
-                    ));
+
                     if (prop.type === PropertyType.Object) {
                         objectProps[prop.URI] = prop.URI;
                         quads.push(quad(
                             namedNode(prop.URI),
-                            namedNode('http://www.w3.org/2000/01/rdf-schema#range'),
-                            namedNode(prop.range.URI)
-                        ));
-                    } else {
+                            namedNode('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'),
+                            namedNode('http://www.w3.org/2002/07/owl#ObjectProperty')
+                        ), quad(
+                            namedNode(prop.URI),
+                            namedNode('http://www.w3.org/2000/01/rdf-schema#label'),
+                            literal(prop.name)
+                        ),
+                            quad(
+                                namedNode(prop.URI),
+                                namedNode('http://www.w3.org/2000/01/rdf-schema#comment'),
+                                literal(prop.description)
+                            ), quad(
+                                namedNode(prop.URI),
+                                namedNode('http://www.w3.org/2000/01/rdf-schema#domain'),
+                                namedNode(clazz.URI)
+                            ), quad( //TODO: allow only range and only domain props using owl:thing as filler in visualisation
+                                namedNode(prop.URI),
+                                namedNode('http://www.w3.org/2000/01/rdf-schema#range'),
+                                namedNode(prop.range.URI),
+                            )
+                            , quad(
+                                namedNode(prop.URI),
+                                namedNode('http://hussain.ali.gitlab.io/vocab-proximity/hasTime'),
+                                literal(formatTime(prop.createdOn)))
+                        );
+                    } else if (prop.type === PropertyType.subclass) {
+                        quads.push(
+                            quad(
+                                namedNode(clazz.URI),
+                                namedNode(prop.type),
+                                namedNode(prop.range.URI)
+                            )
+                        );
+                    }
+                    else {
                         dataProps[prop.URI] = prop.URI;
+                        let temp = dataTypeProps.filter(prop1 => prop1._id == prop._id)
                         quads.push(quad(
                             namedNode(prop.URI),
-                            namedNode('http://www.w3.org/2000/01/rdf-schema#range'),
-                            namedNode(`http://www.w3.org/2001/XMLSchema#${prop.range as unknown as string}`)
-                        ));
+                            namedNode('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'),
+                            namedNode('http://www.w3.org/2002/07/owl#DatatypeProperty')
+                        ), quad(
+                            namedNode(prop.URI),
+                            namedNode('http://www.w3.org/2000/01/rdf-schema#label'),
+                            literal(prop.name)
+                        ),
+                            quad(
+                                namedNode(prop.URI),
+                                namedNode('http://www.w3.org/2000/01/rdf-schema#comment'),
+                                literal(prop.description)
+                            ), quad(
+                                namedNode(prop.URI),
+                                namedNode('http://www.w3.org/2000/01/rdf-schema#domain'),
+                                namedNode(clazz.URI)
+                            ), quad(
+                                namedNode(prop.URI),
+                                namedNode('http://www.w3.org/2000/01/rdf-schema#range'),
+                                namedNode(prop.range as unknown as string)
+                            )
+                            ,quad(
+                                namedNode(prop.URI),
+                                namedNode('http://hussain.ali.gitlab.io/vocab-proximity/hasX'),
+                                literal(temp[0].position.x)
+                            ), quad(
+                                namedNode(prop.URI),
+                                namedNode('http://hussain.ali.gitlab.io/vocab-proximity/hasY'),
+                                literal(temp[0].position.y)
+                            )
+                            , quad(
+                                namedNode(prop.URI),
+                                namedNode('http://hussain.ali.gitlab.io/vocab-proximity/hasTime'),
+                                literal(formatTime(temp[0].createdOn))
+                            )
+                        )
                     }
-
-
-
                 });
             });
-            for (const propURI in objectProps) {
-                quads.push(quad(
-                    namedNode(propURI),
-                    namedNode('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'),
-                    namedNode('http://www.w3.org/2002/07/owl#ObjectProperty')
-                ));
-            }
 
-            for (const propURI in dataProps) {
-                quads.push(quad(
-                    namedNode(propURI),
-                    namedNode('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'),
-                    namedNode('http://www.w3.org/2002/07/owl#DatatypeProperty')
-                ));
-            }
             writer.addQuads(quads);
             writer.end((error, result) => {
                 if (error) {
@@ -219,7 +292,7 @@ export class N3Codec {
                             uri: subClass.subject.value,
                             label: propLabel,
                             domain: domainLabel,
-                            description: "" , // TODO: Fix export to include comments
+                            description: "", // TODO: Fix export to include comments
                             type: isDataType ? PropertyType.Data : PropertyType.Object,
                             range: rangeLabel
                         }
