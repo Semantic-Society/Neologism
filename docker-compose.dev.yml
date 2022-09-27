@@ -5,14 +5,20 @@ services:
   neologism:
     container_name: neologism_app
     image: ghcr.io/semantic-society/neologism/neologism2:latest
+    # build creates a local docker container, to use the image comment it out
+    build:
+     context: .
+     dockerfile: Dockerfile
     depends_on:
       - mongo
     volumes:
       - data:/data/uploads
     ports:
+      - '3000:3000'
       - '80:80'
 
     environment:
+      
       # Required for meteor server startup
       # https://docs.meteor.com/v2.2/environment-variables.html
       PORT: 3000
@@ -24,6 +30,8 @@ services:
       # Required for meteor client-side bundle 
       # used as external in angular static bundle 
       METEOR_CLIENT_CONFIG_URL: ${METEOR_CLIENT_CONFIG_URL:-http://localhost/api}
+
+      
 
   mongo:
     container_name: neologism_db

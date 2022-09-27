@@ -64,3 +64,4 @@ chromiumprofile
 app/src/assets/env.js
 app/api/env.local.json
 app/.angular/cache/
+app/api/settings.json

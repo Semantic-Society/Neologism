@@ -66,6 +66,7 @@ export class MxgraphComponent implements OnInit, OnDestroy {
         }
     }
 
+
     constructor(
         private route: ActivatedRoute,
         private vocabService: VocabulariesService,
@@ -85,47 +86,18 @@ export class MxgraphComponent implements OnInit, OnDestroy {
             });
         // TODO (18): Currently creates a new instance with each subscription. Use something like this instead: .multicast(new BehaviorSubject([]));
         // This did, however, not work.
-        this.classes = this.vocabService.getClassesWithProperties(this.vocabID);
+        this.classes = this.vocabService.getClassesWithProperties(this.vocabID)
         this.mx = new MxgraphService(this.mxGraphView.nativeElement);
         this.sideBarState.changeSidebarToDefault();
 
-        this.currentEdgeSelectionSub = this.mx
-            .currentEdgeSelection().pipe(takeUntil(this.ngUnsubscribe))
-            .subscribe((edgeSelection) => {
-                if (edgeSelection != null) {
-                    const modal = this.modalService.create({
-                        nzTitle: 'Actions on Property',
-                        nzContent: PropertyEditModal,
-                        nzComponentParams: {
-                            propListString: edgeSelection.edgeID,
-                            propSourceNodeId: edgeSelection.domainClazzID,
-                        },
-                        nzFooter: [
-                            {
-                                type: 'default',
-                                label: 'Cancel',
-                                onClick: (componentInstance) => {
-                                    modal.destroy();
-                                },
-                            },
-                            {
-                                type: 'primary',
-                                label: 'Update',
-                                onClick: (componentInstance) => {
-                                    componentInstance.closeModal();
-                                },
-                            },
-                            {
-                                type: 'danger',
-                                label: 'Delete',
-                                onClick: (componentInstance) => {
-                                    componentInstance.deleteProp();
-                                },
-                            },
-                        ],
-                    });
-                }
-            });
+        // this.currentEdgeSelectionSub = this.mx
+        //     .currentEdgeSelection().pipe(takeUntil(this.ngUnsubscribe))
+        //     .subscribe((edgeSelection) => {
+        //         if (edgeSelection != null) {
+        //             let modal = null
+        //             modal = this.openPropUpdateForm(edgeSelection, modal);
+        //         }
+        //     });
 
         this.currentSelectionSub = this.mx
             .currentSelection()
@@ -228,6 +200,45 @@ export class MxgraphComponent implements OnInit, OnDestroy {
         });
 
     }// end ngOnInit
+
+    private openPropUpdateForm(edgeSelection: { domainClazzID: string; edgeID: string; isDataTypeProp: boolean; }, modal) {
+        return this.modalService.create({
+            nzTitle: 'Actions on Property',
+            nzContent: PropertyEditModal,
+            nzComponentParams: {
+                propListString: edgeSelection.edgeID,
+                domainClassId: edgeSelection.domainClazzID,
+            },
+            nzFooter: [
+                {
+                    type: 'default',
+                    label: 'Cancel',
+                    onClick: (componentInstance) => {
+                        modal.destroy();
+                    },
+                },
+                {
+                    type: 'primary',
+                    label: 'Update',
+                    onClick: (componentInstance) => {
+                        componentInstance.closeModal();
+                    },
+                },
+                {
+                    type: 'danger',
+                    label: 'Delete',
+                    onClick: (componentInstance) => {
+                        componentInstance.deleteProp()
+                        .subscribe((response) => {
+                            // Handle success and response from server!
+                        }, (err) => {
+                            console.log(err);
+                        });
+                    },
+                },
+            ],
+        });
+    }
 
     private transformVocab(vocab: Ivocabulary, emailAddress: string) {
         const newVocab = {} as IvocabularyExtended;

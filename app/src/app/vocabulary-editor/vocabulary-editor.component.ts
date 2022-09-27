@@ -184,6 +184,10 @@ export class VocabularyEditorComponent implements OnInit {
 
   }
 
+  addRecommendedProperyToGraph(rec: IClassProperty){
+    this.editComponentService.addRecommendedProperyToGraph(rec, this.selectedClassID, this.vocabID);
+}
+
   addEditClass() {
     console.log(this.newClass);
     this.vocabService.addClass(this.vocabID, this.newClass.name, this.newClass.description, this.newClass.URI).subscribe((res) => '');

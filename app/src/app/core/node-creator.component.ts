@@ -2,10 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, Input } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SpellCheckerService } from 'ngx-spellchecker';
-import { MxgraphService } from '../mxgraph/mxgraph';
-import { SideBarStateService } from '../services/state-services/sidebar-state.service';
-import { VocabulariesService } from '../services/vocabularies.service';
-
+import { transformURI } from '../shared/validator.dup.URI';
 @Component({
     selector: 'app-node-creator',
     templateUrl: './node-creator.html',
@@ -13,16 +10,16 @@ import { VocabulariesService } from '../services/vocabularies.service';
     providers: [SpellCheckerService]
 })
 export class SideBarNodeCreatorComponent {
-  static CLASS_ADD_MESSAGE = 'A new class has been added!';
-  @Input() vocabID: string;
-  @Input() uriPrefix: string;
-  @Input() graphService: MxgraphService;
-  selectedClassID;
-  createClassForm: FormGroup;
-  contextmenu = false;
-  public suggestions: string[];
+    @Input() vocabID: string;
+    @Input() uriPrefix: string;
+    @Input() graphService: MxgraphService;
+    selectedClassID;
+    static CLASS_ADD_MESSAGE = 'A new class has been added!'
+    createClassForm: FormGroup;
+    contextmenu = false;
+    public suggestions: string[];
 
-  fileURL = 'https://raw.githubusercontent.com/JacobSamro/ngx-spellchecker/master/dict/normalized_en-US.dic';
+    fileURL = "https://raw.githubusercontent.com/JacobSamro/ngx-spellchecker/master/dict/normalized_en-US.dic"
 
   constructor(private vocabService: VocabulariesService,
               private sidebarService: SideBarStateService,
@@ -31,18 +28,18 @@ export class SideBarNodeCreatorComponent {
               private httpClient: HttpClient) {
   }
 
-  ngOnInit() {
-      this.uriPrefix = (this.uriPrefix.search(/^(.*)#$/) === -1) ? `${this.uriPrefix}#` : `${this.uriPrefix}`;
-      this.createClassForm = this.formBuilder.group({
-          name: ['', [Validators.required]],
-          URI: [`${this.uriPrefix}`,
-              {
-                  asyncValidators: [this.vocabService.uriValidator()],
-              }
-          ],
-          description: ['', []],
-      }
-      );
+    ngOnInit() {
+        this.uriPrefix = (this.uriPrefix.search(/^(.*)#$/) == -1) ? `${this.uriPrefix}#` : `${this.uriPrefix}`;
+        this.createClassForm = this.formBuilder.group({
+            name: ['', [Validators.required]],
+            URI: [`${this.uriPrefix}`,
+                //   {
+                //       asyncValidators: [this.vocabService.uriValidator()],
+                //   }
+            ],
+            description: ['', []],
+        }
+        );
 
   }
 
@@ -65,15 +62,16 @@ export class SideBarNodeCreatorComponent {
       this.resetSidebarState();
   }
 
-  autoCompleteURI($event) {
-      this.createClassForm.controls['URI'].setValue(`${this.uriPrefix}${encodeURIComponent($event.target.value)}`);
-  }
-  onInput($event) {
-      const value = ($event.target as HTMLInputElement).value;
-      this.createClassForm.controls['URI'].setValue(`${this.uriPrefix}${$event.target.value}`);
-  }
+    autoCompleteURI($event) {
+        this.createClassForm.controls['URI'].setValue(`${this.uriPrefix}${transformURI($event.target.value)}`);
+    }
+    onInput($event) {
+        const value = ($event.target as HTMLInputElement).value;
+        this.createClassForm.controls['URI'].setValue(`${this.uriPrefix}${$event.target.value}`);
+    }
 
-  resetSidebarState() {
-      this.sidebarService.changeSidebarToDefault();
-  }
+    resetSidebarState() {
+        this.sidebarService.changeSidebarToDefault();
+    }
+
 }

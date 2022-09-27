@@ -37,7 +37,7 @@
               <nz-form-item class="full-width uri">
                 <nz-form-label nzFor="uri">Class URI</nz-form-label><br>
                 <nz-form-control >
-              <input nz-input class="form-control" placeholder="uri" nzRequired formControlName="URI" readonly disabled>
+              <input nz-input class="form-control" placeholder="uri" nzRequired formControlName="URI" >
               <nz-form-explain *ngIf="createClassForm.get('URI').hasError('invalidURI')">
                 URI is already in <strong>USE</strong>
               </nz-form-explain>

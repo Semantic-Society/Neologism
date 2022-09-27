@@ -20,6 +20,13 @@ function assertUser() {
  * They are not matched by order, but by name.
  */
 
+function addTimeStamp(data){
+  return {
+    ...data,
+    createdOn:Date.now()
+  }
+}
+
 Meteor.methods({
   // get user by email, needed to add users by email, collaboration feature
   'users-without-self.get'(email: string) {
@@ -93,16 +100,15 @@ Meteor.methods({
       public:
         field_public,
       classes: [],
-      domain
+      domain,
+      createdAt: new Date().getTime()
     });
 
   },
-  /*'vocabulary.insertClass'({id, vClass}) {
-    Vocabularies.update({_id:id}, { $push: {classes: vClass}});
-  },*/
+
   'vocabulary.remove'(vocabId: string) {
     assertUser();
-    // TODO (#183): Sanitize
+
     // currently: pseudo permission check via only being able to remove documents where the current user is also an author
     const vocab = Vocabularies.findOne({ _id: vocabId, creator: this.userId });
     Vocabularies.remove({ _id: vocabId, creator: this.userId });
@@ -118,16 +124,20 @@ Meteor.methods({
   },
   'vocabulary.publish'(rdfTtl: string, vocabId: string) {
     assertUser();
-    // TODO (#183): Sanitize
-    publishVocabulary(rdfTtl, vocabId);
+  
+    publishVocabulary(rdfTtl, vocabId)
   },
   'class.create'(vocabId, vertexType, name, description, URI, position, _id) {
     assertUser();
-    // TODO (#183): Sanitize
-    let classIdO;
+
+    var classIdO
     // checking for Id indicates that it is a DataType Vertex
     // where the id for prop and vertex are identical
-    classIdO = Classes.insert({ _id, name, isDataTypeVertex: vertexType, description, URI, properties: [], position, skos: { closeMatch: [], exactMatch: [] } });
+      classIdO = Classes.insert(addTimeStamp({
+         _id, name, isDataTypeVertex: vertexType
+      , description, URI, properties: [], position
+      , skos: { closeMatch: [], exactMatch: [] } 
+      }));
 
     classIdO.subscribe((classID) =>
       Vocabularies.update(
@@ -172,7 +182,7 @@ Meteor.methods({
   },
   'classes.translate'(classids: string[], dx: number, dy: number) {
     assertUser();
-    // TODO (#183): Sanitize
+  
     Classes.update(
       { _id: { $in: classids } },
       { $inc: { 'position.x': dx, 'position.y': dy } },
@@ -200,10 +210,10 @@ Meteor.methods({
   },
   'property.create'(classId, payload) {
     assertUser();
-    // TODO (#183): Sanitize
+
     // Note, these operations must occur in this order. Otherwise an observer of the vocabualry might
     const propID = Properties.insert(
-      { ...payload })
+      addTimeStamp({ ...payload }))
       ;
     propID.subscribe((pID) => {
       return Classes.update(

@@ -1,4 +1,5 @@
 import * as m from 'mxgraph';
+import { mxCell, mxPoint } from 'mxgraph';
 import { Observable, Subject } from 'rxjs';
 import { distinctUntilChanged } from 'rxjs/operators';
 
@@ -20,35 +21,31 @@ export class MxgraphService {
     tb: m.mxToolbar;
     deletePress: Subject<any>;
 
-  executeLayout() {
-    const layout = new MxgraphService.mx.mxCircleLayout(this.graph);
-    const { x, y } = this.viewCenter();
-    layout.x0 = x;
-    layout.y0 = y;
-    layout.moveCircle = true;
-    layout.execute(this.canvas);
-  }
+    constructor(
+        private container: HTMLDivElement,
+       
+    ) {
 
   constructor(private container: HTMLDivElement) {
     if (!MxgraphService.mx.mxClient.isBrowserSupported()) MxgraphService.mx.mxUtils.error('Browser is not supported!', 200, false);
 
-    this.graph = new MxgraphService.mx.mxGraph(container);          // Create the graph inside the given container
-    this.model = this.graph.getModel();
-    // const sel = new MxgraphService.mx.mxRubberband(this.graph);     // Enable rubberband selection (constructor side effect)
-    MxgraphService.mx.mxEvent.disableContextMenu(container);        // Disable right click menu
-    this.graph.setAllowDanglingEdges(false);                        // Disallow edges that are not connected to nodes
-    this.graph.setAutoSizeCells(true);
-    this.graph.autoSizeCellsOnAdd = true;
-    this.graph.setCellsResizable(false);
-    this.graph.setConnectable(false); // TODO (187): Implement this in the future?
-    this.graph.setPanning(true);
-    this.graph.setCellsEditable(false);
-    this.graph.panningHandler.useLeftButtonForPanning = true;    // Breaks lasso selection!
-    // this.graph.convertValueToString = (cell: m.mxCell) => cell.getValue().label;  // Enable mxGraph to extract cell labels
-    enableDynamicGrid(this.graph, MxgraphService.mx);
-    this.graph.view.refresh();
-    // allow only one thing to be selected at the same time.
-    this.graph.getSelectionModel().setSingleSelection(true);
+        this.graph = new MxgraphService.mx.mxGraph(container);          // Create the graph inside the given container
+        this.model = this.graph.getModel();
+        // const sel = new MxgraphService.mx.mxRubberband(this.graph);     // Enable rubberband selection (constructor side effect)
+        MxgraphService.mx.mxEvent.disableContextMenu(container);        // Disable right click menu
+        this.graph.setAllowDanglingEdges(false);                        // Disallow edges that are not connected to nodes
+        this.graph.setAutoSizeCells(true);
+        this.graph.autoSizeCellsOnAdd = true;
+        this.graph.setCellsResizable(false);
+        this.graph.setConnectable(false);
+        this.graph.setPanning(true);
+        this.graph.setCellsEditable(false);
+        this.graph.panningHandler.useLeftButtonForPanning = true;    // Breaks lasso selection!
+        // this.graph.convertValueToString = (cell: m.mxCell) => cell.getValue().label;  // Enable mxGraph to extract cell labels
+        enableDynamicGrid(this.graph, MxgraphService.mx);
+        this.graph.view.refresh();
+        // allow only one thing to be selected at the same time.
+        this.graph.getSelectionModel().setSingleSelection(true);
 
     const edgeStyle = this.graph.stylesheet.getDefaultEdgeStyle();
     edgeStyle[MxgraphService.mx.mxConstants.STYLE_FILLCOLOR] = '#FFFFFF';
@@ -112,52 +109,11 @@ export class MxgraphService {
     // The default parent for inserting new cells. This is normally the first child of the root (ie. layer 0).
     this.canvas = this.graph.getDefaultParent();
 
-    // Create layout algorithm to be used with the graph
-    // const hierarchical = new MxgraphService.mx.mxHierarchicalLayout(this.graph, MxgraphService.mx.mxConstants.DIRECTION_SOUTH, true);
-    // const organic = new MxgraphServiBehaviorSubject,e.mx.mxFastOrganicLayout(this.graph);
-    // organic.forceConstant = 120;
-
-    // Initialize a lookup map from subject IRI to the corresponding mxGraph cell and set up automatic syncronization
-    // this.graph.addListener(MxgraphService.mx.mxEvent.CELLS_ADDED, (sender: m.mxEventSource, evt: m.mxEventObject) => {
-    // throw new Error('NOT  IMPELEMENTED'); // TODO (187):Michael does this need to be implemented?
-    // const cells: m.mxCell[] = (evt.getProperties() || {})['cells'];
-    // if (Array.isArray(cells)) cells.forEach((cell) => this.model.set(cell.getId(), cell));
-    // organic.execute(this.canvas);
-    // });
-    // this.graph.addListener(MxgraphService.mx.mxEvent.CELLS_REMOVED, (sender: m.mxEventSource, evt: m.mxEventObject) => {
-    //  throw new Error('NOT  IMPELEMENTED'); // TODO (187): Michael does this need to be implemented?
-    // const cells: m.mxCell[] = (evt.getProperties() || {})['cells'];
-    // if (Array.isArray(cells)) cells.forEach((cell) => this.cellByIRI.delete(cell.getId()));
-    // organic.execute(this.canvas);
-    // });
-
-    // this.toolbar = new MxgraphService.mx.mxToolbar(toolbarContainer);
-    // this.addToolbarVertex('assets/class_mockup.gif', 80, 30, 'shape=rounded');
-
-    // this.codec = new N3Codec();
-    // const importingCodec = new N3Codec();
-    // importingCodec.loadUrl2store(this.url)
-    //     .then(() => {
-    //         this.codec.getClasses()
-    //             .forEach((element) => {
-    //                 this.insertClass(element.uri, element.label);
-    //             });
-    //         this.codec.getPredicates()
-    //             .forEach((element) => {
-    //                 this.insertProperty(element.domain, element.uri, element.label, element.comment, element.range);
-    //             });
-    //         this.codec.getSubClassRelations()
-    //             .forEach((element) => {
-    //                 this.insertSubclassRelation(element.domain, element.range);
-    //             });
-    //         this.zoomToFit();
-    //     });
-
-    // TODO (186): Check if multiple listener on same event creating UI flow disturbances
-    this.selection$ = new Observable<string>((observer) => {
-      const handler = (sender, evt) => {
-        const cell = evt.getProperty('cell'); // cell may be null
-        if (cell != null && cell.vertex) {
+ 
+        this.selection$ = new Observable<string>((observer) => {
+            const handler = (sender, evt) => {
+                const cell = evt.getProperty('cell'); // cell may be null
+                if (cell != null && cell.vertex) {
 
           if (cell.style === 'Dashed') {
             observer.next(null);
@@ -194,12 +150,13 @@ export class MxgraphService {
       return () => this.graph.getSelectionModel().removeListener(handler);
     }).pipe(distinctUntilChanged());
 
-    this.initializeToolBar();
+
+        this.initializeToolBar();
+
 
   }
 
     getEdgeWithId(edgeID: string) {
-        // TODO (186): in principle getCell should work, but upon inserting there is an issue and the cell gets assigned a new id
         for (const key in this.model.cells) {
             if (this.model.cells.hasOwnProperty(key)) {
                 const candidate = this.model.cells[key];
@@ -271,12 +228,12 @@ export class MxgraphService {
 
     public clearModel() {
         this.assertTransaction();
-        this.graph.removeCells(this.graph.getChildCells(this.canvas, true, true)); // TODO (183): Assert this clear selection model
+        this.graph.removeCells(this.graph.getChildCells(this.canvas, true, true)); // 
     }
 
     public removeCell(_id: string) {
         this.assertTransaction();
-        this.model.remove(this.model.getCell(_id)); // TODO (183): Assert this clear selection model
+        this.model.remove(this.model.getCell(_id));
     }
 
     assertTransaction() {
@@ -294,6 +251,7 @@ export class MxgraphService {
         const edge = this.graph.insertEdge(this.canvas, id, label, v1, v2);
         // there seems to be a bug in mxgraph, such that the id is not set properly upon insertion
         edge.setId(id);
+        // edge.geometry.points = [edge.source.geometry.getPoint(), edge.target.geometry.getPoint()]
         return edge;
     }
 
@@ -329,6 +287,7 @@ export class MxgraphService {
         }
         this.assertTransaction();
         this.graph.insertVertex(this.canvas, id, label, x, y, 100, 15);
+
     }
 
     /**
@@ -412,9 +371,9 @@ export class MxgraphService {
     // }
 
     destroy() {
-            this.graph.destroy();
-            this.tb.destroy();
-            this.wnd.destroy();
+        this.graph.destroy();
+        this.tb.destroy();
+        this.wnd.destroy();
     }
 
     selectCells(cells: m.mxCell[]) {
@@ -460,12 +419,14 @@ export class MxgraphService {
             const ids: string[] = cells.map((cell) => cell.getId());
             const dx: number = evt.getProperty('dx');
             const dy: number = evt.getProperty('dy');
+            // cells[0].edges[0].geometry.points = [cells[0].edges[0].source.geometry.getPoint(),cells[0].edges[0].target.geometry.getPoint()]
 
+            // console.log(this.computeEdgeCenter(cells[0].edges[0]))
             funct(ids, dx, dy);
         });
     }
 
-    public saveLayout(funct: (ids: string[], dx: number, dy: number) => void) {
+    public saveLayout(funct: (ids: string[], dx: number, dy: number) => void)  {
 
             Object.keys(this.model.cells).map((cellid) => {
                 if (this.model.cells[cellid].vertex) {
@@ -521,5 +482,20 @@ export class MxgraphService {
         this.wnd.addListener(MxgraphService.mx.mxEvent.MOVE, (e) => {
             this.wnd.setLocation(Math.max(0, this.wnd.getX()), Math.max(0, this.wnd.getY()));
         });
+    }
+
+    private computeEdgeCenter(mxEdge: mxCell): mxPoint {
+        const points: mxPoint[] = mxEdge.geometry.points;
+
+        const p0 = points[0];
+        const pe = points[points.length - 1];
+
+        if (p0 != null && pe != null) {
+            const dx = pe.x - p0.x;
+            const dy = pe.y - p0.y;
+            return new MxgraphService.mx.mxPoint(p0.x + dx / 2, p0.y + dy / 2);
+        }
+
+        return undefined;
     }
 }

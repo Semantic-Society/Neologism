@@ -23,6 +23,8 @@ export interface Ivocabulary {
   public: boolean;
   classes: meteorID[]; // List of all classes in the vocab
   domain: string;
+  createdAt:number;
+  publishedAt?:number;
 }
 
 export interface Iclass {
@@ -40,6 +42,7 @@ export interface Iclass {
     closeMatch: string[];
     exactMatch: string[];
   };
+  createdOn: Date;
 }
 
 export interface Iproperty {
@@ -48,8 +51,8 @@ export interface Iproperty {
   type?: PropertyType;
   description: string;
   URI: string;
-  range: meteorID;
-  rangeName?: string;
+  range: meteorID | string;
+  createdOn: Date;
 }
 
 export interface IvocabularyExtended extends Ivocabulary {
@@ -68,6 +71,7 @@ export interface IClassWithProperties {
     type?: PropertyType;
     description: string;
     URI: string;
+    createdOn: Date;
     range: IClassWithProperties; // these MUST be in the same vocabulary!
   }>;
   position: {
@@ -78,61 +82,117 @@ export interface IClassWithProperties {
     closeMatch: string[];
     exactMatch: string[];
   };
+  createdOn: Date;
 }
 
 export enum PropertyType {
   Object = 'owl:ObjectProperty',
-  Data = 'owl:DatatypeProperty'
+  Data = 'owl:DatatypeProperty',
+  subclass = 'rdfs:subClassOf'
+}
+
+export enum PropertyType2 {
+  'owl:ObjectProperty',
+  'owl:DatatypeProperty',
+  'rdfs:subClassOf'
 }
 
 const xsdDataTypes = [
 
-  'anyURI',
-  'base64Binary',
-  'boolean',
-  'byte',
-  'date',
-  'dateTime',
-  'decimal',
-  'derivationControl',
-  'double',
-  'duration',
-  'ENTITIES',
-  'ENTITY',
-  'float',
-  'gDay',
-  'gMonth',
-  'gMonthDay',
-  'gYear',
-  'gYearMonth',
-  'hexBinary',
-  'ID',
-  'IDREF',
-  'IDREFS',
-  'int',
-  'integer',
-  'language',
-  'long',
-  'Name',
-  'NCName',
-  'negativeInteger',
-  'NMTOKEN',
-  'NMTOKENS',
-  'nonNegativeInteger',
-  'nonPositiveInteger',
-  'normalizedString',
-  'NOTATION',
-  'positiveInteger',
-  'QName',
-  'short',
-  'simpleDerivationSet',
-  'string',
-  'time',
-  'token',
-  'unsignedByte',
-  'unsignedInt',
-  'unsignedLong',
-  'unsignedShort'
+  'xsd:anyURI',
+
+  'xsd:base64Binary',
+
+  'xsd:boolean',
+
+  'xsd:byte',
+
+  'xsd:date',
+
+  'xsd:dateTime',
+
+  'xsd:decimal',
+
+  'xsd:derivationControl',
+
+  'xsd:double',
+
+  'xsd:duration',
+
+  ' xsd:ENTITIES',
+
+  ' xsd:ENTITY',
+
+  ' xsd:float',
+
+  ' xsd:gDay',
+
+  'xsd:gMonth',
+
+  'xsd:gMonthDay',
+
+  'xsd:gYear',
+
+  'xsd:gYearMonth',
+
+  'xsd:hexBinary',
+
+  'xsd:ID',
+
+  'xsd:IDREF',
+
+  'xsd:IDREFS',
+
+  'xsd:int',
+
+  'xsd:integer',
+
+  'xsd:language',
+
+  'xsd:long',
+
+  'xsd:Name',
+
+  'xsd:NCName',
+
+  'xsd:negativeInteger',
+
+  'xsd:NMTOKEN',
+
+  'xsd:NMTOKENS',
+
+  'xsd:nonNegativeInteger',
+
+  'xsd:nonPositiveInteger',
+
+  'xsd:normalizedString',
+
+  'xsd:NOTATION',
+
+  'xsd:positiveInteger',
+
+  'xsd:QName',
+
+  'xsd:short',
+
+  'xsd:simpleDerivationSet',
+
+  'xsd:string',
+
+  'xsd:time',
+
+  'xsd:token',
+
+  'xsd:unsignedByte',
+
+  'xsd:unsignedInt',
+
+  'xsd:unsignedLong',
+
+  'xsd:unsignedShort',
+
+  'rdfs:Literal'
+
 ];
 
-export {xsdDataTypes};
+export { xsdDataTypes };

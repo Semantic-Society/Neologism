@@ -4,9 +4,6 @@
 # - https://github.com/meteor/galaxy-images/blob/master/ubuntu/Dockerfile
 FROM ubuntu
 
-
-ARG METEOR_CLIENT_CONN_URL
-
 # Meteor version to build for; see ../build.sh
 ENV METEOR_VERSION 2.2
 
@@ -18,7 +15,7 @@ ENV APP_BUNDLE_FOLDER /opt/bundle
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && \
 	apt-get install --assume-yes apt-transport-https ca-certificates && \
-	apt-get install --assume-yes --no-install-recommends build-essential bzip2 curl git libarchive-tools python
+	apt-get install --assume-yes --no-install-recommends build-essential bzip2 curl git libarchive-tools python2.7
 
 # Install Meteor
 RUN curl https://install.meteor.com/?release=$METEOR_VERSION --output /tmp/install-meteor.sh && \
@@ -30,7 +27,7 @@ RUN curl https://install.meteor.com/?release=$METEOR_VERSION --output /tmp/insta
 
 # Fix permissions warning; https://github.com/meteor/meteor/issues/7959
 ENV METEOR_ALLOW_SUPERUSER true
-
+ENV ROOT_URL="http://localhost:3000"
 
 # Copy entrypoint and dependencies
 COPY ./docker $SCRIPTS_FOLDER/
@@ -91,6 +88,7 @@ FROM node:14.17.0-alpine
 ENV APP_BUNDLE_FOLDER /opt/bundle
 ENV SCRIPTS_FOLDER /docker
 
+
 # Install OS runtime dependencies
 RUN apk --no-cache add \
 	bash \
@@ -115,6 +113,7 @@ COPY $SCRIPTS_FOLDER/config/supervisord.conf /etc/
 
 COPY $SCRIPTS_FOLDER/config/nginx.default.conf /etc/nginx/conf.d/default.conf
 
-# ENTRYPOINT "bin/startup.sh && /usr/bin/supervisord -c /etc/supervisord.conf"
+EXPOSE 3000
 
+# ENTRYPOINT "bin/startup.sh && /usr/bin/supervisord -c /etc/supervisord.conf"
 ENTRYPOINT $SCRIPTS_FOLDER/entrypoint.sh

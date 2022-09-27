@@ -232,7 +232,6 @@ mat-form-field.description input {
 
 .button-group-edit button {
   margin:0.25rem;
-  width: calc(50% - 1rem);
 }
 
 .full-width-field {
@@ -253,4 +252,16 @@ mat-form-field.description input {
 
 :host ::ng-deep nz-form-explain {
   color: rgb(103, 174, 255);
+}
+
+:host ::ng-deep .ant-descriptions-item-content {
+  color: white
+}
+
+:host ::ng-deep .ant-descriptions-title {
+  color: white
+}
+
+.frmSelectBox{
+  margin: 5px 5px;
 }

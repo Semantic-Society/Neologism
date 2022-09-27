@@ -3,23 +3,31 @@ import {Users, Vocabularies} from '../collections';
 
 import * as fs from 'fs';
 
-export function publishVocabulary(rdfTtl: string, vocabId) {
-  try {
-    const storageLocation = Meteor.settings.storageLocation;
-    if (!storageLocation) {
-      console.log('Config error');
-      return;
-    }
-    let name = '';
-    const vocab = Vocabularies.findOne({_id: vocabId}) || null;
-    if (!vocab) {
-      throw new Meteor.Error(404, 'Not Found');
-    }
-    vocab.authors.map((author) => {
-      const emails = Users.findOne({_id: author}).emails;
-      if (!!emails)
-        return emails;
-    });
+export function publishVocabulary(rdfTtl: String, vocabId) {
+    try {
+        const storageLocation = Meteor.settings.storageLocation;
+        if (!storageLocation) {
+            console.log('Config error');
+            return;
+        }
+        let name = '';
+        const vocab = Vocabularies.findOne({ _id: vocabId }) || null;
+        if (!vocab) {
+            throw new Meteor.Error(404, 'Not Found');
+        }
+
+
+        Vocabularies.update(
+            { _id: vocabId },
+            { $set: { publishedAt: new Date().getTime() } },
+            {}
+        )
+
+        const authorEmails = vocab.authors.map((author) => {
+            const emails = Users.findOne({ _id: author }).emails;
+            if (!!emails)
+                return emails;
+        });
 
     if (name === '' || name === undefined) name = 'vocab-' + vocabId;
 
