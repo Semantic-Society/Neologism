@@ -57,7 +57,7 @@ export class VocabularyEditorComponent implements OnInit {
 
   propertyRecommendations: Observable<Array<{ comment: string; label: string; uri: string; range: string }>>;
 
-  // TODO (186): as this is an observable, does it need @Input?
+
   @Input() selectedClassID: string;
 
   /**
@@ -65,7 +65,7 @@ export class VocabularyEditorComponent implements OnInit {
    */
   classInfo: Observable<{ label: string; description: string; url: string }>;
 
-  // TODO (184): strictly speaking, this component does not need this as it only needs access to classes and properties.
+ 
   // However, more fine grained methods in the VocabulariesService are not yet implemented.
   newClass = {
     name: '',

@@ -84,7 +84,7 @@ export class MxgraphComponent implements OnInit, OnDestroy {
             .subscribe((params) => {
                 this.layoutExecute = params.layout === 'true';
             });
-        // TODO (18): Currently creates a new instance with each subscription. Use something like this instead: .multicast(new BehaviorSubject([]));
+     
         // This did, however, not work.
         this.classes = this.vocabService.getClassesWithProperties(this.vocabID)
         this.mx = new MxgraphService(this.mxGraphView.nativeElement);
@@ -271,7 +271,7 @@ export class MxgraphComponent implements OnInit, OnDestroy {
         // only takes the necessary parts
         const withMergedProps: IMergedPropertiesClass = { _id: c._id, properties: [], name: c.name };
         // merge the properties and fill.
-        // TODO (184): is this better solved with a ES6 Map?
+      
         const grouped = c.properties.reduce(
             (groups, x) => {
                 if (x.type === PropertyType.Data) {
