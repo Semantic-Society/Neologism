@@ -43,7 +43,7 @@ export class MxGraphEditorComponent implements OnInit {
 
    ngOnInit() {
        this.vocabID = this.vocabEditorService.vocabularyId;
-       // TODO 18: Currently creates a new instance with each subscription. Use something like this instead: .multicast(new BehaviorSubject([]));
+
        // This did, however, not work.
        this.classes = this.vocabService.getClassesWithProperties(this.vocabID);
 

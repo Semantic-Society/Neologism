@@ -1,4 +1,5 @@
-import { Meteor } from 'meteor/meteor';
+import {Meteor} from 'meteor/meteor';
+
 /**
  * These types are only to be used for communication between server and client.
  *
@@ -12,13 +13,6 @@ export interface Iuser extends Meteor.User {
 export type meteorID = string;
 export type userID = meteorID;
 
-export interface IpropertyMeta {
-  name: string;
-  URI: string;
-  range: string;
-  comment: string;
-}
-
 export interface Ivocabulary {
   _id?: meteorID; // Mongo generated ID
   name: string;
@@ -27,7 +21,6 @@ export interface Ivocabulary {
   authors: userID[];
   uriPrefix: string;
   public: boolean;
-  // version: string;
   classes: meteorID[]; // List of all classes in the vocab
   domain: string;
   createdAt:number;
@@ -66,7 +59,6 @@ export interface IvocabularyExtended extends Ivocabulary {
   authorsEmailAddress: string;
 }
 
-
 export interface IClassWithProperties {
   _id: string; // Mongo generated ID
   name: string;
@@ -104,7 +96,6 @@ export enum PropertyType2 {
   'owl:DatatypeProperty',
   'rdfs:subClassOf'
 }
-
 
 const xsdDataTypes = [
 

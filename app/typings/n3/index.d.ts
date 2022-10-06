@@ -5,9 +5,8 @@
 
 /// <reference types="node" />
 
-
-import * as fs from "fs";
-import * as stream from "stream";
+import * as fs from 'fs';
+import * as stream from 'stream';
 
 declare namespace N3 {
 
@@ -22,17 +21,16 @@ declare namespace N3 {
     }
 
     interface Triple {
-        subject: string,
-        predicate: string,
-        object: string,
-        graph?: string
+        subject: string;
+        predicate: string;
+        object: string;
+        graph?: string;
     }
 
     interface BlankTriple {
-        predicate: string,
-        object: string
+        predicate: string;
+        object: string;
     }
-
 
     interface ParserConstructor {
         new (options?: ParserOptions): N3Parser;
@@ -47,17 +45,13 @@ declare namespace N3 {
     const StreamParser: StreamParserConstructor;
 
     interface ParserOptions {
-        format?: string,
-        prefixes?: string[]
+        format?: string;
+        prefixes?: string[];
     }
 
-    interface ParseCallback {
-        (error: Error, triple: Triple, prefixes: Prefixes): void;
-    }
+    type ParseCallback = (error: Error, triple: Triple, prefixes: Prefixes) => void;
 
-    interface Logger {
-        (message?: any, ...optionalParams: any[]): void;
-    }
+    type Logger = (message?: any, ...optionalParams: any[]) => void;
     interface N3Parser {
         parse(input: string, callback: ParseCallback): void;
         parse(subject: string, predicate: string, object: string): void;
@@ -68,7 +62,6 @@ declare namespace N3 {
     interface N3StreamParser extends N3Parser, fs.WriteStream {
         pipe<T extends NodeJS.WritableStream | N3StreamWriter>(consumer: T): T;
     }
-
 
     interface WriterConstructor {
         new (options?: WriterOptions): N3Writer;
@@ -97,8 +90,8 @@ declare namespace N3 {
     }
 
     interface WriterOptions {
-        format?: string,
-        prefixes?: Prefixes
+        format?: string;
+        prefixes?: Prefixes;
     }
 
     interface N3StoreWriter extends N3Writer {

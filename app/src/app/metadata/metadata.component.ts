@@ -1,8 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { domain } from 'process';
-
 import { MeteorObservable, zoneOperator } from 'meteor-rxjs';
-import { Vocabularies } from '../../../api/collections';
 import { IvocabularyExtended } from '../../../api/models';
 import { VocabulariesService } from '../services/vocabularies.service';
 

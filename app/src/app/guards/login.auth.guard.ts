@@ -7,8 +7,8 @@ export class LoginAuthGuard implements CanActivate {
     constructor( private router: Router) {}
 
     canActivate(): boolean {
-    //check if user currently is logged in
-        const loggedIn: boolean = (Meteor.userId()) ? true : false;
+    // check if user currently is logged in
+        const loggedIn: boolean = !!(Meteor.userId());
 
         if (loggedIn) {
             this.router.navigate(['/dashboard']);

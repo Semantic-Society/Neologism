@@ -8,7 +8,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatMenuModule } from '@angular/material/menu';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { AuthGuard } from "./AuthGuard";
+import { AuthGuard } from './AuthGuard';
 import { LoginButtons } from './loginButton/login-buttons';
 import { LoginDialog } from './loginDialog/login-dialog';
 import { SignupDialog } from './signupDialog/signup-dialog';

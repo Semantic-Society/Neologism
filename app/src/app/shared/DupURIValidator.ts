@@ -1,9 +1,6 @@
 import { Directive } from '@angular/core';
-import { NG_VALIDATORS, ValidatorFn, Validator, FormControl } from '@angular/forms';
+import { FormControl, NG_VALIDATORS, Validator, ValidatorFn } from '@angular/forms';
 import { uriPropValidator } from './validator.dup.URI';
-
-
-
 
 @Directive({
     selector: '[dupURI][ngModel]',

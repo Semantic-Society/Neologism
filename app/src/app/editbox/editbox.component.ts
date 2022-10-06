@@ -50,8 +50,6 @@ export class EditboxComponent implements OnInit, OnChanges {
      */
     classInfo$: Observable<{ label: string; description: string; url: string }>;
 
-    // TODO (184): strictly speaking, this component does not need this as it only needs access to classes and properties.
-    // However, more fine grained methods in the VocabulariesService are not yet implemented.
     @Input() vocabID: string;
 
     formProp: FormGroup;
@@ -130,7 +128,7 @@ export class EditboxComponent implements OnInit, OnChanges {
                     combineLatest(this.alreadyThere$, (recommendations, alreadys) => {
                         const newReccommendations = [];
                         recommendations.forEach((recommendation) => {
-                            //       // TODO (184): is there a better way in JS?
+                 
                             if (!alreadys.some((already) => already.uri === recommendation.uri)) {
                                 // the property is not there yet
                                 newReccommendations.push(recommendation);

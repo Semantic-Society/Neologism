@@ -1,14 +1,15 @@
-import { Component, EventEmitter, Inject, OnInit, Output } from '@angular/core';
-import { VocabulariesService } from '../../../app/services/vocabularies.service';
-import { combineLatest, Observable } from 'rxjs';
-import { startWith, debounceTime, tap, take, map } from 'rxjs/operators';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { AddUserModalComponent } from '../../../app/vocablist/components/add-user-modal/add-user-modal.component';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { Observable } from 'rxjs';
+import { take, tap } from 'rxjs/operators';
 import { Iuser } from '../../../../api/models';
-import { RemoveUserModalComponent } from '../../../app/vocablist/components/remove-user-modal/remove-user-modal.component';
-import { N3Codec } from '../../../app/mxgraph/N3Codec';
+import { N3Codec } from '../../mxgraph/N3Codec';
+import { VocabulariesService } from '../../services/vocabularies.service';
+import { AddUserModalComponent } from '../../vocablist/components/add-user-modal/add-user-modal.component';
+import { RemoveUserModalComponent } from '../../vocablist/components/remove-user-modal/remove-user-modal.component';
+
 @Component({
     selector: 'app-vocabulary-list',
     templateUrl: './vocabulary-list.component.html',
@@ -18,6 +19,7 @@ export class VocabularyListComponent implements OnInit {
     public context$: Observable<any>;
     public loggedInUser: Iuser;
     @Output() totalVocab = new EventEmitter<number>();
+
 
     constructor(
         private router: Router,
@@ -46,11 +48,11 @@ export class VocabularyListComponent implements OnInit {
         const dialogRef = this.dialog.open(DownloadBtnDialog, {
             height: "400px",
             width: "600px",
-            data: {option: 0},
+            data: { option: 0 },
         });
 
         dialogRef.afterClosed().subscribe(result => {
-        
+
 
             this.vocabService.getClassesWithProperties(id).pipe(take(1)).subscribe(
                 (classesWithProps) => {
@@ -58,14 +60,14 @@ export class VocabularyListComponent implements OnInit {
                         N3Codec.serializeWithProximity(id, classesWithProps, (content) => {
                             const blob = new Blob([content], { type: 'text/plain' });
                             saveAs(blob, name + '.rdf');
-                            
+
                         });
                     }
-                    if (result == 1){
+                    if (result == 1) {
                         N3Codec.serialize(id, classesWithProps, (content) => {
                             const blob = new Blob([content], { type: 'text/plain' });
                             saveAs(blob, name + '.rdf');
-                           
+
                         });
                     }
 
@@ -117,8 +119,8 @@ export class VocabularyListComponent implements OnInit {
 }
 export interface DialogData {
     option: boolean
-  }
-  
+}
+
 
 @Component({
     selector: 'dialog-download',
@@ -137,12 +139,12 @@ export interface DialogData {
 export class DownloadBtnDialog {
     constructor(
         public dialogRef: MatDialogRef<DownloadBtnDialog>,
-      ) { }
+    ) { }
 
-        close(val:any){
-            this.dialogRef.close(val); 
-        }
-        onNoClick(): void {
-            this.dialogRef.close();
-          }
+    close(val: any) {
+        this.dialogRef.close(val);
+    }
+    onNoClick(): void {
+        this.dialogRef.close();
+    }
 }

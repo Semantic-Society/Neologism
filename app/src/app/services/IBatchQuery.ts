@@ -1,4 +1,4 @@
-export interface BatchQuery {
+export interface IBatchQuery {
      domain: string;
      classes: string[];
      properties: string[];

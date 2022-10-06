@@ -1,54 +1,29 @@
-import {
-    Component,
-    ElementRef,
-    HostListener,
-    OnDestroy,
-    OnInit,
-    ViewChild,
-} from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Observable, Subject, Subscription } from 'rxjs';
-import {
-    debounceTime,
-    distinctUntilChanged,
-    map,
-    startWith,
-    takeUntil,
-} from 'rxjs/operators';
+import {Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
+import {Observable, Subject, Subscription} from 'rxjs';
+import {debounceTime, distinctUntilChanged, map, startWith, takeUntil} from 'rxjs/operators';
 
-import { MxgraphService } from './mxgraph';
+import {MxgraphService} from './mxgraph';
 
-import {
-    Ivocabulary,
-    meteorID,
-    IvocabularyExtended,
-    PropertyType,
-    IClassWithProperties
-} from '../../../api/models';
-import {
-    VocabulariesService,
-} from '../services/vocabularies.service';
+import {IClassWithProperties, Ivocabulary, IvocabularyExtended, meteorID, PropertyType} from '../../../api/models';
+import {VocabulariesService} from '../services/vocabularies.service';
 
-// import sidebar state dep.
-import {
-    SideBarStateService,
-    SidebarChange,
-} from '../services/state-services/sidebar-state.service';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { PropertyEditModal } from './property-edit-form/property-edit.component';
-import { RecommendationService } from '../services/recommendation.service';
-import { MeteorObservable, zoneOperator } from 'meteor-rxjs';
-import { BatchRecommendations } from '../services/BatchRecommendations';
+import {MeteorObservable, zoneOperator} from 'meteor-rxjs';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {BatchRecommendations} from '../services/BatchRecommendations';
+import {RecommendationService} from '../services/recommendation.service';
+import {SidebarChange, SideBarStateService} from '../services/state-services/sidebar-state.service';
+import {PropertyEditModal} from './property-edit-form/property-edit.component';
 
 interface IMergedPropertiesClass {
     _id: string; // Mongo generated ID
     name: string;
-    properties: {
+    properties: Array<{
         _id: string;
         name: string;
         rangeID: string; // just the ID
         type: PropertyType;
-    }[];
+    }>;
 }
 
 @Component({
@@ -58,8 +33,8 @@ interface IMergedPropertiesClass {
 })
 
 export class MxgraphComponent implements OnInit, OnDestroy {
-    private ngUnsubscribe: Subject<boolean> = new Subject()
-    editMode: Observable<SidebarChange>; // type SidebarChange = 'default' | 'edit' | 'recommend'
+    private ngUnsubscribe: Subject<boolean> = new Subject();
+    editMode: Observable<SidebarChange>;
     currentSelection: meteorID;
     currentSelectionSub: Subscription;
     currentEdgeSelectionSub: Subscription;
@@ -104,12 +79,12 @@ export class MxgraphComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.vocabID = this.route.snapshot.paramMap.get("id");
+        this.vocabID = this.route.snapshot.paramMap.get('id');
         this.route.queryParams
-            .subscribe(params => {
-                this.layoutExecute = params.layout == 'true';
+            .subscribe((params) => {
+                this.layoutExecute = params.layout === 'true';
             });
-        // TODO (18): Currently creates a new instance with each subscription. Use something like this instead: .multicast(new BehaviorSubject([]));
+     
         // This did, however, not work.
         this.classes = this.vocabService.getClassesWithProperties(this.vocabID)
         this.mx = new MxgraphService(this.mxGraphView.nativeElement);
@@ -141,7 +116,6 @@ export class MxgraphComponent implements OnInit, OnDestroy {
                 this.sideBarState.changeBySelection(selection);
                 this.currentSelection = selection;
             });
-
 
         this.vocabularySub = this.vocabService
             .getVocabulary(this.vocabID)
@@ -194,17 +168,21 @@ export class MxgraphComponent implements OnInit, OnDestroy {
                     this.mx.insertClass(c._id, c.name, c.position.x, c.position.y);
                 }
 
-                !this.classNames.includes(c.name) ? this.classNames.push(c.name) : null;
+                if (!this.classNames.includes(c.name)) {
+                  this.classNames.push(c.name);
+                }
             });
 
-            cs = cs.filter(c => !c.isDataTypeVertex);
+            cs = cs.filter((c) => !c.isDataTypeVertex);
             // insert properties
             this.propertyNames = [];
             cs.forEach((c) => {
                 // grouping the properties by their target
                 const merged = this.mergeProperties(c);
                 merged.properties.forEach((p) => {
-                    !this.propertyNames.includes(p.name) ? this.propertyNames.push(p.name) : null;
+                    if (!this.propertyNames.includes(p.name)) {
+                      this.propertyNames.push(p.name);
+                    }
                     this.mx.insertProperty(c._id,
                         p._id, p.name,
                         p.rangeID);
@@ -214,10 +192,10 @@ export class MxgraphComponent implements OnInit, OnDestroy {
             this.mx.endTransaction();
 
             if (this.layoutExecute) {
-                this.mx.executeLayout()
-                this.mx.saveLayout(this.vocabService.translateClasses)
-                this.layoutExecute = false
-                this.clearQueryParam()
+                this.mx.executeLayout();
+                this.mx.saveLayout(this.vocabService.translateClasses);
+                this.layoutExecute = false;
+                this.clearQueryParam();
             }
         });
 
@@ -293,10 +271,10 @@ export class MxgraphComponent implements OnInit, OnDestroy {
         // only takes the necessary parts
         const withMergedProps: IMergedPropertiesClass = { _id: c._id, properties: [], name: c.name };
         // merge the properties and fill.
-        // TODO (184): is this better solved with a ES6 Map?
+      
         const grouped = c.properties.reduce(
             (groups, x) => {
-                if (x.type == PropertyType.Data) {
+                if (x.type === PropertyType.Data) {
                     (groups[x._id] = groups[x._id] || []).push(x);
                 } else {
                     (groups[x.range._id] = groups[x.range._id] || []).push(x);
@@ -309,13 +287,12 @@ export class MxgraphComponent implements OnInit, OnDestroy {
         // in fact, it does not have hasOwnProperty
         // eslint-disable-next-line guard-for-in
         for (const key in grouped) {
-            // if (grouped.hasOwnProperty(key)) {
-            const group: {
+            const group: Array<{
                 _id: string;
                 name: string;
                 type: PropertyType;
                 range: IClassWithProperties;
-            }[] = grouped[key];
+            }> = grouped[key];
             // join names
             const nameList: string[] = group.reduce<string[]>(
                 (combinedNameAcc, prop) => {
@@ -345,7 +322,6 @@ export class MxgraphComponent implements OnInit, OnDestroy {
 
     getBatchRecommendation() {
 
-
         this.recommendations$ = this.recommenderService.batchRecommendationsForClasses(
             {
                 classes: this.classNames,
@@ -356,12 +332,10 @@ export class MxgraphComponent implements OnInit, OnDestroy {
         );
 
         this.batchPhase = false;
-
     }
 
     hideBatch() {
         this.batchPhase = true;
-
     }
 
     startEdit() {
@@ -378,19 +352,9 @@ export class MxgraphComponent implements OnInit, OnDestroy {
             });
         this.editing = false;
     }
-
-
-    showEditBox() {
-        console.log('show edit box');
-        this.currentSelection = null;
-        this.sideBarState.changeSidebarState('edit');
-    }
-
     ngOnDestroy() {
         this.ngUnsubscribe.next(true);
         this.ngUnsubscribe.complete();
         this.mx.destroy();
-
     }
-
 }

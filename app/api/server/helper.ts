@@ -1,5 +1,5 @@
-import { Meteor } from 'meteor/meteor';
-import { Vocabularies, Users } from '../collections';
+import {Meteor} from 'meteor/meteor';
+import {Users, Vocabularies} from '../collections';
 
 import * as fs from 'fs';
 
@@ -29,23 +29,22 @@ export function publishVocabulary(rdfTtl: String, vocabId) {
                 return emails;
         });
 
-        if (name === '' || name === undefined) name = 'vocab-' + vocabId;
+    if (name === '' || name === undefined) name = 'vocab-' + vocabId;
 
-        const buffer = rdfTtl
-        const filePath = `${storageLocation}/${vocab.name}.ttl`
-        let fd = fs.openSync(filePath, 'w');
-        const encoding = 'utf8'
-        fs.write(fd, buffer, 0, encoding, function (err) {
-            if (err) {
-                throw (new Meteor.Error(500, 'Failed to save file.', err.message));
-            } else {
-                console.log('The file ' + name + ' (' + encoding + ') was saved to ' + filePath);
-            }
-        });
+    const buffer = rdfTtl;
+    const filePath = `${storageLocation}/${vocab.name}.ttl`;
+    const fd = fs.openSync(filePath, 'w');
+    const encoding = 'utf8';
+    fs.write(fd, buffer, 0, encoding, function (err) {
+      if (err) {
+        throw (new Meteor.Error(500, 'Failed to save file.', err.message));
+      } else {
+        console.log('The file ' + name + ' (' + encoding + ') was saved to ' + filePath);
+      }
+    });
 
-    } catch (error) {
-        console.log(error);
-        return;
-    }
-
+  } catch (error) {
+    console.log(error);
+    return;
+  }
 }

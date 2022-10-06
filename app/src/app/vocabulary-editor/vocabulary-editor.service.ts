@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 
 @Injectable()
@@ -9,24 +9,24 @@ export class VocabularyEditorService {
      _classes: BehaviorSubject<Observable<any>> = new BehaviorSubject(null);
      classSub: Subscription;
 
-     _visibleCreateDrawer: BehaviorSubject<Boolean> = new BehaviorSubject(false);
-     _visibleEditDrawer: BehaviorSubject<Boolean> = new BehaviorSubject(false);
-     _visibleSearchDrawer: BehaviorSubject<Boolean> = new BehaviorSubject(false);
+     _visibleCreateDrawer: BehaviorSubject<boolean> = new BehaviorSubject(false);
+     _visibleEditDrawer: BehaviorSubject<boolean> = new BehaviorSubject(false);
+     _visibleSearchDrawer: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
      constructor() {
      }
 
-     get visibleCreatDrawer(): Observable<Boolean> {
+     get visibleCreatDrawer(): Observable<boolean> {
          return this._visibleCreateDrawer
              .asObservable();
      }
 
-     get visibleSearchDrawer(): Observable<Boolean> {
+     get visibleSearchDrawer(): Observable<boolean> {
          return this._visibleSearchDrawer
              .asObservable();
      }
 
-     get visibleEditorDrawer(): Observable<Boolean> {
+     get visibleEditorDrawer(): Observable<boolean> {
          return this._visibleEditDrawer
              .asObservable();
      }
@@ -39,28 +39,28 @@ export class VocabularyEditorService {
          return this._classes.getValue();
      }
 
-     setClasses(classes: Observable<any>){
+     setClasses(classes: Observable<any>) {
          this._classes.next(classes);
      }
 
-     setVocabularyId(vocabularyId: string){
+     setVocabularyId(vocabularyId: string) {
          this.selected_vocabularyId.next(vocabularyId);
      }
 
      setSearchDrawer(visible: boolean) {
-         if(this.allowEditing)
+         if (this.allowEditing)
              this._visibleSearchDrawer.next(visible);
      }
 
      setAddDrawer(visible: boolean) {
          console.log(this.allowEditing);
-         if(this.allowEditing)
+         if (this.allowEditing)
              this._visibleCreateDrawer.next(visible);
      }
 
      setEditorDrawer(visible: boolean) {
          console.log(this.allowEditing);
-         if(this.allowEditing)
+         if (this.allowEditing)
              this._visibleEditDrawer.next(visible);
      }
 
@@ -69,6 +69,5 @@ export class VocabularyEditorService {
          this.selected_vocabularyId.next(null);
          this.classSub.unsubscribe();
      }
-
 
 }

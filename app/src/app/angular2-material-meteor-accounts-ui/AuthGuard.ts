@@ -8,7 +8,6 @@ import { Observable, Observer } from 'rxjs';
  * A service to use as auth guard on the route.
  *
  */
-// eslint-disable-next-line max-classes-per-file
 
 @Injectable()
 export class AuthGuard implements CanActivate {
