@@ -1,3 +1,4 @@
+
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio and Webstorm
 # Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
 
@@ -48,8 +49,9 @@ crashlytics.properties
 crashlytics-build.properties
 fabric.properties
 
-.idea/
+.idea
 
+# Plugin-specific files:
 chromiumprofile
 .vscode
 /.project

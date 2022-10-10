@@ -11,7 +11,18 @@ function formatTime(timeInMs) {
     providedIn: 'root',
 })
 export class N3Codec {
-    public static neoPrefixes = {
+    parser = new Parser();
+
+    public static prefix = {
+
+        rdf: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
+        rdfs: 'http://www.w3.org/2000/01/rdf-schema#',
+        owl: 'http://www.w3.org/2002/07/owl#',
+        dcterms: 'http://purl.org/dc/terms/',
+        xsd: 'http://www.w3.org/2001/XMLSchema#',
+    };
+
+    public static prefixWithProxi = {
         /**
          * TODO: purl to dcterms, order of terms ?
          * add rdfs isDefinedBy
@@ -24,7 +35,6 @@ export class N3Codec {
         xsd: 'http://www.w3.org/2001/XMLSchema#',
     };
 
-  parser = new Parser();
 
     public static serialize(id, classesWithProps, respHandler) {
 
@@ -38,7 +48,183 @@ export class N3Codec {
                 throw new Meteor.Error(404, 'Not Found');
             }
             const writer = new Writer({
-                prefixes: { ...N3Codec.neoPrefixes, [``]: `http://w3id.org/neologism/${vocab.name}#` }
+                prefixes: { ...N3Codec.prefix, [``]: `http://w3id.org/neologism/${vocab.name}#` }
+            });
+            let authorEmails = vocab.authors.map((author) => {
+                const emails = Users.findOne({ _id: author }).emails;
+                if (!!emails)
+                    return emails;
+            });
+
+            if (name === '' || name === undefined) name = 'vocab-' + vocabId;
+
+
+            let classes: IClassWithProperties[] = classesWithProps;
+            const dataTypeProps = classes.filter((classs) => classs.isDataTypeVertex);
+            classes = classes.filter((classs) => !classs.isDataTypeVertex);
+            const creator: Iuser = (vocab.creator) ? Users.findOne({ _id: vocab.creator }, { fields: { emails: 1 } }) : null;
+            const quads: Quad[] = [];
+            quads.push(quad(
+                namedNode(vocab.uriPrefix),
+                namedNode('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'),
+                namedNode('http://www.w3.org/2002/07/owl#Ontology')
+            ));
+            quads.push(quad(
+                namedNode(vocab.uriPrefix),
+                namedNode('http://purl.org/dc/terms/creator'),
+                literal(creator.emails[0].address)
+            ));
+
+            authorEmails = authorEmails.filter((emails) => emails[0].address != creator.emails[0].address);
+            authorEmails.forEach((emails) => emails.forEach((email) => {
+                quads.push(quad(
+                    namedNode(vocab.uriPrefix),
+                    namedNode('http://purl.org/dc/terms/contributor'),
+                    literal(email.address)
+                ));
+            }));
+
+
+            quads.push(quad(
+                namedNode(vocab.uriPrefix),
+                namedNode('http://purl.org/dc/terms/title'),
+                literal(vocab.name)
+            ), quad(
+                namedNode(vocab.uriPrefix),
+                namedNode('http://purl.org/dc/terms/description'),
+                literal(vocab.description)
+            ),quad(
+                namedNode(vocab.uriPrefix),
+                namedNode('http://purl.org/dc/terms/created'),
+                literal(new Date(vocab.createdAt).toLocaleDateString('sv'))
+            )     );
+
+            const objectProps = Object.create(null);
+            const dataProps = Object.create(null);
+
+            classes.forEach((clazz) => {
+
+                quads.push(quad(
+                    namedNode(clazz.URI),
+                    namedNode('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'),
+                    namedNode('http://www.w3.org/2000/01/rdf-schema#Class')
+                ),
+                    quad(
+                        namedNode(clazz.URI),
+                        namedNode('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'),
+                        namedNode('http://www.w3.org/2002/07/owl#Class')
+                    )
+                    , quad(
+                        namedNode(clazz.URI),
+                        namedNode('http://www.w3.org/2000/01/rdf-schema#label'),
+                        literal(clazz.name)
+                    ),
+                    quad(
+                        namedNode(clazz.URI),
+                        namedNode('http://www.w3.org/2000/01/rdf-schema#comment'),
+                        literal(clazz.description)
+                    )
+                    );
+
+
+
+                clazz.properties.forEach((prop) => {
+
+                    if (prop.type === PropertyType.Object) {
+                        objectProps[prop.URI] = prop.URI;
+                        quads.push(quad(
+                            namedNode(prop.URI),
+                            namedNode('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'),
+                            namedNode('http://www.w3.org/2002/07/owl#ObjectProperty')
+                        ), quad(
+                            namedNode(prop.URI),
+                            namedNode('http://www.w3.org/2000/01/rdf-schema#label'),
+                            literal(prop.name)
+                        ),
+                            quad(
+                                namedNode(prop.URI),
+                                namedNode('http://www.w3.org/2000/01/rdf-schema#comment'),
+                                literal(prop.description)
+                            ), quad(
+                                namedNode(prop.URI),
+                                namedNode('http://www.w3.org/2000/01/rdf-schema#domain'),
+                                namedNode(clazz.URI)
+                            ), quad( //TODO: allow only range and only domain props using owl:thing as filler in visualisation
+                                namedNode(prop.URI),
+                                namedNode('http://www.w3.org/2000/01/rdf-schema#range'),
+                                namedNode(prop.range.URI),
+                            )
+                            
+                        );
+                    } else if (prop.type === PropertyType.subclass) {
+                        quads.push(
+                            quad(
+                                namedNode(clazz.URI),
+                                namedNode(prop.type),
+                                namedNode(prop.range.URI)
+                            )
+                        );
+                    }
+                    else {
+                        dataProps[prop.URI] = prop.URI;
+                        let temp = dataTypeProps.filter(prop1 => prop1._id == prop._id)
+                        quads.push(quad(
+                            namedNode(prop.URI),
+                            namedNode('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'),
+                            namedNode('http://www.w3.org/2002/07/owl#DatatypeProperty')
+                        ), quad(
+                            namedNode(prop.URI),
+                            namedNode('http://www.w3.org/2000/01/rdf-schema#label'),
+                            literal(prop.name)
+                        ),
+                            quad(
+                                namedNode(prop.URI),
+                                namedNode('http://www.w3.org/2000/01/rdf-schema#comment'),
+                                literal(prop.description)
+                            ), quad(
+                                namedNode(prop.URI),
+                                namedNode('http://www.w3.org/2000/01/rdf-schema#domain'),
+                                namedNode(clazz.URI)
+                            ), quad(
+                                namedNode(prop.URI),
+                                namedNode('http://www.w3.org/2000/01/rdf-schema#range'),
+                                namedNode(prop.range as unknown as string)
+                            )
+                      
+                        )
+                    }
+                });
+            });
+
+            writer.addQuads(quads);
+            writer.end((error, result) => {
+                if (error) {
+                    console.error(error);
+                    return;
+                }
+                respHandler(result);
+                return;
+            });
+        } catch (error) {
+            console.log(error);
+            return;
+        }
+    }
+
+    public static serializeWithProximity(id, classesWithProps, respHandler) {
+
+        try {
+            const vocabId = id || null;
+            let name = ""
+
+
+
+            const vocab = Vocabularies.findOne({ _id: vocabId }) || null;
+            if (!vocab) {
+                throw new Meteor.Error(404, 'Not Found');
+            }
+            const writer = new Writer({
+                prefixes: { ...N3Codec.prefixWithProxi, [``]: `http://w3id.org/neologism/${vocab.name}#` }
             });
             let authorEmails = vocab.authors.map((author) => {
                 const emails = Users.findOne({ _id: author }).emails;
