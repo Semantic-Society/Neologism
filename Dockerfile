@@ -32,6 +32,9 @@ ENV ROOT_URL="http://localhost:3000"
 # Copy entrypoint and dependencies
 COPY ./docker $SCRIPTS_FOLDER/
 
+RUN cd $SCRIPTS_FOLDER && \
+    npm install --production
+
 # Install Docker entrypoint dependencies; npm ci was added in npm 5.7.0, and therefore available only to Meteor 1.7+
 RUN cd $SCRIPTS_FOLDER && \
 	if bash -c "if [[ ${METEOR_VERSION} == 1.6* ]]; then exit 0; else exit 1; fi"; then \
@@ -44,9 +47,10 @@ RUN cd $SCRIPTS_FOLDER && \
 
 
 # Copy app package.json into container
-
 COPY ./app/package.json $APP_SOURCE_FOLDER/
 
+RUN cd $APP_SOURCE_FOLDER && \
+    npm install --production
 
 RUN bash $SCRIPTS_FOLDER/build-app-npm-dependencies.sh
 
