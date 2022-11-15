@@ -33,7 +33,7 @@ ENV ROOT_URL="http://localhost:3000"
 COPY ./docker $SCRIPTS_FOLDER/
 
 RUN cd $SCRIPTS_FOLDER && \
-    npm install --production
+    npm i --package-lock-only
 
 # Install Docker entrypoint dependencies; npm ci was added in npm 5.7.0, and therefore available only to Meteor 1.7+
 RUN cd $SCRIPTS_FOLDER && \
@@ -50,7 +50,7 @@ RUN cd $SCRIPTS_FOLDER && \
 COPY ./app/package.json $APP_SOURCE_FOLDER/
 
 RUN cd $APP_SOURCE_FOLDER && \
-    npm install --production
+    npm i --package-lock-only
 
 RUN bash $SCRIPTS_FOLDER/build-app-npm-dependencies.sh
 
