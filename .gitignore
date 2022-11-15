@@ -67,3 +67,9 @@ app/src/assets/env.js
 app/api/env.local.json
 app/.angular/cache/
 app/api/settings.json
+
+# We do not include any package-lock.json in version control
+package-lock.json
+app/package-lock.json
+app/api/package-lock.json
+docker/package-lock.json
