@@ -43,9 +43,9 @@ RUN cd $SCRIPTS_FOLDER && \
 # No ONBUILD lines, because this is intended to be used by your app’s multistage Dockerfile and you might need control of the sequence of steps using files from this image
 
 
-# Copy app package.json (and optionally) package-lock.json into container
+# Copy app package.json into container
 
-COPY ./app/package*.json $APP_SOURCE_FOLDER/
+COPY ./app/package.json $APP_SOURCE_FOLDER/
 
 
 RUN bash $SCRIPTS_FOLDER/build-app-npm-dependencies.sh
